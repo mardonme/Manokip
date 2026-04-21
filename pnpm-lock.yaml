@@ -82,8 +82,8 @@ importers:
         specifier: 1.59.1
         version: 1.59.1
       '@tailwindcss/postcss':
-        specifier: 4.0.0
-        version: 4.0.0
+        specifier: 4.2.3
+        version: 4.2.3
       '@types/node':
         specifier: 22.10.2
         version: 22.10.2
@@ -127,8 +127,8 @@ importers:
         specifier: 0.6.11
         version: 0.6.11(prettier@3.4.2)
       tailwindcss:
-        specifier: 4.0.0
-        version: 4.0.0
+        specifier: 4.2.3
+        version: 4.2.3
       typescript:
         specifier: 5.7.3
         version: 5.7.3
@@ -2344,8 +2344,8 @@ packages:
     resolution: {integrity: sha512-YyhwSBcxHLS3CU2Mk3dXDuVm8/Ia0+XvfpT8s9YQoICppkUeoobB3hgyGMYbyQ4vn6VgWH9bdv5UnzhTz2NPTQ==}
     engines: {node: '>= 20'}
 
-  '@tailwindcss/postcss@4.0.0':
-    resolution: {integrity: sha512-lI2bPk4TvwavHdehjr5WiC6HnZ59hacM6ySEo4RM/H7tsjWd8JpqiNW9ThH7rO/yKtrn4mGBoXshpvn8clXjPg==}
+  '@tailwindcss/postcss@4.2.3':
+    resolution: {integrity: sha512-MehdHOQRVFf300r8F430s4cf2QL+nSjFUNIndX5ZMqDLyMwTnyL4RDZsoDsDU+ThzT5eCj1+erSDKBWdn462Nw==}
 
   '@tybys/wasm-util@0.10.1':
     resolution: {integrity: sha512-9tTaPJLSiejZKx+Bmog4uSubteqTvFrVrURwkmHixBo0G4seD0zUxp98E1DzUBJxLQ3NPwXrGKDiVjwx/DpPsg==}
@@ -4823,9 +4823,6 @@ packages:
     resolution: {integrity: sha512-yEFYrVhod+hdNyx7g5Bnkkb0G6si8HJurOoOEgC8B/O0uXLHlaey/65KRv6cuWBNhBgHKAROVpc7QyYqE5gFng==}
     engines: {node: '>=20'}
 
-  tailwindcss@4.0.0:
-    resolution: {integrity: sha512-ULRPI3A+e39T7pSaf1xoi58AqqJxVCLg8F/uM5A3FadUbnyDTgltVnXJvdkTjwCOGA6NazqHVcwPJC5h2vRYVQ==}
-
   tailwindcss@4.2.3:
     resolution: {integrity: sha512-fA/NX5gMf0ooCLISgB0wScaWgaj6rjTN2SVAwleURjiya7ITNkV+VMmoHtKkldP6CIZoYCZyxb8zP/e2TWoEtQ==}
 
@@ -6878,14 +6875,13 @@ snapshots:
       '@tailwindcss/oxide-win32-arm64-msvc': 4.2.3
       '@tailwindcss/oxide-win32-x64-msvc': 4.2.3
 
-  '@tailwindcss/postcss@4.0.0':
+  '@tailwindcss/postcss@4.2.3':
     dependencies:
       '@alloc/quick-lru': 5.2.0
       '@tailwindcss/node': 4.2.3
       '@tailwindcss/oxide': 4.2.3
-      lightningcss: 1.32.0
-      postcss: 8.5.1
-      tailwindcss: 4.0.0
+      postcss: 8.5.10
+      tailwindcss: 4.2.3
 
   '@tybys/wasm-util@0.10.1':
     dependencies:
@@ -9562,8 +9558,6 @@ snapshots:
       uuid: 10.0.0
 
   tagged-tag@1.0.0: {}
-
-  tailwindcss@4.0.0: {}
 
   tailwindcss@4.2.3: {}
 
