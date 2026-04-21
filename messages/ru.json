@@ -1,0 +1,17 @@
+{
+  "common": {
+    "siteTitle": "Manometr",
+    "loading": "Загрузка...",
+    "error": "Произошла ошибка"
+  },
+  "auth": {
+    "signIn": "Войти",
+    "signInPrompt": "Введите ваш email",
+    "checkEmail": "Проверьте вашу электронную почту",
+    "sendLink": "Отправить ссылку"
+  },
+  "admin": {
+    "title": "Админ-панель",
+    "comingSoon": "Скоро"
+  }
+}

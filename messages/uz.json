@@ -1,0 +1,17 @@
+{
+  "common": {
+    "siteTitle": "Manometr",
+    "loading": "Yuklanmoqda...",
+    "error": "Xato yuz berdi"
+  },
+  "auth": {
+    "signIn": "Kirish",
+    "signInPrompt": "Elektron pochta manzilingizni kiriting",
+    "checkEmail": "Elektron pochtangizni tekshiring",
+    "sendLink": "Havolani yuborish"
+  },
+  "admin": {
+    "title": "Admin panel",
+    "comingSoon": "Tez orada"
+  }
+}

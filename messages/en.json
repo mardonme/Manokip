@@ -1,0 +1,17 @@
+{
+  "common": {
+    "siteTitle": "Manometr",
+    "loading": "Loading...",
+    "error": "An error occurred"
+  },
+  "auth": {
+    "signIn": "Sign in",
+    "signInPrompt": "Enter your email address",
+    "checkEmail": "Check your email",
+    "sendLink": "Send link"
+  },
+  "admin": {
+    "title": "Admin panel",
+    "comingSoon": "Coming soon"
+  }
+}
