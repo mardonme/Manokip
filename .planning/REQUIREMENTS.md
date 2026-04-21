@@ -9,10 +9,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Foundations (FOUND)
 
-- [ ] **FOUND-01**: Database schema supports sibling `*_translations` tables for every translatable entity (category, product, manufacturer, spec_field, recipe, industry) keyed `(entity_id, locale)` — no per-locale columns, no JSONB translation bags
-- [ ] **FOUND-02**: Database schema supports typed spec fields (`spec_field` catalog with type `number`/`range`/`enum`/`bool`/`text` + unit metadata) and a long `product_spec_values` table with typed value columns (`num_value`, `text_value`, `enum_value`, `bool_value`)
+- [x] **FOUND-01**: Database schema supports sibling `*_translations` tables for every translatable entity (category, product, manufacturer, spec_field, recipe, industry) keyed `(entity_id, locale)` — no per-locale columns, no JSONB translation bags
+- [x] **FOUND-02**: Database schema supports typed spec fields (`spec_field` catalog with type `number`/`range`/`enum`/`bool`/`text` + unit metadata) and a long `product_spec_values` table with typed value columns (`num_value`, `text_value`, `enum_value`, `bool_value`)
 - [ ] **FOUND-03**: Locale-prefixed routing (`/uz/...`, `/ru/...`, `/en/...`) via next-intl middleware; root `/` redirects to detected/default locale
-- [ ] **FOUND-04**: Managed Postgres (Neon) with pooled runtime connection for app and direct connection for migrations; Vercel region co-located with database region
+- [x] **FOUND-04**: Managed Postgres (Neon) with pooled runtime connection for app and direct connection for migrations; Vercel region co-located with database region
 - [ ] **FOUND-05**: Auth.js v5 with email magic-link provider, Drizzle adapter, and Resend transactional email; admin session cookie gated by middleware for `/[locale]/admin/*` routes
 - [ ] **FOUND-06**: Cloudinary SDK wired up with server-side signing endpoint; credentials in environment variables only
 - [ ] **FOUND-07**: Production deployment on Vercel Pro with Sentry error tracking and Vercel Web Analytics + Speed Insights enabled
@@ -136,10 +136,10 @@ Which phases cover which requirements.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| FOUND-01 | Phase 1 | Pending |
-| FOUND-02 | Phase 1 | Pending |
+| FOUND-01 | Phase 1 | Complete (01-02) |
+| FOUND-02 | Phase 1 | Complete (01-02) |
 | FOUND-03 | Phase 1 | Pending |
-| FOUND-04 | Phase 1 | Pending |
+| FOUND-04 | Phase 1 | Complete (01-02) |
 | FOUND-05 | Phase 1 | Pending |
 | FOUND-06 | Phase 1 | Pending |
 | FOUND-07 | Phase 1 | Pending |
