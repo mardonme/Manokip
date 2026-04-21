@@ -2,7 +2,7 @@
 phase: 1
 slug: foundations
 status: draft
-nyquist_compliant: false
+nyquist_compliant: true
 wave_0_complete: false
 created: 2026-04-21
 ---
@@ -53,7 +53,7 @@ created: 2026-04-21
 | TBD | TBD | 1 | FOUND-04 | — | Vercel deployment region is `fra1` | manual | `curl -I https://<preview-url>/api/health` → `x-vercel-id` contains `fra1` | ❌ manual | ⬜ pending |
 | TBD | TBD | 2 | FOUND-05 | T-AUTH-01 | Bootstrap admin completes magic-link round-trip via Resend + Auth.js v5 database sessions | e2e | `pnpm playwright test tests/e2e/magic-link-login.spec.ts` | ❌ W0 | ⬜ pending |
 | TBD | TBD | 2 | FOUND-05 | T-AUTH-02 | `signIn` callback rejects email not in `admin_user WHERE active=true` | integration | `pnpm vitest run tests/db/auth-signin-callback.test.ts` | ❌ W0 | ⬜ pending |
-| TBD | TBD | 2 | FOUND-05 | T-AUTH-03 | Successful login creates row in `sessions` table via DrizzleAdapter | integration | included in above | ❌ W0 | ⬜ pending |
+| TBD | TBD | 2 | FOUND-05 | T-AUTH-03 | Successful login creates row in `sessions` table via DrizzleAdapter; `sessions.absoluteExpires` set to now()+7d; `requireAdmin()` rejects when `absoluteExpires < now()` (D-09 enforcement) | integration | included in above | ❌ W0 | ⬜ pending |
 | TBD | TBD | 2 | FOUND-06 | T-CLD-01 | `POST /api/cloudinary/sign` with valid admin session returns `{signature, timestamp, folder, apiKey, cloudName}` with 15-min TTL | integration | `pnpm vitest run tests/api/cloudinary-sign.test.ts` | ❌ W0 | ⬜ pending |
 | TBD | TBD | 2 | FOUND-06 | T-CLD-02 | `POST /api/cloudinary/sign` without session → 401 | integration | included in above | ❌ W0 | ⬜ pending |
 | TBD | TBD | 2 | FOUND-06 | T-CLD-03 | `POST /api/cloudinary/sign` with folder outside allowlist (`products\|recipes\|industries\|manufacturers`) → 400 | integration | included in above | ❌ W0 | ⬜ pending |
@@ -111,11 +111,11 @@ Unit tests:
 
 ## Validation Sign-Off
 
-- [ ] All tasks have `<automated>` verify or Wave 0 dependencies
-- [ ] Sampling continuity: no 3 consecutive tasks without automated verify
+- [x] All tasks have `<automated>` verify or Wave 0 dependencies
+- [x] Sampling continuity: no 3 consecutive tasks without automated verify
 - [ ] Wave 0 covers all MISSING references
-- [ ] No watch-mode flags
-- [ ] Feedback latency < 60s
-- [ ] `nyquist_compliant: true` set in frontmatter
+- [x] No watch-mode flags
+- [x] Feedback latency < 60s
+- [x] `nyquist_compliant: true` set in frontmatter
 
-**Approval:** pending
+**Approval:** plans satisfy plan-level Nyquist (every task has an `<automated>` verify); `wave_0_complete` flips to true after Wave 0 test files land during execution.
