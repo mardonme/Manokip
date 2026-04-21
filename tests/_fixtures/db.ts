@@ -1,9 +1,7 @@
-// Lazy Drizzle test client; plan 02 creates @/db/client, plan 03 runs the migration
-// against the test branch. Tests that call this must run AFTER plan 03.
-// The @ts-expect-error silences TS2307 until plan 02 lands src/db/client.ts —
-// at that point the directive becomes an error and MUST be removed.
+// Lazy Drizzle test client. Tests that call this must run AFTER plan 03's
+// migration lands on the Neon test branch; this fixture itself only checks
+// that DATABASE_URL points at a Neon test branch, without opening a connection.
 export async function getTestDb() {
-  // @ts-expect-error — @/db/client is created in plan 02; this import is lazy + runtime-only
   const { db } = await import('@/db/client');
   return db;
 }
