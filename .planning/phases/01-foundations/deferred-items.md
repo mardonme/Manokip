@@ -6,9 +6,11 @@ Items discovered during execution that are out of scope for the current plan. Ea
 
 ## From Plan 01-04 (2026-04-21)
 
-### DEF-01: Tailwind v4 / @tailwindcss/postcss transitive version skew breaks `next build`
+### DEF-01: Tailwind v4 / @tailwindcss/postcss transitive version skew breaks `next build` — RESOLVED
 
 **Discovered during:** Plan 01-04 Task 04.2 build verification
+
+**Resolved:** 2026-04-21 in commit `31062b4` — `fix(01-04): resolve tailwind v4 transitive skew (4.0.0 → 4.2.3) — DEF-01`. Direct deps bumped to exact 4.2.3 so the whole tailwind graph resolves consistently; no config changes needed. Verified with `pnpm build` (compiled 2.5s, 5 static pages), `pnpm typecheck` (0), `pnpm vitest run` (29/29), `pnpm dev` (Ready in 516ms, no PostCSS error).
 
 **Issue:** `pnpm build` fails with
 ```
@@ -23,13 +25,7 @@ at Object.Once (node_modules/.pnpm/@tailwindcss+postcss@4.0.0/node_modules/@tail
 
 **Pre-existing evidence:** No prior plan SUMMARY documents a successful `pnpm build` run. Plan 01-01 summary says "pnpm build: 0 after plan 03" but plan 03 also did not run `pnpm build` locally — it only set up `vercel.json` (which runs build inside Vercel's environment where dep resolution may differ).
 
-**Recommended fix:** Either:
-- Upgrade `tailwindcss` + `@tailwindcss/postcss` to matching newer versions (both `^4.2.3` or latest stable), OR
-- Add `"overrides"` to `package.json` pinning `@tailwindcss/node` + `@tailwindcss/oxide` to `4.0.0`.
-
-**Suggested landing plan:** Fold into Plan 01-05 pre-flight or raise a separate chore plan. Not urgent for Phase 1 correctness if Vercel's build environment resolves the peer differently, but should be verified against a Vercel preview build before Phase 1 closes.
-
-**Workaround in place:** None. `pnpm dev` and `pnpm build` both fail on developer machine. Plan 01-04's source code deliverables (i18n config + [locale] layout + messages + e2e specs) are nonetheless correct per typecheck, and the e2e specs are seeded for future execution against a working server (Plan 06 locally or Plan 07 Vercel preview).
+**Fix applied:** Upgraded `tailwindcss` + `@tailwindcss/postcss` from exact `4.0.0` to exact `4.2.3` (option 1 of the recommendation). The overrides route (option 2) was not needed — the skew was purely a major-minor mismatch between direct pins and transitive resolution.
 
 ### DEF-02: .env.local lacks Auth.js + Resend secrets (expected until plan 01-05)
 

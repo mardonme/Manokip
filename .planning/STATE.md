@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 01-04 (next-intl v4 routing + [locale] layout + setRequestLocale + generateStaticParams + next/font Inter + Analytics/SpeedInsights mount + 3-locale dictionaries + 8 e2e specs seeded + next.config.mjs→next.config.ts Rule 3 fix + DEF-01 tailwind skew + DEF-02 .env.local placeholders documented); plan 01-05 (Auth.js v5 + Resend magic-link + signIn callback + bootstrapAdmin) is next
-last_updated: "2026-04-21T21:10:00Z"
+stopped_at: Completed 01-04 + DEF-01 resolved (tailwind 4.0.0 → 4.2.3, pnpm build/typecheck/vitest/dev all green on developer machine); plan 01-05 (Auth.js v5 + Resend magic-link + signIn callback + bootstrapAdmin) is next
+last_updated: "2026-04-21T21:30:00Z"
 last_activity: 2026-04-21 -- Phase 01 plan 04 executed (next-intl routing SSOT, [locale] layout with notFound allowlist + static params + Vercel Analytics/SpeedInsights, uz/ru/en message dicts, 8 Playwright specs for FOUND-03/FOUND-07, next.config.ts replacing broken next.config.mjs — env validator now actually triggers at boot)
 progress:
   total_phases: 5
@@ -99,11 +99,11 @@ Items acknowledged and carried forward during execution:
 
 | Category | Item | Status | Deferred At |
 |----------|------|--------|-------------|
-| deps / build | DEF-01 — tailwindcss@4.0.0 + @tailwindcss/postcss@4.0.0 skew with transitive @tailwindcss/node/oxide@4.2.3 breaks globals.css compilation; blocks `pnpm build` + page render in dev. See `.planning/phases/01-foundations/deferred-items.md`. Fix: upgrade both to ^4.2.3 or pnpm.overrides pin. | open | Plan 01-04 |
+| deps / build | ~~DEF-01 — tailwindcss@4.0.0 + @tailwindcss/postcss@4.0.0 skew with transitive @tailwindcss/node/oxide@4.2.3 breaks globals.css compilation~~ | **RESOLVED 2026-04-21** (commit `31062b4` — bumped both to exact 4.2.3; `pnpm build`, `typecheck`, `vitest` 29/29, `dev` all green) | Plan 01-04 |
 | env / auth | DEF-02 — .env.local lacks AUTH_SECRET/AUTH_RESEND_KEY/RESEND_FROM_EMAIL; plan 01-04 added gitignored placeholders as interim. Plan 01-05 replaces with real values. | open (expected resolution: plan 01-05) | Plan 01-04 |
 
 ## Session Continuity
 
-Last session: 2026-04-21T21:10:00Z
-Stopped at: Completed 01-04 (next-intl v4 locale routing SSOT, [locale] layout shell with setRequestLocale + hasLocale→notFound + generateStaticParams + next/font Inter + Analytics/SpeedInsights, 3-locale message dicts, 8 Playwright e2e specs seeded for FOUND-03/FOUND-07, next.config.mjs→next.config.ts Rule 3 fix that actually activates @/env Zod validation at boot, DEF-01 tailwind skew + DEF-02 env placeholders logged); plan 01-05 (Auth.js v5 edge-split + Resend magic-link + signIn callback + bootstrapAdmin + login/admin pages) is next.
+Last session: 2026-04-21T21:30:00Z
+Stopped at: Completed 01-04 + DEF-01 resolved (commit `31062b4` — tailwindcss + @tailwindcss/postcss 4.0.0 → 4.2.3 resolves transitive skew with @tailwindcss/node/oxide@4.2.3; pnpm build compiles in 2.5s with 5 static pages, pnpm typecheck 0, pnpm vitest run 29/29, pnpm dev Ready in 516ms without the ScannerOptions.sources PostCSS error). DEF-02 (.env.local Auth/Resend placeholders) untouched — resolves in plan 01-05. Plan 01-05 (Auth.js v5 edge-split + Resend magic-link + signIn callback + bootstrapAdmin + login/admin pages) is next.
 Resume file: .planning/phases/01-foundations/01-05-PLAN.md
