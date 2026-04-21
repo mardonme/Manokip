@@ -7,7 +7,7 @@ export default defineConfig({
     globals: true,
     include: ['tests/**/*.test.ts'],
     exclude: ['tests/e2e/**', 'node_modules', '.next'],
-    setupFiles: [],
+    setupFiles: ['./tests/_fixtures/load-env.ts'],
     reporters: ['verbose'],
   },
   resolve: {
