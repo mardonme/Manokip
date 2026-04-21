@@ -132,17 +132,75 @@ Explicitly excluded. Documented to prevent scope creep.
 
 ## Traceability
 
-Which phases cover which requirements. Updated during roadmap creation.
+Which phases cover which requirements.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| (to be populated by gsd-roadmapper) | | |
+| FOUND-01 | Phase 1 | Pending |
+| FOUND-02 | Phase 1 | Pending |
+| FOUND-03 | Phase 1 | Pending |
+| FOUND-04 | Phase 1 | Pending |
+| FOUND-05 | Phase 1 | Pending |
+| FOUND-06 | Phase 1 | Pending |
+| FOUND-07 | Phase 1 | Pending |
+| ADMIN-01 | Phase 2 | Pending |
+| ADMIN-02 | Phase 2 | Pending |
+| ADMIN-03 | Phase 2 | Pending |
+| ADMIN-04 | Phase 2 | Pending |
+| ADMIN-05 | Phase 2 | Pending |
+| ADMIN-06 | Phase 2 | Pending |
+| ADMIN-07 | Phase 2 | Pending |
+| ADMIN-08 | Phase 2 | Pending |
+| ADMIN-09 | Phase 2 | Pending |
+| ADMIN-10 | Phase 2 | Pending |
+| ADMIN-11 | Phase 2 | Pending |
+| ADMIN-12 | Phase 2 | Pending |
+| CAT-01 | Phase 3 | Pending |
+| CAT-02 | Phase 3 | Pending |
+| CAT-03 | Phase 3 | Pending |
+| CAT-04 | Phase 3 | Pending |
+| CAT-05 | Phase 3 | Pending |
+| CAT-06 | Phase 3 | Pending |
+| CAT-07 | Phase 3 | Pending |
+| CAT-08 | Phase 3 | Pending |
+| SRCH-01 | Phase 3 | Pending |
+| SRCH-02 | Phase 3 | Pending |
+| SRCH-03 | Phase 3 | Pending |
+| SRCH-04 | Phase 3 | Pending |
+| SRCH-05 | Phase 3 | Pending |
+| CONT-01 | Phase 4 | Pending |
+| CONT-02 | Phase 4 | Pending |
+| CONT-03 | Phase 4 | Pending |
+| CONT-04 | Phase 4 | Pending |
+| CONT-05 | Phase 4 | Pending |
+| CONT-06 | Phase 4 | Pending |
+| MFG-01 | Phase 3 | Pending |
+| MFG-02 | Phase 3 | Pending |
+| CTA-01 | Phase 5 | Pending |
+| CTA-02 | Phase 5 | Pending |
+| CTA-03 | Phase 5 | Pending |
+| CTA-04 | Phase 5 | Pending |
+| SEO-01 | Phase 3 | Pending |
+| SEO-02 | Phase 3 | Pending |
+| SEO-03 | Phase 3 | Pending |
+| SEO-04 | Phase 3 | Pending |
+| SEO-05 | Phase 3 | Pending |
+| SEO-06 | Phase 5 | Pending |
+| OPS-01 | Phase 2 | Pending |
+| OPS-02 | Phase 5 | Pending |
 
 **Coverage:**
-- v1 requirements: 48 total
-- Mapped to phases: 0 (pending roadmap)
-- Unmapped: 48 ⚠️
+- v1 requirements: 52 total (7 FOUND + 12 ADMIN + 8 CAT + 5 SRCH + 6 CONT + 2 MFG + 4 CTA + 6 SEO + 2 OPS)
+- Mapped to phases: 52
+- Unmapped: 0
+
+**By phase:**
+- Phase 1 (Foundations): 7 requirements
+- Phase 2 (Admin Panel): 13 requirements (12 ADMIN + OPS-01)
+- Phase 3 (Public Rendering + Search + SEO): 20 requirements (8 CAT + 5 SRCH + 2 MFG + 5 SEO)
+- Phase 4 (Content Features): 6 requirements (6 CONT)
+- Phase 5 (Contact + Launch): 6 requirements (4 CTA + SEO-06 + OPS-02)
 
 ---
 *Requirements defined: 2026-04-21*
-*Last updated: 2026-04-21 after initial definition*
+*Last updated: 2026-04-21 after roadmap creation (traceability populated; prior "48 total" self-count corrected to 52)*
