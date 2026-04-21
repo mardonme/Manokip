@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 01-03 (drizzle migration applied to live Neon dev branch, 24 tables + enums + 9 locale CHECKs + GIN index verified; vercel.json with fra1 + migrate-before-build; 3 live-DB Nyquist tests green); plan 01-04 (next-intl locale routing) is next
-last_updated: "2026-04-21T15:18:59Z"
-last_activity: 2026-04-21 -- Phase 01 plan 03 executed (drizzle-kit generate/migrate against DATABASE_URL_DIRECT, 24 tables live on Neon, locale CHECK + psv_extra_key_check + typed num_value range query Nyquist tests against live DB, vercel.json fra1 + migrate-before-build)
+stopped_at: Completed 01-04 (next-intl v4 routing + [locale] layout + setRequestLocale + generateStaticParams + next/font Inter + Analytics/SpeedInsights mount + 3-locale dictionaries + 8 e2e specs seeded + next.config.mjs→next.config.ts Rule 3 fix + DEF-01 tailwind skew + DEF-02 .env.local placeholders documented); plan 01-05 (Auth.js v5 + Resend magic-link + signIn callback + bootstrapAdmin) is next
+last_updated: "2026-04-21T21:10:00Z"
+last_activity: 2026-04-21 -- Phase 01 plan 04 executed (next-intl routing SSOT, [locale] layout with notFound allowlist + static params + Vercel Analytics/SpeedInsights, uz/ru/en message dicts, 8 Playwright specs for FOUND-03/FOUND-07, next.config.ts replacing broken next.config.mjs — env validator now actually triggers at boot)
 progress:
   total_phases: 5
   completed_phases: 0
   total_plans: 7
-  completed_plans: 3
-  percent: 9
+  completed_plans: 4
+  percent: 11
 ---
 
 # Project State
@@ -26,30 +26,30 @@ See: .planning/PROJECT.md (updated 2026-04-21)
 ## Current Position
 
 Phase: 1 of 5 (Foundations)
-Plan: 3 of 7 in current phase (01-01 + 01-02 + 01-03 complete)
+Plan: 4 of 7 in current phase (01-01 + 01-02 + 01-03 + 01-04 complete)
 Status: Executing
-Last activity: 2026-04-21 -- Phase 01 plan 03 executed (drizzle-kit generate/migrate against DATABASE_URL_DIRECT, 24 tables live on Neon, locale CHECK + psv_extra_key_check + typed num_value range query Nyquist tests against live DB, vercel.json fra1 + migrate-before-build)
+Last activity: 2026-04-21 -- Phase 01 plan 04 executed (next-intl v4 routing single-source-of-truth, [locale] layout with hasLocale→notFound allowlist + setRequestLocale + generateStaticParams + next/font Inter + <Analytics /> + <SpeedInsights />, three-locale message dictionaries with common/auth/admin namespaces, 8 Playwright specs for locale redirect + observability, next.config.mjs→next.config.ts conversion that actually triggers the @/env Zod validator at boot, deferred-items.md recorded DEF-01 tailwind v4 transitive skew + DEF-02 .env.local Auth/Resend placeholders)
 
-Progress: [████░░░░░░] 43%
+Progress: [█████░░░░░] 57%
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 3
-- Average duration: ~60 min
-- Total execution time: 2.98 hours
+- Total plans completed: 4
+- Average duration: ~56 min
+- Total execution time: 3.73 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 1. Foundations | 3 | ~179 min | ~60 min |
+| 1. Foundations | 4 | ~224 min | ~56 min |
 
 **Recent Trend:**
 
-- Last 5 plans: 01-01 (14 min), 01-02 (~95 min across two executor sessions), 01-03 (~70 min)
-- Trend: plan 01-03 shipped atomically in one session; migration apply went clean on first try (Neon dev branch was empty) and all three live-DB Nyquist tests greened on first run after adjusting the constraint-violation matcher for drizzle-orm's error-wrapping shape.
+- Last 5 plans: 01-01 (14 min), 01-02 (~95 min across two executor sessions), 01-03 (~70 min), 01-04 (~45 min)
+- Trend: plan 01-04 surfaced a latent plan-01-01 bug (next.config.mjs `import './src/env.js'` never resolved → env validator never ran at boot). Fix was clean (rename .mjs→.ts + bare TS import). That cascaded into exposing DEF-01 (tailwind v4 transitive skew) and DEF-02 (.env.local Auth/Resend gaps) — both logged, neither caused by plan 04. Source-level deliverables shipped complete and typecheck-clean.
 
 *Updated after each plan completion*
 
@@ -75,6 +75,11 @@ Recent decisions affecting current work:
 - (01-03) Task 03.2 executed autonomously (not checkpoint-paused) — executor prompt explicitly authorized live-DB migration; target branch was verified empty via read-only pg_tables query before DDL ran
 - (01-03) Plan test bodies adjusted for drizzle-orm's error wrapping: NeonDbError with { code, constraint } lives on err.cause, not outer message. Tests assert against the joined chain; required regex literals preserved in source.
 - (01-03) tests/_fixtures/load-env.ts fills placeholder AUTH_SECRET/AUTH_RESEND_KEY/RESEND_FROM_EMAIL defaults so @/env boundary passes at test-boot until plan 01-05 wires Auth.js
+- (01-04) next.config.mjs → next.config.ts (Rule 3). Plan 01-01's `import './src/env.js'` never resolved (only env.ts exists) so the Zod env validator silently never ran at build/dev boot. Plan 04 renamed + converted to TS per t3-oss/env-nextjs Next.js guide. All downstream plans can now rely on fail-fast env validation at config load.
+- (01-04) .env.local augmented with placeholder AUTH_SECRET/AUTH_RESEND_KEY/RESEND_FROM_EMAIL (same pattern as tests/_fixtures/load-env.ts from 01-03) so pnpm dev / pnpm build load next.config.ts past Zod without source-level schema changes. Plan 01-05 replaces with real secrets.
+- (01-04) DEF-01 logged to .planning/phases/01-foundations/deferred-items.md — tailwind v4 + @tailwindcss/postcss 4.0.0 transitive skew with @tailwindcss/node/oxide 4.2.3 breaks globals.css compilation. Pre-existing from plan 01-01. Blocks `pnpm build` + dev-server page render. Recommended fix: upgrade both to ^4.2.3 OR pnpm.overrides pin. Fold into plan 01-05 pre-flight.
+- (01-04) DEF-02 logged to deferred-items.md — .env.local missing Auth/Resend secrets is the expected pre-plan-01-05 state; placeholders in place as the interim workaround.
+- (01-04) E2E specs for locale redirect use real assertions (not test.fixme) with TODO(01-06) comment; plan 06 will flip the 2 redirect-behavior tests from failing to passing once middleware lands.
 
 ### Pending Todos
 
@@ -90,14 +95,15 @@ Research flags carried into planning:
 
 ## Deferred Items
 
-Items acknowledged and carried forward from previous milestone close:
+Items acknowledged and carried forward during execution:
 
 | Category | Item | Status | Deferred At |
 |----------|------|--------|-------------|
-| *(none)* | | | |
+| deps / build | DEF-01 — tailwindcss@4.0.0 + @tailwindcss/postcss@4.0.0 skew with transitive @tailwindcss/node/oxide@4.2.3 breaks globals.css compilation; blocks `pnpm build` + page render in dev. See `.planning/phases/01-foundations/deferred-items.md`. Fix: upgrade both to ^4.2.3 or pnpm.overrides pin. | open | Plan 01-04 |
+| env / auth | DEF-02 — .env.local lacks AUTH_SECRET/AUTH_RESEND_KEY/RESEND_FROM_EMAIL; plan 01-04 added gitignored placeholders as interim. Plan 01-05 replaces with real values. | open (expected resolution: plan 01-05) | Plan 01-04 |
 
 ## Session Continuity
 
-Last session: 2026-04-21T15:18:59Z
-Stopped at: Completed 01-03 (drizzle migration applied to live Neon dev branch with 24 tables + 9 locale CHECKs + GIN index; vercel.json fra1 + migrate-before-build; 29/29 vitest tests green including 6 new live-DB Nyquist tests); plan 01-04 (next-intl v4 locale routing + [locale] layout + observability wiring) is next
-Resume file: .planning/phases/01-foundations/01-04-PLAN.md
+Last session: 2026-04-21T21:10:00Z
+Stopped at: Completed 01-04 (next-intl v4 locale routing SSOT, [locale] layout shell with setRequestLocale + hasLocale→notFound + generateStaticParams + next/font Inter + Analytics/SpeedInsights, 3-locale message dicts, 8 Playwright e2e specs seeded for FOUND-03/FOUND-07, next.config.mjs→next.config.ts Rule 3 fix that actually activates @/env Zod validation at boot, DEF-01 tailwind skew + DEF-02 env placeholders logged); plan 01-05 (Auth.js v5 edge-split + Resend magic-link + signIn callback + bootstrapAdmin + login/admin pages) is next.
+Resume file: .planning/phases/01-foundations/01-05-PLAN.md

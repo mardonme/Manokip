@@ -138,11 +138,11 @@ Which phases cover which requirements.
 |-------------|-------|--------|
 | FOUND-01 | Phase 1 | Complete (01-02) |
 | FOUND-02 | Phase 1 | Complete (01-02) |
-| FOUND-03 | Phase 1 | Pending |
+| FOUND-03 | Phase 1 | Partial (01-04 — routing SSOT + [locale] layout + 3-locale dicts landed; middleware `/` → `/uz/` redirect lands in 01-06) |
 | FOUND-04 | Phase 1 | Complete (01-02) |
 | FOUND-05 | Phase 1 | Pending |
 | FOUND-06 | Phase 1 | Pending |
-| FOUND-07 | Phase 1 | Pending |
+| FOUND-07 | Phase 1 | Partial (01-04 — `<Analytics />` + `<SpeedInsights />` mount point added to [locale] layout; Sentry wiring + production deploy land in 01-07) |
 | ADMIN-01 | Phase 2 | Pending |
 | ADMIN-02 | Phase 2 | Pending |
 | ADMIN-03 | Phase 2 | Pending |

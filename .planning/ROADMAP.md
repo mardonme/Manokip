@@ -34,7 +34,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] 01-01-PLAN.md — Project scaffold, env boundary (@t3-oss/env-nextjs), Vitest + Playwright Wave 0 harness
 - [x] 01-02-PLAN.md — Drizzle schema (24 tables: translations siblings, typed spec long-table, Auth.js tables) + HTTP/WS clients + drizzle.config.ts
 - [x] 01-03-PLAN.md — [BLOCKING] drizzle-kit generate/migrate against DATABASE_URL_DIRECT + live-DB Nyquist tests + vercel.json (fra1)
-- [ ] 01-04-PLAN.md — next-intl v4 routing + [locale] layout (setRequestLocale, next/font, Analytics, SpeedInsights) + 3-locale messages + locale-redirect/observability e2e stubs
+- [x] 01-04-PLAN.md — next-intl v4 routing + [locale] layout (setRequestLocale, next/font, Analytics, SpeedInsights) + 3-locale messages + locale-redirect/observability e2e stubs
 - [ ] 01-05-PLAN.md — Auth.js v5 edge-split (auth.config / auth.ts) + Resend magic-link + signIn callback + bootstrapAdmin + login/admin pages + T-AUTH-02 test
 - [ ] 01-06-PLAN.md — middleware.ts (locale + admin gate) + Cloudinary sign endpoint + admin-gate e2e + magic-link round-trip checkpoint
 - [ ] 01-07-PLAN.md — Sentry 3-runtime + instrumentation.ts (bootstrap boot hook) + next.config.mjs withSentryConfig + deploy + 3-dashboard smoke checkpoint
@@ -95,7 +95,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundations | 3/7 | In Progress | - |
+| 1. Foundations | 4/7 | In Progress | - |
 | 2. Admin Panel | 0/TBD | Not started | - |
 | 3. Public Rendering, Search, SEO | 0/TBD | Not started | - |
 | 4. Content Features | 0/TBD | Not started | - |
