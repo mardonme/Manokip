@@ -11,8 +11,8 @@ See: .planning/PROJECT.md (updated 2026-04-21)
 
 Phase: 1 of 5 (Foundations)
 Plan: 0 of TBD in current phase
-Status: Ready to plan
-Last activity: 2026-04-21 — Roadmap created; 52/52 v1 requirements mapped across 5 phases
+Status: Context gathered; ready to plan
+Last activity: 2026-04-21 — Phase 1 context captured (locale codes, fallback policy, auth sessions, spec_field shape)
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -55,7 +55,7 @@ None yet.
 Research flags carried into planning:
 - Phase 1: Verify Next.js 16 caching API names at scaffold (`unstable_cache`, `revalidateTag`, `"use cache"`); confirm Neon transaction-mode pooling posture with Auth.js session writes
 - Phase 2: Budget a design spike for the spec-schema editor (rename-as-migration, type-change preview, delete-with-impact-count)
-- Phase 3: Decide Uzbek FTS morphology (`simple` adequacy vs custom dictionary); decide default-locale for `.uz` visitors (ru vs uz-Latn)
+- Phase 3: Decide Uzbek FTS morphology (`simple` adequacy vs custom dictionary). [Resolved Phase-1: default locale is bare `uz`, fallback chain `uz → ru → en`]
 
 ## Deferred Items
 
@@ -68,5 +68,5 @@ Items acknowledged and carried forward from previous milestone close:
 ## Session Continuity
 
 Last session: 2026-04-21
-Stopped at: Roadmap created; ready for `/gsd-plan-phase 1`
-Resume file: None
+Stopped at: Phase 1 context gathered; ready for `/gsd-plan-phase 1`
+Resume file: .planning/phases/01-foundations/01-CONTEXT.md
