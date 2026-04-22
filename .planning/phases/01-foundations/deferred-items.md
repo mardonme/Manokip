@@ -40,3 +40,23 @@ at Object.Once (node_modules/.pnpm/@tailwindcss+postcss@4.0.0/node_modules/@tail
 **Fix applied:** Real values populated in `.env.local` (gitignored, developer-machine only). `tests/_fixtures/load-env.ts` continues to supply placeholders only when a var is unset (first-loaded-wins, so real .env.local values take precedence on the developer machine; CI without .env.local falls through to placeholders). Production values for Vercel are still pending — will be entered in the Vercel dashboard before the first preview deploy (plan 01-07 deploy smoke).
 
 ---
+
+## From Plan 01-06 (2026-04-22)
+
+### DEF-03: Task 06.3 human checkpoint — magic-link round-trip manual verification not yet run
+
+**Discovered during:** Plan 01-06 execution (auto mode — human checkpoint skipped by policy).
+
+**Issue:** Plan 01-06 Task 06.3 is a blocking human checkpoint (10-step browser walkthrough) that drives `/uz/login → Resend email → magic link → /uz/admin` against a live Resend account and observes a fresh `sessions` row in Neon. The checkpoint is the authoritative Phase 1 verification for FOUND-05 (roadmap success criterion 4: "An invited admin can complete a magic-link login round-trip"). It requires either:
+  1. Plan 07's `instrumentation.ts` to auto-invoke `bootstrapAdmin()` at dev/prod boot, OR
+  2. A one-time manual `bootstrapAdmin()` call to seed the `admin_user` table with `BOOTSTRAP_ADMIN_EMAIL`.
+
+Until an admin row exists, the magic-link `signIn` callback will reject every email (T-AUTH-02 integration test already proves this is the correct rejection behaviour — plan 05 commit `1fa815d`). So the round-trip cannot be driven end-to-end without one of the two pre-conditions.
+
+**Scope:** Not a bug — the gate is by design and aligned with plan 07's deliverable. The auto-mode executor session for plan 06 does not run interactive human checkpoints.
+
+**Fix plan:** Carry into plan 01-07. Plan 07 adds `instrumentation.ts` with the bootstrap boot hook; after plan 07 lands, the developer runs Task 06.3's 10-step walkthrough against their local `pnpm dev` + real Resend account + real `BOOTSTRAP_ADMIN_EMAIL`, then records the outcome in a short follow-up commit annotating DEF-03 as RESOLVED. The `tests/e2e/magic-link-login.spec.ts` Playwright scaffold (also from plan 06) remains in place for a future Phase 2 automation effort if/when email-intercept infra is budgeted.
+
+**Acceptance of DEF-03:** Developer confirms steps 1–10 of Task 06.3 produce expected outcomes AND `psql "$DATABASE_URL_DIRECT" -c "SELECT COUNT(*) FROM sessions"` returns ≥ 1.
+
+---

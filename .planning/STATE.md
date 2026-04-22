@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 01-05 (Auth.js v5 edge-split + Resend magic-link + signIn admin-gate + requireAdmin + bootstrapAdmin + login/admin pages + T-AUTH-02 integration test); plan 01-06 (middleware.ts locale + admin gate + Cloudinary sign endpoint + magic-link round-trip e2e) is next
-last_updated: "2026-04-21T22:30:00Z"
-last_activity: 2026-04-21 -- Phase 01 plan 05 executed (Auth.js v5 edge-split at src/lib/auth.config.ts (Edge-safe) + src/lib/auth.ts (Node + DrizzleAdapter + session callback stamps sessions.absoluteExpires + requireAdmin enforces D-09 7d absolute cap + deletes expired sessions), Resend magic-link via sendVerificationRequest override rendering src/emails/magic-link.tsx (3-locale React Email template), src/lib/bootstrap.ts with D-12 verbatim SELECT 1 FROM admin_user LIMIT 1 pre-check + onConflictDoNothing belt-and-suspenders, login + admin minimal pages under /[locale]/, 'use server' Zod-validated action wired to <form action={requestMagicLink}>, tests/db/auth-signin-callback.test.ts with 4 cases against live Neon exercising T-AUTH-02 contract; DEF-02 resolved as .env.local now has real Auth/Resend values; pnpm build green 11 static pages 5.8s, pnpm typecheck 0, pnpm vitest run 33/33)
+stopped_at: Completed 01-06 (proxy.ts Next.js-16 composed Edge middleware for locale + admin gate + next.config.ts turbopack.root pin + src/lib/cloudinary.ts + /api/cloudinary/sign POST (Node runtime, Zod folder allowlist, HMAC integer seconds) + 9 cloudinary-sign integration tests + 10 admin-gate e2e tests + magic-link-login e2e scaffold CI-skipped); plan 01-07 (Sentry 3-runtime + instrumentation.ts bootstrap hook + withSentryConfig + deploy smoke + DEF-03 Task 06.3 manual magic-link round-trip) is next
+last_updated: "2026-04-22T00:00:00Z"
+last_activity: 2026-04-22 -- Phase 01 plan 06 executed (proxy.ts at repo root — Next.js 16 renamed middleware.ts → proxy.ts — composing createMiddleware(routing) inside NextAuth(authConfig).auth() wrapper, admin regex /^\/(uz|ru|en)\/admin(\/|$)/ redirects unauth 307 to /{locale}/login, matcher excludes api/_next/_vercel/static; next.config.ts turbopack.root pinned to __dirname to stop the upward walk hitting C:\Users\hp elitebook\package-lock.json on Windows; src/lib/cloudinary.ts 3-line singleton config; src/app/api/cloudinary/sign/route.ts with runtime='nodejs', session→JSON→Zod→HMAC ordering, response includes apiKey+cloudName but NEVER apiSecret (T-SEC-ENV); tests/api/cloudinary-sign.test.ts with vi.mock('@/lib/auth') narrow-cast workaround for Auth.js overload union + 9 passing cases (401×2, 400×3, 200×4); tests/e2e/admin-gate.spec.ts with 10 Playwright tests 3-locale × 3-scenario + regex precision; tests/e2e/magic-link-login.spec.ts as RUN_MAGIC_LINK_TEST=1-gated scaffold; pnpm build 0 in 7.0s with new /api/cloudinary/sign dynamic route listed, pnpm typecheck 0, pnpm vitest run 42/42 in ~5.4s; Task 06.3 human checkpoint DEFERRED as DEF-03 to plan 01-07)
 progress:
   total_phases: 5
   completed_phases: 0
   total_plans: 7
-  completed_plans: 5
-  percent: 14
+  completed_plans: 6
+  percent: 17
 ---
 
 # Project State
@@ -26,30 +26,30 @@ See: .planning/PROJECT.md (updated 2026-04-21)
 ## Current Position
 
 Phase: 1 of 5 (Foundations)
-Plan: 5 of 7 in current phase (01-01 + 01-02 + 01-03 + 01-04 + 01-05 complete)
+Plan: 6 of 7 in current phase (01-01 + 01-02 + 01-03 + 01-04 + 01-05 + 01-06 complete)
 Status: Executing
-Last activity: 2026-04-21 -- Phase 01 plan 05 executed (Auth.js v5 edge-split + Resend magic-link + signIn admin-gate + D-09 dual session caps + bootstrapAdmin with D-12 verbatim pre-check + login/admin placeholder pages + T-AUTH-02 integration test against live Neon with 4 cases)
+Last activity: 2026-04-22 -- Phase 01 plan 06 executed (proxy.ts composed Edge middleware + turbopack.root pin + Cloudinary sign endpoint + 9 cloudinary-sign tests + 10 admin-gate e2e tests + magic-link-login e2e scaffold; Task 06.3 manual checkpoint DEFERRED as DEF-03 to plan 01-07)
 
-Progress: [█████░░░░░] 71%
+Progress: [██████░░░░] 86%
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 5
-- Average duration: ~52 min
-- Total execution time: 4.32 hours
+- Total plans completed: 6
+- Average duration: ~50 min
+- Total execution time: 4.82 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 1. Foundations | 5 | ~259 min | ~52 min |
+| 1. Foundations | 6 | ~289 min | ~50 min |
 
 **Recent Trend:**
 
-- Last 5 plans: 01-01 (14 min), 01-02 (~95 min across two executor sessions), 01-03 (~70 min), 01-04 (~45 min), 01-05 (~35 min)
-- Trend: plan 01-05 was the fastest phase-1 plan to-date (35 min). Three Rule-3 blockers auto-fixed inline (Auth.js Session type augmentation for sessionToken, React 19 void-return shape on <form action>, Vitest 4 timeout API shift from object-arg to 3rd-positional). All three were mechanical typing/API alignment — zero semantic deviation from plan. Edge-split survived `pnpm build` cleanly (5.8s, 11 static pages). Test suite grew 29 → 33 (4 new T-AUTH-02 cases).
+- Last 6 plans: 01-01 (14 min), 01-02 (~95 min across two executor sessions), 01-03 (~70 min), 01-04 (~45 min), 01-05 (~35 min), 01-06 (~30 min)
+- Trend: plan 01-06 is now the fastest phase-1 plan (30 min) because Task 06.1 (proxy.ts + admin-gate e2e + turbopack.root pin) had already been drafted before the executor session, so this session completed only Task 06.2 (Cloudinary sign endpoint + 9 tests) + Task 06.4 (magic-link-login scaffold) + verification + summary. Two deviations from plan worth noting: (1) file name is proxy.ts not middleware.ts because Next.js 16 renamed the convention — every other contract matches verbatim; (2) tests/api/cloudinary-sign.test.ts needed a narrow `ReturnType<typeof vi.fn<() => Promise<Session | null>>>` cast on `vi.mocked(auth)` because Auth.js v5's `auth` export is an overloaded union that narrows to NextMiddleware under vi.mocked, which rejects mockResolvedValue(null). Task 06.3 (human checkpoint) deferred as DEF-03 to plan 01-07. Test suite grew 33 → 42 (9 new cloudinary-sign cases).
 
 *Updated after each plan completion*
 
@@ -107,9 +107,10 @@ Items acknowledged and carried forward during execution:
 |----------|------|--------|-------------|
 | deps / build | ~~DEF-01 — tailwindcss@4.0.0 + @tailwindcss/postcss@4.0.0 skew with transitive @tailwindcss/node/oxide@4.2.3 breaks globals.css compilation~~ | **RESOLVED 2026-04-21** (commit `31062b4` — bumped both to exact 4.2.3; `pnpm build`, `typecheck`, `vitest` 29/29, `dev` all green) | Plan 01-04 |
 | env / auth | ~~DEF-02 — .env.local lacks AUTH_SECRET/AUTH_RESEND_KEY/RESEND_FROM_EMAIL~~ | **RESOLVED 2026-04-21** (developer populated real values in .env.local before plan 01-05 ran; pnpm build/typecheck/vitest all loaded via real env at boot during plan 01-05 commits `862bc15`/`75d6387`/`1fa815d`) | Plan 01-04 |
+| checkpoint / auth | DEF-03 — Task 06.3 magic-link round-trip manual verification (FOUND-05 acceptance) not yet run — requires bootstrapAdmin() to have seeded admin_user, which plan 07's instrumentation.ts boot hook will provide (or developer runs bootstrapAdmin() manually once) | Pending plan 01-07 | Plan 01-06 |
 
 ## Session Continuity
 
-Last session: 2026-04-21T22:30:00Z
-Stopped at: Completed 01-05 (Auth.js v5 edge-split locked at src/lib/auth.config.ts with ONLY `next-auth/providers/resend` + type-only NextAuthConfig as static imports; src/lib/auth.ts composes DrizzleAdapter + session.strategy='database' + maxAge=86400 + signIn admin-gate + session callback stamping absoluteExpires + requireAdmin rejecting past-7d sessions; src/lib/bootstrap.ts with D-12 verbatim SELECT 1 pre-check + onConflictDoNothing; src/emails/magic-link.tsx 3-locale React Email template; src/app/api/auth/[...nextauth]/route.ts GET/POST re-export; src/app/[locale]/login/page.tsx + actions.ts (Zod-validated Server Action delegating to signIn('resend', ...)); src/app/[locale]/admin/page.tsx gated by requireAdmin(); tests/db/auth-signin-callback.test.ts with 4 cases against live Neon). DEF-02 resolved — real Auth/Resend values populated in .env.local before this plan ran. pnpm build 0 in 5.8s (11 static pages + 2 dynamic: /api/auth/[...nextauth] + /[locale]/admin). pnpm typecheck 0. pnpm vitest run 33/33 in ~3s. Plan 01-06 (middleware.ts locale redirect + admin gate + Cloudinary sign endpoint + magic-link round-trip e2e) is next.
-Resume file: .planning/phases/01-foundations/01-06-PLAN.md
+Last session: 2026-04-22T00:00:00Z
+Stopped at: Completed 01-06 — proxy.ts at repo root (Next.js 16's renamed middleware convention — `export const proxy = auth(async fn)`) composing next-intl createMiddleware(routing) + Auth.js admin-gate with regex /^\/(uz|ru|en)\/admin(\/|$)/ redirecting unauth 307 to /{locale}/login, matcher excluding api/_next/_vercel/*.\\..\\*; next.config.ts augmented with turbopack.root = path.resolve(__dirname) to stop Next's upward walk from rooting on C:\Users\hp elitebook\package-lock.json which breaks proxy.ts discovery on Windows; src/lib/cloudinary.ts as 3-line v2 singleton config; src/app/api/cloudinary/sign/route.ts Node-runtime POST with ordered defence (auth→JSON→Zod-folder-allowlist→HMAC integer seconds) returning {signature, timestamp, folder, apiKey, cloudName} — NEVER apiSecret (T-SEC-ENV); tests/api/cloudinary-sign.test.ts 9 passing cases via vi.mock('@/lib/auth') with narrow cast workaround for Auth.js overload union; tests/e2e/admin-gate.spec.ts 10 Playwright tests (3 locales × 3 scenarios + regex precision); tests/e2e/magic-link-login.spec.ts CI-skipped scaffold behind RUN_MAGIC_LINK_TEST=1 gate. pnpm build 0 in 7.0s now lists /api/cloudinary/sign dynamic route, pnpm typecheck 0, pnpm vitest run 42/42 in ~5.4s. Task 06.3 human checkpoint (magic-link round-trip manual verification) deferred as DEF-03 — awaits plan 01-07 instrumentation.ts bootstrap hook OR a one-time manual bootstrapAdmin() invocation. Plan 01-07 (Sentry 3-runtime + instrumentation.ts + withSentryConfig + deploy smoke) is next.
+Resume file: .planning/phases/01-foundations/01-07-PLAN.md
