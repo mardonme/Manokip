@@ -27,14 +27,16 @@ at Object.Once (node_modules/.pnpm/@tailwindcss+postcss@4.0.0/node_modules/@tail
 
 **Fix applied:** Upgraded `tailwindcss` + `@tailwindcss/postcss` from exact `4.0.0` to exact `4.2.3` (option 1 of the recommendation). The overrides route (option 2) was not needed — the skew was purely a major-minor mismatch between direct pins and transitive resolution.
 
-### DEF-02: .env.local lacks Auth.js + Resend secrets (expected until plan 01-05)
+### DEF-02: .env.local lacks Auth.js + Resend secrets (expected until plan 01-05) — RESOLVED
 
 **Discovered during:** Plan 01-04 Task 04.2 build verification
+
+**Resolved:** 2026-04-21 during Plan 01-05 pre-flight setup — developer populated `.env.local` with real values before executor ran (executor prompt confirmed `.env.local` "verified clean, no duplicates" with real AUTH_SECRET (44-char base64), AUTH_RESEND_KEY (re_*), RESEND_FROM_EMAIL (onboarding@resend.dev — Resend test sender), BOOTSTRAP_ADMIN_EMAIL). Plan 01-05 commits (`862bc15`, `75d6387`, `1fa815d`) then exercised these values: `pnpm typecheck`, `pnpm vitest run` (33/33), and `pnpm build` (11 static pages in 5.8s) all loaded `.env.local` through `next.config.ts`'s `import './src/env'` without the Zod validator throwing.
 
 **Issue:** `src/env.ts` declares `AUTH_SECRET`, `AUTH_RESEND_KEY`, `RESEND_FROM_EMAIL` as required. The developer `.env.local` only has DB + Cloudinary secrets from plan 01-01/01-03. Running `pnpm dev` or `pnpm build` (after DEF-01 is fixed) triggers the Zod validator and aborts before next-intl routing can be exercised.
 
 **Workaround applied by plan 01-04:** Non-functional placeholder values appended to `.env.local` (gitignored, developer-machine only) so `next.config.ts`'s `import './src/env'` can load. Exact values documented in `.env.local` with a comment "awaiting plan 01-05". Tests/_fixtures/load-env.ts already uses the same pattern for test-suite boot (plan 01-03).
 
-**Recommended fix:** Plan 01-05 will generate real `AUTH_SECRET` (`openssl rand -base64 32`) and provide real `AUTH_RESEND_KEY` + `RESEND_FROM_EMAIL` from the developer's Resend dashboard. Replacing the placeholders in `.env.local` is a plan 01-05 setup step.
+**Fix applied:** Real values populated in `.env.local` (gitignored, developer-machine only). `tests/_fixtures/load-env.ts` continues to supply placeholders only when a var is unset (first-loaded-wins, so real .env.local values take precedence on the developer machine; CI without .env.local falls through to placeholders). Production values for Vercel are still pending — will be entered in the Vercel dashboard before the first preview deploy (plan 01-07 deploy smoke).
 
 ---
