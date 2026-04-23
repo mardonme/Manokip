@@ -12,7 +12,7 @@ Manometr is a trilingual (uz-Latn / ru / en) B2B catalog for industrial pressure
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Foundations** - Schema, locale routing, auth, pooled Postgres, deployment scaffold
+- [x] **Phase 1: Foundations** - Schema, locale routing, auth, pooled Postgres, deployment scaffold
 - [ ] **Phase 2: Admin Panel** - Spec-schema editor, product CRUD, media, invites, audit, cache invalidation
 - [ ] **Phase 3: Public Rendering, Search, SEO** - Catalog pages, filters, FTS, hreflang, JSON-LD, manufacturer pages
 - [ ] **Phase 4: Content Features** - Recipes, industry pages, product cross-links

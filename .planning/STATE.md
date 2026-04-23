@@ -2,13 +2,13 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: phase-verification-pending
-stopped_at: Completed 01-07 (sentry.{server,client,edge}.config.ts at repo root + src/instrumentation.ts register hook with NEXT_RUNTIME branching + dynamic Sentry imports + bootstrapAdmin() boot call wrapped in try/catch Sentry.captureException + onRequestError bound to Sentry.captureRequestError; next.config.ts wrapped with withSentryConfig(withNextIntl(nextConfig)) — tunnelRoute '/sentry-tunnel' + sourcemaps.deleteSourcemapsAfterUpload (replaces removed v10 hideSourceMaps) + disableLogger; src/app/api/smoke/sentry/route.ts POST-only admin-gated throw endpoint — folder renamed _smoke→smoke because App Router private-folder convention opts _-prefixed out of routing; Task 07.3 approved — Vercel preview deploy verified: fra1 region header, magic-link round-trip against pooled Neon, Sentry 'Phase 1 Sentry smoke test' issue captured, Vercel Analytics pageview, Speed Insights sample, no client-secret leak, 401 on unauthenticated smoke endpoint; DEF-03 resolved). Phase 01 all 7 plans complete — ready for phase verification.
+status: phase-complete
+stopped_at: Phase 01 Foundations COMPLETE and verifier-APPROVED (5/5 success criteria + 7/7 FOUND requirements passing). Plans 01-01..01-07 all landed; DEF-01/DEF-02/DEF-03 all resolved. Highest-cost pitfalls structurally prevented (no _ru/_en/_uz columns, no JSONB spec bag, no opaque spec-value strings). Task 07.3 Vercel preview deploy verified fra1 region + magic-link round-trip on pooled Neon + Sentry/Analytics/Speed Insights all receiving events + no client-secret leak + 401 on unauthed smoke endpoint. VERIFICATION.md written. Next: route to /gsd-new-milestone or Phase 2 (Admin Panel) planning via /gsd-plan-phase 02-admin.
 last_updated: "2026-04-23T00:00:00Z"
 last_activity: 2026-04-23 -- Phase 01 plan 07 executed + Task 07.3 checkpoint approved (Sentry three-runtime observability + bootstrap boot hook + Vercel preview smoke verification — all 8 acceptance checks passed on live fra1 deployment). DEF-03 (plan 01-06 magic-link round-trip) resolved as part of 07.3 checkpoint since instrumentation.ts now seeds bootstrapAdmin on cold start. Phase 01 all plans done.
 progress:
   total_phases: 5
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 7
   completed_plans: 7
   percent: 20
@@ -25,12 +25,12 @@ See: .planning/PROJECT.md (updated 2026-04-21)
 
 ## Current Position
 
-Phase: 1 of 5 (Foundations)
-Plan: 7 of 7 in current phase — ALL COMPLETE (01-01 + 01-02 + 01-03 + 01-04 + 01-05 + 01-06 + 01-07)
-Status: Phase verification pending
-Last activity: 2026-04-23 -- Phase 01 plan 07 executed + Task 07.3 deploy smoke checkpoint approved (Sentry three-runtime + instrumentation boot hook + Vercel preview dashboard verification; DEF-03 magic-link round-trip resolved in-flight)
+Phase: 1 of 5 (Foundations) — COMPLETE + VERIFIED
+Plan: 7 of 7 — ALL COMPLETE (01-01 + 01-02 + 01-03 + 01-04 + 01-05 + 01-06 + 01-07)
+Status: Phase complete — ready to open Phase 2 (Admin Panel)
+Last activity: 2026-04-23 -- Phase 01 verifier APPROVED (5/5 success criteria + 7/7 FOUND requirements passing); VERIFICATION.md written; REQUIREMENTS.md + ROADMAP.md + STATE.md reconciled
 
-Progress: [██████████] 100% of phase plans complete; phase verification + complete-phase routing next
+Progress: [██████████] Phase 01 done (1 of 5 phases complete, 20%)
 
 ## Performance Metrics
 
