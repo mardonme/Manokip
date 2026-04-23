@@ -1,5 +1,6 @@
 import type { NextConfig } from 'next';
 import createNextIntlPlugin from 'next-intl/plugin';
+import { withSentryConfig } from '@sentry/nextjs';
 import path from 'node:path';
 import './src/env';
 
@@ -24,4 +25,18 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default withNextIntl(nextConfig);
+export default withSentryConfig(withNextIntl(nextConfig), {
+  org: process.env.SENTRY_ORG,
+  project: process.env.SENTRY_PROJECT,
+  authToken: process.env.SENTRY_AUTH_TOKEN,
+  silent: !process.env.CI,
+  tunnelRoute: '/sentry-tunnel',
+  // @sentry/nextjs v10 replaced the v8 `hideSourceMaps: true` flag with
+  // `sourcemaps.deleteSourcemapsAfterUpload: true` — same outcome (uploaded
+  // maps aren't left publicly served next to the bundle). See CHANGELOG for
+  // @sentry/nextjs 10.x.
+  sourcemaps: {
+    deleteSourcemapsAfterUpload: true,
+  },
+  disableLogger: true,
+});
