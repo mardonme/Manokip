@@ -37,7 +37,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] 01-04-PLAN.md — next-intl v4 routing + [locale] layout (setRequestLocale, next/font, Analytics, SpeedInsights) + 3-locale messages + locale-redirect/observability e2e stubs
 - [x] 01-05-PLAN.md — Auth.js v5 edge-split (auth.config / auth.ts) + Resend magic-link + signIn callback + bootstrapAdmin + login/admin pages + T-AUTH-02 test
 - [x] 01-06-PLAN.md — proxy.ts (Next.js 16 locale + admin gate) + Cloudinary sign endpoint + admin-gate e2e + magic-link round-trip scaffold (manual checkpoint deferred to plan 07)
-- [ ] 01-07-PLAN.md — Sentry 3-runtime + instrumentation.ts (bootstrap boot hook) + next.config.mjs withSentryConfig + deploy + 3-dashboard smoke checkpoint
+- [x] 01-07-PLAN.md — Sentry 3-runtime + instrumentation.ts (bootstrap boot hook) + next.config.ts withSentryConfig + deploy + 3-dashboard smoke checkpoint
 
 ### Phase 2: Admin Panel
 **Goal**: The content team can enter real trilingual products in under 10 minutes each, with every admin write invalidating the correct public caches — admin UX quality is the operational risk this phase closes.

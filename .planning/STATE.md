@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: executing
-stopped_at: Completed 01-06 (proxy.ts Next.js-16 composed Edge middleware for locale + admin gate + next.config.ts turbopack.root pin + src/lib/cloudinary.ts + /api/cloudinary/sign POST (Node runtime, Zod folder allowlist, HMAC integer seconds) + 9 cloudinary-sign integration tests + 10 admin-gate e2e tests + magic-link-login e2e scaffold CI-skipped); plan 01-07 (Sentry 3-runtime + instrumentation.ts bootstrap hook + withSentryConfig + deploy smoke + DEF-03 Task 06.3 manual magic-link round-trip) is next
-last_updated: "2026-04-22T00:00:00Z"
-last_activity: 2026-04-22 -- Phase 01 plan 06 executed (proxy.ts at repo root — Next.js 16 renamed middleware.ts → proxy.ts — composing createMiddleware(routing) inside NextAuth(authConfig).auth() wrapper, admin regex /^\/(uz|ru|en)\/admin(\/|$)/ redirects unauth 307 to /{locale}/login, matcher excludes api/_next/_vercel/static; next.config.ts turbopack.root pinned to __dirname to stop the upward walk hitting C:\Users\hp elitebook\package-lock.json on Windows; src/lib/cloudinary.ts 3-line singleton config; src/app/api/cloudinary/sign/route.ts with runtime='nodejs', session→JSON→Zod→HMAC ordering, response includes apiKey+cloudName but NEVER apiSecret (T-SEC-ENV); tests/api/cloudinary-sign.test.ts with vi.mock('@/lib/auth') narrow-cast workaround for Auth.js overload union + 9 passing cases (401×2, 400×3, 200×4); tests/e2e/admin-gate.spec.ts with 10 Playwright tests 3-locale × 3-scenario + regex precision; tests/e2e/magic-link-login.spec.ts as RUN_MAGIC_LINK_TEST=1-gated scaffold; pnpm build 0 in 7.0s with new /api/cloudinary/sign dynamic route listed, pnpm typecheck 0, pnpm vitest run 42/42 in ~5.4s; Task 06.3 human checkpoint DEFERRED as DEF-03 to plan 01-07)
+status: phase-verification-pending
+stopped_at: Completed 01-07 (sentry.{server,client,edge}.config.ts at repo root + src/instrumentation.ts register hook with NEXT_RUNTIME branching + dynamic Sentry imports + bootstrapAdmin() boot call wrapped in try/catch Sentry.captureException + onRequestError bound to Sentry.captureRequestError; next.config.ts wrapped with withSentryConfig(withNextIntl(nextConfig)) — tunnelRoute '/sentry-tunnel' + sourcemaps.deleteSourcemapsAfterUpload (replaces removed v10 hideSourceMaps) + disableLogger; src/app/api/smoke/sentry/route.ts POST-only admin-gated throw endpoint — folder renamed _smoke→smoke because App Router private-folder convention opts _-prefixed out of routing; Task 07.3 approved — Vercel preview deploy verified: fra1 region header, magic-link round-trip against pooled Neon, Sentry 'Phase 1 Sentry smoke test' issue captured, Vercel Analytics pageview, Speed Insights sample, no client-secret leak, 401 on unauthenticated smoke endpoint; DEF-03 resolved). Phase 01 all 7 plans complete — ready for phase verification.
+last_updated: "2026-04-23T00:00:00Z"
+last_activity: 2026-04-23 -- Phase 01 plan 07 executed + Task 07.3 checkpoint approved (Sentry three-runtime observability + bootstrap boot hook + Vercel preview smoke verification — all 8 acceptance checks passed on live fra1 deployment). DEF-03 (plan 01-06 magic-link round-trip) resolved as part of 07.3 checkpoint since instrumentation.ts now seeds bootstrapAdmin on cold start. Phase 01 all plans done.
 progress:
   total_phases: 5
   completed_phases: 0
   total_plans: 7
-  completed_plans: 6
-  percent: 17
+  completed_plans: 7
+  percent: 20
 ---
 
 # Project State
@@ -26,11 +26,11 @@ See: .planning/PROJECT.md (updated 2026-04-21)
 ## Current Position
 
 Phase: 1 of 5 (Foundations)
-Plan: 6 of 7 in current phase (01-01 + 01-02 + 01-03 + 01-04 + 01-05 + 01-06 complete)
-Status: Executing
-Last activity: 2026-04-22 -- Phase 01 plan 06 executed (proxy.ts composed Edge middleware + turbopack.root pin + Cloudinary sign endpoint + 9 cloudinary-sign tests + 10 admin-gate e2e tests + magic-link-login e2e scaffold; Task 06.3 manual checkpoint DEFERRED as DEF-03 to plan 01-07)
+Plan: 7 of 7 in current phase — ALL COMPLETE (01-01 + 01-02 + 01-03 + 01-04 + 01-05 + 01-06 + 01-07)
+Status: Phase verification pending
+Last activity: 2026-04-23 -- Phase 01 plan 07 executed + Task 07.3 deploy smoke checkpoint approved (Sentry three-runtime + instrumentation boot hook + Vercel preview dashboard verification; DEF-03 magic-link round-trip resolved in-flight)
 
-Progress: [██████░░░░] 86%
+Progress: [██████████] 100% of phase plans complete; phase verification + complete-phase routing next
 
 ## Performance Metrics
 

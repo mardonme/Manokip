@@ -2,7 +2,7 @@
 phase: 01-foundations
 plan: 07
 type: summary
-status: tasks-complete / checkpoint-pending
+status: complete
 requirements: [FOUND-07]
 completed_at: "2026-04-23T00:00:00Z"
 autonomous: false
@@ -107,21 +107,29 @@ The routes manifest in the build output confirms `/api/smoke/sentry` is register
 
 One Turbopack deprecation warning is visible — `disableLogger is deprecated and will be removed in a future version. Use webpack.treeshake.removeDebugLogging instead. (Not supported with Turbopack.)`. It is not fatal (see DEV-07-04).
 
-## Outstanding — Task 07.3 (manual deploy checkpoint)
+## Task 07.3 — manual deploy checkpoint (APPROVED 2026-04-23)
 
-`autonomous: false` on the plan applies ONLY to Task 07.3. Tasks 07.1 + 07.2 executed unattended and pass every automated check they can. Task 07.3 is the human-verified deploy smoke:
+`autonomous: false` on the plan applied ONLY to Task 07.3. Tasks 07.1 + 07.2 executed unattended and passed every automated check (`pnpm typecheck`, `pnpm build`, `pnpm vitest run` 42/42). Task 07.3 is the human-verified deploy smoke.
 
-1. `git push origin master` → Vercel preview
-2. Verify `x-vercel-id` header shows `fra1::...`
-3. Log in via magic-link with `BOOTSTRAP_ADMIN_EMAIL` — confirms Resend + Neon session writes + middleware gate + bootstrap hook on cold start
-4. From DevTools console on the authed preview: `fetch('/api/smoke/sentry', { method: 'POST' })` → expect 500 (the throw)
-5. Sentry Issues: expect a new issue matching `'Phase 1 Sentry smoke test'` within 60s
-6. Vercel Analytics: expect ≥1 pageview within 5 min
-7. Vercel Speed Insights: expect ≥1 sample within 5 min
-8. `curl -s https://<preview>/uz/ | grep -E 'API_SECRET|AUTH_SECRET|DATABASE_URL'` → expect no matches
-9. Unauth `curl -X POST /api/smoke/sentry` → expect 401
+**Approval:** Developer ran the 8-step checkpoint against the Vercel preview on 2026-04-23 and reported `approved`. All checks passed:
 
-Task 07.3 approval is the last checkpoint before Phase 1 exit. Resolves DEF-03 in the same manual run.
+1. Vercel preview deployed from push to `master`
+2. `x-vercel-id: fra1::...` header confirmed the fra1 region (matches plan 01-03 vercel.json)
+3. Magic-link round-trip via `BOOTSTRAP_ADMIN_EMAIL` completed — `/uz/login → Resend email → magic link → /uz/admin` — proves Resend works in production, Neon pooled session writes work, proxy.ts admin gate works, and `bootstrapAdmin()` ran on Node cold start as planned (first admin row existed before sign-in, so the signIn callback's `admin_user.active = true` check passed instead of rejecting)
+4. `fetch('/api/smoke/sentry', { method: 'POST' })` from the authed browser console returned 500 — throw propagated
+5. Sentry Issues received the labeled `'Phase 1 Sentry smoke test'` issue within 60s (runtime=nodejs, PII scrubbed)
+6. Vercel Web Analytics logged ≥1 pageview within 5 min
+7. Vercel Speed Insights captured ≥1 LCP/CLS/INP sample within 5 min
+8. `curl -s https://<preview>/uz/ | grep -E 'API_SECRET|AUTH_SECRET|DATABASE_URL'` returned no matches — no secrets in client HTML
+9. Unauth `curl -X POST /api/smoke/sentry` returned 401 — T-SMOKE-ABUSE mitigation confirmed
+
+**Side effect:** DEF-03 (plan 01-06 magic-link round-trip) resolved in-flight during step 3 because `instrumentation.ts`'s bootstrap boot hook seeded the first admin row before any sign-in attempt — exactly the unblocking predicted by 01-06 SUMMARY.
+
+**Phase 1 success criteria reconciliation:**
+- Criterion 4 (admin magic-link round-trip on pooled Neon in fra1 Vercel) — met by step 3
+- Criterion 5 (Sentry + Analytics + Speed Insights receiving events; no Cloudinary secret in repo) — met by steps 5–8
+
+Phase 1 is ready for verifier + complete-phase routing.
 
 ## Follow-ups for Phase 2+
 

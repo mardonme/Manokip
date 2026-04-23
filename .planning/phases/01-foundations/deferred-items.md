@@ -43,7 +43,9 @@ at Object.Once (node_modules/.pnpm/@tailwindcss+postcss@4.0.0/node_modules/@tail
 
 ## From Plan 01-06 (2026-04-22)
 
-### DEF-03: Task 06.3 human checkpoint — magic-link round-trip manual verification not yet run
+### DEF-03: Task 06.3 human checkpoint — magic-link round-trip manual verification — RESOLVED
+
+**Resolved:** 2026-04-23 during plan 01-07 Task 07.3 deploy checkpoint. Developer completed the magic-link round-trip against the Vercel preview (`BOOTSTRAP_ADMIN_EMAIL` → Resend → magic-link click → `/uz/admin` landing). `instrumentation.ts`'s `bootstrapAdmin()` call on Node cold start seeded the first admin row before the sign-in attempt, as predicted. Fresh `sessions` row confirmed server-side by the successful `/uz/admin` render (middleware admin-gate passes only on a valid session cookie). Task 07.3 approval also confirmed the `fra1` region, Sentry event capture, Analytics pageview, Speed Insights sample, no client-side secret leak, and 401 on unauthenticated smoke endpoint.
 
 **Discovered during:** Plan 01-06 execution (auto mode — human checkpoint skipped by policy).
 
