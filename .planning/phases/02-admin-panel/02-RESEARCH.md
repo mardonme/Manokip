@@ -1015,42 +1015,43 @@ export const inviteAdmin = withAdminAction(schema, async ({ email }, { actorEmai
 | A9 | The `@hookform/resolvers` 3.10.0 currently in package.json works with RHF 7.73.x; do not upgrade to 5.x | Standard Stack | If 3.10.0 has a Zod 4.x peer issue (zod was upgraded 3→4 at some point), upgrade to a 3.x line that supports zod 4 — verify at install. |
 | A10 | The Cloudinary CldUploadWidget pre-PDF restriction works via `clientAllowedFormats: ['pdf']` + `resourceType: 'auto'` | Pattern 3 | If Cloudinary docs require `resource_type: 'raw'` for PDFs in signed mode, swap. Smoke-test in Wave 3. |
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **`product.status` enum vs `product.publishedAt` (existing)**
    - What we know: Phase 1 schema declares `product.publishedAt TIMESTAMPTZ NULL` (NULL = draft). CONTEXT D-11 says add `product.status TEXT NOT NULL DEFAULT 'draft' CHECK (status IN ('draft','published'))`.
    - What's unclear: Should Phase 2 add `status` as a new column (and backfill) OR keep `publishedAt` and treat `status` as a derived field (`published_at IS NULL ? 'draft' : 'published'`)?
-   - Recommendation: **Option A (keep `publishedAt`, derive status).** Zero schema change to the existing column; the form has a single "Publish/Unpublish" button that sets/nulls `publishedAt`. The Zod schema's `status: z.enum(['draft','published'])` is computed in code from `publishedAt`. Future v2 needs (per-locale publish, scheduled publish at) extend `publishedAt` cleanly. Adopt Option B only if the planner judges Option A introduces too much code-vs-schema drift.
+   - **RESOLVED: Option B (literal CONTEXT D-11)** — add `product.status TEXT NOT NULL DEFAULT 'draft' CHECK (status IN ('draft','published'))` column to `product` table; backfill from existing `publishedAt` (`UPDATE product SET status = CASE WHEN published_at IS NOT NULL THEN 'published' ELSE 'draft' END`). Keep `publishedAt` for the timestamp; `status` is the canonical state. **This reverses the previous Option A plan choice** — implementing CONTEXT D-11 verbatim avoids code-vs-schema drift and gives lifecycle actions (publishProduct/unpublishProduct) a single canonical column to mutate.
 
 2. **Per-field MT flag schema choice (D-05 alternative)**
    - What we know: D-05 default is sibling `*_translation_field_flags` table; alternative is boolean column per field on each translation table.
    - What's unclear: Which is cleaner under our `*_translations` PK shape (composite `(productId, locale)`)?
-   - Recommendation: **Sibling table.** PK `(translation_id, field_name)` is naturally extensible (v2 `needs_review` flag). Translation tables stay narrow. Reads are one extra JOIN, keyed; cost is negligible with our row counts.
+   - **RESOLVED: Option A (sibling table)** — create `*_translation_field_flags (translation_id, field_name, machine_translated BOOLEAN, PRIMARY KEY (translation_id, field_name))` per translatable entity. Translation tables stay narrow; PK is naturally extensible to v2 `needs_review`; one extra keyed JOIN at read time is negligible.
 
 3. **Spec-fields list — server-side or client-side pagination?**
    - What we know: D-17 says reusable DataTable for every list. Spec-fields per category typically 20–80 rows.
    - What's unclear: Per-category page client-side or server-side?
-   - Recommendation: **Client-side.** The list is per-category and bounded; loading all rows is cheap. Audit log + products go server-side; categories + manufacturers + spec-fields go client-side.
+   - **RESOLVED: Option A (client-side TanStack pagination)** — ~80 rows expected per category; loading all rows is cheap. Audit log + products go server-side; categories + manufacturers + spec-fields go client-side.
 
 4. **Where does `spec_field.deleted_at` filter go?**
    - What we know: D-07 soft-delete adds `deleted_at`. Public reads should `WHERE deleted_at IS NULL`.
    - What's unclear: How do we make this default without manually adding to every query? Drizzle does not have first-class soft-delete.
-   - Recommendation: **Wrapper functions.** Repository functions in `src/lib/repos/spec-fields.ts` always add `where(isNull(specFields.deletedAt))`. ESLint rule `no-restricted-imports` blocks importing `specFields` directly outside the repo module. The admin schema editor that needs to see soft-deleted fields imports a different function (`listAllSpecFields` vs `listSpecFields`).
+   - **RESOLVED: Option A (repository wrapper helpers)** — `findActiveSpecFields`, `listSpecFields`, etc. in `src/lib/repos/spec-fields.ts` always add `where(isNull(specFields.deletedAt))`, plus an ESLint `no-restricted-syntax` rule blocking direct `db.select().from(specFields)` outside the wrapper. The admin schema editor that needs to see soft-deleted fields imports a different function (`listAllSpecFields`).
 
 5. **Audit log for `login`/`logout`?**
    - What we know: D-16 includes `'login'`, `'logout'`, `'session_revoked'` in the action enum. CONTEXT.md doesn't specify where these are written.
    - What's unclear: Phase 1's signIn callback could write `'login'`; logout via Auth.js `signOut`; session_revoked via the proxy.ts middleware D-15 cap rejection.
-   - Recommendation: **Add in Wave 1.** `'login'` row in `signIn` callback (extend `src/lib/auth.ts`); `'logout'` in `signOut` route handler; `'session_revoked'` in proxy.ts when D-15 rejects. All are HTTP-driver-friendly single statements (`db` not `dbTx`).
+   - **RESOLVED: Auth.js `events.signIn` / `events.signOut` callbacks in `src/lib/auth.ts`** + `requireAdmin()` cap-rejection path emits `session_revoked`. All are HTTP-driver-friendly single statements; the events run after Auth.js completes the auth state change so the audit row is atomic with the lifecycle event.
 
 6. **CSV export: streaming or buffered?**
    - What we know: Phase 5 polish item flags streaming for large counts. Phase 2 ships buffered.
    - What's unclear: How many submissions before buffered breaks? With ~10 KB per submission, 100k rows = 1 GB. Vercel serverless has a 4.5 MB response limit for non-streaming.
-   - Recommendation: **Buffered up to ~5k submissions; document the cap; defer streaming to Phase 5 polish.** A 5k-row CSV is ~5 MB, comfortably under Vercel Edge's response budget.
+   - **RESOLVED: Buffered (in-memory) for Phase 2; streaming deferred to Phase 5 launch polish.** Hard cap of 10000 rows in the Server Action; ~5k-row CSV is ~5 MB and within Vercel's response budget. Phase 5 launch polish revisits with a streaming response.
 
 7. **`spec_field.deleted_at` and the `(category_id, key)` UNIQUE index**
    - What we know: Phase-1 schema has `UNIQUE(spec_field_category_key_idx)`. Soft-delete a field, then add a new field with the same key in the same category → UNIQUE collision.
    - What's unclear: Replace with a partial unique index `WHERE deleted_at IS NULL`?
-   - Recommendation: **Yes — partial index.** Phase-2 migration drops the existing unique index and recreates as `UNIQUE INDEX ... ON spec_field(category_id, key) WHERE deleted_at IS NULL`. drizzle-kit supports partial indexes via `.where(...)` on `uniqueIndex`. [VERIFIED: orm.drizzle.team/docs/indexes-constraints]
+   - **RESOLVED: Partial unique index `WHERE deleted_at IS NULL`** to allow re-creation after soft-delete. Phase-2 migration drops the existing unique index and recreates as `UNIQUE INDEX ... ON spec_field(category_id, key) WHERE deleted_at IS NULL`. drizzle-kit supports partial indexes via `.where(...)` on `uniqueIndex`. [VERIFIED: orm.drizzle.team/docs/indexes-constraints]
+
 
 ## Environment Availability
 
