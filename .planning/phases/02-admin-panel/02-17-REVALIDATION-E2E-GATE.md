@@ -2,8 +2,8 @@
 phase: 02-admin-panel
 plan: 17
 type: execute
-wave: 4
-depends_on: [09, 13]
+wave: 5
+depends_on: [09, 13b]
 files_modified:
   - tests/e2e/admin-edit-revalidates.spec.ts
   - tests/e2e/admin-session-cap.spec.ts
