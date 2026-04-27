@@ -49,7 +49,25 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Admin-uploaded images and datasheets land in Cloudinary via signed direct upload (not through Vercel), with only the `public_id` persisted to the database
   4. Each product shows a translation-completeness indicator per locale, and any field marked `machine_translated: true` is visually flagged in the admin UI
   5. Every product / category / manufacturer / spec-field mutation calls `revalidateTag` for the affected public pages, and the contact-submissions inbox supports view, search, and export
-**Plans**: TBD
+**Plans**: 18 plans
+- [ ] 02-01-SCHEMA-MIGRATION.md — additive Drizzle schema (admin_invite, spec_field_group, translation_field_flags, spec_field.deleted_at + group_id, **product.status** + backfill, pgView with required-text spec values) + drizzle-kit generate/migrate [BLOCKING]
+- [ ] 02-02-ADMIN-SHELL.md — admin layout + sidebar + top bar + NuqsAdapter + shadcn primitives + Phase-2 dep install
+- [ ] 02-03-PROXY-SESSION-CAP.md — proxy.ts D-15 idle + 7d absolute cap via sessions.absoluteExpires
+- [ ] 02-04-LIB-AUDIT.md — logAudit + AuditAction enum + withAdminAction wrapper + auth.ts events hook + admin-session test fixture
+- [ ] 02-05-LIB-REVALIDATION.md — typed revalidateTag helpers (Next 16 2-arg form) + unit tests
+- [ ] 02-06-LIB-DATATABLE.md — generic DataTable<TData> + pagination + toolbar (TanStack v8 + nuqs)
+- [ ] 02-07-ADMINS-INVITE.md — inviteAdmin + acceptInvite Server Actions + AdminInviteEmail + admins list + accept-invite landing
+- [ ] 02-08-LOGIN-POLISH.md — useActionState login form + check-email + access-denied banner + magic-link harvesting mitigation
+- [ ] 02-09-CATEGORIES-CRUD.md — category tree CRUD + 3 translations + LocaleTabs + SlugInput primitives
+- [ ] 02-10-MANUFACTURERS-CRUD.md — manufacturer CRUD + logo upload + reusable MediaUploader (single + multi)
+- [ ] 02-11-SPEC-FIELDS-EDITOR.md — spec_field rename/soft-delete/hard-delete + spec_field_group CRUD + ConfirmDialog + soft-delete repository wrapper
+- [ ] 02-12-TRANSLATION-COMPLETENESS-VIEW.md — pgView helpers + TranslationCompleteness + TranslationDots
+- [ ] 02-13a-PRODUCTS-CRUD-CORE.md — Zod schemas + saveProduct (5-step tx with refusal-to-elevate) + duplicateProduct + integration tests + seed-products fixture
+- [ ] 02-13b-PRODUCTS-CRUD-LIFECYCLE-UI.md — publishProduct/unpublishProduct/deleteProduct (distinct audit rows) + products list + product editor pages with locale tabs + spec values editor + MT toggle + lifecycle buttons
+- [ ] 02-14-PRODUCTS-MEDIA.md — confirm CldUploadWidget signing parity + MediaUploader unit test
+- [ ] 02-15-SUBMISSIONS-INBOX.md — submissions inbox + mark-read + CSV export with UTF-8 BOM
+- [ ] 02-16-AUDIT-LOG-VIEWER.md — read-only audit log viewer with URL-driven filters
+- [ ] 02-17-REVALIDATION-E2E-GATE.md — Playwright OPS-01 spec on Vercel preview + GH Actions gate
 
 ### Phase 3: Public Rendering, Search, SEO
 **Goal**: A trilingual visitor finds, filters, searches, and reads trustworthy product pages that Google and Yandex can index correctly — SSR + hreflang + per-locale canonical + per-locale tsvector + JSON-LD land together because they interlock.
@@ -96,7 +114,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundations | 5/7 | In Progress | - |
-| 2. Admin Panel | 0/TBD | Not started | - |
+| 2. Admin Panel | 0/18 | Not started | - |
 | 3. Public Rendering, Search, SEO | 0/TBD | Not started | - |
 | 4. Content Features | 0/TBD | Not started | - |
 | 5. Contact and Launch Polish | 0/TBD | Not started | - |
