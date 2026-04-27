@@ -2,7 +2,7 @@
 phase: 02-admin-panel
 plan: 13b
 type: execute
-wave: 3
+wave: 4
 depends_on: [13a, 12, 09, 10, 11]
 files_modified:
   - src/actions/products.ts
