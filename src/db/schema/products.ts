@@ -1,5 +1,7 @@
 // Pattern 3: product base + product_translations sibling.
 // publishedAt NULL = draft; non-NULL = published at that instant.
+// Phase 2 D-11 / Open Q §1 Option B: status is the canonical lifecycle state
+// ('draft' | 'published'); publishedAt remains as the publish timestamp.
 import {
   pgTable,
   uuid,
@@ -25,6 +27,7 @@ export const products = pgTable(
       () => manufacturers.id,
     ),
     sku: text().unique(),
+    status: text('status').notNull().default('draft'),
     publishedAt: timestamp('published_at', { withTimezone: true }),
     createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
@@ -32,6 +35,10 @@ export const products = pgTable(
   (t) => [
     index('product_category_idx').on(t.categoryId),
     index('product_manufacturer_idx').on(t.manufacturerId),
+    check(
+      'product_status_check',
+      sql`${t.status} IN ('draft','published')`,
+    ),
   ],
 );
 

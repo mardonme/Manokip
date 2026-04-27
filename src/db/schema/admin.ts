@@ -1,5 +1,6 @@
 // D-10, D-11, D-13: app-owned admin_user (email PK, role='admin' default) +
 // audit_log (declared in Phase 1, written in Phase 2 via logAudit()).
+// Phase 2 D-14: admin_invite — single-use 48h tokens for new-admin onboarding.
 import {
   pgTable,
   text,
@@ -7,6 +8,7 @@ import {
   boolean,
   bigserial,
   jsonb,
+  uuid,
 } from 'drizzle-orm/pg-core';
 
 export const adminUsers = pgTable('admin_user', {
@@ -32,4 +34,21 @@ export const auditLog = pgTable('audit_log', {
   at: timestamp('at', { withTimezone: true }).notNull().defaultNow(),
   ip: text('ip'),
   userAgent: text('user_agent'),
+});
+
+// D-14 / ADMIN-02: admin_invite — single-use token-based onboarding.
+// Atomic consume contract:
+//   UPDATE admin_invite SET used_at = now()
+//    WHERE token = $1 AND used_at IS NULL AND expires_at > now()
+//    RETURNING email
+export const adminInvites = pgTable('admin_invite', {
+  id: uuid().primaryKey().defaultRandom(),
+  email: text('email').notNull(),
+  token: text('token').notNull().unique(),
+  expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+  usedAt: timestamp('used_at', { withTimezone: true }),
+  invitedBy: text('invited_by').notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
 });

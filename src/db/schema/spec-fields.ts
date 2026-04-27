@@ -3,20 +3,26 @@
 // (no 'range' — ranges are modeled as TWO number fields sharing
 // filter_group_key). filter_kind IS where 'range' lives (D-17).
 // Enum options + their translations are siblings per D-18.
+// Phase 2 D-07 / D-09 / Open Q §7: deletedAt soft-delete + groupId FK to
+// spec_field_group; partial-unique index on (category_id, key) WHERE
+// deleted_at IS NULL so a soft-deleted key may be re-created.
 import {
   pgTable,
   uuid,
   text,
   boolean,
   integer,
+  timestamp,
   pgEnum,
   primaryKey,
   uniqueIndex,
   index,
   check,
+  type AnyPgColumn,
 } from 'drizzle-orm/pg-core';
 import { sql } from 'drizzle-orm';
 import { categories } from './categories';
+import { specFieldGroups } from './spec-field-groups';
 
 // D-16: four values, no 'range'. Range = two number fields sharing filter_group_key.
 export const specDataTypeEnum = pgEnum('spec_data_type', [
@@ -48,9 +54,15 @@ export const specFields = pgTable(
     sortOrder: integer('sort_order').notNull().default(0),
     filterKind: specFilterKindEnum('filter_kind'), // NULL = display-only field (D-17)
     filterGroupKey: text('filter_group_key'), // shared by range min/max pair
+    deletedAt: timestamp('deleted_at', { withTimezone: true }), // D-07 soft-delete
+    groupId: uuid('group_id').references(
+      (): AnyPgColumn => specFieldGroups.id,
+    ), // D-09 optional group FK (NULL allowed)
   },
   (t) => [
-    uniqueIndex('spec_field_category_key_idx').on(t.categoryId, t.key),
+    uniqueIndex('spec_field_category_key_idx')
+      .on(t.categoryId, t.key)
+      .where(sql`${t.deletedAt} IS NULL`),
     index('spec_field_filter_group_idx').on(t.filterGroupKey),
   ],
 );
