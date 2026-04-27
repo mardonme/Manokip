@@ -2,10 +2,10 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: phase-complete
-stopped_at: Phase 01 Foundations COMPLETE and verifier-APPROVED (5/5 success criteria + 7/7 FOUND requirements passing). Plans 01-01..01-07 all landed; DEF-01/DEF-02/DEF-03 all resolved. Highest-cost pitfalls structurally prevented (no _ru/_en/_uz columns, no JSONB spec bag, no opaque spec-value strings). Task 07.3 Vercel preview deploy verified fra1 region + magic-link round-trip on pooled Neon + Sentry/Analytics/Speed Insights all receiving events + no client-secret leak + 401 on unauthed smoke endpoint. VERIFICATION.md written. Next: route to /gsd-new-milestone or Phase 2 (Admin Panel) planning via /gsd-plan-phase 02-admin.
-last_updated: "2026-04-23T00:00:00Z"
-last_activity: 2026-04-23 -- Phase 01 plan 07 executed + Task 07.3 checkpoint approved (Sentry three-runtime observability + bootstrap boot hook + Vercel preview smoke verification — all 8 acceptance checks passed on live fra1 deployment). DEF-03 (plan 01-06 magic-link round-trip) resolved as part of 07.3 checkpoint since instrumentation.ts now seeds bootstrapAdmin on cold start. Phase 01 all plans done.
+status: context-gathered
+stopped_at: Phase 02 Admin Panel CONTEXT gathered (4 gray areas locked, 17 implementation decisions D-01..D-17). Editor shape (single long page, locale tabs swap translatable fields, single-transaction Save, full-clone duplicate, per-locale % completeness, per-field MT flag), spec-schema editor mechanics (rename with impact-preview transaction, soft-delete + cascade option, type changes blocked, new spec_field_group entity for fiztech-style grouped tables), cache invalidation + publish (fine-grained typed tags + collection tags, single product.status enum, revalidateCategoryMove fan-out, OPS-01 = Playwright on Vercel preview PR-blocking), admin lifecycle + audit (pre-create admin_user(active=false) + admin_invite 48h single-use, session timeout in proxy.ts middleware, full before/after JSON audit log per Server Action, reusable TanStack DataTable + nuqs for every list page). Schema additive: spec_field.deleted_at, spec_field.group_id, spec_field_group(+translations), product.status, admin_invite, per-field MT storage. Phase 1's 21 decisions carry forward verbatim. Next: /gsd-plan-phase 2 to generate executable plans.
+last_updated: "2026-04-27T00:00:00Z"
+last_activity: 2026-04-27 -- Phase 02 discuss-phase complete; 02-CONTEXT.md + 02-DISCUSSION-LOG.md committed (b84f90f); 4 gray areas resolved interactively (editor layout, spec-schema mechanics, cache+publish semantics, admin lifecycle+audit). Ready for /gsd-plan-phase 2.
 progress:
   total_phases: 5
   completed_phases: 1
