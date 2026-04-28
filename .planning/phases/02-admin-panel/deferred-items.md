@@ -8,7 +8,7 @@ Items discovered during execution that are out of scope for the current plan. Ea
 
 ### DEF-2-01: Cold-Neon HTTP timeout flake on Phase-1 live-DB tests (`locale-constraint`, `spec-values`) — RESOLVED 2026-04-28 (plan 02-02)
 
-**Status:** RESOLVED in plan 02-02 — `15_000` 3rd-arg `it()` timeouts applied to all 6 affected tests in `tests/db/locale-constraint.test.ts`, `tests/db/spec-values.test.ts`, and `tests/db/schema-push-smoke.test.ts`. See commit at the end of this section.
+**Status:** RESOLVED in plan 02-02 (commit `74080e1`) — `15_000` 3rd-arg `it()` timeouts applied to all 6 affected tests in `tests/db/locale-constraint.test.ts`, `tests/db/spec-values.test.ts`, and `tests/db/schema-push-smoke.test.ts`.
 
 
 

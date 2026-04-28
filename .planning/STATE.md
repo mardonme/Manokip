@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in-progress
-stopped_at: Phase 02 Plan 01 SCHEMA-MIGRATION COMPLETE — drizzle/0001_overrated_shiva.sql applied to Neon dev branch (drizzle.__drizzle_migrations row #2 hash 4cadf343...); 4 new tables (admin_invite, spec_field_group, spec_field_group_translations, product_translation_field_flags); product.status TEXT NOT NULL DEFAULT 'draft' + CHECK with backfill from publishedAt; spec_field.deleted_at + spec_field.group_id columns + partial-unique (category_id,key) WHERE deleted_at IS NULL; product_translation_completeness pgView. All 8 verification checks PASS via Node-based scripts/verify-02-01-migration.ts (psql not on developer PATH). Test suite 42/42 green against migrated DB (warm). DEF-2-01 logged for cold-Neon timeout flake on Phase-1 live-DB tests (pre-existing, fix planned for plan 02-02). Next: 02-02 ADMIN-SHELL.
-last_updated: "2026-04-28T00:00:00Z"
-last_activity: 2026-04-28 -- 02-01 schema migration applied + verified + committed. 18 plans / 4 waves remaining for Phase 2. /gsd-execute-phase 2 should resume from 02-02.
+stopped_at: Phase 02 Plan 02 ADMIN-SHELL COMPLETE — RSC admin layout (NuqsAdapter + 8-link sidebar + email-display top bar with inline 'use server' signOut) replaces the Phase-1 'coming soon' stub. Phase-2 deps locked at exact pinned versions (@tanstack/react-table 8.21.3, nuqs 2.8.9, @dnd-kit/{core 6.3.1, sortable 10.0.0, utilities 3.2.2}). Phase-1 RHF + sonner + next-cloudinary pins unchanged. shadcn@latest init + add scaffolded 19 UI primitives under src/components/ui/* (button, input, label, textarea, select, table, dialog, alert-dialog, dropdown-menu, form, tabs, card, badge, sheet, tooltip, switch, checkbox, separator, sonner) — base-nova preset uses @base-ui/react under the hood. i18n keys (admin.nav.*, admin.topbar.signOut, admin.dashboard.*) populated for all 3 locales. e2e shell smoke spec (tests/e2e/admin-shell.spec.ts) authored eagerly with auto-skip until plan 02-04 fixture lands. DEF-2-01 cold-Neon timeout flake RESOLVED (74080e1) — 15_000 3rd-arg `it()` timeouts on 6 affected tests in tests/db/{locale-constraint,spec-values,schema-push-smoke}. Test suite 42/42 green warm; pnpm tsc --noEmit clean for plan-02-02 files. 4 commits total: b786862 (Task 2.1) + 74080e1 (DEF-2-01 fix) + 4246e36 (Task 2.2) + plan-metadata commit (this session). Next: 02-03 PROXY-SESSION-CAP.
+last_updated: "2026-04-28T12:05:00Z"
+last_activity: 2026-04-28 -- 02-02 ADMIN-SHELL: admin layout + sidebar + topbar + NuqsAdapter + 19 shadcn primitives + Phase-2 deps + DEF-2-01 fix. 16 plans remaining for Phase 2. /gsd-execute-phase 2 resumes at 02-03.
 progress:
   total_phases: 5
   completed_phases: 1
-  total_plans: 8
-  completed_plans: 8
-  percent: 22
+  total_plans: 9
+  completed_plans: 9
+  percent: 25
 ---
 
 # Project State
@@ -26,33 +26,33 @@ See: .planning/PROJECT.md (updated 2026-04-21)
 ## Current Position
 
 Phase: 2 of 5 (Admin Panel) — IN PROGRESS
-Plan: 1 of 18 COMPLETE (02-01 SCHEMA-MIGRATION); Wave 1 has 5 more plans pending (02-02..02-06)
-Status: 02-01 schema substrate landed; plan 02-02 ADMIN-SHELL is unblocked
-Last activity: 2026-04-28 -- 02-01 SCHEMA-MIGRATION applied to live Neon dev branch; 0001_overrated_shiva.sql + verification harness + SUMMARY committed
+Plan: 2 of 18 COMPLETE (02-01 SCHEMA-MIGRATION + 02-02 ADMIN-SHELL); Wave 1 has 4 more plans pending (02-03..02-06)
+Status: Admin shell substrate landed — every Wave-2/3 plan now renders inside this layout. Plan 02-03 PROXY-SESSION-CAP is unblocked.
+Last activity: 2026-04-28 -- 02-02 ADMIN-SHELL: admin RSC layout + sidebar + topbar + NuqsAdapter + 19 shadcn primitives + Phase-2 deps + DEF-2-01 fix; 4 commits (Task 2.1, DEF-2-01 fix, Task 2.2, plan metadata)
 
-Progress: [██████████░] Phase 01 done + 02-01 done (8 of 25 known plans complete, 22%)
+Progress: [██████████░] Phase 01 done + 02-01 done + 02-02 done (9 of 25 known plans complete, 25%)
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 8 (7 Phase-1 + 1 Phase-2)
-- Average duration: ~46 min
-- Total execution time: ~5.24 hours
+- Total plans completed: 9 (7 Phase-1 + 2 Phase-2)
+- Average duration: ~44 min
+- Total execution time: ~5.74 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 1. Foundations | 7 | ~289 min | ~50 min* |
-| 2. Admin Panel | 1 | ~25 min | ~25 min |
+| 2. Admin Panel | 2 | ~55 min | ~28 min |
 
 *Phase 1 average computed across 6 timed plans (01-01..01-06); 01-07 timing not separately tracked.*
 
 **Recent Trend:**
 
-- Last 7 plans: 01-01 (14 min), 01-02 (~95 min across two executor sessions), 01-03 (~70 min), 01-04 (~45 min), 01-05 (~35 min), 01-06 (~30 min), 02-01 (~25 min across two executor sessions — Tasks 1.1+1.2+1.3-prep in session 1, Task 1.3 apply+verify in this session)
-- Trend: plan 02-01 is now the fastest plan (25 min) because the human-verify checkpoint front-loaded all schema authoring + migration generation into the prior session, leaving only `pnpm drizzle-kit migrate` + verification + SUMMARY for the resume session. Continuation handed off cleanly with 3 commit hashes (`93b20c4`, `a5861f3`, `a33ad59`) and a complete state-handoff prompt; resume agent verified all 3 hashes existed before applying. Three deviations worth noting: (1) Rule-3 blocker — psql not on developer PATH; replaced with Node-based verification harness (`scripts/verify-02-01-migration.ts`) using Drizzle/Neon HTTP `db.execute` with `.rows` access; (2) Rule-1 bug — first-iteration script called `.map()` directly on `db.execute` result, but neon-http returns `{rows:[...]}` not an array; fixed with an `exec(query)` wrapper handling both shapes; (3) Rule-2 missing-critical — Phase-2 had no `deferred-items.md` for tracking out-of-scope discoveries; created it with DEF-2-01 (cold-Neon timeout flake on Phase-1 tests, pre-existing, fix planned for plan 02-02). Test suite stable at 42/42 against the migrated DB (warm); cold-start hits a known Phase-1 5-second timeout on 2 tests (DEF-2-01).
+- Last 8 plans: 01-01 (14 min), 01-02 (~95 min), 01-03 (~70 min), 01-04 (~45 min), 01-05 (~35 min), 01-06 (~30 min), 02-01 (~25 min), 02-02 (~30 min)
+- Trend: plan 02-02 ran as a single autonomous executor session (no checkpoints since `autonomous: true`). Three minor deviations auto-fixed: (1) Rule-3 blocker — shadcn CLI's `add form` hung on dependency resolution against pinned RHF / hookform-resolvers; authored form.tsx manually using the canonical recipe with @base-ui/react substitutions; (2) Rule-3 blocker — shadcn init was interactive on preset choice; switched to `-d` (defaults flag) to skip; (3) Rule-1 bug — tests/e2e/admin-shell.spec.ts failed tsc --noEmit because the dynamic import string was statically resolvable; fixed with string-concat path so tsc skips static resolution. DEF-2-01 cold-Neon timeout flake RESOLVED in same plan (74080e1) — 15_000 3rd-arg `it()` timeouts applied to 6 affected tests in tests/db/{locale-constraint,spec-values,schema-push-smoke}. shadcn init also bumped src/app/layout.tsx (Geist font) + src/app/globals.css (@theme tokens, light/dark CSS-var palette, tw-animate-css import) — accepted as idiomatic shadcn defaults aligned with locked Tailwind v4 / next/font posture. 19 shadcn primitives installed; @base-ui/react pulled in as the base-nova preset's primitives backend (the new shadcn default — replaces @radix-ui/* in the recipe).
 
 *Updated after each plan completion*
 
@@ -93,6 +93,13 @@ Recent decisions affecting current work:
 - (02-01) pgView product_translation_completeness uses `sf.required` not `sf.is_required` — Phase-1 spec_fields.ts line 53 declares `required: boolean()` unprefixed; plan's <action> block authorized adjusting SQL identifiers to match actual schema. View resolves cleanly on live DB.
 - (02-01) psql replaced with Node-based verification harness (scripts/verify-02-01-migration.ts) since psql isn't on the Windows developer's PATH. Uses Drizzle/Neon HTTP `db.execute(sql\`...\`)` with `.rows` access (same shape as Phase-1 schema-push-smoke.test.ts). 8 checks PASS. Pattern reusable for future plans needing pg_class/information_schema-level verification.
 - (02-01) DEF-2-01 logged to .planning/phases/02-admin-panel/deferred-items.md — cold-Neon HTTP first-query timeout on tests/db/locale-constraint.test.ts + tests/db/spec-values.test.ts at 5012ms (default vitest 5s timeout). Pre-existing Phase-1 issue; plan 01-05 documented the same root cause and added 15s timeouts on its OWN test but didn't retroactively patch the older Phase-1 test files. Fix plan: 6-line edit in plan 02-02 (or follow-up) adding 15_000 3rd-arg timeouts to 6 affected `it()` calls. NOT a 02-01 regression — re-running warmed produces 42/42 in 3.25s.
+- (02-02) DEF-2-01 RESOLVED in commit 74080e1 — 15_000 3rd-arg `it()` timeouts applied to all 6 affected tests in tests/db/{locale-constraint,spec-values,schema-push-smoke}.test.ts. Same pattern Plan 01-05 used for auth-signin-callback.test.ts. Marked RESOLVED in deferred-items.md.
+- (02-02) shadcn@latest init lands the new base-nova preset (default) which uses @base-ui/react instead of @radix-ui/* for primitives — fully compatible with Phase-2 plans because they import from @/components/ui/* abstractly. shadcn-ui 4.5.0 docs: https://ui.shadcn.com/docs.
+- (02-02) shadcn CLI's `add form` recipe hung on dependency resolution against pinned RHF 7.73.1 / @hookform/resolvers 3.10.0; authored src/components/ui/form.tsx manually using the canonical shadcn recipe with @base-ui/react substitutions (local Label component + React.cloneElement-based Slot equivalent). Behavior matches upstream: Controller + FormProvider + ID-namespacing context.
+- (02-02) Inline 'use server' Server Action for sign-out in src/components/admin/top-bar.tsx over a separate src/actions/auth.ts file — action has no shared schema, no audit log, no transaction; matches Next 16's recommended inline form-action shape. Future per-mutation actions still use the withAdminAction wrapper that 02-04 introduces.
+- (02-02) AdminSidebar is a server component (zero JS for nav) — no active-link highlighting in plan 02-02. Client-side `usePathname()` highlighting can be added later in a small client island if/when needed.
+- (02-02) Defense-in-depth requireAdmin(): both admin layout AND admin dashboard page call it. The Edge middleware (proxy.ts from plan 01-06) already 307-redirects unauth requests, but in-RSC checks prevent a misconfigured middleware from leaking server-rendered admin HTML. Auth.js memoizes auth() per-request via React's cache wrapper, so cost is negligible.
+- (02-02) Accepted shadcn-init's bumps to src/app/layout.tsx (Geist font wiring) + src/app/globals.css (@theme tokens + light/dark CSS-var palette + tw-animate-css import). Idiomatic shadcn defaults aligned with locked Tailwind v4 / next/font posture. Final visual theme tuning is a Phase-3 design decision per CONTEXT D-Discretion.
 
 ### Pending Todos
 
@@ -115,9 +122,10 @@ Items acknowledged and carried forward during execution:
 | deps / build | ~~DEF-01 — tailwindcss@4.0.0 + @tailwindcss/postcss@4.0.0 skew with transitive @tailwindcss/node/oxide@4.2.3 breaks globals.css compilation~~ | **RESOLVED 2026-04-21** (commit `31062b4` — bumped both to exact 4.2.3; `pnpm build`, `typecheck`, `vitest` 29/29, `dev` all green) | Plan 01-04 |
 | env / auth | ~~DEF-02 — .env.local lacks AUTH_SECRET/AUTH_RESEND_KEY/RESEND_FROM_EMAIL~~ | **RESOLVED 2026-04-21** (developer populated real values in .env.local before plan 01-05 ran; pnpm build/typecheck/vitest all loaded via real env at boot during plan 01-05 commits `862bc15`/`75d6387`/`1fa815d`) | Plan 01-04 |
 | checkpoint / auth | DEF-03 — Task 06.3 magic-link round-trip manual verification (FOUND-05 acceptance) not yet run — requires bootstrapAdmin() to have seeded admin_user, which plan 07's instrumentation.ts boot hook will provide (or developer runs bootstrapAdmin() manually once) | Pending plan 01-07 | Plan 01-06 |
+| tests / cold-Neon | ~~DEF-2-01 — cold-Neon HTTP first-query 5s timeout flake on tests/db/{locale-constraint,spec-values,schema-push-smoke}~~ | **RESOLVED 2026-04-28** (commit `74080e1` — 15_000 3rd-arg it() timeouts on 6 affected tests) | Plan 02-01 |
 
 ## Session Continuity
 
-Last session: 2026-04-28T00:00:00Z
-Stopped at: Completed 02-01 SCHEMA-MIGRATION — drizzle/0001_overrated_shiva.sql applied to Neon dev branch via `pnpm drizzle-kit migrate` (drizzle.__drizzle_migrations row #2 hash 4cadf343caa831e3...). Migration adds product.status TEXT NOT NULL DEFAULT 'draft' + CHECK (status IN ('draft','published')) with hand-authored backfill UPDATE FROM publishedAt; admin_invite + spec_field_group + spec_field_group_translations + product_translation_field_flags tables; spec_field.deleted_at + spec_field.group_id columns; partial-unique spec_field(category_id, key) WHERE deleted_at IS NULL (replacing the Phase-1 non-partial); product_translation_completeness pgView using `sf.required` (Phase-1 column name). Verification: scripts/verify-02-01-migration.ts (Node-based equivalent of psql checks since psql is not on PATH) reports all 8 checks PASS. Test suite 42/42 green against migrated DB (warm Neon — cold-start hits a known pre-existing 5s timeout on 2 Phase-1 tests, logged as DEF-2-01 in `.planning/phases/02-admin-panel/deferred-items.md`, fix planned for plan 02-02). Three deviations from plan auto-fixed in this session (Rule-3 psql replacement, Rule-1 bug in initial script's `.rows` access, Rule-2 missing Phase-2 deferred-items.md). 4 commit hashes total: 93b20c4 (Task 1.1) + a5861f3 (Task 1.2) + a33ad59 (Task 1.3 prep) + plan-metadata commit (this session). Phase 2 has 17 plans remaining: 02-02 ADMIN-SHELL is unblocked next.
-Resume file: .planning/phases/02-admin-panel/02-02-ADMIN-SHELL.md
+Last session: 2026-04-28T12:05:00Z
+Stopped at: Completed 02-02 ADMIN-SHELL — RSC admin layout (src/app/[locale]/admin/layout.tsx) wraps children in <NuqsAdapter> from nuqs/adapters/next/app, calls setRequestLocale + requireAdmin + getTranslations, renders AdminSidebar (server component, 8 next-intl Link nav items) + AdminTopBar (admin email display + inline 'use server' signOut form action) around <main>. Phase-2 deps locked at exact pinned versions: @tanstack/react-table 8.21.3, nuqs 2.8.9, @dnd-kit/{core 6.3.1, sortable 10.0.0, utilities 3.2.2}. Phase-1 RHF + sonner + next-cloudinary pins unchanged. shadcn@latest init (base-nova preset / @base-ui/react primitives backend, neutral baseColor, css-variables) + add scaffolded 19 UI primitives under src/components/ui/* (button, input, label, textarea, select, table, dialog, alert-dialog, dropdown-menu, form, tabs, card, badge, sheet, tooltip, switch, checkbox, separator, sonner). form.tsx authored manually because shadcn CLI's `add form` hung on dep resolution against pinned RHF (recipe is plain composition over RHF — no version-specific behavior). i18n keys (admin.nav.*, admin.topbar.signOut, admin.dashboard.{title,placeholder}) populated for all 3 locales with proper Uzbek-Latin (oʻ U+02BB), Russian Cyrillic, and English copy. e2e shell smoke spec (tests/e2e/admin-shell.spec.ts) authored eagerly with auto-skip until tests/_fixtures/admin-session.ts (plan 02-04) lands; flips on automatically when fixture file present. DEF-2-01 cold-Neon timeout flake RESOLVED in same plan (commit 74080e1) — 15_000 3rd-arg `it()` timeouts on 6 affected tests in tests/db/{locale-constraint,spec-values,schema-push-smoke}.test.ts. shadcn init also bumped src/app/layout.tsx (Geist font) + src/app/globals.css (@theme tokens, light/dark CSS-var palette, tw-animate-css import) — accepted as idiomatic shadcn defaults aligned with locked Tailwind v4 + next/font posture. Three deviations auto-fixed (Rule-3 shadcn-form CLI hang → manual authoring; Rule-3 shadcn init interactive preset → -d defaults flag; Rule-1 dynamic-import tsc resolution → string-concat path). Test suite 42/42 green warm; pnpm tsc --noEmit clean for plan-02-02 files; pnpm playwright test tests/e2e/admin-shell.spec.ts → 1 skipped (expected — fixture pending). 4 commits total: b786862 (Task 2.1) + 74080e1 (DEF-2-01 fix) + 4246e36 (Task 2.2) + plan-metadata commit (this session). Phase 2 has 16 plans remaining: 02-03 PROXY-SESSION-CAP is unblocked next.
+Resume file: .planning/phases/02-admin-panel/02-03-PROXY-SESSION-CAP.md
