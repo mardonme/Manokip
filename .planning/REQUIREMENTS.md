@@ -144,16 +144,16 @@ Which phases cover which requirements.
 | FOUND-06 | Phase 1 | Pending |
 | FOUND-07 | Phase 1 | Partial (01-04 — `<Analytics />` + `<SpeedInsights />` mount point added to [locale] layout; Sentry wiring + production deploy land in 01-07) |
 | ADMIN-01 | Phase 2 | Pending |
-| ADMIN-02 | Phase 2 | Pending |
+| ADMIN-02 | Phase 2 | Partial (02-01 — admin_invite schema landed: token UNIQUE, expires_at NOT NULL, used_at nullable for single-use; inviteAdmin/acceptAdminInvite Server Actions + UI land in 02-07) |
 | ADMIN-03 | Phase 2 | Pending |
 | ADMIN-04 | Phase 2 | Pending |
-| ADMIN-05 | Phase 2 | Pending |
+| ADMIN-05 | Phase 2 | Partial (02-01 — spec_field.deleted_at + spec_field.group_id columns + spec_field_group + spec_field_group_translations + partial-unique (category_id,key) WHERE deleted_at IS NULL landed; spec-field rename/soft-delete/group-CRUD UI lands in 02-11) |
 | ADMIN-06 | Phase 2 | Pending |
 | ADMIN-07 | Phase 2 | Pending |
 | ADMIN-08 | Phase 2 | Pending |
-| ADMIN-09 | Phase 2 | Pending |
-| ADMIN-10 | Phase 2 | Pending |
-| ADMIN-11 | Phase 2 | Pending |
+| ADMIN-09 | Phase 2 | Partial (02-01 — productTranslationFieldFlags sibling table landed: PK (product_id, locale, field_name) + machine_translated boolean + compound FK to product_translations ON DELETE CASCADE; MT toggle UI + write path land in 02-13b) |
+| ADMIN-10 | Phase 2 | Partial (02-01 — product_translation_completeness pgView landed computing per-locale percent over name+slug+short_desc+long_desc plus required-text spec values; helper module + UI dots land in 02-12) |
+| ADMIN-11 | Phase 2 | Partial (02-01 — no schema change needed; Phase-1 audit_log shape sufficient per threat-model T-02-01-04 disposition=accept; logAudit + AuditAction enum + withAdminAction wrapper land in 02-04) |
 | ADMIN-12 | Phase 2 | Pending |
 | CAT-01 | Phase 3 | Pending |
 | CAT-02 | Phase 3 | Pending |
@@ -203,4 +203,4 @@ Which phases cover which requirements.
 
 ---
 *Requirements defined: 2026-04-21*
-*Last updated: 2026-04-21 after roadmap creation (traceability populated; prior "48 total" self-count corrected to 52)*
+*Last updated: 2026-04-28 — Phase 2 plan 02-01 schema migration applied; ADMIN-02, ADMIN-05, ADMIN-09, ADMIN-10, ADMIN-11 marked Partial (schema substrate landed, full validation pending downstream Phase-2 CRUD/UI plans)*

@@ -50,7 +50,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   4. Each product shows a translation-completeness indicator per locale, and any field marked `machine_translated: true` is visually flagged in the admin UI
   5. Every product / category / manufacturer / spec-field mutation calls `revalidateTag` for the affected public pages, and the contact-submissions inbox supports view, search, and export
 **Plans**: 18 plans
-- [ ] 02-01-SCHEMA-MIGRATION.md — additive Drizzle schema (admin_invite, spec_field_group, translation_field_flags, spec_field.deleted_at + group_id, **product.status** + backfill, pgView with required-text spec values) + drizzle-kit generate/migrate [BLOCKING]
+- [x] 02-01-SCHEMA-MIGRATION.md — additive Drizzle schema (admin_invite, spec_field_group, translation_field_flags, spec_field.deleted_at + group_id, **product.status** + backfill, pgView with required-text spec values) + drizzle-kit generate/migrate [BLOCKING] — applied 2026-04-28 to Neon dev branch (drizzle.__drizzle_migrations row #2 hash 4cadf343...); 8/8 verification checks PASS
 - [ ] 02-02-ADMIN-SHELL.md — admin layout + sidebar + top bar + NuqsAdapter + shadcn primitives + Phase-2 dep install
 - [ ] 02-03-PROXY-SESSION-CAP.md — proxy.ts D-15 idle + 7d absolute cap via sessions.absoluteExpires
 - [ ] 02-04-LIB-AUDIT.md — logAudit + AuditAction enum + withAdminAction wrapper + auth.ts events hook + admin-session test fixture
@@ -113,8 +113,8 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundations | 5/7 | In Progress | - |
-| 2. Admin Panel | 0/18 | Not started | - |
+| 1. Foundations | 7/7 | Complete | 2026-04-23 |
+| 2. Admin Panel | 1/18 | In Progress | - |
 | 3. Public Rendering, Search, SEO | 0/TBD | Not started | - |
 | 4. Content Features | 0/TBD | Not started | - |
 | 5. Contact and Launch Polish | 0/TBD | Not started | - |

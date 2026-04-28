@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: ready-to-execute
-stopped_at: Phase 02 Admin Panel PLANNED (18 plans across 5 waves; verifier PASSED on iteration 3/3). RESEARCH.md (Open Questions §1..§7 RESOLVED), PATTERNS.md (60+ files mapped to Phase-1 analogs), VALIDATION.md (Wave-0 fixtures + per-requirement test commands), CONTEXT.md (D-15 amended to formalize sessions.absoluteExpires reuse). Wave layout — W1: 01,02,03,04,05,06 (foundations: schema+migration, admin shell, proxy session cap, audit lib, revalidation lib, DataTable); W2: 07,08,09,10,11,12 (admins-invite, login-polish, categories CRUD, manufacturers CRUD, spec-fields editor, completeness view); W3: 13a (saveProduct + duplicateProduct + tx tests); W4: 13b, 15, 16 (lifecycle actions + product editor UI; submissions inbox; audit log viewer); W5: 14, 17 (Cloudinary signature smoke + uploader; OPS-01 Playwright preview e2e gate). All 13 requirement IDs (ADMIN-01..12, OPS-01) covered. Next: /gsd-execute-phase 2.
-last_updated: "2026-04-27T00:00:00Z"
-last_activity: 2026-04-27 -- Phase 02 plan-phase complete; 18 PLAN.md files + RESEARCH.md + PATTERNS.md + VALIDATION.md committed; verifier PASSED iteration 3/3 (10 issues found and resolved across 2 revision passes — open-question resolution markers, D-11 product.status column kept literal, D-15 absoluteExpires formalized in CONTEXT, 02-13 split into 13a/13b for scope sanity, wave/dependency mechanics fixed). Ready for /gsd-execute-phase 2.
+status: in-progress
+stopped_at: Phase 02 Plan 01 SCHEMA-MIGRATION COMPLETE — drizzle/0001_overrated_shiva.sql applied to Neon dev branch (drizzle.__drizzle_migrations row #2 hash 4cadf343...); 4 new tables (admin_invite, spec_field_group, spec_field_group_translations, product_translation_field_flags); product.status TEXT NOT NULL DEFAULT 'draft' + CHECK with backfill from publishedAt; spec_field.deleted_at + spec_field.group_id columns + partial-unique (category_id,key) WHERE deleted_at IS NULL; product_translation_completeness pgView. All 8 verification checks PASS via Node-based scripts/verify-02-01-migration.ts (psql not on developer PATH). Test suite 42/42 green against migrated DB (warm). DEF-2-01 logged for cold-Neon timeout flake on Phase-1 live-DB tests (pre-existing, fix planned for plan 02-02). Next: 02-02 ADMIN-SHELL.
+last_updated: "2026-04-28T00:00:00Z"
+last_activity: 2026-04-28 -- 02-01 schema migration applied + verified + committed. 18 plans / 4 waves remaining for Phase 2. /gsd-execute-phase 2 should resume from 02-02.
 progress:
   total_phases: 5
   completed_phases: 1
-  total_plans: 7
-  completed_plans: 7
-  percent: 20
+  total_plans: 8
+  completed_plans: 8
+  percent: 22
 ---
 
 # Project State
@@ -25,31 +25,34 @@ See: .planning/PROJECT.md (updated 2026-04-21)
 
 ## Current Position
 
-Phase: 1 of 5 (Foundations) — COMPLETE + VERIFIED
-Plan: 7 of 7 — ALL COMPLETE (01-01 + 01-02 + 01-03 + 01-04 + 01-05 + 01-06 + 01-07)
-Status: Phase complete — ready to open Phase 2 (Admin Panel)
-Last activity: 2026-04-23 -- Phase 01 verifier APPROVED (5/5 success criteria + 7/7 FOUND requirements passing); VERIFICATION.md written; REQUIREMENTS.md + ROADMAP.md + STATE.md reconciled
+Phase: 2 of 5 (Admin Panel) — IN PROGRESS
+Plan: 1 of 18 COMPLETE (02-01 SCHEMA-MIGRATION); Wave 1 has 5 more plans pending (02-02..02-06)
+Status: 02-01 schema substrate landed; plan 02-02 ADMIN-SHELL is unblocked
+Last activity: 2026-04-28 -- 02-01 SCHEMA-MIGRATION applied to live Neon dev branch; 0001_overrated_shiva.sql + verification harness + SUMMARY committed
 
-Progress: [██████████] Phase 01 done (1 of 5 phases complete, 20%)
+Progress: [██████████░] Phase 01 done + 02-01 done (8 of 25 known plans complete, 22%)
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 6
-- Average duration: ~50 min
-- Total execution time: 4.82 hours
+- Total plans completed: 8 (7 Phase-1 + 1 Phase-2)
+- Average duration: ~46 min
+- Total execution time: ~5.24 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 1. Foundations | 6 | ~289 min | ~50 min |
+| 1. Foundations | 7 | ~289 min | ~50 min* |
+| 2. Admin Panel | 1 | ~25 min | ~25 min |
+
+*Phase 1 average computed across 6 timed plans (01-01..01-06); 01-07 timing not separately tracked.*
 
 **Recent Trend:**
 
-- Last 6 plans: 01-01 (14 min), 01-02 (~95 min across two executor sessions), 01-03 (~70 min), 01-04 (~45 min), 01-05 (~35 min), 01-06 (~30 min)
-- Trend: plan 01-06 is now the fastest phase-1 plan (30 min) because Task 06.1 (proxy.ts + admin-gate e2e + turbopack.root pin) had already been drafted before the executor session, so this session completed only Task 06.2 (Cloudinary sign endpoint + 9 tests) + Task 06.4 (magic-link-login scaffold) + verification + summary. Two deviations from plan worth noting: (1) file name is proxy.ts not middleware.ts because Next.js 16 renamed the convention — every other contract matches verbatim; (2) tests/api/cloudinary-sign.test.ts needed a narrow `ReturnType<typeof vi.fn<() => Promise<Session | null>>>` cast on `vi.mocked(auth)` because Auth.js v5's `auth` export is an overloaded union that narrows to NextMiddleware under vi.mocked, which rejects mockResolvedValue(null). Task 06.3 (human checkpoint) deferred as DEF-03 to plan 01-07. Test suite grew 33 → 42 (9 new cloudinary-sign cases).
+- Last 7 plans: 01-01 (14 min), 01-02 (~95 min across two executor sessions), 01-03 (~70 min), 01-04 (~45 min), 01-05 (~35 min), 01-06 (~30 min), 02-01 (~25 min across two executor sessions — Tasks 1.1+1.2+1.3-prep in session 1, Task 1.3 apply+verify in this session)
+- Trend: plan 02-01 is now the fastest plan (25 min) because the human-verify checkpoint front-loaded all schema authoring + migration generation into the prior session, leaving only `pnpm drizzle-kit migrate` + verification + SUMMARY for the resume session. Continuation handed off cleanly with 3 commit hashes (`93b20c4`, `a5861f3`, `a33ad59`) and a complete state-handoff prompt; resume agent verified all 3 hashes existed before applying. Three deviations worth noting: (1) Rule-3 blocker — psql not on developer PATH; replaced with Node-based verification harness (`scripts/verify-02-01-migration.ts`) using Drizzle/Neon HTTP `db.execute` with `.rows` access; (2) Rule-1 bug — first-iteration script called `.map()` directly on `db.execute` result, but neon-http returns `{rows:[...]}` not an array; fixed with an `exec(query)` wrapper handling both shapes; (3) Rule-2 missing-critical — Phase-2 had no `deferred-items.md` for tracking out-of-scope discoveries; created it with DEF-2-01 (cold-Neon timeout flake on Phase-1 tests, pre-existing, fix planned for plan 02-02). Test suite stable at 42/42 against the migrated DB (warm); cold-start hits a known Phase-1 5-second timeout on 2 tests (DEF-2-01).
 
 *Updated after each plan completion*
 
@@ -86,6 +89,10 @@ Recent decisions affecting current work:
 - (01-05) T-AUTH-02 inline signInCheck() helper replicates the auth.ts query 1:1 rather than invoking the Auth.js-constructed callback post-hoc. Auth.js v5 doesn't expose a typed way to pull the composed signIn callback out of NextAuth()'s return — the plan and the test both acknowledge this and keep the two in-sync-by-review.
 - (01-05) 15s per-test timeout on live-DB tests (cold Neon HTTP connection on first query exceeds 5s default). Vitest 4 moved timeout from describe-option-object to `it(name, fn, timeout)` 3rd positional arg.
 - (01-05) bootstrapAdmin() enforces D-12 verbatim with a SELECT 1 FROM admin_user LIMIT 1 pre-check BEFORE insert (line 32 in src/lib/bootstrap.ts < line 44). If ANY admin exists, bootstrap no-ops even if BOOTSTRAP_ADMIN_EMAIL is a different address — protects against stale env var post-legitimate-invites. onConflictDoNothing handles the narrow concurrent-cold-start race.
+- (02-01) Drizzle migration 0001_overrated_shiva.sql applied to Neon dev branch. Hand-authored backfill UPDATE on line 38 (drizzle-kit doesn't generate data migrations); Open Q §1 RESOLVED Option B (literal CONTEXT D-11 — product.status as own column with CHECK + backfill from publishedAt); Open Q §2 RESOLVED Option A (sibling productTranslationFieldFlags scoped to product translations only for v1); Open Q §7 RESOLVED partial-unique on spec_field(category_id, key) WHERE deleted_at IS NULL; CONTEXT D-15 amended (sessions.absoluteExpires reused, no schema change).
+- (02-01) pgView product_translation_completeness uses `sf.required` not `sf.is_required` — Phase-1 spec_fields.ts line 53 declares `required: boolean()` unprefixed; plan's <action> block authorized adjusting SQL identifiers to match actual schema. View resolves cleanly on live DB.
+- (02-01) psql replaced with Node-based verification harness (scripts/verify-02-01-migration.ts) since psql isn't on the Windows developer's PATH. Uses Drizzle/Neon HTTP `db.execute(sql\`...\`)` with `.rows` access (same shape as Phase-1 schema-push-smoke.test.ts). 8 checks PASS. Pattern reusable for future plans needing pg_class/information_schema-level verification.
+- (02-01) DEF-2-01 logged to .planning/phases/02-admin-panel/deferred-items.md — cold-Neon HTTP first-query timeout on tests/db/locale-constraint.test.ts + tests/db/spec-values.test.ts at 5012ms (default vitest 5s timeout). Pre-existing Phase-1 issue; plan 01-05 documented the same root cause and added 15s timeouts on its OWN test but didn't retroactively patch the older Phase-1 test files. Fix plan: 6-line edit in plan 02-02 (or follow-up) adding 15_000 3rd-arg timeouts to 6 affected `it()` calls. NOT a 02-01 regression — re-running warmed produces 42/42 in 3.25s.
 
 ### Pending Todos
 
@@ -111,6 +118,6 @@ Items acknowledged and carried forward during execution:
 
 ## Session Continuity
 
-Last session: 2026-04-22T00:00:00Z
-Stopped at: Completed 01-06 — proxy.ts at repo root (Next.js 16's renamed middleware convention — `export const proxy = auth(async fn)`) composing next-intl createMiddleware(routing) + Auth.js admin-gate with regex /^\/(uz|ru|en)\/admin(\/|$)/ redirecting unauth 307 to /{locale}/login, matcher excluding api/_next/_vercel/*.\\..\\*; next.config.ts augmented with turbopack.root = path.resolve(__dirname) to stop Next's upward walk from rooting on C:\Users\hp elitebook\package-lock.json which breaks proxy.ts discovery on Windows; src/lib/cloudinary.ts as 3-line v2 singleton config; src/app/api/cloudinary/sign/route.ts Node-runtime POST with ordered defence (auth→JSON→Zod-folder-allowlist→HMAC integer seconds) returning {signature, timestamp, folder, apiKey, cloudName} — NEVER apiSecret (T-SEC-ENV); tests/api/cloudinary-sign.test.ts 9 passing cases via vi.mock('@/lib/auth') with narrow cast workaround for Auth.js overload union; tests/e2e/admin-gate.spec.ts 10 Playwright tests (3 locales × 3 scenarios + regex precision); tests/e2e/magic-link-login.spec.ts CI-skipped scaffold behind RUN_MAGIC_LINK_TEST=1 gate. pnpm build 0 in 7.0s now lists /api/cloudinary/sign dynamic route, pnpm typecheck 0, pnpm vitest run 42/42 in ~5.4s. Task 06.3 human checkpoint (magic-link round-trip manual verification) deferred as DEF-03 — awaits plan 01-07 instrumentation.ts bootstrap hook OR a one-time manual bootstrapAdmin() invocation. Plan 01-07 (Sentry 3-runtime + instrumentation.ts + withSentryConfig + deploy smoke) is next.
-Resume file: .planning/phases/01-foundations/01-07-PLAN.md
+Last session: 2026-04-28T00:00:00Z
+Stopped at: Completed 02-01 SCHEMA-MIGRATION — drizzle/0001_overrated_shiva.sql applied to Neon dev branch via `pnpm drizzle-kit migrate` (drizzle.__drizzle_migrations row #2 hash 4cadf343caa831e3...). Migration adds product.status TEXT NOT NULL DEFAULT 'draft' + CHECK (status IN ('draft','published')) with hand-authored backfill UPDATE FROM publishedAt; admin_invite + spec_field_group + spec_field_group_translations + product_translation_field_flags tables; spec_field.deleted_at + spec_field.group_id columns; partial-unique spec_field(category_id, key) WHERE deleted_at IS NULL (replacing the Phase-1 non-partial); product_translation_completeness pgView using `sf.required` (Phase-1 column name). Verification: scripts/verify-02-01-migration.ts (Node-based equivalent of psql checks since psql is not on PATH) reports all 8 checks PASS. Test suite 42/42 green against migrated DB (warm Neon — cold-start hits a known pre-existing 5s timeout on 2 Phase-1 tests, logged as DEF-2-01 in `.planning/phases/02-admin-panel/deferred-items.md`, fix planned for plan 02-02). Three deviations from plan auto-fixed in this session (Rule-3 psql replacement, Rule-1 bug in initial script's `.rows` access, Rule-2 missing Phase-2 deferred-items.md). 4 commit hashes total: 93b20c4 (Task 1.1) + a5861f3 (Task 1.2) + a33ad59 (Task 1.3 prep) + plan-metadata commit (this session). Phase 2 has 17 plans remaining: 02-02 ADMIN-SHELL is unblocked next.
+Resume file: .planning/phases/02-admin-panel/02-02-ADMIN-SHELL.md
