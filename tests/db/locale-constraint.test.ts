@@ -11,6 +11,8 @@ import { sql } from 'drizzle-orm';
 import { getTestDb, requireTestDatabaseUrl } from '../_fixtures/db';
 
 describe("FOUND-01: product_translations CHECK rejects invalid locale", () => {
+  // 15s timeouts: cold-Neon HTTP first-query exceeds vitest's 5s default
+  // (DEF-2-01 — see .planning/phases/02-admin-panel/deferred-items.md).
   it("rejects locale='de' with CHECK violation", async () => {
     requireTestDatabaseUrl();
     const db = await getTestDb();
@@ -59,7 +61,7 @@ describe("FOUND-01: product_translations CHECK rejects invalid locale", () => {
     // Cleanup — ON DELETE CASCADE from product removes any stray translation rows.
     await db.execute(sql`DELETE FROM product WHERE id = ${prodId}::uuid`);
     await db.execute(sql`DELETE FROM category WHERE id = ${catId}::uuid`);
-  });
+  }, 15_000);
 
   it('accepts locale=uz + ru + en', async () => {
     requireTestDatabaseUrl();
@@ -97,5 +99,5 @@ describe("FOUND-01: product_translations CHECK rejects invalid locale", () => {
     );
     await db.execute(sql`DELETE FROM product WHERE id = ${prodId}::uuid`);
     await db.execute(sql`DELETE FROM category WHERE id = ${catId}::uuid`);
-  });
+  }, 15_000);
 });

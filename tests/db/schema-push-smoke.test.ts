@@ -37,6 +37,8 @@ const EXPECTED_TABLES = [
 ] as const;
 
 describe('schema-push smoke: all Phase 1 tables exist in live DB', () => {
+  // 15s timeouts: cold-Neon HTTP first-query exceeds vitest's 5s default
+  // (DEF-2-01 — see .planning/phases/02-admin-panel/deferred-items.md).
   it('pg_tables returns every expected table', async () => {
     requireTestDatabaseUrl();
     const db = await getTestDb();
@@ -50,7 +52,7 @@ describe('schema-push smoke: all Phase 1 tables exist in live DB', () => {
     );
     const missing = EXPECTED_TABLES.filter((t) => !actual.has(t));
     expect(missing, `missing tables: ${missing.join(', ')}`).toEqual([]);
-  });
+  }, 15_000);
 
   it('spec_data_type enum contains exactly [number, text, enum, bool] (no range)', async () => {
     requireTestDatabaseUrl();
@@ -66,5 +68,5 @@ describe('schema-push smoke: all Phase 1 tables exist in live DB', () => {
       (r) => r.label,
     );
     expect(labels.sort()).toEqual(['bool', 'enum', 'number', 'text']);
-  });
+  }, 15_000);
 });

@@ -11,6 +11,8 @@ import { sql } from 'drizzle-orm';
 import { getTestDb, requireTestDatabaseUrl } from '../_fixtures/db';
 
 describe('FOUND-02: product_spec_values typed insert + range query', () => {
+  // 15s timeouts: cold-Neon HTTP first-query exceeds vitest's 5s default
+  // (DEF-2-01 — see .planning/phases/02-admin-panel/deferred-items.md).
   it('inserts num_value=42.5 and range query returns the row', async () => {
     requireTestDatabaseUrl();
     const db = await getTestDb();
@@ -64,7 +66,7 @@ describe('FOUND-02: product_spec_values typed insert + range query', () => {
     await db.execute(sql`DELETE FROM product WHERE id = ${prodId}::uuid`);
     await db.execute(sql`DELETE FROM spec_field WHERE id = ${specId}::uuid`);
     await db.execute(sql`DELETE FROM category WHERE id = ${catId}::uuid`);
-  });
+  }, 15_000);
 
   it('is_extra=true WITHOUT extra_key violates psv_extra_key_check', async () => {
     requireTestDatabaseUrl();
@@ -102,5 +104,5 @@ describe('FOUND-02: product_spec_values typed insert + range query', () => {
     // Cleanup
     await db.execute(sql`DELETE FROM product WHERE id = ${prodId}::uuid`);
     await db.execute(sql`DELETE FROM category WHERE id = ${catId}::uuid`);
-  });
+  }, 15_000);
 });
