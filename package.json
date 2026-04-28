@@ -64,6 +64,7 @@
     "@types/node": "22.10.2",
     "@types/react": "19.0.7",
     "@types/react-dom": "19.0.3",
+    "@types/ws": "^8.18.1",
     "@vitest/coverage-v8": "4.1.4",
     "dotenv": "^17.4.2",
     "drizzle-kit": "0.31.10",
@@ -77,6 +78,7 @@
     "prettier-plugin-tailwindcss": "0.6.11",
     "tailwindcss": "4.2.3",
     "typescript": "5.7.3",
-    "vitest": "4.1.4"
+    "vitest": "4.1.4",
+    "ws": "^8.20.0"
   }
 }

@@ -13,6 +13,18 @@ loadEnv({ path: '.env.local' });
 loadEnv({ path: '.env.test' });
 loadEnv();
 
+// Plan 02-04: dbTx (WebSocket Pool client) is required for transaction
+// integration tests (logAudit). Node 22's global WebSocket sometimes fails
+// to negotiate with Neon's serverless endpoint; the canonical fix
+// (per https://github.com/neondatabase/serverless CONFIG.md) is to point
+// neonConfig.webSocketConstructor at the `ws` package, which is already
+// installed as a transitive dep of @neondatabase/serverless. Done at
+// test-suite boot — has no effect outside of tests since this fixture is
+// the vitest setupFiles entry only.
+import { neonConfig } from '@neondatabase/serverless';
+import ws from 'ws';
+neonConfig.webSocketConstructor = ws as unknown as typeof globalThis.WebSocket;
+
 // The @/env boundary (src/env.ts, @t3-oss/env-nextjs) asserts all required
 // server env vars at import time. Tests only exercise the DB path; Auth.js,
 // Resend, and Sentry are wired in later plans. Until those plans add the
