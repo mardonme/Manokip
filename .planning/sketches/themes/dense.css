@@ -1,0 +1,62 @@
+/* Dense alt theme — fiztech.ru-style maximum information density.
+   Same palette, tighter spacing + smaller body type.
+   Toggle via the sketch toolbar to A/B feel. */
+:root {
+  --color-bg: #f4f5f7;
+  --color-surface: #ffffff;
+  --color-surface-alt: #f9fafb;
+  --color-border: #d8dce2;
+  --color-border-strong: #b1b8c1;
+  --color-text: #0c1219;
+  --color-text-muted: #4d5763;
+  --color-text-faint: #7d8794;
+  --color-primary: #0a2c55;
+  --color-primary-hover: #06203f;
+  --color-primary-soft: #e3eaf3;
+  --color-accent: #b85c00;
+  --color-success: #14532d;
+  --color-danger: #991b1b;
+  --color-link: #1e40af;
+
+  --color-status-published-bg: #dcfce7;
+  --color-status-published-fg: #14532d;
+  --color-status-draft-bg: #fef3c7;
+  --color-status-draft-fg: #713f12;
+
+  --font-sans: 'Inter', -apple-system, system-ui, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, Consolas, monospace;
+  --text-xs: 0.625rem;    /* 10 */
+  --text-sm: 0.75rem;     /* 12 */
+  --text-base: 0.875rem;  /* 14 */
+  --text-md: 0.9375rem;
+  --text-lg: 1.0625rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+
+  --leading-tight: 1.15;
+  --leading-normal: 1.4;
+  --weight-normal: 420;
+  --weight-medium: 540;
+  --weight-bold: 640;
+
+  --space-1: 3px;
+  --space-2: 6px;
+  --space-3: 10px;
+  --space-4: 14px;
+  --space-5: 18px;
+  --space-6: 22px;
+  --space-8: 28px;
+  --space-10: 36px;
+  --space-12: 44px;
+  --space-16: 56px;
+
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 8px;
+  --radius-full: 9999px;
+
+  --shadow-sm: 0 1px 0 rgba(12,18,25,0.06);
+  --shadow-md: 0 2px 4px rgba(12,18,25,0.06), 0 0 0 1px rgba(12,18,25,0.06);
+  --shadow-lg: 0 12px 24px rgba(12,18,25,0.10), 0 0 0 1px rgba(12,18,25,0.06);
+}
