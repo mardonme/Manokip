@@ -57,7 +57,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] 02-05-LIB-REVALIDATION.md — typed revalidateTag helpers (Next 16 2-arg form) + unit tests — completed 2026-04-28 (6bc879e RED test + c70bf46 GREEN impl; 7 helpers, 9 vi.mock specs, 63/63 vitest green)
 - [x] 02-06-LIB-DATATABLE.md — generic DataTable<TData> + pagination + toolbar (TanStack v8 + nuqs) — completed 2026-04-28 (bb3256e RED test + e71fafc GREEN impl; 14/14 vitest files / 69/69 tests; jsdom split; Wave 1 closed)
 - [x] 02-07-ADMINS-INVITE.md — inviteAdmin + acceptInvite Server Actions + AdminInviteEmail + admins list + accept-invite landing — completed 2026-04-28 (3dbde57 email template + a5ba0c7 TDD RED + 06e2cd4 TDD GREEN inviteAdmin/acceptInvite; UI pages + metadata in continuation commit; 15/15 vitest files / 72/72 tests; ADMIN-02 + ADMIN-11 satisfied)
-- [ ] 02-08-LOGIN-POLISH.md — useActionState login form + check-email + access-denied banner + magic-link harvesting mitigation
+- [x] 02-08-LOGIN-POLISH.md — useActionState login form + check-email + access-denied banner + magic-link harvesting mitigation — completed 2026-04-28 (a9fa727 TDD RED LoginForm + 76bc5f1 TDD GREEN useActionState + i18n + dd40f85 TDD RED isActiveAdminEmail + 2474ca4 TDD GREEN sendVerificationRequest gate; 17/17 vitest files / 81/81 tests; ADMIN-01 satisfied; Phase-1 DEF closed)
 - [ ] 02-09-CATEGORIES-CRUD.md — category tree CRUD + 3 translations + LocaleTabs + SlugInput primitives
 - [ ] 02-10-MANUFACTURERS-CRUD.md — manufacturer CRUD + logo upload + reusable MediaUploader (single + multi)
 - [ ] 02-11-SPEC-FIELDS-EDITOR.md — spec_field rename/soft-delete/hard-delete + spec_field_group CRUD + ConfirmDialog + soft-delete repository wrapper
@@ -114,7 +114,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundations | 7/7 | Complete | 2026-04-23 |
-| 2. Admin Panel | 7/18 | In Progress | - |
+| 2. Admin Panel | 8/18 | In Progress | - |
 | 3. Public Rendering, Search, SEO | 0/TBD | Not started | - |
 | 4. Content Features | 0/TBD | Not started | - |
 | 5. Contact and Launch Polish | 0/TBD | Not started | - |

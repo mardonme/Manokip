@@ -19,7 +19,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Admin Panel (ADMIN)
 
-- [ ] **ADMIN-01**: Invited admin can log in via email magic-link; session expires on idle (24h) and absolute limit (7d)
+- [x] **ADMIN-01**: Invited admin can log in via email magic-link; session expires on idle (24h) and absolute limit (7d)
 - [x] **ADMIN-02**: Existing admin can invite a new admin by email; invite token is single-use and expires in 48 hours
 - [ ] **ADMIN-03**: Admin can CRUD categories in a tree (parent/child), with translations for name and description across all three locales on one page
 - [ ] **ADMIN-04**: Admin can CRUD manufacturers with translations and logo upload to Cloudinary
@@ -143,7 +143,7 @@ Which phases cover which requirements.
 | FOUND-05 | Phase 1 | Partial (01-05 — Auth.js v5 edge-split, Resend magic-link, signIn admin-gate, DrizzleAdapter with D-09 dual session caps, bootstrapAdmin, login/admin pages, T-AUTH-02 test all landed; middleware admin cookie gate for `/[locale]/admin/*` lands in 01-06) |
 | FOUND-06 | Phase 1 | Pending |
 | FOUND-07 | Phase 1 | Partial (01-04 — `<Analytics />` + `<SpeedInsights />` mount point added to [locale] layout; Sentry wiring + production deploy land in 01-07) |
-| ADMIN-01 | Phase 2 | Pending |
+| ADMIN-01 | Phase 2 | Complete (01-05 — Auth.js v5 magic-link signIn callback authorising admin_user.active=true; 01-06 — proxy.ts admin gate; 02-03 — proxy.ts D-15 idle/absolute cap via sessions.absoluteExpires; 02-08 — useActionState login form with check-email + access-denied banner + magic-link harvesting mitigation in sendVerificationRequest via isActiveAdminEmail helper; T-02-08-01 + T-02-08-02 anti-enumeration both layers) |
 | ADMIN-02 | Phase 2 | Complete (02-01 — admin_invite schema; 02-07 — inviteAdmin + acceptInvite Server Actions with Pitfall #4 atomic single-use UPDATE, AdminInviteEmail React Email template via Resend, admins list with InviteAdminDialog, accept-invite landing page with constant-message rejection per T-02-07-06) |
 | ADMIN-03 | Phase 2 | Pending |
 | ADMIN-04 | Phase 2 | Pending |
