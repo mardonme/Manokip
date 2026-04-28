@@ -54,7 +54,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] 02-02-ADMIN-SHELL.md — admin layout + sidebar + top bar + NuqsAdapter + shadcn primitives + Phase-2 dep install — completed 2026-04-28 (b786862 + 74080e1 DEF-2-01 fix + 4246e36)
 - [x] 02-03-PROXY-SESSION-CAP.md — proxy.ts D-15 idle + 7d absolute cap via sessions.absoluteExpires — completed 2026-04-28 (c157d7c proxy.ts cap + 7e77a79 e2e fixme spec)
 - [x] 02-04-LIB-AUDIT.md — logAudit + AuditAction enum + withAdminAction wrapper + auth.ts events hook + admin-session test fixture — completed 2026-04-28 (36078a5/c369b68 logAudit, 1a0a0e0/b562456 withAdminAction + events, c637cd8 fixture + enforceAbsoluteCap seam)
-- [ ] 02-05-LIB-REVALIDATION.md — typed revalidateTag helpers (Next 16 2-arg form) + unit tests
+- [x] 02-05-LIB-REVALIDATION.md — typed revalidateTag helpers (Next 16 2-arg form) + unit tests — completed 2026-04-28 (6bc879e RED test + c70bf46 GREEN impl; 7 helpers, 9 vi.mock specs, 63/63 vitest green)
 - [ ] 02-06-LIB-DATATABLE.md — generic DataTable<TData> + pagination + toolbar (TanStack v8 + nuqs)
 - [ ] 02-07-ADMINS-INVITE.md — inviteAdmin + acceptInvite Server Actions + AdminInviteEmail + admins list + accept-invite landing
 - [ ] 02-08-LOGIN-POLISH.md — useActionState login form + check-email + access-denied banner + magic-link harvesting mitigation
@@ -114,7 +114,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundations | 7/7 | Complete | 2026-04-23 |
-| 2. Admin Panel | 4/18 | In Progress | - |
+| 2. Admin Panel | 5/18 | In Progress | - |
 | 3. Public Rendering, Search, SEO | 0/TBD | Not started | - |
 | 4. Content Features | 0/TBD | Not started | - |
 | 5. Contact and Launch Polish | 0/TBD | Not started | - |
