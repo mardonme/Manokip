@@ -20,6 +20,12 @@ import {
 } from '@/db/schema';
 import authConfig from './auth.config';
 import { logAudit } from '@/lib/audit';
+import { enforceAbsoluteCap } from '@/lib/admin-session-cap';
+
+// Re-export for the small surface of consumers (tests, future audit log
+// viewer query helper). Kept at module top so a downstream import seam
+// is obvious.
+export { enforceAbsoluteCap } from '@/lib/admin-session-cap';
 
 // Augment the default Session type to expose the opaque sessionToken (cookie
 // value, not user-facing) so requireAdmin() can enforce the D-09 7d absolute
@@ -186,38 +192,13 @@ export async function requireAdmin() {
   if (!session?.user?.email) {
     throw new Error('Unauthorized');
   }
-
   if (session.sessionToken) {
-    const [row] = await db
-      .select({ absoluteExpires: sessions.absoluteExpires })
-      .from(sessions)
-      .where(eq(sessions.sessionToken, session.sessionToken))
-      .limit(1);
-    if (row?.absoluteExpires && row.absoluteExpires.getTime() < Date.now()) {
-      // D-16 / Open Q §5: emit `session_revoked` BEFORE the row deletion +
-      // throw so the audit log records who got 7d-capped and when. We use
-      // the same dbTx transaction shape as every other audit write — the
-      // row commits atomically with itself (no other mutation in this tx).
-      // Errors are caught + logged so an audit-write failure can never
-      // bypass the cap rejection (the throw below is the security gate).
-      try {
-        await dbTx.transaction(async (tx) => {
-          await logAudit(tx, {
-            actorEmail: session.user!.email!,
-            action: 'session_revoked',
-            entityType: 'admin_user',
-            entityId: session.user!.email!,
-            before: { absoluteExpires: row.absoluteExpires!.toISOString() },
-            after: null,
-          });
-        });
-      } catch (err) {
-        console.error('audit:session_revoked emit failed', err);
-      }
-      await db.delete(sessions).where(eq(sessions.sessionToken, session.sessionToken));
-      throw new Error('Unauthorized'); // D-09 absolute timeout
-    }
+    // D-15 / Open Q §5: dual-cap enforcement. enforceAbsoluteCap lives in
+    // its own module (no next-auth import) so vitest can exercise it
+    // against the live Neon test branch without pulling in next-auth's
+    // env.js (which transitively fails to resolve `next/server` outside
+    // a Next.js runtime). See tests/lib/require-admin.test.ts.
+    await enforceAbsoluteCap(session.sessionToken, session.user.email);
   }
-
   return session;
 }
