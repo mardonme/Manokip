@@ -1,3 +1,4 @@
+// Node-only — never import from Edge contexts (proxy.ts uses @/lib/auth.config instead)
 // Node-runtime Auth.js v5 composition — glues auth.config.ts to DrizzleAdapter
 // + live-DB signIn callback + D-09 7d absolute session cap enforcement.
 //
@@ -9,6 +10,7 @@ import NextAuth, { type DefaultSession } from 'next-auth';
 import { DrizzleAdapter } from '@auth/drizzle-adapter';
 import { eq, and, isNull } from 'drizzle-orm';
 import { db } from '@/db/client';
+import { dbTx } from '@/db/client-ws';
 import {
   authUsers,
   authAccounts,
@@ -17,6 +19,7 @@ import {
   adminUsers,
 } from '@/db/schema';
 import authConfig from './auth.config';
+import { logAudit } from '@/lib/audit';
 
 // Augment the default Session type to expose the opaque sessionToken (cookie
 // value, not user-facing) so requireAdmin() can enforce the D-09 7d absolute
@@ -97,6 +100,72 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       return session;
     },
   },
+  // D-16 / Open Q §5: Auth.js lifecycle audit emission. Auth.js fires these
+  // AFTER the auth state has been committed (signIn = adapter wrote the row;
+  // signOut = adapter dropped the row), so the audit row is atomic with the
+  // lifecycle event in the sense that requireAdmin() will already see the
+  // new state on the next request. Errors thrown here are swallowed by
+  // Auth.js (per next-auth/events docs), but we still wrap the body in
+  // try/catch so an audit-write failure can never break the user-visible
+  // sign-in/-out flow.
+  events: {
+    async signIn({ user }) {
+      if (!user?.email) return;
+      const at = new Date().toISOString();
+      try {
+        await dbTx.transaction(async (tx) => {
+          await logAudit(tx, {
+            actorEmail: user.email!,
+            action: 'login',
+            entityType: 'admin_user',
+            entityId: user.email!,
+            before: null,
+            after: { at },
+          });
+        });
+      } catch (err) {
+        console.error('audit:login emit failed', err);
+      }
+    },
+    async signOut(message) {
+      // Auth.js v5 with database strategy passes `{ session: AdapterSession }`;
+      // with JWT it would be `{ token: JWT }`. We only run database strategy
+      // (src/lib/auth.ts:51), so the `session` branch is what matters. Look
+      // up the user's email by `session.userId` since AdapterSession does
+      // not carry email itself.
+      try {
+        let email: string | null = null;
+        if (
+          'session' in message &&
+          message.session &&
+          typeof message.session === 'object' &&
+          'userId' in message.session &&
+          typeof message.session.userId === 'string'
+        ) {
+          const [u] = await db
+            .select({ email: authUsers.email })
+            .from(authUsers)
+            .where(eq(authUsers.id, message.session.userId))
+            .limit(1);
+          email = u?.email ?? null;
+        }
+        if (!email) return;
+        const at = new Date().toISOString();
+        await dbTx.transaction(async (tx) => {
+          await logAudit(tx, {
+            actorEmail: email!,
+            action: 'logout',
+            entityType: 'admin_user',
+            entityId: email!,
+            before: null,
+            after: { at },
+          });
+        });
+      } catch (err) {
+        console.error('audit:logout emit failed', err);
+      }
+    },
+  },
 });
 
 /**
@@ -125,6 +194,26 @@ export async function requireAdmin() {
       .where(eq(sessions.sessionToken, session.sessionToken))
       .limit(1);
     if (row?.absoluteExpires && row.absoluteExpires.getTime() < Date.now()) {
+      // D-16 / Open Q §5: emit `session_revoked` BEFORE the row deletion +
+      // throw so the audit log records who got 7d-capped and when. We use
+      // the same dbTx transaction shape as every other audit write — the
+      // row commits atomically with itself (no other mutation in this tx).
+      // Errors are caught + logged so an audit-write failure can never
+      // bypass the cap rejection (the throw below is the security gate).
+      try {
+        await dbTx.transaction(async (tx) => {
+          await logAudit(tx, {
+            actorEmail: session.user!.email!,
+            action: 'session_revoked',
+            entityType: 'admin_user',
+            entityId: session.user!.email!,
+            before: { absoluteExpires: row.absoluteExpires!.toISOString() },
+            after: null,
+          });
+        });
+      } catch (err) {
+        console.error('audit:session_revoked emit failed', err);
+      }
       await db.delete(sessions).where(eq(sessions.sessionToken, session.sessionToken));
       throw new Error('Unauthorized'); // D-09 absolute timeout
     }
