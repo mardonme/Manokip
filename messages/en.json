@@ -12,6 +12,23 @@
   },
   "admin": {
     "title": "Admin panel",
-    "comingSoon": "Coming soon"
+    "comingSoon": "Coming soon",
+    "nav": {
+      "dashboard": "Dashboard",
+      "products": "Products",
+      "categories": "Categories",
+      "manufacturers": "Manufacturers",
+      "specFields": "Spec Fields",
+      "submissions": "Submissions",
+      "audit": "Audit Log",
+      "admins": "Admins"
+    },
+    "topbar": {
+      "signOut": "Sign out"
+    },
+    "dashboard": {
+      "title": "Admin panel",
+      "placeholder": "Phase-2 management tools will populate this dashboard."
+    }
   }
 }

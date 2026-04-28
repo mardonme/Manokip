@@ -12,6 +12,23 @@
   },
   "admin": {
     "title": "Админ-панель",
-    "comingSoon": "Скоро"
+    "comingSoon": "Скоро",
+    "nav": {
+      "dashboard": "Панель",
+      "products": "Товары",
+      "categories": "Категории",
+      "manufacturers": "Производители",
+      "specFields": "Спецификации",
+      "submissions": "Заявки",
+      "audit": "Журнал действий",
+      "admins": "Администраторы"
+    },
+    "topbar": {
+      "signOut": "Выйти"
+    },
+    "dashboard": {
+      "title": "Админ-панель",
+      "placeholder": "Здесь появятся инструменты управления в течение Phase 2."
+    }
   }
 }

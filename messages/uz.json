@@ -12,6 +12,23 @@
   },
   "admin": {
     "title": "Admin panel",
-    "comingSoon": "Tez orada"
+    "comingSoon": "Tez orada",
+    "nav": {
+      "dashboard": "Bosh sahifa",
+      "products": "Mahsulotlar",
+      "categories": "Kategoriyalar",
+      "manufacturers": "Ishlab chiqaruvchilar",
+      "specFields": "Spetsifikatsiyalar",
+      "submissions": "Murojaatlar",
+      "audit": "Audit log",
+      "admins": "Adminlar"
+    },
+    "topbar": {
+      "signOut": "Chiqish"
+    },
+    "dashboard": {
+      "title": "Admin panel",
+      "placeholder": "Bu yerda Phase 2 davomida boshqaruv vositalari paydo bo'ladi."
+    }
   }
 }
