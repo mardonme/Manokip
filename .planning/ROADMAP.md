@@ -61,7 +61,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] 02-09-CATEGORIES-CRUD.md — category tree CRUD + 3 translations + LocaleTabs + SlugInput primitives — completed 2026-04-28 (12f7f05 LocaleTabs+SlugInput primitives + 5981b26 TDD RED + c55c5dd TDD GREEN saveCategory/deleteCategory + drizzle casing fix + bb4baa0 list/new/edit/form pages; 18/18 vitest files / 84/84 tests; ADMIN-03 satisfied)
 - [x] 02-10-MANUFACTURERS-CRUD.md — manufacturer CRUD + logo upload + reusable MediaUploader (single + multi) — completed 2026-04-28 (667f44c MediaUploader single+multi modes + 8ca6833 TDD RED + b36df3c TDD GREEN saveManufacturer/deleteManufacturer + a5c0d8c list/new/edit/form pages; 19/19 vitest files / 87/87 tests; ADMIN-04 satisfied; D-07 SSOT regression-locker spec lands)
 - [x] 02-11-SPEC-FIELDS-EDITOR.md — spec_field rename/soft-delete/hard-delete + spec_field_group CRUD + ConfirmDialog + soft-delete repository wrapper — completed 2026-04-28 (99f365c repository wrapper + ConfirmDialog + 0a392d9 TDD RED specs/zod + 4f5d719 TDD GREEN saveSpecField/renameSpecField/softDeleteSpecField/deleteSpecField + d61d2b6 group RED + d2c5bf9 group GREEN saveSpecFieldGroup/reorderGroups/deleteSpecFieldGroup + 90f87cc UI + DataTable manualPagination prop; 21/21 vitest files / 95/95 tests; ADMIN-05 satisfied; D-08 type-lock at runtime + UI; D-06 limited cascade on extra_key; Open Q §3 client-paginated DataTable opt-in; Open Q §4 repository wrapper for Phase-3 reads)
-- [ ] 02-12-TRANSLATION-COMPLETENESS-VIEW.md — pgView helpers + TranslationCompleteness + TranslationDots
+- [x] 02-12-TRANSLATION-COMPLETENESS-VIEW.md — pgView helpers + TranslationCompleteness + TranslationDots — completed 2026-04-28 (edd7c0d TDD RED stub helper + 3-spec live-Neon test + 2620a71 TDD GREEN findProductCompleteness/findCompletenessForProducts wrapping productTranslationCompleteness pgView + 9fef5e0 UI components TranslationCompleteness progress bar + TranslationDots 3-locale dot indicator with D-04 thresholds; 22/22 vitest files / 98/98 tests; ADMIN-10 satisfied; Wave 2 closes — 12/18 Phase-2 plans complete)
 - [ ] 02-13a-PRODUCTS-CRUD-CORE.md — Zod schemas + saveProduct (5-step tx with refusal-to-elevate) + duplicateProduct + integration tests + seed-products fixture
 - [ ] 02-13b-PRODUCTS-CRUD-LIFECYCLE-UI.md — publishProduct/unpublishProduct/deleteProduct (distinct audit rows) + products list + product editor pages with locale tabs + spec values editor + MT toggle + lifecycle buttons
 - [ ] 02-14-PRODUCTS-MEDIA.md — confirm CldUploadWidget signing parity + MediaUploader unit test
@@ -114,7 +114,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundations | 7/7 | Complete | 2026-04-23 |
-| 2. Admin Panel | 11/18 | In Progress | - |
+| 2. Admin Panel | 12/18 | In Progress | - |
 | 3. Public Rendering, Search, SEO | 0/TBD | Not started | - |
 | 4. Content Features | 0/TBD | Not started | - |
 | 5. Contact and Launch Polish | 0/TBD | Not started | - |

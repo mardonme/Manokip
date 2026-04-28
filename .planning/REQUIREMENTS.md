@@ -28,7 +28,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [ ] **ADMIN-07**: Admin can upload product images and datasheets/certificates directly to Cloudinary via signed-upload flow; DB stores `public_id` only
 - [ ] **ADMIN-08**: Admin can duplicate an existing product as a starting point for a new one
 - [ ] **ADMIN-09**: Admin can mark a translation as machine-generated (`machine_translated: true`); such fields are flagged in the UI
-- [ ] **ADMIN-10**: Admin can see a per-product translation-completeness indicator (which locales/fields are missing)
+- [x] **ADMIN-10**: Admin can see a per-product translation-completeness indicator (which locales/fields are missing)
 - [x] **ADMIN-11**: Every admin write operation is recorded in an audit log (who, what, when, entity)
 - [ ] **ADMIN-12**: Admin can view, search, and export contact-form submissions
 
@@ -152,7 +152,7 @@ Which phases cover which requirements.
 | ADMIN-07 | Phase 2 | Pending |
 | ADMIN-08 | Phase 2 | Pending |
 | ADMIN-09 | Phase 2 | Partial (02-01 — productTranslationFieldFlags sibling table landed: PK (product_id, locale, field_name) + machine_translated boolean + compound FK to product_translations ON DELETE CASCADE; MT toggle UI + write path land in 02-13b) |
-| ADMIN-10 | Phase 2 | Partial (02-01 — product_translation_completeness pgView landed computing per-locale percent over name+slug+short_desc+long_desc plus required-text spec values; helper module + UI dots land in 02-12) |
+| ADMIN-10 | Phase 2 | Complete (02-01 schema substrate — product_translation_completeness pgView computing per-locale percent over name+slug+short_desc+long_desc plus required-text spec values; 02-12 — findProductCompleteness + findCompletenessForProducts server helpers wrapping the pgView with locale-narrowing type-guard and missing-row-defaults-to-0 contract; <TranslationCompleteness percent={N} /> progress bar + <TranslationDots completeness={...} /> 3-locale dot indicator client components with D-04 thresholds (green ≥95 / amber ≥50 / red <50) hard-coded; 3 live-Neon specs lock view math 25/50/100 base + 100/80/80 W10 spec; consumed by 02-13b product editor + products list) |
 | ADMIN-11 | Phase 2 | Complete (02-04 — logAudit(tx, ...) + closed AUDIT_ACTIONS const tuple of 13 actions + withAdminAction wrapper + auth.ts events.signIn/signOut/session_revoked emit; 02-07 — first end-to-end production callsites: action='invite' on inviteAdmin tx + action='update' on acceptInvite tx; future Wave-2/3/4 mutations all flow through withAdminAction → logAudit) |
 | ADMIN-12 | Phase 2 | Pending |
 | CAT-01 | Phase 3 | Pending |
@@ -203,4 +203,4 @@ Which phases cover which requirements.
 
 ---
 *Requirements defined: 2026-04-21*
-*Last updated: 2026-04-28 — Phase 2 plan 02-11 SPEC-FIELDS-EDITOR complete; ADMIN-05 marked Complete (saveSpecField + renameSpecField with extra_key cascade + softDelete + deleteSpecField + spec_field_group CRUD with 3-locale labels + ConfirmDialog + soft-delete repository wrapper for Phase 3 public reads). ADMIN-09, ADMIN-10 remain Partial pending downstream Phase-2 UI plans (02-13b, 02-12 respectively).*
+*Last updated: 2026-04-28 — Phase 2 plan 02-12 TRANSLATION-COMPLETENESS-VIEW complete; ADMIN-10 marked Complete (findProductCompleteness + findCompletenessForProducts server helpers wrapping productTranslationCompleteness pgView + TranslationCompleteness progress bar + TranslationDots 3-locale dot indicator client components with D-04 thresholds; 3 live-Neon specs lock the view math). Wave 2 closes — 12/18 Phase-2 plans complete (02-01..02-12). ADMIN-09 remains Partial pending downstream 02-13b MT toggle UI + write path.*
