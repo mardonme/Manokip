@@ -22,7 +22,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **ADMIN-01**: Invited admin can log in via email magic-link; session expires on idle (24h) and absolute limit (7d)
 - [x] **ADMIN-02**: Existing admin can invite a new admin by email; invite token is single-use and expires in 48 hours
 - [x] **ADMIN-03**: Admin can CRUD categories in a tree (parent/child), with translations for name and description across all three locales on one page
-- [ ] **ADMIN-04**: Admin can CRUD manufacturers with translations and logo upload to Cloudinary
+- [x] **ADMIN-04**: Admin can CRUD manufacturers with translations and logo upload to Cloudinary
 - [ ] **ADMIN-05**: Admin can define the spec-field schema for each category: add/rename/delete fields with type, unit, required flag, and filter behavior; rename treats stable internal key as unchanged
 - [ ] **ADMIN-06**: Admin can CRUD products with: three-locale tabs (name, short description, long description, slug per locale), manufacturer assignment, category assignment, typed spec values (driven by the category schema), free-form display-only extras, draft/published state
 - [ ] **ADMIN-07**: Admin can upload product images and datasheets/certificates directly to Cloudinary via signed-upload flow; DB stores `public_id` only
@@ -146,7 +146,7 @@ Which phases cover which requirements.
 | ADMIN-01 | Phase 2 | Complete (01-05 — Auth.js v5 magic-link signIn callback authorising admin_user.active=true; 01-06 — proxy.ts admin gate; 02-03 — proxy.ts D-15 idle/absolute cap via sessions.absoluteExpires; 02-08 — useActionState login form with check-email + access-denied banner + magic-link harvesting mitigation in sendVerificationRequest via isActiveAdminEmail helper; T-02-08-01 + T-02-08-02 anti-enumeration both layers) |
 | ADMIN-02 | Phase 2 | Complete (02-01 — admin_invite schema; 02-07 — inviteAdmin + acceptInvite Server Actions with Pitfall #4 atomic single-use UPDATE, AdminInviteEmail React Email template via Resend, admins list with InviteAdminDialog, accept-invite landing page with constant-message rejection per T-02-07-06) |
 | ADMIN-03 | Phase 2 | Complete (02-09 — saveCategory + deleteCategory Server Actions with atomic 1+3+1 row write per dbTx.transaction + logAudit + revalidateCategoryMove fan-out for D-12 re-parent; reusable LocaleTabs + SlugInput primitives; categories list/new/edit pages consume DataTable<TData> from 02-06; Phase-1 drizzle runtime client casing fix as Rule-1 deviation; 3 live-Neon specs cover create/update-with-parent-change/delete) |
-| ADMIN-04 | Phase 2 | Pending |
+| ADMIN-04 | Phase 2 | Complete (02-10 — saveManufacturer + deleteManufacturer Server Actions with universal pre-tx-snapshot + dbTx.transaction(base upsert + 3 translation upserts ON CONFLICT DO UPDATE on (manufacturer_id, locale) + logAudit) + post-commit revalidateManufacturer fan-out; reusable MediaUploader (single + multi modes, signed via Phase-1 /api/cloudinary/sign, DB stores public_id only per D-07 SSOT — regression-locker test asserts persisted column does not match `^https?://`); manufacturer list/new/edit pages reuse LocaleTabs + SlugInput verbatim from 02-09; 3 live-Neon specs lock create/update-with-logo-change/delete-cascade contracts) |
 | ADMIN-05 | Phase 2 | Partial (02-01 — spec_field.deleted_at + spec_field.group_id columns + spec_field_group + spec_field_group_translations + partial-unique (category_id,key) WHERE deleted_at IS NULL landed; spec-field rename/soft-delete/group-CRUD UI lands in 02-11) |
 | ADMIN-06 | Phase 2 | Pending |
 | ADMIN-07 | Phase 2 | Pending |
@@ -203,4 +203,4 @@ Which phases cover which requirements.
 
 ---
 *Requirements defined: 2026-04-21*
-*Last updated: 2026-04-28 — Phase 2 plan 02-07 ADMINS-INVITE complete; ADMIN-02 + ADMIN-11 marked Complete (admin invite lifecycle end-to-end + first audit-log production callsites). ADMIN-05, ADMIN-09, ADMIN-10 remain Partial pending downstream Phase-2 CRUD/UI plans (02-11, 02-13b, 02-12 respectively).*
+*Last updated: 2026-04-28 — Phase 2 plan 02-10 MANUFACTURERS-CRUD complete; ADMIN-04 marked Complete (manufacturer CRUD with 3 translations + Cloudinary logo upload + reusable MediaUploader). ADMIN-05, ADMIN-09, ADMIN-10 remain Partial pending downstream Phase-2 CRUD/UI plans (02-11, 02-13b, 02-12 respectively).*

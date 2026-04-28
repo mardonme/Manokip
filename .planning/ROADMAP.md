@@ -59,7 +59,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] 02-07-ADMINS-INVITE.md — inviteAdmin + acceptInvite Server Actions + AdminInviteEmail + admins list + accept-invite landing — completed 2026-04-28 (3dbde57 email template + a5ba0c7 TDD RED + 06e2cd4 TDD GREEN inviteAdmin/acceptInvite; UI pages + metadata in continuation commit; 15/15 vitest files / 72/72 tests; ADMIN-02 + ADMIN-11 satisfied)
 - [x] 02-08-LOGIN-POLISH.md — useActionState login form + check-email + access-denied banner + magic-link harvesting mitigation — completed 2026-04-28 (a9fa727 TDD RED LoginForm + 76bc5f1 TDD GREEN useActionState + i18n + dd40f85 TDD RED isActiveAdminEmail + 2474ca4 TDD GREEN sendVerificationRequest gate; 17/17 vitest files / 81/81 tests; ADMIN-01 satisfied; Phase-1 DEF closed)
 - [x] 02-09-CATEGORIES-CRUD.md — category tree CRUD + 3 translations + LocaleTabs + SlugInput primitives — completed 2026-04-28 (12f7f05 LocaleTabs+SlugInput primitives + 5981b26 TDD RED + c55c5dd TDD GREEN saveCategory/deleteCategory + drizzle casing fix + bb4baa0 list/new/edit/form pages; 18/18 vitest files / 84/84 tests; ADMIN-03 satisfied)
-- [ ] 02-10-MANUFACTURERS-CRUD.md — manufacturer CRUD + logo upload + reusable MediaUploader (single + multi)
+- [x] 02-10-MANUFACTURERS-CRUD.md — manufacturer CRUD + logo upload + reusable MediaUploader (single + multi) — completed 2026-04-28 (667f44c MediaUploader single+multi modes + 8ca6833 TDD RED + b36df3c TDD GREEN saveManufacturer/deleteManufacturer + a5c0d8c list/new/edit/form pages; 19/19 vitest files / 87/87 tests; ADMIN-04 satisfied; D-07 SSOT regression-locker spec lands)
 - [ ] 02-11-SPEC-FIELDS-EDITOR.md — spec_field rename/soft-delete/hard-delete + spec_field_group CRUD + ConfirmDialog + soft-delete repository wrapper
 - [ ] 02-12-TRANSLATION-COMPLETENESS-VIEW.md — pgView helpers + TranslationCompleteness + TranslationDots
 - [ ] 02-13a-PRODUCTS-CRUD-CORE.md — Zod schemas + saveProduct (5-step tx with refusal-to-elevate) + duplicateProduct + integration tests + seed-products fixture
@@ -114,7 +114,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundations | 7/7 | Complete | 2026-04-23 |
-| 2. Admin Panel | 8/18 | In Progress | - |
+| 2. Admin Panel | 10/18 | In Progress | - |
 | 3. Public Rendering, Search, SEO | 0/TBD | Not started | - |
 | 4. Content Features | 0/TBD | Not started | - |
 | 5. Contact and Launch Polish | 0/TBD | Not started | - |
