@@ -1,19 +1,23 @@
 import { defineConfig } from 'vitest/config';
 import path from 'node:path';
 
+// Vitest is split into two projects:
+//   - 'node' — server/lib tests (DB, lib helpers, API routes). Default Node
+//             environment; default setup file (env loader).
+//   - 'dom'  — component tests under tests/components/**. jsdom environment
+//             so React components can render. No env loader (component tests
+//             don't touch @/env / Neon).
+//
+// Each project defines its own `include` + `setupFiles`, so they do NOT
+// inherit the parent's `include`/`setupFiles` (Vitest 4 projects override
+// parent test config field-by-field for arrays / strings).
 export default defineConfig({
+  resolve: {
+    alias: { '@': path.resolve(__dirname, './src') },
+  },
   test: {
-    environment: 'node',
     globals: true,
-    // Include .ts (server/lib) and .tsx (component) tests.
-    include: ['tests/**/*.test.ts', 'tests/**/*.test.tsx'],
-    exclude: ['tests/e2e/**', 'node_modules', '.next'],
-    setupFiles: ['./tests/_fixtures/load-env.ts'],
     reporters: ['verbose'],
-    // Component tests need a DOM. Vitest 4 honours `// @vitest-environment jsdom`
-    // pragma at the top of each .test.tsx file; this projects-style override
-    // keeps the default Node env for server-side tests while enabling jsdom
-    // for everything under tests/components/**.
     projects: [
       {
         extends: true,
@@ -21,7 +25,8 @@ export default defineConfig({
           name: 'node',
           environment: 'node',
           include: ['tests/**/*.test.ts'],
-          exclude: ['tests/components/**', 'tests/e2e/**'],
+          exclude: ['tests/e2e/**', 'tests/components/**', 'node_modules', '.next'],
+          setupFiles: ['./tests/_fixtures/load-env.ts'],
         },
       },
       {
@@ -30,12 +35,11 @@ export default defineConfig({
           name: 'dom',
           environment: 'jsdom',
           include: ['tests/components/**/*.test.tsx'],
-          exclude: ['tests/e2e/**'],
+          exclude: ['tests/e2e/**', 'node_modules', '.next'],
+          // No env loader — component tests do not touch @/env / Neon.
+          setupFiles: [],
         },
       },
     ],
-  },
-  resolve: {
-    alias: { '@': path.resolve(__dirname, './src') },
   },
 });

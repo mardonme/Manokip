@@ -87,11 +87,14 @@ describe("DataTable URL state", () => {
       },
       { timeout: 1500 },
     );
-    // The toolbar resets pagination on a new query so page is forced back to 1.
+    // The toolbar resets pagination on a new query. nuqs strips default
+    // values from URLs (page default = 1), so the URL records this as "no
+    // ?page=" rather than "?page=1" — both are semantically page 1.
     const lastCall = onUrlUpdate.mock.calls.at(-1)![0] as {
       searchParams: URLSearchParams;
     };
-    expect(lastCall.searchParams.get("page")).toBe("1");
+    const pageParam = lastCall.searchParams.get("page");
+    expect(pageParam === null || pageParam === "1").toBe(true);
   });
 
   it("Prev button is disabled on the first page", () => {
