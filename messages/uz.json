@@ -6,9 +6,13 @@
   },
   "auth": {
     "signIn": "Kirish",
-    "signInPrompt": "Elektron pochta manzilingizni kiriting",
-    "checkEmail": "Elektron pochtangizni tekshiring",
-    "sendLink": "Havolani yuborish"
+    "signInPrompt": "Admin hisobingizga bog'langan elektron pochtani kiriting",
+    "emailPlaceholder": "admin@manometr.uz",
+    "checkEmail": "Pochtangizni tekshiring — kirish havolasini yubordik.",
+    "sendLink": "Kirish havolasini yuborish",
+    "invalidEmail": "Iltimos, to'g'ri elektron pochta manzilini kiriting.",
+    "unknownError": "Xato yuz berdi. Iltimos, qaytadan urinib ko'ring.",
+    "accessDenied": "Sizda admin huquqi yo'q. Boshqa hisob bilan kiring yoki administratorga murojaat qiling."
   },
   "admin": {
     "title": "Admin panel",

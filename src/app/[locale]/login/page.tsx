@@ -1,61 +1,55 @@
-// Magic-link login page — minimal Phase 1 shell. Phase 2 polishes UX
-// (check-email confirmation screen, invalid-input toasts, resend throttle).
+// Plan 02-08: server-component page that hosts the LoginForm client island.
+// Replaces the Phase-1 void-action page with a useActionState-driven form
+// that surfaces "Check your email" confirmation and access-denied banner.
+//
+// `?error=` reading: Auth.js redirects to `/[locale]/login?error=AccessDenied`
+// when the signIn callback rejects (e.g. inactive admin clicked the magic
+// link). We map that to `initialError='access_denied'` so the form renders
+// a localized banner above the input. Other Auth.js error codes collapse to
+// the generic 'unknown' surface (the client form already renders this for
+// transient errors).
 //
 // setRequestLocale(locale) is mandatory before any getTranslations() call to
 // avoid forced dynamic rendering (Pitfall 4).
 
 import { setRequestLocale, getTranslations } from 'next-intl/server';
-import { requestMagicLink } from './actions';
+import { LoginForm, type LoginFormLabels } from './login-form';
 
-type Props = { params: Promise<{ locale: string }> };
+type Props = {
+  params: Promise<{ locale: string }>;
+  searchParams: Promise<{ error?: string }>;
+};
 
-export default async function LoginPage({ params }: Props) {
+function normalizeError(raw: string | undefined): string | undefined {
+  if (!raw) return undefined;
+  const lower = raw.toLowerCase();
+  if (lower === 'accessdenied' || lower === 'access_denied') return 'access_denied';
+  return undefined;
+}
+
+export default async function LoginPage({ params, searchParams }: Props) {
   const { locale } = await params;
+  const sp = await searchParams;
   setRequestLocale(locale);
-  const t = await getTranslations('auth');
+  const t = await getTranslations({ locale, namespace: 'auth' });
+
+  const labels: LoginFormLabels = {
+    title: t('signIn'),
+    prompt: t('signInPrompt'),
+    email: t('emailPlaceholder'),
+    submit: t('sendLink'),
+    success: t('checkEmail'),
+    invalidEmail: t('invalidEmail'),
+    unknown: t('unknownError'),
+    accessDenied: t('accessDenied'),
+  };
+
+  const initialError = normalizeError(sp.error);
 
   return (
-    <main
-      style={{
-        padding: '2rem',
-        maxWidth: '420px',
-        margin: '4rem auto',
-        fontFamily: 'var(--font-sans), system-ui, sans-serif',
-      }}
-    >
-      <h1>{t('signIn')}</h1>
-      <p style={{ color: '#555', marginBottom: '1rem' }}>{t('signInPrompt')}</p>
-      <form
-        action={requestMagicLink}
-        style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}
-      >
-        <input type="hidden" name="locale" value={locale} />
-        <input
-          name="email"
-          type="email"
-          required
-          autoComplete="email"
-          placeholder="admin@manometr.uz"
-          style={{
-            padding: '0.6rem',
-            border: '1px solid #ccc',
-            borderRadius: '4px',
-          }}
-        />
-        <button
-          type="submit"
-          style={{
-            padding: '0.6rem 1rem',
-            background: '#111',
-            color: '#fff',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
-          }}
-        >
-          {t('sendLink')}
-        </button>
-      </form>
+    <main className="mx-auto max-w-md px-6 py-16">
+      <h1 className="mb-2 text-2xl font-semibold">{labels.title}</h1>
+      <LoginForm locale={locale} labels={labels} initialError={initialError} />
     </main>
   );
 }

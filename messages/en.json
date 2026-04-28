@@ -5,10 +5,14 @@
     "error": "An error occurred"
   },
   "auth": {
-    "signIn": "Sign in",
-    "signInPrompt": "Enter your email address",
-    "checkEmail": "Check your email",
-    "sendLink": "Send link"
+    "signIn": "Admin sign in",
+    "signInPrompt": "Enter the email associated with your admin account",
+    "emailPlaceholder": "admin@manometr.uz",
+    "checkEmail": "Check your email — we've sent you a magic link.",
+    "sendLink": "Send magic link",
+    "invalidEmail": "Please enter a valid email address.",
+    "unknownError": "Something went wrong. Please try again.",
+    "accessDenied": "You do not have admin access. Sign in with a different account or contact an administrator."
   },
   "admin": {
     "title": "Admin panel",
