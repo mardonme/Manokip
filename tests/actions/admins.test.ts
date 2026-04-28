@@ -19,10 +19,24 @@
 // Closest analog: tests/lib/audit.test.ts (live-Neon insert + assertion +
 // 15s timeouts for cold-Neon HTTP first-query).
 
-import { describe, it, expect, afterEach } from 'vitest';
+import { describe, it, expect, afterEach, vi } from 'vitest';
 import { sql } from 'drizzle-orm';
 import { randomUUID } from 'node:crypto';
 import { getTestDb, requireTestDatabaseUrl } from '../_fixtures/db';
+
+// acceptInvite does NOT use withAdminAction (the invitee is unauthenticated)
+// but it lives in src/actions/admins.ts alongside inviteAdmin which imports
+// `@/lib/server-action` -> `@/lib/auth` -> next-auth. Vitest cannot resolve
+// next-auth's `next/server` reference (Next.js-runtime-only); same posture
+// as plan 02-04 SUMMARY deviation #3. Mocking @/lib/auth at module scope
+// short-circuits that import chain so we can exercise acceptInvite against
+// the live Neon test branch without booting next-auth.
+vi.mock('@/lib/auth', () => ({
+  requireAdmin: vi.fn(async () => {
+    throw new Error('not used by acceptInvite');
+  }),
+}));
+
 import { acceptInvite } from '@/actions/admins';
 
 describe('acceptInvite — atomic single-use UPDATE (Pitfall #4)', () => {
