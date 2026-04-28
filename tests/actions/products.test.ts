@@ -69,6 +69,7 @@ vi.mock("next/cache", () => ({
 }));
 
 import { saveProduct, duplicateProduct } from "@/actions/products";
+import type { ProductInput } from "@/lib/zod/product";
 
 describe("products actions (live Neon)", () => {
   const stamp = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
@@ -84,7 +85,7 @@ describe("products actions (live Neon)", () => {
     status?: "draft" | "published";
     namePrefix?: string;
     slugPrefix?: string;
-  }): Parameters<typeof saveProduct>[0] {
+  }): ProductInput {
     const namePrefix = overrides.namePrefix ?? `prod-${stamp}`;
     const slugPrefix = overrides.slugPrefix ?? namePrefix;
     return {
