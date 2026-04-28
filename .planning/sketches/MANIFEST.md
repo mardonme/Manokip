@@ -17,6 +17,7 @@ Two themes, identical structure: `default` (comfortable density) and `dense` (fi
 |---|------|----------------|--------|------|
 | 001 | public-product-detail | How should the spec-dense product page balance visual hierarchy with engineer-grade information density? | _pending_ | public, product-detail, phase-3 |
 | 002 | public-catalog-filters | How should the typed-spec faceted filters interact with the product grid? | _pending_ | public, catalog, filters, phase-3 |
+| 003 | product-detail-premium-saas | Premium-SaaS visual finish for the 2-column + sticky-CTA pattern (single mockup, no variants). | _baseline_ | public, product-detail, premium, mockup, phase-3 |
 
 ## Open Questions / Backlog Hints
 
