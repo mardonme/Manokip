@@ -34,6 +34,9 @@ import * as React from "react";
 import {
   flexRender,
   getCoreRowModel,
+  getPaginationRowModel,
+  getFilteredRowModel,
+  getSortedRowModel,
   useReactTable,
   type ColumnDef,
   type PaginationState,
@@ -68,6 +71,15 @@ export interface DataTableProps<TData> {
   defaultPageSize?: number;
   /** Page-size dropdown options. Defaults to [10,20,50,100]. */
   pageSizeOptions?: number[];
+  /**
+   * Server-pagination switch (Open Q §3 of plan 02-11). Defaults to `true`
+   * — every existing call-site passes the parent RSC's already-paginated
+   * slice and TanStack just renders it. Pass `false` for small lists that
+   * fit in a single fetch (e.g. spec-fields, ~80 rows expected) so the
+   * client sorts / paginates / filters in-memory; the parent RSC simply
+   * fetches *all* rows and provides them as `data`.
+   */
+  manualPagination?: boolean;
 }
 
 export function DataTable<TData>({
@@ -78,6 +90,7 @@ export function DataTable<TData>({
   toolbarSlot,
   defaultPageSize = 20,
   pageSizeOptions,
+  manualPagination = true,
 }: DataTableProps<TData>) {
   const [{ page, pageSize, q, sort }, setQuery] = useQueryStates({
     page: parseAsInteger.withDefault(1),
@@ -111,10 +124,23 @@ export function DataTable<TData>({
       sorting,
       globalFilter: q,
     },
-    // Server-pagination flags — see file-header note + Pitfall #8.
-    manualPagination: true,
-    manualSorting: true,
-    manualFiltering: true,
+    // Server-pagination flags — see file-header note + Pitfall #8. The
+    // three flags are tied to the same opt-in (`manualPagination` prop):
+    // either ALL three are server-driven (the default) or ALL three are
+    // client-driven (small in-memory tables like spec-fields).
+    manualPagination,
+    manualSorting: manualPagination,
+    manualFiltering: manualPagination,
+    // Client-side row models — only attached when `manualPagination` is
+    // false; otherwise the parent RSC owns the slice and TanStack must not
+    // recompute pagination locally.
+    ...(manualPagination
+      ? {}
+      : {
+          getPaginationRowModel: getPaginationRowModel(),
+          getFilteredRowModel: getFilteredRowModel(),
+          getSortedRowModel: getSortedRowModel(),
+        }),
     onPaginationChange: (updater) => {
       const next =
         typeof updater === "function" ? updater(pagination) : updater;
