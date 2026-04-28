@@ -52,7 +52,14 @@ vi.mock("next/headers", () => ({
 
 // next/cache is the chokepoint for the typed revalidate helpers. Spy here
 // so each test can assert the fan-out shape.
-const revalidateTag = vi.fn().mockResolvedValue(undefined);
+//
+// Use vi.hoisted so the spy is constructed BEFORE vi.mock's factory runs
+// (vi.mock is hoisted by Vitest to the top of the file; a plain
+// `const revalidateTag = vi.fn()` would be in the temporal dead zone when
+// the hoisted factory accesses it).
+const { revalidateTag } = vi.hoisted(() => ({
+  revalidateTag: vi.fn().mockResolvedValue(undefined),
+}));
 vi.mock("next/cache", () => ({
   revalidateTag,
 }));
