@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in-progress
-stopped_at: Phase 02 Plan 02 ADMIN-SHELL COMPLETE — RSC admin layout (NuqsAdapter + 8-link sidebar + email-display top bar with inline 'use server' signOut) replaces the Phase-1 'coming soon' stub. Phase-2 deps locked at exact pinned versions (@tanstack/react-table 8.21.3, nuqs 2.8.9, @dnd-kit/{core 6.3.1, sortable 10.0.0, utilities 3.2.2}). Phase-1 RHF + sonner + next-cloudinary pins unchanged. shadcn@latest init + add scaffolded 19 UI primitives under src/components/ui/* (button, input, label, textarea, select, table, dialog, alert-dialog, dropdown-menu, form, tabs, card, badge, sheet, tooltip, switch, checkbox, separator, sonner) — base-nova preset uses @base-ui/react under the hood. i18n keys (admin.nav.*, admin.topbar.signOut, admin.dashboard.*) populated for all 3 locales. e2e shell smoke spec (tests/e2e/admin-shell.spec.ts) authored eagerly with auto-skip until plan 02-04 fixture lands. DEF-2-01 cold-Neon timeout flake RESOLVED (74080e1) — 15_000 3rd-arg `it()` timeouts on 6 affected tests in tests/db/{locale-constraint,spec-values,schema-push-smoke}. Test suite 42/42 green warm; pnpm tsc --noEmit clean for plan-02-02 files. 4 commits total: b786862 (Task 2.1) + 74080e1 (DEF-2-01 fix) + 4246e36 (Task 2.2) + plan-metadata commit (this session). Next: 02-03 PROXY-SESSION-CAP.
-last_updated: "2026-04-28T12:05:00Z"
-last_activity: 2026-04-28 -- 02-02 ADMIN-SHELL: admin layout + sidebar + topbar + NuqsAdapter + 19 shadcn primitives + Phase-2 deps + DEF-2-01 fix. 16 plans remaining for Phase 2. /gsd-execute-phase 2 resumes at 02-03.
+stopped_at: Phase 02 Plan 03 PROXY-SESSION-CAP COMPLETE — proxy.ts now enforces D-15 dual cap (24h idle via sessions.expires + 7d absolute via sessions.absolute_expires) with one Neon HTTP read per /[locale]/admin/* request. Either expired window triggers 307 to /[locale]/login + Set-Cookie clears (Max-Age=0) for both production (__Secure-authjs.session-token) and dev (authjs.session-token) cookie names. Edge runtime constraint preserved — proxy.ts imports neon() from @neondatabase/serverless directly with process.env.DATABASE_URL!, no @/db/client / @/env import (those would pull Node-only modules into the Edge bundle). NULL absolute_expires treated as grandfathered Phase-1 session (24h idle still bounds it). e2e spec (tests/e2e/admin-session-cap.spec.ts) authored as 3 test.fixme probes (full bodies in comments + TODO(02-04) markers): expired absolute_expires, expired sessions.expires (24h idle), valid both windows pass-through. Auto-activates once plan 02-04 lands tests/_fixtures/admin-session.ts; flip is one-line edit per test. No schema change — D-15 step 3 amended at Phase-2 planning time to confirm sessions.absoluteExpires is canonical (mathematically equivalent to original cap formulation). 1 deviation auto-fixed: Rule-2 added a 3rd e2e fixme probe for the 24h-idle case (plan example skeleton omitted it but plan <behavior> block called it out as Test 2). Test suite 42/42 green; pnpm tsc --noEmit clean for plan-02-03 files; pnpm build Compiled step succeeds in 9.8s (Edge bundle clean — TS check still fails on 7 pre-existing 02-01 script errors, out-of-scope per CLAUDE.md scope-boundary). 3 commits: c157d7c (Task 3.1 proxy.ts cap), 7e77a79 (Task 3.2 e2e fixme spec), plan-metadata commit (this session). Next: 02-04 LIB-AUDIT (logAudit + withAdminAction wrapper + tests/_fixtures/admin-session.ts fixture — the latter unlocks 02-03 e2e probes + 02-02 admin-shell smoke spec).
+last_updated: "2026-04-28T07:14:30Z"
+last_activity: 2026-04-28 -- 02-03 PROXY-SESSION-CAP: proxy.ts D-15 dual cap + e2e fixme spec. 15 plans remaining for Phase 2. /gsd-execute-phase 2 resumes at 02-04.
 progress:
   total_phases: 5
   completed_phases: 1
-  total_plans: 9
-  completed_plans: 9
-  percent: 25
+  total_plans: 10
+  completed_plans: 10
+  percent: 28
 ---
 
 # Project State
@@ -26,32 +26,32 @@ See: .planning/PROJECT.md (updated 2026-04-21)
 ## Current Position
 
 Phase: 2 of 5 (Admin Panel) — IN PROGRESS
-Plan: 2 of 18 COMPLETE (02-01 SCHEMA-MIGRATION + 02-02 ADMIN-SHELL); Wave 1 has 4 more plans pending (02-03..02-06)
-Status: Admin shell substrate landed — every Wave-2/3 plan now renders inside this layout. Plan 02-03 PROXY-SESSION-CAP is unblocked.
-Last activity: 2026-04-28 -- 02-02 ADMIN-SHELL: admin RSC layout + sidebar + topbar + NuqsAdapter + 19 shadcn primitives + Phase-2 deps + DEF-2-01 fix; 4 commits (Task 2.1, DEF-2-01 fix, Task 2.2, plan metadata)
+Plan: 3 of 18 COMPLETE (02-01 SCHEMA-MIGRATION + 02-02 ADMIN-SHELL + 02-03 PROXY-SESSION-CAP); Wave 1 has 3 more plans pending (02-04..02-06)
+Status: Server-enforced D-15 dual session cap (24h idle + 7d absolute) live in proxy.ts. Plan 02-04 LIB-AUDIT is unblocked — its tests/_fixtures/admin-session.ts fixture will activate the 02-03 e2e fixme probes + the 02-02 admin-shell smoke spec.
+Last activity: 2026-04-28 -- 02-03 PROXY-SESSION-CAP: proxy.ts D-15 dual cap (24h idle + 7d absolute) + e2e fixme spec; 3 commits (Task 3.1, Task 3.2, plan metadata)
 
-Progress: [██████████░] Phase 01 done + 02-01 done + 02-02 done (9 of 25 known plans complete, 25%)
+Progress: [███████████░] Phase 01 done + 02-01..02-03 done (10 of 25 known plans complete, 28%)
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 9 (7 Phase-1 + 2 Phase-2)
-- Average duration: ~44 min
-- Total execution time: ~5.74 hours
+- Total plans completed: 10 (7 Phase-1 + 3 Phase-2)
+- Average duration: ~40 min
+- Total execution time: ~5.82 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 1. Foundations | 7 | ~289 min | ~50 min* |
-| 2. Admin Panel | 2 | ~55 min | ~28 min |
+| 2. Admin Panel | 3 | ~60 min | ~20 min |
 
 *Phase 1 average computed across 6 timed plans (01-01..01-06); 01-07 timing not separately tracked.*
 
 **Recent Trend:**
 
-- Last 8 plans: 01-01 (14 min), 01-02 (~95 min), 01-03 (~70 min), 01-04 (~45 min), 01-05 (~35 min), 01-06 (~30 min), 02-01 (~25 min), 02-02 (~30 min)
+- Last 9 plans: 01-01 (14 min), 01-02 (~95 min), 01-03 (~70 min), 01-04 (~45 min), 01-05 (~35 min), 01-06 (~30 min), 02-01 (~25 min), 02-02 (~30 min), 02-03 (~5 min)
 - Trend: plan 02-02 ran as a single autonomous executor session (no checkpoints since `autonomous: true`). Three minor deviations auto-fixed: (1) Rule-3 blocker — shadcn CLI's `add form` hung on dependency resolution against pinned RHF / hookform-resolvers; authored form.tsx manually using the canonical recipe with @base-ui/react substitutions; (2) Rule-3 blocker — shadcn init was interactive on preset choice; switched to `-d` (defaults flag) to skip; (3) Rule-1 bug — tests/e2e/admin-shell.spec.ts failed tsc --noEmit because the dynamic import string was statically resolvable; fixed with string-concat path so tsc skips static resolution. DEF-2-01 cold-Neon timeout flake RESOLVED in same plan (74080e1) — 15_000 3rd-arg `it()` timeouts applied to 6 affected tests in tests/db/{locale-constraint,spec-values,schema-push-smoke}. shadcn init also bumped src/app/layout.tsx (Geist font) + src/app/globals.css (@theme tokens, light/dark CSS-var palette, tw-animate-css import) — accepted as idiomatic shadcn defaults aligned with locked Tailwind v4 / next/font posture. 19 shadcn primitives installed; @base-ui/react pulled in as the base-nova preset's primitives backend (the new shadcn default — replaces @radix-ui/* in the recipe).
 
 *Updated after each plan completion*
@@ -100,6 +100,11 @@ Recent decisions affecting current work:
 - (02-02) AdminSidebar is a server component (zero JS for nav) — no active-link highlighting in plan 02-02. Client-side `usePathname()` highlighting can be added later in a small client island if/when needed.
 - (02-02) Defense-in-depth requireAdmin(): both admin layout AND admin dashboard page call it. The Edge middleware (proxy.ts from plan 01-06) already 307-redirects unauth requests, but in-RSC checks prevent a misconfigured middleware from leaking server-rendered admin HTML. Auth.js memoizes auth() per-request via React's cache wrapper, so cost is negligible.
 - (02-02) Accepted shadcn-init's bumps to src/app/layout.tsx (Geist font wiring) + src/app/globals.css (@theme tokens + light/dark CSS-var palette + tw-animate-css import). Idiomatic shadcn defaults aligned with locked Tailwind v4 / next/font posture. Final visual theme tuning is a Phase-3 design decision per CONTEXT D-Discretion.
+- (02-03) proxy.ts now enforces D-15 dual cap server-side via one Neon HTTP read per /[locale]/admin/* request. Reads sessions.expires (24h idle, refreshed by Auth.js DrizzleAdapter) AND sessions.absolute_expires (7d absolute, lazily stamped by src/lib/auth.ts session callback). Either expired triggers 307 + Max-Age=0 cookie clear for both production and dev cookie names. NULL absolute_expires grandfathered (next session read stamps it).
+- (02-03) sessions.absolute_expires column reused (no schema change). D-15 step 3 was amended 2026-04-27 to confirm the column already populated by the Phase-1 session callback is canonical — mathematically equivalent to the originally-prescribed `created_at + 7d` formulation.
+- (02-03) Edge constraint preserved: proxy.ts imports neon() from @neondatabase/serverless directly with process.env.DATABASE_URL!. The forbidden modules (@/db/client, @/env) are mentioned only in explanatory comments documenting why they're not imported. pnpm build Compiled step succeeds in 9.8s.
+- (02-03) Authored 3 e2e test.fixme probes in tests/e2e/admin-session-cap.spec.ts (plan example showed 2; added 24h-idle case for symmetry with proxy.ts implementation that checks BOTH expires and absolute_expires). Full bodies in comments alongside TODO(02-04) markers. Activates when plan 02-04 lands tests/_fixtures/admin-session.ts; flip is one-line edit per test (drop .fixme, uncomment body).
+- (02-03) Substituted `pnpm tsc --noEmit` + `pnpm build` (compile step) + `pnpm vitest run` for the plan's `pnpm vitest run tests/lib/require-admin.test.ts` because the latter file doesn't exist yet (plan 02-04 lands it). Substituted commands cover the same intent — typecheck clean, Edge bundle compiles, suite still green — without forward-referencing a non-existent test.
 
 ### Pending Todos
 
@@ -126,6 +131,6 @@ Items acknowledged and carried forward during execution:
 
 ## Session Continuity
 
-Last session: 2026-04-28T12:05:00Z
-Stopped at: Completed 02-02 ADMIN-SHELL — RSC admin layout (src/app/[locale]/admin/layout.tsx) wraps children in <NuqsAdapter> from nuqs/adapters/next/app, calls setRequestLocale + requireAdmin + getTranslations, renders AdminSidebar (server component, 8 next-intl Link nav items) + AdminTopBar (admin email display + inline 'use server' signOut form action) around <main>. Phase-2 deps locked at exact pinned versions: @tanstack/react-table 8.21.3, nuqs 2.8.9, @dnd-kit/{core 6.3.1, sortable 10.0.0, utilities 3.2.2}. Phase-1 RHF + sonner + next-cloudinary pins unchanged. shadcn@latest init (base-nova preset / @base-ui/react primitives backend, neutral baseColor, css-variables) + add scaffolded 19 UI primitives under src/components/ui/* (button, input, label, textarea, select, table, dialog, alert-dialog, dropdown-menu, form, tabs, card, badge, sheet, tooltip, switch, checkbox, separator, sonner). form.tsx authored manually because shadcn CLI's `add form` hung on dep resolution against pinned RHF (recipe is plain composition over RHF — no version-specific behavior). i18n keys (admin.nav.*, admin.topbar.signOut, admin.dashboard.{title,placeholder}) populated for all 3 locales with proper Uzbek-Latin (oʻ U+02BB), Russian Cyrillic, and English copy. e2e shell smoke spec (tests/e2e/admin-shell.spec.ts) authored eagerly with auto-skip until tests/_fixtures/admin-session.ts (plan 02-04) lands; flips on automatically when fixture file present. DEF-2-01 cold-Neon timeout flake RESOLVED in same plan (commit 74080e1) — 15_000 3rd-arg `it()` timeouts on 6 affected tests in tests/db/{locale-constraint,spec-values,schema-push-smoke}.test.ts. shadcn init also bumped src/app/layout.tsx (Geist font) + src/app/globals.css (@theme tokens, light/dark CSS-var palette, tw-animate-css import) — accepted as idiomatic shadcn defaults aligned with locked Tailwind v4 + next/font posture. Three deviations auto-fixed (Rule-3 shadcn-form CLI hang → manual authoring; Rule-3 shadcn init interactive preset → -d defaults flag; Rule-1 dynamic-import tsc resolution → string-concat path). Test suite 42/42 green warm; pnpm tsc --noEmit clean for plan-02-02 files; pnpm playwright test tests/e2e/admin-shell.spec.ts → 1 skipped (expected — fixture pending). 4 commits total: b786862 (Task 2.1) + 74080e1 (DEF-2-01 fix) + 4246e36 (Task 2.2) + plan-metadata commit (this session). Phase 2 has 16 plans remaining: 02-03 PROXY-SESSION-CAP is unblocked next.
-Resume file: .planning/phases/02-admin-panel/02-03-PROXY-SESSION-CAP.md
+Last session: 2026-04-28T07:14:30Z
+Stopped at: Completed 02-03 PROXY-SESSION-CAP — proxy.ts now enforces D-15 dual cap (24h idle via sessions.expires + 7d absolute via sessions.absolute_expires) on every /[locale]/admin/* request via one Neon HTTP read per request. Either expired window triggers 307 to /[locale]/login + Set-Cookie clears (Max-Age=0) for BOTH production (__Secure-authjs.session-token) and dev (authjs.session-token) cookie names. Edge constraint preserved — imports neon() from @neondatabase/serverless directly with process.env.DATABASE_URL!. NULL absolute_expires grandfathered as Phase-1 session (24h idle still bounds it; next session read stamps the column). No schema change — D-15 step 3 amended at Phase-2 planning time to confirm sessions.absoluteExpires is canonical (mathematically equivalent to original cap formulation). e2e spec (tests/e2e/admin-session-cap.spec.ts) authored as 3 test.fixme probes (full bodies in comments + TODO(02-04) markers): expired absolute_expires → 307 + cookie clear; expired sessions.expires (24h idle) → 307 + cookie clear; valid both windows → passes admin gate. Auto-activates once plan 02-04 lands tests/_fixtures/admin-session.ts; flip is one-line edit per test (drop .fixme, uncomment body). 1 deviation auto-fixed (Rule-2 added 3rd e2e fixme probe for 24h-idle case — plan example skeleton showed 2 but plan <behavior> block called it out as Test 2). pnpm tsc --noEmit clean for plan-02-03 files; pnpm vitest run 42/42 green; pnpm build Compiled step succeeds in 9.8s (Edge bundle clean — TS check still fails on 7 pre-existing 02-01 script errors, out-of-scope per CLAUDE.md scope-boundary). 3 commits: c157d7c (Task 3.1 proxy.ts cap) + 7e77a79 (Task 3.2 e2e fixme spec) + plan-metadata commit (this session). Phase 2 has 15 plans remaining: 02-04 LIB-AUDIT is unblocked next (logAudit + withAdminAction + tests/_fixtures/admin-session.ts fixture — the latter unlocks 02-03 e2e probes + 02-02 admin-shell smoke spec).
+Resume file: .planning/phases/02-admin-panel/02-04-LIB-AUDIT.md
