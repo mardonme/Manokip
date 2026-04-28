@@ -20,7 +20,7 @@ Requirements for initial release. Each maps to roadmap phases.
 ### Admin Panel (ADMIN)
 
 - [ ] **ADMIN-01**: Invited admin can log in via email magic-link; session expires on idle (24h) and absolute limit (7d)
-- [ ] **ADMIN-02**: Existing admin can invite a new admin by email; invite token is single-use and expires in 48 hours
+- [x] **ADMIN-02**: Existing admin can invite a new admin by email; invite token is single-use and expires in 48 hours
 - [ ] **ADMIN-03**: Admin can CRUD categories in a tree (parent/child), with translations for name and description across all three locales on one page
 - [ ] **ADMIN-04**: Admin can CRUD manufacturers with translations and logo upload to Cloudinary
 - [ ] **ADMIN-05**: Admin can define the spec-field schema for each category: add/rename/delete fields with type, unit, required flag, and filter behavior; rename treats stable internal key as unchanged
@@ -29,7 +29,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [ ] **ADMIN-08**: Admin can duplicate an existing product as a starting point for a new one
 - [ ] **ADMIN-09**: Admin can mark a translation as machine-generated (`machine_translated: true`); such fields are flagged in the UI
 - [ ] **ADMIN-10**: Admin can see a per-product translation-completeness indicator (which locales/fields are missing)
-- [ ] **ADMIN-11**: Every admin write operation is recorded in an audit log (who, what, when, entity)
+- [x] **ADMIN-11**: Every admin write operation is recorded in an audit log (who, what, when, entity)
 - [ ] **ADMIN-12**: Admin can view, search, and export contact-form submissions
 
 ### Public Catalog (CAT)
@@ -144,7 +144,7 @@ Which phases cover which requirements.
 | FOUND-06 | Phase 1 | Pending |
 | FOUND-07 | Phase 1 | Partial (01-04 — `<Analytics />` + `<SpeedInsights />` mount point added to [locale] layout; Sentry wiring + production deploy land in 01-07) |
 | ADMIN-01 | Phase 2 | Pending |
-| ADMIN-02 | Phase 2 | Partial (02-01 — admin_invite schema landed: token UNIQUE, expires_at NOT NULL, used_at nullable for single-use; inviteAdmin/acceptAdminInvite Server Actions + UI land in 02-07) |
+| ADMIN-02 | Phase 2 | Complete (02-01 — admin_invite schema; 02-07 — inviteAdmin + acceptInvite Server Actions with Pitfall #4 atomic single-use UPDATE, AdminInviteEmail React Email template via Resend, admins list with InviteAdminDialog, accept-invite landing page with constant-message rejection per T-02-07-06) |
 | ADMIN-03 | Phase 2 | Pending |
 | ADMIN-04 | Phase 2 | Pending |
 | ADMIN-05 | Phase 2 | Partial (02-01 — spec_field.deleted_at + spec_field.group_id columns + spec_field_group + spec_field_group_translations + partial-unique (category_id,key) WHERE deleted_at IS NULL landed; spec-field rename/soft-delete/group-CRUD UI lands in 02-11) |
@@ -153,7 +153,7 @@ Which phases cover which requirements.
 | ADMIN-08 | Phase 2 | Pending |
 | ADMIN-09 | Phase 2 | Partial (02-01 — productTranslationFieldFlags sibling table landed: PK (product_id, locale, field_name) + machine_translated boolean + compound FK to product_translations ON DELETE CASCADE; MT toggle UI + write path land in 02-13b) |
 | ADMIN-10 | Phase 2 | Partial (02-01 — product_translation_completeness pgView landed computing per-locale percent over name+slug+short_desc+long_desc plus required-text spec values; helper module + UI dots land in 02-12) |
-| ADMIN-11 | Phase 2 | Partial (02-01 — no schema change needed; Phase-1 audit_log shape sufficient per threat-model T-02-01-04 disposition=accept; logAudit + AuditAction enum + withAdminAction wrapper land in 02-04) |
+| ADMIN-11 | Phase 2 | Complete (02-04 — logAudit(tx, ...) + closed AUDIT_ACTIONS const tuple of 13 actions + withAdminAction wrapper + auth.ts events.signIn/signOut/session_revoked emit; 02-07 — first end-to-end production callsites: action='invite' on inviteAdmin tx + action='update' on acceptInvite tx; future Wave-2/3/4 mutations all flow through withAdminAction → logAudit) |
 | ADMIN-12 | Phase 2 | Pending |
 | CAT-01 | Phase 3 | Pending |
 | CAT-02 | Phase 3 | Pending |
@@ -203,4 +203,4 @@ Which phases cover which requirements.
 
 ---
 *Requirements defined: 2026-04-21*
-*Last updated: 2026-04-28 — Phase 2 plan 02-01 schema migration applied; ADMIN-02, ADMIN-05, ADMIN-09, ADMIN-10, ADMIN-11 marked Partial (schema substrate landed, full validation pending downstream Phase-2 CRUD/UI plans)*
+*Last updated: 2026-04-28 — Phase 2 plan 02-07 ADMINS-INVITE complete; ADMIN-02 + ADMIN-11 marked Complete (admin invite lifecycle end-to-end + first audit-log production callsites). ADMIN-05, ADMIN-09, ADMIN-10 remain Partial pending downstream Phase-2 CRUD/UI plans (02-11, 02-13b, 02-12 respectively).*
