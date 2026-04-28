@@ -61,6 +61,8 @@
   "devDependencies": {
     "@playwright/test": "1.59.1",
     "@tailwindcss/postcss": "4.2.3",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
     "@types/node": "22.10.2",
     "@types/react": "19.0.7",
     "@types/react-dom": "19.0.3",
@@ -72,6 +74,7 @@
     "eslint-config-next": "16.2.4",
     "eslint-config-prettier": "9.1.0",
     "husky": "9.1.7",
+    "jsdom": "^29.1.0",
     "lint-staged": "15.3.0",
     "postcss": "8.5.1",
     "prettier": "3.4.2",
