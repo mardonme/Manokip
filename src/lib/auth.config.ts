@@ -29,6 +29,27 @@ export default {
       apiKey: process.env.AUTH_RESEND_KEY,
       from: process.env.RESEND_FROM_EMAIL,
       async sendVerificationRequest({ identifier: to, url, provider }) {
+        // T-02-08-01 magic-link harvesting mitigation: only emit a Resend
+        // send when the identifier corresponds to an active admin_user. For
+        // unknown / inactive emails we silently no-op so the response shape
+        // (and the Resend dashboard) cannot be used as an enumeration
+        // oracle. The login form (Server Action) returns the same
+        // { ok: true } confirmation in either case (T-02-08-02).
+        //
+        // Dynamic import — keeps the helper (and its DB import chain) out
+        // of the Edge bundle's static graph. sendVerificationRequest runs
+        // on the Node runtime (Auth.js route handler), so dynamic resolves
+        // here are safe.
+        const { isActiveAdminEmail } = await import('@/lib/active-admin-check');
+        const allowed = await isActiveAdminEmail(to);
+        if (!allowed) {
+          // Silent: do not signal to the caller whether the email is unknown
+          // or inactive. Audit-log the no-op? Out of scope for Phase 2;
+          // adding it would create a covert channel via timing/audit-row
+          // counts. Plan-2 PROJECT log notes this as a known posture.
+          return;
+        }
+
         // Dynamic imports keep Node-only modules out of the Edge bundle.
         const { Resend: ResendSDK } = await import('resend');
         const { render } = await import('@react-email/components');
