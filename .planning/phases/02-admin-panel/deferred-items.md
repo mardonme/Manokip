@@ -52,3 +52,33 @@ This is a 6-line edit, low risk. Documented here so the warm-second-run pattern 
 **Acceptance of DEF-2-13b-01:** `pnpm build` exits 0 on master with no script-level type errors.
 
 ---
+
+## From Plan 02-17 (2026-04-29)
+
+### DEF-2-17-01: OPS-01 deployment-side validation (workflow green on real PR + RED on regression PR + branch-protection rule)
+
+**Status:** OPEN — local artifacts shipped and locally verified; deployment-side validation queued for the user's post-merge environmental work.
+
+**Discovered during:** Plan 02-17 Task 17.3 checkpoint — the user replied "approved" to the human-verify gate without providing PR URLs or workflow run IDs, indicating the deployment-side validation is genuinely the user's domain (Vercel UI clicks, GitHub repository secrets, PR creation, branch protection rule configuration) and not something the executor can drive from a single CLI session.
+
+**Issue:** The OPS-01 merge-blocking gate is fully armed in code (Playwright spec at `tests/e2e/admin-edit-revalidates.spec.ts`, GitHub Actions workflow at `.github/workflows/e2e-preview.yml`, playwright.config.ts BASE_URL + bypass-header threading) and is locally verified (`pnpm playwright test --list` lists 24 tests across 7 files; `pnpm tsc --noEmit` clean; `pnpm vitest run` 122/122 across 26 files). However the gate has NOT YET fired against a real Vercel preview deployment, and is NOT YET configured as a required status check at branch protection level. Until the deployment-side validation completes, OPS-01 is "complete-with-deferred-validation" rather than "fully validated end-to-end".
+
+**Pre-existing evidence:** N/A — this is a new deferred item closing plan 02-17.
+
+**Scope:** Out of plan 02-17 (the executor cannot drive Vercel project settings, GitHub repository secrets, draft PR creation, or branch protection rule configuration). The plan ships its local artifacts; the deployment-side validation is environmental.
+
+**Fix plan (the user's post-merge steps):**
+
+1. **Vercel Deployment Protection decision** — Either disable Deployment Protection on preview deployments (simpler, lower setup overhead) OR provision a Protection Bypass for Automation token in the Vercel project settings and store its value as the `VERCEL_AUTOMATION_BYPASS_SECRET` GitHub repository secret (defense-in-depth, prevents random-internet-traffic from hitting preview URLs). Both postures work with the shipped artifacts.
+2. **GitHub repository secrets** — Set `DATABASE_URL` (Neon dev branch URL the spec reads `verification_tokens` from), `DATABASE_URL_DIRECT` (Neon dev branch direct URL), and optionally `VERCEL_AUTOMATION_BYPASS_SECRET` (only if Deployment Protection is ON on previews). Settings → Secrets and variables → Actions → New repository secret.
+3. **First-PR validation** — Open a draft PR with any small commit. Observe the e2e-preview workflow:
+   - `wait-for-vercel-preview` polls deployment statuses for the PR head SHA and resolves to the live preview URL.
+   - The OPS-01 spec runs against the preview URL.
+   - Workflow exits 0 (green) → the gate is functional.
+4. **Regression test** — On the same draft PR, push a commit that comments out `revalidateProduct(result.id)` in `src/actions/products.ts`. Observe the workflow goes RED — the spec should fail the 5-second visibility assertion because the cached admin list keeps showing the original name. Then restore the call and prove the workflow goes green again.
+5. **Branch protection rule** — Configure the `e2e-preview / OPS-01 admin edit → public refresh gate` job as a REQUIRED status check on `main` / `master` (Settings → Branches → Branch protection rules → Require status checks to pass before merging). Without this rule, the workflow exists but doesn't actually block merge — a failing gate could be bypassed. T-02-17-05 mitigation depends on this rule.
+
+**Acceptance of DEF-2-17-01:** Reply with the PR URL where the workflow ran green + the PR URL where the regression test went RED + a screenshot or confirmation that branch protection requires the `e2e-preview / OPS-01` status check on `main`/`master`. At that point OPS-01 transitions from `complete-with-deferred-validation` to `fully validated end-to-end` and this entry is closed.
+
+---
+
