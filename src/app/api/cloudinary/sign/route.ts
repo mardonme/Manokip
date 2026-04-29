@@ -1,4 +1,5 @@
-// FOUND-06: signed-upload credential endpoint for admin Cloudinary uploads.
+// FOUND-06 + Plan 02-14 Task 14.2: signed-upload credential endpoint for
+// admin Cloudinary uploads.
 //
 // Threat model (see .planning/phases/01-foundations/01-06-PLAN.md):
 //   T-CLD-01  unauth signing → 401 before body parse
@@ -8,6 +9,28 @@
 //             timestamp drift > 1h from server time.
 //   T-SEC-ENV response returns apiKey + cloudName (public) but NEVER
 //             apiSecret (server-only).
+//
+// PITFALL #5 — Plan 02-14 Task 14.0 parity smoke (PARITY-MISMATCH):
+//   `next-cloudinary`'s CldUploadWidget delegates signing to
+//   `@cloudinary-util/url-loader@5.10.4`'s `generateSignatureCallback`
+//   (dist/index.js:67-89), which POSTs `{ paramsToSign: {...} }` and reads
+//   `result.signature` from the response. The Phase-1 endpoint expected a
+//   top-level `{ folder }` and signed server-generated `{ folder, timestamp }`
+//   — incompatible on both axes (request shape AND signature scope).
+//
+//   Fix: accept BOTH request shapes (preserve Phase-1 tests + serve the
+//   widget):
+//     A. Legacy `{ folder }`         — server generates timestamp,
+//                                      signs `{ folder, timestamp }`, returns
+//                                      full {signature, timestamp, folder,
+//                                      apiKey, cloudName} response shape.
+//     B. Widget `{ paramsToSign }`   — validate `paramsToSign.folder` is in
+//                                      allowlist, sign `paramsToSign`
+//                                      verbatim (whatever the widget puts
+//                                      in there is what Cloudinary will
+//                                      receive — the signature must cover
+//                                      EVERY param Cloudinary sees).
+//                                      Returns {signature, apiKey, cloudName}.
 //
 // Node runtime is mandatory — `auth()` pulls DrizzleAdapter + Neon driver,
 // which cannot run on Edge.
@@ -20,10 +43,30 @@ import { env } from '@/env';
 export const runtime = 'nodejs';
 
 const FOLDER_ALLOWLIST = ['products', 'recipes', 'industries', 'manufacturers'] as const;
+type AllowedFolder = (typeof FOLDER_ALLOWLIST)[number];
 
-const bodySchema = z.object({
-  folder: z.enum(FOLDER_ALLOWLIST),
-});
+// Accept either legacy `{ folder }` (Phase-1 contract) OR the widget's
+// `{ paramsToSign }` envelope. `paramsToSign` is a flat record of
+// string|number|boolean — Cloudinary's HMAC consumes exactly that shape.
+// (`undefined` values would pollute the signed string with empty entries,
+// so they're excluded by Zod's `record(string|number|boolean)`.)
+const paramsValueSchema = z.union([z.string(), z.number(), z.boolean()]);
+const bodySchema = z.union([
+  z.object({
+    folder: z.enum(FOLDER_ALLOWLIST),
+    paramsToSign: z.undefined().optional(),
+  }),
+  z.object({
+    paramsToSign: z.record(z.string(), paramsValueSchema),
+  }),
+]);
+
+function isAllowedFolder(value: unknown): value is AllowedFolder {
+  return (
+    typeof value === 'string' &&
+    (FOLDER_ALLOWLIST as readonly string[]).includes(value)
+  );
+}
 
 export async function POST(req: Request) {
   // T-CLD-01: admin-session gate — runs BEFORE any body read so unauth
@@ -33,7 +76,6 @@ export async function POST(req: Request) {
     return new Response('Unauthorized', { status: 401 });
   }
 
-  // T-CLD-02: folder allowlist.
   let raw: unknown;
   try {
     raw = await req.json();
@@ -44,20 +86,46 @@ export async function POST(req: Request) {
   if (!parsed.success) {
     return new Response('Invalid folder', { status: 400 });
   }
-  const { folder } = parsed.data;
 
-  // T-CLD-03: integer Unix seconds matches what the uploader will POST back
-  // to Cloudinary in its form data so HMAC verification succeeds.
-  const timestamp = Math.floor(Date.now() / 1000);
+  // Branch A — Phase-1 legacy shape `{ folder }`.
+  if ('folder' in parsed.data && typeof parsed.data.folder === 'string') {
+    const folder = parsed.data.folder;
+    // T-CLD-03: integer Unix seconds matches what the uploader will POST
+    // back to Cloudinary in its form data so HMAC verification succeeds.
+    const timestamp = Math.floor(Date.now() / 1000);
+    const signature = cloudinary.utils.api_sign_request(
+      { timestamp, folder },
+      env.CLOUDINARY_API_SECRET,
+    );
+    return Response.json({
+      signature,
+      timestamp,
+      folder,
+      apiKey: env.CLOUDINARY_API_KEY,
+      cloudName: env.CLOUDINARY_CLOUD_NAME,
+    });
+  }
+
+  // Branch B — widget shape `{ paramsToSign }`.
+  // T-CLD-02 still applies: the widget MUST be configured with a folder in
+  // the allowlist; reject if it tried to upload to anywhere else.
+  const { paramsToSign } = parsed.data;
+  if (!isAllowedFolder(paramsToSign.folder)) {
+    return new Response('Invalid folder', { status: 400 });
+  }
+
+  // PITFALL #5 mitigation: sign EXACTLY the param set the widget will send
+  // to Cloudinary (no more, no less). The widget already includes its own
+  // timestamp here; we do NOT override it with our own — that would break
+  // signature parity. Cloudinary rejects signatures with a server-side
+  // timestamp drift > 1h, which is enforced by Cloudinary itself, not by us.
   const signature = cloudinary.utils.api_sign_request(
-    { timestamp, folder },
+    paramsToSign,
     env.CLOUDINARY_API_SECRET,
   );
 
   return Response.json({
     signature,
-    timestamp,
-    folder,
     apiKey: env.CLOUDINARY_API_KEY,
     cloudName: env.CLOUDINARY_CLOUD_NAME,
   });
