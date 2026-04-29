@@ -1,0 +1,107 @@
+# Plan 02-17 Task 17.3 — OPS-01 e2e gate workflow.
+#
+# Runs on every pull request: waits for the Vercel preview to be ready,
+# then runs the OPS-01 Playwright spec against the preview URL. The spec
+# proves "admin edit → public refresh shows new content within 5s" — i.e.
+# saveProduct's revalidateProduct() call worked (Pitfall #3 silent-failure
+# detection is the entire point of this gate).
+#
+# Pitfall #11 (Vercel Deployment Protection): if the Vercel project keeps
+# Deployment Protection ON for previews, set the
+# `VERCEL_AUTOMATION_BYPASS_SECRET` repository secret to a Protection
+# Bypass for Automation token. The spec threads it through every HTTP
+# request and page navigation as `x-vercel-protection-bypass`. If
+# protection is OFF on previews, leave the secret unset — the spec will
+# send no extra header.
+#
+# Pitfall #12 (magic-link in CI): the spec consumes verification_tokens
+# DB-direct from Neon (no Resend inbox needed). DATABASE_URL must point at
+# the Neon test/dev branch the spec is allowed to write seed data into.
+#
+# Branch protection: configure this workflow as a REQUIRED status check
+# on the protected branch (Settings → Branches → branch-protection rule)
+# so a failing OPS-01 gate blocks merge per CONTEXT D-13.
+
+name: e2e-preview
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+# Cancel in-flight runs of this workflow on the same PR when a new commit
+# lands — saves Vercel preview wait + Playwright minutes on rapid pushes.
+concurrency:
+  group: e2e-preview-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  e2e:
+    name: OPS-01 admin edit → public refresh gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright Chromium
+        run: pnpm exec playwright install --with-deps chromium
+
+      # Wait for the Vercel preview deployment to finish building. This
+      # action polls GitHub deployment statuses for the PR's head SHA and
+      # exits when the Vercel deployment status flips to 'success', exposing
+      # the live preview URL on `steps.wait.outputs.url`.
+      #
+      # max_timeout 600s (10min) is generous for a Phase-2-sized Next.js
+      # build; tighten as the build trends faster.
+      - name: Wait for Vercel preview
+        id: wait
+        uses: patrickedqvist/wait-for-vercel-preview@v1.3.1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          max_timeout: 600
+
+      - name: Run OPS-01 spec
+        env:
+          # Preview URL the wait step discovered. The spec uses this to
+          # build every HTTP request and page navigation target.
+          BASE_URL: ${{ steps.wait.outputs.url }}
+          # CI marker — flips the spec's local-fallback skip OFF.
+          CI: 'true'
+          # Neon connection. The spec reads verification_tokens directly
+          # from this branch (Pitfall #12 DB-direct).
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DATABASE_URL_DIRECT: ${{ secrets.DATABASE_URL_DIRECT }}
+          # Vercel Deployment Protection bypass header (Pitfall #11). When
+          # unset, the spec sends no extra header and assumes protection is
+          # OFF on previews. When set, every HTTP/page request carries
+          # `x-vercel-protection-bypass: $VERCEL_AUTOMATION_BYPASS_SECRET`.
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+          # Admin email seeded at the start of the spec via INSERT ... ON
+          # CONFLICT DO UPDATE active=true. This MUST be a non-production
+          # mailbox; the spec tears down its verification_tokens but leaves
+          # the admin_user row intact across runs (idempotent).
+          E2E_ADMIN_EMAIL: 'e2e-admin@manometr.uz'
+        run: pnpm playwright test tests/e2e/admin-edit-revalidates.spec.ts
+
+      # Upload the HTML report on failure for post-mortem investigation.
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-ops-01
+          path: playwright-report/
+          retention-days: 14
