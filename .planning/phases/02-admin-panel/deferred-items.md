@@ -34,3 +34,21 @@ This is a 6-line edit, low risk. Documented here so the warm-second-run pattern 
 **Acceptance of DEF-2-01:** Single cold-start `pnpm vitest run` returns 42/42 PASS without re-runs.
 
 ---
+
+## From Plan 02-13b (2026-04-29)
+
+### DEF-2-13b-01: `scripts/verify-02-01-migration.ts` strict-typing failures fail `pnpm build`
+
+**Discovered during:** Plan 02-13b Task 13b.3 verification — `pnpm build` invokes Next.js typecheck which sweeps the `scripts/` folder.
+
+**Issue:** Seven `Object is possibly 'undefined'` errors at `scripts/verify-02-01-migration.ts` lines 89-93, 166, 182. The errors trace to PG row indexing under `noUncheckedIndexedAccess: true` (added in plan 01-something). The script predates the strict-indexing flag and was never updated.
+
+**Pre-existing evidence:** Confirmed — `git stash && pnpm build` on master prior to plan 02-13b's changes hits the same errors. Plan 02-13a (and earlier waves) closed without addressing this; their typecheck path was likely `pnpm tsc --noEmit` rather than `pnpm build`.
+
+**Scope:** Out of plan 02-13b (the failing file is unrelated to the editor / lifecycle actions that this plan ships). The plan's own files all type-check cleanly.
+
+**Fix plan:** A 7-line guard pass adding `cols[0]?.data_type === "text"` style optional chaining to lines 89-93, 166, 182. Should be paired with either a tsconfig change to exclude `scripts/` from `pnpm build`'s typecheck or a one-time fix-up commit. Recommend including this in plan 02-15 (audit-log viewer) or whichever Wave-5 plan touches build infrastructure.
+
+**Acceptance of DEF-2-13b-01:** `pnpm build` exits 0 on master with no script-level type errors.
+
+---
