@@ -87,9 +87,17 @@ export async function POST(req: Request) {
     return new Response('Invalid folder', { status: 400 });
   }
 
+  // Discriminate: presence of `paramsToSign` ⇒ widget branch; otherwise
+  // ⇒ legacy `{ folder }` branch. Narrow via local refs so TS sees
+  // non-undefined values in each branch's body.
+  const data = parsed.data;
+  const widgetParams: Record<string, string | number | boolean> | undefined =
+    'paramsToSign' in data ? data.paramsToSign : undefined;
+
   // Branch A — Phase-1 legacy shape `{ folder }`.
-  if ('folder' in parsed.data && typeof parsed.data.folder === 'string') {
-    const folder = parsed.data.folder;
+  if (!widgetParams) {
+    // The first union variant guarantees `folder` is present here.
+    const folder = (data as { folder: AllowedFolder }).folder;
     // T-CLD-03: integer Unix seconds matches what the uploader will POST
     // back to Cloudinary in its form data so HMAC verification succeeds.
     const timestamp = Math.floor(Date.now() / 1000);
@@ -109,8 +117,7 @@ export async function POST(req: Request) {
   // Branch B — widget shape `{ paramsToSign }`.
   // T-CLD-02 still applies: the widget MUST be configured with a folder in
   // the allowlist; reject if it tried to upload to anywhere else.
-  const { paramsToSign } = parsed.data;
-  if (!isAllowedFolder(paramsToSign.folder)) {
+  if (!isAllowedFolder(widgetParams.folder)) {
     return new Response('Invalid folder', { status: 400 });
   }
 
@@ -120,7 +127,7 @@ export async function POST(req: Request) {
   // signature parity. Cloudinary rejects signatures with a server-side
   // timestamp drift > 1h, which is enforced by Cloudinary itself, not by us.
   const signature = cloudinary.utils.api_sign_request(
-    paramsToSign,
+    widgetParams,
     env.CLOUDINARY_API_SECRET,
   );
 

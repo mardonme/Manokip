@@ -84,13 +84,19 @@ async function run() {
         JOIN pg_class t ON t.oid = c.conrelid
        WHERE t.relname = 'product' AND c.conname = 'product_status_check'
     `);
+    const col = cols[0];
     const colOK =
       cols.length === 1 &&
-      cols[0].data_type === "text" &&
-      String(cols[0].column_default ?? "").includes("'draft'") &&
-      cols[0].is_nullable === "NO";
+      col != null &&
+      col.data_type === "text" &&
+      String(col.column_default ?? "").includes("'draft'") &&
+      col.is_nullable === "NO";
+    const check = checks[0];
     const checkOK =
-      checks.length === 1 && String(checks[0].def).includes("'draft'") && String(checks[0].def).includes("'published'");
+      checks.length === 1 &&
+      check != null &&
+      String(check.def).includes("'draft'") &&
+      String(check.def).includes("'published'");
     log(
       "Check 2: product.status column + CHECK constraint",
       colOK && checkOK,
@@ -163,7 +169,7 @@ async function run() {
         FROM pg_indexes
        WHERE schemaname = 'public' AND tablename = 'spec_field' AND indexname = 'spec_field_category_key_idx'
     `);
-    const def = rows.length === 1 ? String(rows[0].indexdef) : "";
+    const def = rows.length === 1 && rows[0] != null ? String(rows[0].indexdef) : "";
     const ok = rows.length === 1 && def.toLowerCase().includes("where") && def.toLowerCase().includes("deleted_at is null");
     log(
       "Check 7: spec_field_category_key_idx is partial-unique WHERE deleted_at IS NULL",
@@ -179,7 +185,7 @@ async function run() {
     `);
     log(
       "Check 8: product_translation_completeness is a view (relkind='v')",
-      rows.length === 1 && rows[0].relkind === "v",
+      rows.length === 1 && rows[0] != null && rows[0].relkind === "v",
       `relkind=${JSON.stringify(rows.map((r) => r.relkind))}`,
     );
   }

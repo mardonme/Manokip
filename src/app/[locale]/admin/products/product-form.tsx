@@ -207,6 +207,21 @@ export function ProductForm({
   const currentStatus =
     useWatch({ control: form.control, name: "status" }) ?? persistedStatus;
 
+  // Plan 02-14 Task 14.3 — media-dirty indicator. RHF's `dirtyFields` flips
+  // any time MediaUploader appends/removes/reorders a tile (the wrapped
+  // `{ publicId }` rows or the SortableContext `move()` swap both write
+  // through useFieldArray). We surface this as a visual cue on the Save
+  // button so the admin knows pending media reorders/uploads aren't yet
+  // persisted — protects against the "I dragged thumbnails but forgot to
+  // hit Save" footgun.
+  const dirtyFields = form.formState.dirtyFields as Partial<{
+    imagePublicIds: unknown;
+    datasheetPublicIds: unknown;
+  }>;
+  const mediaDirty = Boolean(
+    dirtyFields.imagePublicIds || dirtyFields.datasheetPublicIds,
+  );
+
   function onSubmit(values: ProductFormUiInput) {
     setServerError(null);
 
@@ -531,7 +546,9 @@ export function ProductForm({
             {pending
               ? "Saving…"
               : initial?.id
-                ? "Save changes"
+                ? mediaDirty
+                  ? "Save changes (media)"
+                  : "Save changes"
                 : "Create product"}
           </Button>
           {initial?.id && currentStatus === "draft" ? (
