@@ -68,7 +68,13 @@ vi.mock("next/cache", () => ({
   revalidateTag,
 }));
 
-import { saveProduct, duplicateProduct } from "@/actions/products";
+import {
+  saveProduct,
+  duplicateProduct,
+  publishProduct,
+  unpublishProduct,
+  deleteProduct,
+} from "@/actions/products";
 import type { ProductInput } from "@/lib/zod/product";
 
 describe("products actions (live Neon)", () => {
@@ -619,5 +625,253 @@ describe("products actions (live Neon)", () => {
     // revalidateProduct(cloneId) fan-out called after tx commit.
     const calls = revalidateTag.mock.calls.map((c) => c[0] as string);
     expect(calls).toContain(`product:${cloneId}`);
+  }, 30_000);
+
+  // ─── Plan 02-13b lifecycle actions ────────────────────────────────────
+  // publishProduct + unpublishProduct + deleteProduct each write a DISTINCT
+  // audit action ('publish' / 'unpublish' / 'delete') so the audit trail
+  // separates content edits from lifecycle transitions (W7 / D-09).
+
+  it("publish — sets status='published' AND publishedAt non-null in same tx; audit row action='publish' (NOT 'update')", async () => {
+    requireTestDatabaseUrl();
+    const db = await getTestDb();
+
+    const seed = await seedProduct({
+      name: `pub-${stamp}`,
+      locales: { uz: true, ru: true, en: true },
+    });
+    cleanups.push(async () => {
+      await db.execute(
+        sql`DELETE FROM audit_log WHERE entity_id = ${seed.productId}`,
+      );
+      await seed.cleanup();
+    });
+
+    // Pre-condition: seed product is 'draft' (status default + publishedAt null).
+    const before = await db.execute(
+      sql`SELECT status, published_at FROM product WHERE id = ${seed.productId}::uuid`,
+    );
+    expect((before.rows[0] as { status: string }).status).toBe("draft");
+    expect(
+      (before.rows[0] as { published_at: string | null }).published_at,
+    ).toBeNull();
+
+    revalidateTag.mockClear();
+
+    const result = await publishProduct({ id: seed.productId });
+    expect(result.ok).toBe(true);
+
+    // status='published' AND publishedAt non-null — single SET clause.
+    const after = await db.execute(
+      sql`SELECT status, published_at FROM product WHERE id = ${seed.productId}::uuid`,
+    );
+    const afterRow = after.rows[0] as {
+      status: string;
+      published_at: string | null;
+    };
+    expect(afterRow.status).toBe("published");
+    expect(afterRow.published_at).not.toBeNull();
+
+    // Audit row exists with action='publish', distinct from 'update'.
+    const pubRows = await db.execute(sql`
+      SELECT action FROM audit_log
+       WHERE entity_id = ${seed.productId} AND action = 'publish'
+    `);
+    expect(pubRows.rows.length).toBe(1);
+    const updRows = await db.execute(sql`
+      SELECT action FROM audit_log
+       WHERE entity_id = ${seed.productId} AND action = 'update'
+    `);
+    expect(updRows.rows.length).toBe(0);
+
+    // revalidateProduct fan-out fires AFTER tx commit.
+    const calls = revalidateTag.mock.calls.map((c) => c[0] as string);
+    expect(calls).toContain(`product:${seed.productId}`);
+    expect(calls).toContain("products-list");
+  }, 25_000);
+
+  it("unpublish — sets status='draft' AND publishedAt=null in same tx; audit row action='unpublish'", async () => {
+    requireTestDatabaseUrl();
+    const db = await getTestDb();
+
+    const seed = await seedProduct({
+      name: `unpub-${stamp}`,
+      locales: { uz: true, ru: true, en: true },
+    });
+    cleanups.push(async () => {
+      await db.execute(
+        sql`DELETE FROM audit_log WHERE entity_id = ${seed.productId}`,
+      );
+      await seed.cleanup();
+    });
+
+    // Promote to published first so the unpublish call has something to undo.
+    await db.execute(sql`
+      UPDATE product SET status = 'published', published_at = now()
+       WHERE id = ${seed.productId}::uuid
+    `);
+
+    revalidateTag.mockClear();
+
+    const result = await unpublishProduct({ id: seed.productId });
+    expect(result.ok).toBe(true);
+
+    const after = await db.execute(
+      sql`SELECT status, published_at FROM product WHERE id = ${seed.productId}::uuid`,
+    );
+    const afterRow = after.rows[0] as {
+      status: string;
+      published_at: string | null;
+    };
+    expect(afterRow.status).toBe("draft");
+    expect(afterRow.published_at).toBeNull();
+
+    const unpubRows = await db.execute(sql`
+      SELECT action, before_json, after_json FROM audit_log
+       WHERE entity_id = ${seed.productId} AND action = 'unpublish'
+    `);
+    expect(unpubRows.rows.length).toBe(1);
+    const auditRow = unpubRows.rows[0] as {
+      action: string;
+      before_json: Record<string, unknown> | null;
+      after_json: Record<string, unknown> | null;
+    };
+    expect(auditRow.before_json?.["status"]).toBe("published");
+    expect(auditRow.after_json?.["status"]).toBe("draft");
+
+    const calls = revalidateTag.mock.calls.map((c) => c[0] as string);
+    expect(calls).toContain(`product:${seed.productId}`);
+  }, 25_000);
+
+  it("delete — hard-deletes product (cascades translations/spec_values/flags); audit row action='delete' with before populated and after=null", async () => {
+    requireTestDatabaseUrl();
+    const db = await getTestDb();
+
+    const seed = await seedProduct({
+      name: `del-${stamp}`,
+      locales: { uz: true, ru: true, en: true },
+    });
+    // The seedProduct cleanup tolerates missing rows — deleteProduct will
+    // remove the product before cleanup runs, but cleanup deletes the
+    // category + audit rows we still need to drop.
+    cleanups.push(async () => {
+      await db.execute(
+        sql`DELETE FROM audit_log WHERE entity_id = ${seed.productId}`,
+      );
+      await seed.cleanup();
+    });
+
+    // Add a spec value + MT flag so we can assert FK cascade.
+    await db.execute(sql`
+      INSERT INTO product_spec_values
+        (product_id, spec_field_id, is_extra, extra_key, text_value, sort_order)
+      VALUES
+        (${seed.productId}::uuid, NULL, true, 'k_del', 'v_del', 0)
+    `);
+    await db.execute(sql`
+      INSERT INTO product_translation_field_flags
+        (product_id, locale, field_name, machine_translated)
+      VALUES (${seed.productId}::uuid, 'uz', 'name', true)
+    `);
+
+    revalidateTag.mockClear();
+
+    const result = await deleteProduct({ id: seed.productId });
+    expect(result.ok).toBe(true);
+
+    // Product row gone.
+    const baseRows = await db.execute(
+      sql`SELECT id FROM product WHERE id = ${seed.productId}::uuid`,
+    );
+    expect(baseRows.rows.length).toBe(0);
+
+    // Cascades: translations + spec values + flags all gone.
+    const trRows = await db.execute(
+      sql`SELECT product_id FROM product_translations WHERE product_id = ${seed.productId}::uuid`,
+    );
+    expect(trRows.rows.length).toBe(0);
+    const psvRows = await db.execute(
+      sql`SELECT id FROM product_spec_values WHERE product_id = ${seed.productId}::uuid`,
+    );
+    expect(psvRows.rows.length).toBe(0);
+    const flagRows = await db.execute(
+      sql`SELECT product_id FROM product_translation_field_flags WHERE product_id = ${seed.productId}::uuid`,
+    );
+    expect(flagRows.rows.length).toBe(0);
+
+    // Audit row action='delete', before populated (full row snapshot),
+    // after=null (hard delete convention from src/lib/audit.ts).
+    const delRows = await db.execute(sql`
+      SELECT action, before_json, after_json FROM audit_log
+       WHERE entity_id = ${seed.productId} AND action = 'delete'
+    `);
+    expect(delRows.rows.length).toBe(1);
+    const auditRow = delRows.rows[0] as {
+      action: string;
+      before_json: Record<string, unknown> | null;
+      after_json: Record<string, unknown> | null;
+    };
+    expect(auditRow.before_json).not.toBeNull();
+    expect(auditRow.before_json?.["id"]).toBe(seed.productId);
+    expect(auditRow.after_json).toBeNull();
+
+    const calls = revalidateTag.mock.calls.map((c) => c[0] as string);
+    expect(calls).toContain(`product:${seed.productId}`);
+  }, 25_000);
+
+  it("W7 distinction — saveProduct(status flip) refuses; publishProduct then writes 'publish' audit (not 'update')", async () => {
+    requireTestDatabaseUrl();
+    const db = await getTestDb();
+
+    const seed = await seedProduct({
+      name: `w7-${stamp}`,
+      locales: { uz: true, ru: true, en: true },
+    });
+    cleanups.push(async () => {
+      await db.execute(
+        sql`DELETE FROM audit_log WHERE entity_id = ${seed.productId}`,
+      );
+      await seed.cleanup();
+    });
+
+    // Snapshot audit count before.
+    const before = await db.execute(
+      sql`SELECT COUNT(*)::int AS n FROM audit_log WHERE entity_id = ${seed.productId}`,
+    );
+    const beforeN = (before.rows[0] as { n: number }).n;
+
+    // 1. Attempted elevation via saveProduct → refused (W7).
+    const elevateInput = buildInput({
+      id: seed.productId,
+      categoryId: seed.categoryId,
+      status: "published",
+      namePrefix: `w7-${stamp}`,
+    });
+    const elevateRes = await saveProduct(elevateInput);
+    expect(elevateRes.ok).toBe(false);
+
+    // No new audit row.
+    const afterRefuse = await db.execute(
+      sql`SELECT COUNT(*)::int AS n FROM audit_log WHERE entity_id = ${seed.productId}`,
+    );
+    expect((afterRefuse.rows[0] as { n: number }).n).toBe(beforeN);
+
+    // 2. Lifecycle transition via publishProduct succeeds and writes
+    //    exactly one 'publish' audit row (NOT 'update').
+    const publishRes = await publishProduct({ id: seed.productId });
+    expect(publishRes.ok).toBe(true);
+
+    const pubRows = await db.execute(sql`
+      SELECT action FROM audit_log
+       WHERE entity_id = ${seed.productId} AND action = 'publish'
+    `);
+    expect(pubRows.rows.length).toBe(1);
+
+    // Crucially — no 'update' audit row was written by publishProduct.
+    const updRows = await db.execute(sql`
+      SELECT action FROM audit_log
+       WHERE entity_id = ${seed.productId} AND action = 'update'
+    `);
+    expect(updRows.rows.length).toBe(0);
   }, 30_000);
 });
