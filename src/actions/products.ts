@@ -66,6 +66,8 @@ import { revalidateProduct } from "@/lib/revalidation";
 import {
   productInsertSchema,
   productDuplicateSchema,
+  productPublishSchema,
+  productDeleteSchema,
 } from "@/lib/zod/product";
 
 const LOCALES = ["uz", "ru", "en"] as const;
@@ -382,5 +384,160 @@ export const duplicateProduct = withAdminAction(
     await revalidateProduct(result.id);
 
     return result;
+  },
+);
+
+// ─── Plan 02-13b: lifecycle actions ────────────────────────────────────────
+//
+// Three actions that mutate ONLY the product lifecycle state — distinct from
+// saveProduct's content edits. Each writes its own audit-action enum value
+// ('publish' / 'unpublish' / 'delete') so the audit log separates "admin
+// edited the product" from "admin transitioned its lifecycle" (D-09 / W7 /
+// T-02-13b-02 / T-02-13b-03 repudiation register).
+//
+// Universal shape:
+//   1. Pre-tx: schema-validated by withAdminAction; no extra prep.
+//   2. dbTx.transaction: capture before snapshot → mutation → atomic audit row.
+//   3. AFTER tx commit: revalidateProduct(id) — Pitfall #2 prohibits firing
+//      revalidate inside a tx (T-02-13b-04).
+//
+// publishProduct sets status='published' AND publishedAt=now() in the SAME
+// SET clause so the row never observes a partial state where status flipped
+// without publishedAt being set (the public detail page derives "is live"
+// from status, but sitemap + sort-by-recently-published keys publishedAt).
+// unpublishProduct does the inverse atomically: status='draft' AND
+// publishedAt=null in the same SET. (Open Q §1 Option B locked.)
+//
+// deleteProduct is a HARD delete. The Phase-1 FKs cascade to
+// product_translations / product_spec_values / product_translation_field_flags,
+// so a single DELETE on `product` drops every related row. The audit row
+// (written BEFORE the DELETE inside the tx) preserves the full row snapshot
+// in before_json so the action remains forensically reconstructable.
+
+export const publishProduct = withAdminAction(
+  productPublishSchema,
+  async ({ id }, ctx) => {
+    const result = await dbTx.transaction(async (tx) => {
+      const [before] = await tx
+        .select()
+        .from(products)
+        .where(eq(products.id, id))
+        .limit(1);
+      if (!before) {
+        throw new Error("NOT_FOUND");
+      }
+      const now = new Date();
+      const [row] = await tx
+        .update(products)
+        .set({
+          status: "published",
+          publishedAt: now,
+          updatedAt: now,
+        })
+        .where(eq(products.id, id))
+        .returning();
+      if (!row) {
+        // Defensive — UPDATE..RETURNING with the same predicate that found
+        // `before` should always return one row. If it doesn't, something
+        // raced (concurrent DELETE) and we abort the tx.
+        throw new Error("NOT_FOUND");
+      }
+      await logAudit(tx, {
+        actorEmail: ctx.actorEmail,
+        action: "publish",
+        entityType: "product",
+        entityId: id,
+        before: { status: before.status, publishedAt: before.publishedAt },
+        after: { status: row.status, publishedAt: row.publishedAt },
+        ip: ctx.ip,
+        userAgent: ctx.userAgent,
+      });
+      return row;
+    });
+
+    await revalidateProduct(id);
+
+    return result;
+  },
+);
+
+export const unpublishProduct = withAdminAction(
+  productPublishSchema,
+  async ({ id }, ctx) => {
+    const result = await dbTx.transaction(async (tx) => {
+      const [before] = await tx
+        .select()
+        .from(products)
+        .where(eq(products.id, id))
+        .limit(1);
+      if (!before) {
+        throw new Error("NOT_FOUND");
+      }
+      const now = new Date();
+      const [row] = await tx
+        .update(products)
+        .set({
+          status: "draft",
+          publishedAt: null,
+          updatedAt: now,
+        })
+        .where(eq(products.id, id))
+        .returning();
+      if (!row) {
+        throw new Error("NOT_FOUND");
+      }
+      await logAudit(tx, {
+        actorEmail: ctx.actorEmail,
+        action: "unpublish",
+        entityType: "product",
+        entityId: id,
+        before: { status: before.status, publishedAt: before.publishedAt },
+        after: { status: row.status, publishedAt: row.publishedAt },
+        ip: ctx.ip,
+        userAgent: ctx.userAgent,
+      });
+      return row;
+    });
+
+    await revalidateProduct(id);
+
+    return result;
+  },
+);
+
+export const deleteProduct = withAdminAction(
+  productDeleteSchema,
+  async ({ id }, ctx) => {
+    await dbTx.transaction(async (tx) => {
+      const [before] = await tx
+        .select()
+        .from(products)
+        .where(eq(products.id, id))
+        .limit(1);
+      if (!before) {
+        throw new Error("NOT_FOUND");
+      }
+      // Audit row first — written BEFORE the DELETE so the audit insert can
+      // still observe `before` even after FK cascades have fired in the
+      // same tx. (Postgres lets us DELETE the parent then INSERT into
+      // audit_log because audit_log has no FK to product.)
+      await logAudit(tx, {
+        actorEmail: ctx.actorEmail,
+        action: "delete",
+        entityType: "product",
+        entityId: id,
+        before,
+        after: null,
+        ip: ctx.ip,
+        userAgent: ctx.userAgent,
+      });
+      // Hard delete — Phase-1 FKs cascade translations / spec values / MT
+      // flags. T-02-13b-03: forensic snapshot survives in before_json.
+      await tx.delete(products).where(eq(products.id, id));
+    });
+
+    await revalidateProduct(id);
+
+    return { id };
   },
 );
