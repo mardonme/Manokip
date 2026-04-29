@@ -143,11 +143,22 @@ describe("submissions actions (live Neon)", () => {
     expect(audit.actor_email).toBe("test-admin@manometr.uz");
     expect(audit.before_json).not.toBeNull();
     expect(audit.after_json).not.toBeNull();
-    // before.read_at was NULL; after.read_at is non-null.
-    const beforeReadAt =
-      audit.before_json?.["readAt"] ?? audit.before_json?.["read_at"];
-    const afterReadAt =
-      audit.after_json?.["readAt"] ?? audit.after_json?.["read_at"];
+    // before.readAt was NULL; after.readAt is non-null. Drizzle JSONB
+    // serialisation emits camelCase keys (matching the schema property
+    // names) — `??` would mask a legitimate null reading on the camelCase
+    // key, so we use Object.hasOwn-aware key picking.
+    const pickKey = (
+      obj: Record<string, unknown> | null,
+      camel: string,
+      snake: string,
+    ): unknown => {
+      if (!obj) return undefined;
+      if (camel in obj) return obj[camel];
+      if (snake in obj) return obj[snake];
+      return undefined;
+    };
+    const beforeReadAt = pickKey(audit.before_json, "readAt", "read_at");
+    const afterReadAt = pickKey(audit.after_json, "readAt", "read_at");
     expect(beforeReadAt).toBeNull();
     expect(afterReadAt).not.toBeNull();
 
