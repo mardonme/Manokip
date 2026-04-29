@@ -18,46 +18,53 @@ If every other feature fails but this one works, the platform still wins.
 
 <!-- Shipped and confirmed valuable. -->
 
-(None yet — ship to validate)
+**Foundations (validated in Phase 1: 2026-04-23)**
+- [x] Database schema with sibling `*_translations` tables, typed spec long-table, Auth.js tables (24 tables on Neon dev)
+- [x] Locale-prefixed routing `/uz/...` `/ru/...` `/en/...` with root-redirect via next-intl middleware
+- [x] Managed Postgres on Neon (pooled runtime + direct migration); Vercel region co-located (fra1)
+- [x] Auth.js v5 magic-link with Drizzle adapter + Resend; `/[locale]/admin/*` gated by edge proxy
+- [x] Cloudinary signing endpoint; credentials in environment only
+- [x] Production deployment scaffold with Sentry + Vercel Analytics + Speed Insights
+
+**Admin panel (validated in Phase 2: 2026-04-29)**
+- [x] Email-invite flow for a small admin team — 48-hour single-use token, atomic consumption (Pitfall #4 mitigated)
+- [x] Magic-link login with 24h idle / 7d absolute session caps + access-denied banner + harvesting mitigation
+- [x] CRUD for categories (tree + 3-locale translations), manufacturers (with Cloudinary logo), spec fields (rename/soft-delete/groups), products (single long-page editor with 3-locale tabs), submissions inbox with CSV export, audit log viewer
+- [x] All editable content supports UZ / RU / EN in parallel via sibling translation tables
+- [x] Media upload to Cloudinary via signed direct upload; DB stores `public_id` only (Pitfall #5 widget paramsToSign protocol verified end-to-end)
+- [x] Per-product translation completeness indicator + per-field machine-translated visual flag (D-04 + D-05)
+- [x] Every mutation invokes typed `revalidateTag` helpers; OPS-01 e2e gate authored (deployment-side validation queued for first preview PR)
+- [x] Clean admin UX — single-page product editor (D-01), reusable DataTable / LocaleTabs / SlugInput / ConfirmDialog / MediaUploader primitives
 
 ### Active
 
 <!-- Current scope. Building toward these. -->
 
-**Multi-language**
+**Multi-language (public-facing UI — Phase 3)**
 - [ ] Full UI in Uzbek (Latin), Russian, and English
-- [ ] All product content translatable per-field (name, description, specs, use-cases)
-- [ ] Language switcher visible site-wide; URL structure reflects locale
+- [ ] Language switcher visible site-wide on the public catalog (admin already has it)
 
-**Product catalog**
+**Product catalog (Phase 3)**
 - [ ] Category tree with subcategories, accessible via faceted navigation
-- [ ] Per-category spec schema (defined once by admin) + per-product custom extras (hybrid)
-- [ ] Product list pages with filters driven by category spec fields
+- [ ] Product list pages with filters driven by category spec fields (typed numeric ranges / enums / booleans)
 - [ ] Product detail pages with deep structured spec tables (fiztech-style density)
-- [ ] Downloadable PDFs / datasheets / certificates per product
+- [ ] Downloadable PDFs / datasheets / certificates per product (rendering side — write side is in Phase 2)
 
-**Search**
-- [ ] Multilingual full-text search across product name, description, and specs
+**Search (Phase 3)**
+- [ ] Multilingual full-text search across product name, description, and specs (per-locale `tsvector` + GIN index)
 - [ ] Results respect current locale; fall back gracefully when a field is untranslated
 
-**Recipes / use-cases**
+**Recipes / use-cases (Phase 4)**
 - [ ] Rich-text articles (e.g., "Selecting a manometer for high-pressure gas pipelines")
 - [ ] Industry-scenario pages (oil & gas, food processing, pharma, etc.) linking relevant products
 - [ ] "Used in" section on each product page surfacing linked case studies
 
-**Partners / manufacturers**
-- [ ] Manufacturer showcase page(s) presenting each partner brand
-- [ ] Products linked to their manufacturer
+**Partners / manufacturers (Phase 3)**
+- [ ] Manufacturer showcase page(s) presenting each partner brand (write-side complete in Phase 2)
+- [ ] Products linked to their manufacturer (display side)
 
-**Contact**
-- [ ] Site-wide simple contact form — captures name, company, email, message; stores in DB and emails admins
-
-**Admin panel**
-- [ ] Email-invite flow for a small admin team (2–5 users in v1)
-- [ ] CRUD for products, categories, subcategories, spec field schemas, recipes, manufacturers, contact submissions
-- [ ] All editable content supports UZ / RU / EN in parallel
-- [ ] Media upload to Cloudinary
-- [ ] Clean, extendable UI (admin UX matters — content team will live here)
+**Contact (Phase 5)**
+- [ ] Site-wide simple contact form — captures name, company, email, message; stores in DB and emails admins (admin inbox already shipped in Phase 2)
 
 **SEO / presentation**
 - [ ] Server-rendered pages (Next.js SSR) — indexable product and category pages
@@ -133,4 +140,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-21 after initialization*
+*Last updated: 2026-04-29 — Phase 2 (Admin Panel) complete + verified. 13/13 ADMIN/OPS requirements satisfied; only DEF-2-17-01 (OPS-01 deployment-side validation) queued for first preview PR. Next: Phase 3 (Public Rendering, Search, SEO).*
