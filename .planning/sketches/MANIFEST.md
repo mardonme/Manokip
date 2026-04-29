@@ -15,9 +15,14 @@ Two themes, identical structure: `default` (comfortable density) and `dense` (fi
 
 | # | Name | Design Question | Winner | Tags |
 |---|------|----------------|--------|------|
-| 001 | public-product-detail | How should the spec-dense product page balance visual hierarchy with engineer-grade information density? | _pending_ | public, product-detail, phase-3 |
-| 002 | public-catalog-filters | How should the typed-spec faceted filters interact with the product grid? | _pending_ | public, catalog, filters, phase-3 |
-| 003 | product-detail-premium-saas | Premium-SaaS visual finish for the 2-column + sticky-CTA pattern (single mockup, no variants). | _baseline_ | public, product-detail, premium, mockup, phase-3 |
+| 001 | public-product-detail | How should the spec-dense product page balance visual hierarchy with engineer-grade information density? | superseded by 003 | public, product-detail, phase-3 |
+| 002 | public-catalog-filters | How should the typed-spec faceted filters interact with the product grid? | A (left sidebar) | public, catalog, filters, phase-3 |
+| 003 | product-detail-premium-saas | Premium-SaaS visual finish for the 2-column + sticky-CTA pattern (single mockup, no variants). | ★ winner | public, product-detail, premium, mockup, phase-3 |
+
+## Locked for Phase 3 (2026-04-29)
+- **Product detail:** sketch **003 premium-SaaS** is the implementation target (slate/blue palette, frosted-glass sticky header, 2-column with sticky CTA rail, Inter typography, hand-drawn gauge SVG style).
+- **Catalog page:** sketch **002 variant A** is the implementation target (persistent left sidebar filters + 3-col grid + active-filter pills above grid).
+- **Compare feature** (sketch 002-C bottom tray): **deferred to v1.1 backlog** — NOT in CAT-01..08, would be a scope expansion of ~2–3 plans.
 
 ## Open Questions / Backlog Hints
 

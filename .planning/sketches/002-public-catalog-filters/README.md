@@ -2,7 +2,7 @@
 sketch: 002
 name: public-catalog-filters
 question: "How should the typed-spec faceted filters interact with the product grid?"
-winner: null
+winner: "A"
 tags: [public, catalog, filters, phase-3]
 ---
 

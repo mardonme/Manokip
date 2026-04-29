@@ -2,7 +2,7 @@
 sketch: 003
 name: product-detail-premium-saas
 question: "What does a polished, premium-SaaS rendering of the WIKA 213.53 product page look like with the 2-column + sticky-CTA layout?"
-winner: null
+winner: "★ Phase-3 implementation target"
 tags: [public, product-detail, premium, mockup, phase-3]
 ---
 
