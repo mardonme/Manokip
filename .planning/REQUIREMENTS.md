@@ -30,7 +30,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **ADMIN-09**: Admin can mark a translation as machine-generated (`machine_translated: true`); such fields are flagged in the UI
 - [x] **ADMIN-10**: Admin can see a per-product translation-completeness indicator (which locales/fields are missing)
 - [x] **ADMIN-11**: Every admin write operation is recorded in an audit log (who, what, when, entity)
-- [ ] **ADMIN-12**: Admin can view, search, and export contact-form submissions
+- [x] **ADMIN-12**: Admin can view, search, and export contact-form submissions
 
 ### Public Catalog (CAT)
 
@@ -154,7 +154,7 @@ Which phases cover which requirements.
 | ADMIN-09 | Phase 2 | Complete (02-01 productTranslationFieldFlags sibling table; 02-13a write path — productInsertSchema accepts mtFlags as per-locale Record<fieldName, boolean>; saveProduct does replace-on-save inside the atomic tx; 02-13b — MachineTranslatedToggle client component (Controller + Checkbox bound to mtFlags.${locale}.${fieldName}) renders inline alongside every translatable field in the editor; D-05 visual cue (amber left-border + 'MT' badge on the Label) applies via useWatch on the same RHF path so the cue updates as the toggle flips) |
 | ADMIN-10 | Phase 2 | Complete (02-01 schema substrate — product_translation_completeness pgView computing per-locale percent over name+slug+short_desc+long_desc plus required-text spec values; 02-12 — findProductCompleteness + findCompletenessForProducts server helpers wrapping the pgView with locale-narrowing type-guard and missing-row-defaults-to-0 contract; <TranslationCompleteness percent={N} /> progress bar + <TranslationDots completeness={...} /> 3-locale dot indicator client components with D-04 thresholds (green ≥95 / amber ≥50 / red <50) hard-coded; 3 live-Neon specs lock view math 25/50/100 base + 100/80/80 W10 spec; consumed by 02-13b product editor + products list) |
 | ADMIN-11 | Phase 2 | Complete (02-04 — logAudit(tx, ...) + closed AUDIT_ACTIONS const tuple of 13 actions + withAdminAction wrapper + auth.ts events.signIn/signOut/session_revoked emit; 02-07 — first end-to-end production callsites: action='invite' on inviteAdmin tx + action='update' on acceptInvite tx; future Wave-2/3/4 mutations all flow through withAdminAction → logAudit) |
-| ADMIN-12 | Phase 2 | Pending |
+| ADMIN-12 | Phase 2 | Complete (02-15) |
 | CAT-01 | Phase 3 | Pending |
 | CAT-02 | Phase 3 | Pending |
 | CAT-03 | Phase 3 | Pending |

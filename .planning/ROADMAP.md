@@ -65,7 +65,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] 02-13a-PRODUCTS-CRUD-CORE.md — Zod schemas + saveProduct (5-step tx with refusal-to-elevate) + duplicateProduct + integration tests + seed-products fixture — completed 2026-04-28 (457fbeb productInsertSchema + seedProduct fixture + cfb2d0a TDD RED 7 specs + ca31675 TDD GREEN saveProduct 5-step atomic tx + duplicateProduct full-clone with status='draft' + slug-copy + audit('duplicate_product'); W7 refusal-to-elevate USE_PUBLISH_ACTION; replace-on-save for spec values + MT flags; 23/23 vitest files / 105/105 tests; ADMIN-06 + ADMIN-08 + ADMIN-09 satisfied; Wave 3 opens)
 - [x] 02-13b-PRODUCTS-CRUD-LIFECYCLE-UI.md — publishProduct/unpublishProduct/deleteProduct (distinct audit rows) + products list + product editor pages with locale tabs + spec values editor + MT toggle + lifecycle buttons — completed 2026-04-29 (ed6da4a TDD RED 4 lifecycle specs + d2a6514 TDD GREEN publishProduct/unpublishProduct/deleteProduct atomic dual-column writes + audit-before-delete + c431a16 products list page + table with TranslationDots and per-row Publish | Unpublish / Duplicate / Delete row actions + product editor with LocaleTabs + SpecValuesEditor + MachineTranslatedToggle + MediaUploader + ConfirmDialog for destructive flows + W7 two-layer status freeze (UI hardcodes status: persistedStatus on submit + saveProduct refusal-to-elevate); 11/11 products specs green; ADMIN-06 + ADMIN-08 + ADMIN-09 closed; ADMIN-11 + OPS-01 advanced; Wave 4 opens; DEF-2-13b-01 logged for pre-existing pnpm build script typecheck)
 - [ ] 02-14-PRODUCTS-MEDIA.md — confirm CldUploadWidget signing parity + MediaUploader unit test
-- [ ] 02-15-SUBMISSIONS-INBOX.md — submissions inbox + mark-read + CSV export with UTF-8 BOM
+- [x] 02-15-SUBMISSIONS-INBOX.md — submissions inbox + mark-read + CSV export with UTF-8 BOM — completed 2026-04-29 (c20c704 TDD RED csv tests + 4f6cb14 TDD GREEN toCsv writer with single-U+FEFF-source-literal BOM + RFC 4180 quoting + Excel formula injection guard + f02d8be TDD RED submissions tests + 9c58cc8 TDD GREEN markSubmissionRead + exportSubmissionsCsv with serialiseSubmission(row) BigInt projection at audit-jsonb boundary + entity_type='contact_submission_export' audit-on-export pattern + 43a19ef admin RSC + DataTable client island with date-range Inputs + Unread Switch + Export CSV button via Blob + URL.createObjectURL); Open Q §6 LOCKED buffered-in-memory CSV for Phase 2 / streaming deferred to Phase 5; LIMIT 10_000 hard cap T-02-15-04 DoS mitigation; 7 new tests (4 csv unit + 3 live-Neon submissions); full suite 116/116 across 25 files; ADMIN-12 closed; ADMIN-11 + OPS-01 advanced
 - [ ] 02-16-AUDIT-LOG-VIEWER.md — read-only audit log viewer with URL-driven filters
 - [ ] 02-17-REVALIDATION-E2E-GATE.md — Playwright OPS-01 spec on Vercel preview + GH Actions gate
 
@@ -114,7 +114,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundations | 7/7 | Complete | 2026-04-23 |
-| 2. Admin Panel | 14/18 | In Progress | - |
+| 2. Admin Panel | 15/18 | In Progress | - |
 | 3. Public Rendering, Search, SEO | 0/TBD | Not started | - |
 | 4. Content Features | 0/TBD | Not started | - |
 | 5. Contact and Launch Polish | 0/TBD | Not started | - |
