@@ -51,7 +51,7 @@
 // manufacturers.ts (plan 02-10). The product write path adds two extras over
 // the universal shape: the 5-table replace-on-save block + the W7 guard.
 
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { dbTx } from "@/db/client-ws";
 import {
   products,
@@ -71,6 +71,68 @@ import {
 } from "@/lib/zod/product";
 
 const LOCALES = ["uz", "ru", "en"] as const;
+type Locale = (typeof LOCALES)[number];
+
+// Phase 3 SRCH-05 — Postgres FTS dictionary per locale. Uzbek Latin uses
+// 'simple' (no stemming — Postgres has no Uzbek dictionary; the simple
+// config + unaccent extension covers our needs); Russian uses 'russian';
+// English uses 'english'. The map is closed/keyed by Locale so the
+// regconfig cast value is NEVER user-controlled (T-03-02-01 mitigation).
+const PG_CONFIG: Record<Locale, string> = {
+  uz: "simple",
+  ru: "russian",
+  en: "english",
+};
+
+/**
+ * Phase 3 Step 6 — rebuild product_search.search_tsv for all 3 locales of a
+ * single product, transactionally. Closes the Phase-2 SRCH-05 gap.
+ *
+ * Called from saveProduct AND duplicateProduct. Both write paths must keep
+ * the FTS index consistent with product_translations + product_spec_values
+ * inside the same atomic transaction — otherwise a search query running
+ * against a freshly-saved product would either miss it (rebuild deferred)
+ * or surface stale data (rebuild raced).
+ *
+ * Weights (A>B>C>D — Postgres setweight() docs):
+ *   A — translation.name
+ *   B — translation.short_desc
+ *   C — translation.long_desc
+ *   D — aggregated spec values (text + enum + num + per-locale translations)
+ *
+ * ON CONFLICT (product_id, locale) DO UPDATE: re-saves replace the row's
+ * tsvector in place (P-key target matches schema/search.ts primaryKey,
+ * preventing row-count growth on every update).
+ */
+async function rebuildProductSearch(
+  tx: Parameters<Parameters<typeof dbTx.transaction>[0]>[0],
+  productId: string,
+): Promise<void> {
+  for (const locale of LOCALES) {
+    const pgConfig = PG_CONFIG[locale];
+    await tx.execute(sql`
+      INSERT INTO product_search (product_id, locale, search_tsv)
+      SELECT ${productId}::uuid, ${locale}::text,
+        setweight(to_tsvector(${pgConfig}::regconfig, coalesce(t.name, '')), 'A') ||
+        setweight(to_tsvector(${pgConfig}::regconfig, coalesce(t.short_desc, '')), 'B') ||
+        setweight(to_tsvector(${pgConfig}::regconfig, coalesce(t.long_desc, '')), 'C') ||
+        setweight(to_tsvector(${pgConfig}::regconfig, coalesce(agg.spec_text, '')), 'D')
+      FROM product_translations t
+      LEFT JOIN LATERAL (
+        SELECT string_agg(
+          COALESCE(psvt.text_value, v.text_value, v.enum_value, v.num_value::text, ''),
+          ' '
+        ) AS spec_text
+        FROM product_spec_values v
+        LEFT JOIN product_spec_value_translations psvt
+          ON psvt.value_id = v.id AND psvt.locale = ${locale}::text
+        WHERE v.product_id = ${productId}::uuid
+      ) agg ON true
+      WHERE t.product_id = ${productId}::uuid AND t.locale = ${locale}::text
+      ON CONFLICT (product_id, locale) DO UPDATE SET search_tsv = EXCLUDED.search_tsv
+    `);
+  }
+}
 
 export const saveProduct = withAdminAction(
   productInsertSchema,
@@ -100,6 +162,10 @@ export const saveProduct = withAdminAction(
     // 2. Mutation — 5-step atomic block.
     const result = await dbTx.transaction(async (tx) => {
       // Step 1: base product row. status writes verbatim from input.
+      // Phase 3 Gap 1: imagePublicIds + datasheetPublicIds persisted on
+      // BOTH branches (insert + update). Defaults to [] if Zod coerced
+      // undefined; the schema default is also [] so both branches receive
+      // a real array.
       const [row] = input.id
         ? await tx
             .update(products)
@@ -107,6 +173,8 @@ export const saveProduct = withAdminAction(
               categoryId: input.categoryId,
               manufacturerId: input.manufacturerId ?? null,
               status: input.status,
+              imagePublicIds: input.imagePublicIds,
+              datasheetPublicIds: input.datasheetPublicIds,
               updatedAt: new Date(),
             })
             .where(eq(products.id, input.id))
@@ -117,6 +185,8 @@ export const saveProduct = withAdminAction(
               categoryId: input.categoryId,
               manufacturerId: input.manufacturerId ?? null,
               status: input.status,
+              imagePublicIds: input.imagePublicIds,
+              datasheetPublicIds: input.datasheetPublicIds,
             })
             .returning();
 
@@ -240,6 +310,12 @@ export const saveProduct = withAdminAction(
         userAgent: ctx.userAgent,
       });
 
+      // Step 6 (Phase 3 SRCH-05): rebuild product_search tsvector for all
+      // 3 locales inside the same transaction. Closes the Phase-2 gap that
+      // left product_search empty after every save. Uses the helper so
+      // duplicateProduct shares the exact same SQL.
+      await rebuildProductSearch(tx, row.id);
+
       return row;
     });
 
@@ -267,6 +343,12 @@ export const duplicateProduct = withAdminAction(
       //    publishedAt cleared so the duplicate is unambiguously unpublished.
       //    sku is intentionally NOT cloned — it's a unique column and the
       //    admin must assign a new SKU before publishing the clone.
+      //    Phase 3 Gap 1: media arrays cloned by-VALUE (spread) — Cloudinary
+      //    public_ids are immutable identifiers, so the duplicate can safely
+      //    reference the same uploaded files. The spread is intentional —
+      //    src.imagePublicIds is the live Drizzle row's array, and we want
+      //    the cloned product's row to own its own copy so a later edit on
+      //    either side doesn't aliace through to the other.
       const [clone] = await tx
         .insert(products)
         .values({
@@ -274,6 +356,8 @@ export const duplicateProduct = withAdminAction(
           manufacturerId: src.manufacturerId,
           status: "draft",
           publishedAt: null,
+          imagePublicIds: [...src.imagePublicIds],
+          datasheetPublicIds: [...src.datasheetPublicIds],
         })
         .returning();
 
@@ -377,6 +461,12 @@ export const duplicateProduct = withAdminAction(
         ip: ctx.ip,
         userAgent: ctx.userAgent,
       });
+
+      // 6. Phase 3 SRCH-05: rebuild tsvector for the clone. The clone has a
+      //    fresh product_id that does not appear in product_search yet —
+      //    the helper's INSERT ... ON CONFLICT shape inserts new rows here
+      //    (no existing rows to update). Same helper saveProduct uses.
+      await rebuildProductSearch(tx, clone.id);
 
       return clone;
     });

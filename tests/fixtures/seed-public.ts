@@ -1,4 +1,5 @@
-// Plan 03-01 Task 1.2 — seedPublicFixture() Wave-0 deterministic seed.
+// Plan 03-01 Task 1.2 + Plan 03-02 Task 2.3 — seedPublicFixture()
+// deterministic public-side seed.
 //
 // Purpose: every Phase-3 downstream plan (02–08) un-skips test stubs that
 // expect a stable public-side fixture: 3 manufacturers (WIKA, BD Sensors,
@@ -7,19 +8,17 @@
 // Playwright e2e specs hardcode slugs and IDs without coupling to runtime
 // state — the same seed produces the same rows every test run.
 //
-// Wave-0 column boundary (CRITICAL):
-//   The fixture writes ONLY columns that exist in the Wave-0 schema. Plan
-//   02 lands the additive migration for: product media arrays, the
-//   manufacturer official-rep flag, and the per-locale relationship note
-//   on manufacturer_translations. The Plan-02 seed extension fills those
-//   after the migration runs. This file MUST NOT reference any of those
-//   columns by their literal names — the verify step asserts with grep.
+// Plan 02 (this plan) extends the fixture to populate the columns added by
+// the additive migration 0002_phase3_media_search_manufacturer:
+//   - product.image_public_ids — gallery hero + side per product
+//   - product.datasheet_public_ids — one datasheet per product
+//   - manufacturer.is_official_rep — true for WIKA only (per D-11)
+//   - manufacturer_translations.relationship_note — per-locale text on WIKA
 //
-// product_search rows: NOT written here. Plan 02 Task 2.3 adds the
-// tsvector rebuild to saveProduct() — tests that exercise search will call
-// saveProduct() on each product after seeding, which populates the FTS
-// index in the same transaction. Pre-populating product_search here would
-// duplicate that contract and drift on column shape.
+// product_search rows: NOT written here. saveProduct()/duplicateProduct()
+// own the rebuild path (rebuildProductSearch helper, Phase 3 Step 6). Tests
+// that exercise search call saveProduct() after seeding to trigger the
+// rebuild — keeps the fixture decoupled from FTS shape.
 //
 // Closest analog: tests/_fixtures/seed-products.ts (Phase 2 Plan 13a).
 // Same shape: { ids } returned + cleanup() function. teardownPublicFixture
@@ -272,25 +271,43 @@ const CATEGORY_TRANSLATIONS: Record<
   },
 };
 
+// Plan 03-02 Task 2.3: per-manufacturer translation rows now carry the
+// nullable per-locale relationship_note column (D-11). Only WIKA has a
+// populated relationship note in the fixture — the other two manufacturers
+// pass null, exercising the nullable-text shape end-to-end.
 const MANUFACTURER_TRANSLATIONS: Record<
   'wika' | 'bd' | 'metran',
-  Record<Locale, { name: string; slug: string; description: string }>
+  Record<
+    Locale,
+    {
+      name: string;
+      slug: string;
+      description: string;
+      relationshipNote: string | null;
+    }
+  >
 > = {
   wika: {
     uz: {
       name: 'WIKA',
       slug: 'wika',
       description: 'WIKA — bosim oʻlchash uskunalari ishlab chiqaruvchi.',
+      relationshipNote:
+        'Manometr — WIKA ning Oʻzbekistondagi rasmiy vakili 2019-yildan beri.',
     },
     ru: {
       name: 'WIKA',
       slug: 'wika-ru',
       description: 'WIKA — производитель приборов измерения давления.',
+      relationshipNote:
+        'Официальный представитель WIKA в Узбекистане с 2019 г.',
     },
     en: {
       name: 'WIKA',
       slug: 'wika-en',
       description: 'WIKA — manufacturer of pressure measurement instruments.',
+      relationshipNote:
+        'Authorized WIKA representative in Uzbekistan since 2019.',
     },
   },
   bd: {
@@ -298,16 +315,19 @@ const MANUFACTURER_TRANSLATIONS: Record<
       name: 'BD Sensors',
       slug: 'bd-sensors',
       description: 'BD Sensors — sanoat datchiklari ishlab chiqaruvchi.',
+      relationshipNote: null,
     },
     ru: {
       name: 'BD Sensors',
       slug: 'bd-sensors-ru',
       description: 'BD Sensors — производитель промышленных датчиков.',
+      relationshipNote: null,
     },
     en: {
       name: 'BD Sensors',
       slug: 'bd-sensors-en',
       description: 'BD Sensors — manufacturer of industrial sensors.',
+      relationshipNote: null,
     },
   },
   metran: {
@@ -315,16 +335,19 @@ const MANUFACTURER_TRANSLATIONS: Record<
       name: 'Метран',
       slug: 'metran',
       description: 'Метран — Rossiya bosim oʻlchash kompaniyasi.',
+      relationshipNote: null,
     },
     ru: {
       name: 'Метран',
       slug: 'metran-ru',
       description: 'Метран — российская компания по измерению давления.',
+      relationshipNote: null,
     },
     en: {
       name: 'Metran',
       slug: 'metran-en',
       description: 'Metran — Russian pressure measurement company.',
+      relationshipNote: null,
     },
   },
 };
@@ -352,18 +375,20 @@ export async function seedPublicFixture(): Promise<PublicFixtureIds> {
     }
   }
 
-  // 3. Manufacturers (3 rows — Wave-0 columns only; the official-rep flag
-  //    lands in the Plan 02 migration).
+  // 3. Manufacturers (3 rows). WIKA has is_official_rep=true (D-11) — the
+  //    other two are explicitly false. Default would be false but we set
+  //    explicitly so re-seeding doesn't drift if defaults change.
   await db.execute(
-    sql`INSERT INTO manufacturer (id, logo_public_id, website_url) VALUES
-        (${ID.manufacturerWika}::uuid, NULL, 'https://www.wika.com'),
-        (${ID.manufacturerBd}::uuid, NULL, 'https://www.bdsensors.de'),
-        (${ID.manufacturerMetran}::uuid, NULL, 'https://www.metran.ru')`,
+    sql`INSERT INTO manufacturer (id, logo_public_id, website_url, is_official_rep) VALUES
+        (${ID.manufacturerWika}::uuid, NULL, 'https://www.wika.com', true),
+        (${ID.manufacturerBd}::uuid, NULL, 'https://www.bdsensors.de', false),
+        (${ID.manufacturerMetran}::uuid, NULL, 'https://www.metran.ru', false)`,
   );
 
   // 4. Manufacturer translations (3 locales × 3 manufacturers = 9 rows).
-  //    The per-locale relationship note column lands in Plan 02 — not
-  //    written here.
+  //    Plan 02 Task 2.3: relationship_note populated for WIKA (per-locale)
+  //    and NULL for the other two manufacturers — exercises both halves of
+  //    the nullable column.
   for (const mfg of ['wika', 'bd', 'metran'] as const) {
     const mfgId =
       mfg === 'wika'
@@ -374,8 +399,8 @@ export async function seedPublicFixture(): Promise<PublicFixtureIds> {
     for (const loc of LOCALES) {
       const tr = MANUFACTURER_TRANSLATIONS[mfg][loc];
       await db.execute(
-        sql`INSERT INTO manufacturer_translations (manufacturer_id, locale, name, slug, description)
-            VALUES (${mfgId}::uuid, ${loc}, ${tr.name}, ${tr.slug}, ${tr.description})`,
+        sql`INSERT INTO manufacturer_translations (manufacturer_id, locale, name, slug, description, relationship_note)
+            VALUES (${mfgId}::uuid, ${loc}, ${tr.name}, ${tr.slug}, ${tr.description}, ${tr.relationshipNote})`,
       );
     }
   }
@@ -465,17 +490,32 @@ export async function seedPublicFixture(): Promise<PublicFixtureIds> {
   }
 
   // 8. Products — 3 manometers + 3 transmitters, status='published'.
-  //    Wave-0 columns only — product media array columns land in Plan 02.
+  //    Plan 02 Task 2.3: image_public_ids + datasheet_public_ids arrays
+  //    populated per product. Each product gets a hero + side image and a
+  //    datasheet PDF stored under the deterministic prefix
+  //    `manometr/seed/<sku>/...`. Pure fixture data — no actual Cloudinary
+  //    asset is required for unit tests; e2e tests that hit Cloudinary
+  //    use a real upload sequence (out of scope here).
   for (const p of MANOMETER_PRODUCTS) {
+    const imgs = [
+      `manometr/seed/${p.sku}/hero`,
+      `manometr/seed/${p.sku}/side`,
+    ];
+    const datasheets = [`manometr/seed/${p.sku}/datasheet`];
     await db.execute(
-      sql`INSERT INTO product (id, category_id, manufacturer_id, sku, status, published_at)
-          VALUES (${p.id}::uuid, ${ID.categoryManometers}::uuid, ${p.manufacturerId}::uuid, ${p.sku}, 'published', now())`,
+      sql`INSERT INTO product (id, category_id, manufacturer_id, sku, status, published_at, image_public_ids, datasheet_public_ids)
+          VALUES (${p.id}::uuid, ${ID.categoryManometers}::uuid, ${p.manufacturerId}::uuid, ${p.sku}, 'published', now(), ${imgs}, ${datasheets})`,
     );
   }
   for (const p of TRANSMITTER_PRODUCTS) {
+    const imgs = [
+      `manometr/seed/${p.sku}/hero`,
+      `manometr/seed/${p.sku}/side`,
+    ];
+    const datasheets = [`manometr/seed/${p.sku}/datasheet`];
     await db.execute(
-      sql`INSERT INTO product (id, category_id, manufacturer_id, sku, status, published_at)
-          VALUES (${p.id}::uuid, ${ID.categoryTransmitters}::uuid, ${p.manufacturerId}::uuid, ${p.sku}, 'published', now())`,
+      sql`INSERT INTO product (id, category_id, manufacturer_id, sku, status, published_at, image_public_ids, datasheet_public_ids)
+          VALUES (${p.id}::uuid, ${ID.categoryTransmitters}::uuid, ${p.manufacturerId}::uuid, ${p.sku}, 'published', now(), ${imgs}, ${datasheets})`,
     );
   }
 
@@ -557,7 +597,13 @@ export async function teardownPublicFixture(
 
   const allProductIds = ids.productIds;
   // Audit log + product_spec_value_translations (compound FK) — defensive.
+  // Plan 02 Task 2.3: also drop product_search rows that downstream tests
+  // may have populated by calling saveProduct() against the seeded
+  // products.
   for (const pid of allProductIds) {
+    await db.execute(
+      sql`DELETE FROM product_search WHERE product_id = ${pid}::uuid`,
+    );
     await db.execute(
       sql`DELETE FROM product_spec_value_translations
            WHERE value_id IN (SELECT id FROM product_spec_values WHERE product_id = ${pid}::uuid)`,
