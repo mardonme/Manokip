@@ -23,14 +23,16 @@
 // header. If protection is OFF on previews, the env var is unset and the
 // header object is empty.
 //
-// Phase scope note (RESEARCH assumption A2 + 02-PATTERNS §1002-1019):
-// Phase 3 will own /uz/products/<slug> (the public product detail page).
-// Until then, the OPS-01 gate asserts the new name is visible on the admin
-// list page (/uz/admin/products), which reads through the SAME cache layer
-// that revalidateProduct() invalidates — Pitfall #3 silent-bug detection
-// works identically on either surface. When Phase 3 ships, migrate the
-// reload assertion below to `${baseURL}/uz/products/${seed.slug}` (one-line
-// change: replace the goto target).
+// PHASE-3 MIGRATION CLOSED 2026-04-30 (plan 03-05): goto target swapped to
+// the public product detail page; product detail shipped in Task 5.3 same
+// wave so the OPS-01 gate validates Phase-3 cache invalidation through the
+// public surface from Wave 4 forward (DEF-2-17-01 closed). The admin-list
+// fallback path is gone — Pitfall #3 silent-bug detection now flows through
+// /[locale]/products/<slug> which reads through the SAME tag-keyed cache
+// layer revalidateProduct() invalidates. The seed product is published
+// in-test (UPDATE product SET status='published' before the edit) so the
+// public detail RSC's status='published' filter (T-03-05-04 mitigation)
+// returns the row.
 //
 // Local-fallback skip: this spec depends on a Vercel preview URL because
 // it asserts CACHE invalidation that doesn't behave the same way on
@@ -70,7 +72,7 @@ test.describe("OPS-01: admin edit → public refresh revalidation gate", () => {
     "OPS-01 gate requires a Vercel preview URL (set BASE_URL); local-fallback skip",
   );
 
-  test("admin edits product name (uz) → admin list reload shows new name within 5s", async ({
+  test("admin edits product name (uz) → public detail reload shows new name within 5s", async ({
     page,
   }) => {
     requireTestDatabaseUrl();
@@ -84,6 +86,19 @@ test.describe("OPS-01: admin edit → public refresh revalidation gate", () => {
       ON CONFLICT (email) DO UPDATE SET active = true, role = 'admin'
     `);
     const seed = await seedProduct({ name: "ops01-original" });
+
+    // Plan 03-05 Task 5.4 — flip seeded product to status='published' so the
+    // public detail RSC's status='published' filter (T-03-05-04) returns the
+    // row. Seed default is 'draft' (Phase-2 baseline); the OPS-01 gate
+    // asserts post-edit cache invalidation against the public URL, which
+    // requires the product to be visible on /uz/products/<slug>.
+    await db.execute(
+      sql`UPDATE product SET status = 'published', published_at = now() WHERE id = ${seed.productId}::uuid`,
+    );
+
+    // Public-detail slug — seedProduct() builds slugs as `${name}-${locale}`
+    // so `ops01-original` + uz → `ops01-original-uz`.
+    const publicSlug = `${seed.name}-uz`;
 
     try {
       // 2. trigger sign-in to write a verification_tokens row. We POST
@@ -172,16 +187,14 @@ test.describe("OPS-01: admin edit → public refresh revalidation gate", () => {
         { timeout: 10_000 },
       );
 
-      // 7. reload the admin list (the SAME RSC that's read-cached behind
-      //    revalidateTag('products-list')). If revalidateProduct() fired,
-      //    the new name is visible within 5 seconds. If it didn't fire, the
-      //    cached list keeps showing 'ops01-original' until the natural ISR
-      //    expiry — well past the 5-second budget.
-      //
-      //    Phase-3 migration note (see file header): replace this goto with
-      //    `${baseURL}/uz/products/${seed.slug}` once the public detail page
-      //    ships. The 5-second budget + reload-loop assertion stays.
-      await page.goto(`${baseURL}/uz/admin/products`);
+      // 7. reload the PUBLIC product detail page (Plan 03-05 Task 5.4
+      //    migration — DEF-2-17-01 closed). The page is wrapped in 'use
+      //    cache' + cacheTag(`product:${id}`); revalidateProduct() fans out
+      //    that exact tag (Phase-2 D-12 helper). If revalidateProduct() fired,
+      //    the new name is visible within 5 seconds via tag invalidation. If
+      //    it didn't fire (Pitfall #3 silent failure), the cached page keeps
+      //    showing 'ops01-original' past the 5-second budget.
+      await page.goto(`${baseURL}/uz/products/${publicSlug}`);
       const start = Date.now();
       let visible = false;
       while (Date.now() - start < 5_000) {
@@ -194,9 +207,10 @@ test.describe("OPS-01: admin edit → public refresh revalidation gate", () => {
       }
       expect(
         visible,
-        "saveProduct's revalidateProduct() did not invalidate the products-list cache within 5s — " +
-          "OPS-01 gate FAILED. Either revalidateProduct() was removed (Pitfall #3) or " +
-          "the cache layer behaved unexpectedly. Diagnose by checking the saveProduct call site.",
+        "saveProduct's revalidateProduct() did not invalidate the product:<id> cache tag within 5s on the public detail page — " +
+          "OPS-01 gate FAILED. Either revalidateProduct() was removed (Pitfall #3), the " +
+          "tag fan-out lost product:<id>, or the page's getProductBySlug helper isn't tagging product:<id>. " +
+          "Diagnose by checking saveProduct + src/lib/product-detail.ts cacheTag set.",
       ).toBe(true);
     } finally {
       // Cleanup in reverse FK order. seedProduct.cleanup() drops product +
