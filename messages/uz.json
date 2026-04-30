@@ -49,6 +49,14 @@
       "noResults": "Tanlangan filtrlarga mos mahsulotlar yo'q",
       "resultsCount": "{count} mahsulot",
       "categories": "Kategoriyalar"
+    },
+    "product": {
+      "applications": "Qo'llanilishi",
+      "officialRep": "Rasmiy vakil",
+      "verified": "Tasdiqlangan",
+      "requestPrice": "Narxni so'rash",
+      "downloads": "Hujjatlar",
+      "download": "Yuklab olish ↓"
     }
   }
 }
