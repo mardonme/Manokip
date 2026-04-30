@@ -34,5 +34,13 @@
       "title": "Admin panel",
       "placeholder": "Phase-2 management tools will populate this dashboard."
     }
+  },
+  "public": {
+    "header": {
+      "catalog": "Catalog",
+      "manufacturers": "Manufacturers",
+      "search": "Search",
+      "searchPlaceholder": "Search products & SKU..."
+    }
   }
 }
