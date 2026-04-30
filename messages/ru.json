@@ -42,6 +42,11 @@
       "search": "Поиск",
       "searchPlaceholder": "Поиск по продуктам и SKU..."
     },
+    "search": {
+      "title": "Результаты поиска: {q}",
+      "noResults": "Ничего не найдено",
+      "fallbackBanner": "Показаны результаты на {locale} — нет совпадений на {current}"
+    },
     "catalog": {
       "filters": "Фильтры",
       "resetAll": "Сбросить все",

@@ -42,6 +42,11 @@
       "search": "Search",
       "searchPlaceholder": "Search products & SKU..."
     },
+    "search": {
+      "title": "Search results: {q}",
+      "noResults": "No results",
+      "fallbackBanner": "Showing results in {locale} — no matches in {current}"
+    },
     "catalog": {
       "filters": "Filters",
       "resetAll": "Reset all",

@@ -1,14 +1,13 @@
 // Plan 03-03 Task 3.2 — Public site header (sketch 003 frosted-glass) RSC.
+// Plan 03-06 Task 6.2 — Disabled placeholder input swapped for the live
+// <SearchBox /> client island. The header layout dimensions (w-72 input
+// width, position in the flex row) are preserved so the swap doesn't
+// visually shift; the placeholder testid is retired and SearchBox uses
+// its own data-testid="search-input" for downstream e2e specs.
 //
 // Sticky frosted-glass header rendered site-wide via the public root layout
 // (src/app/[locale]/layout.tsx). Visual contract from sketch 003:
 //   backdrop-filter: blur(14px), bg-slate-50/80, border-b.
-//
-// IMPORTANT: the search Input is a DISABLED PLACEHOLDER. Plan 06 will swap
-// this block for a live <SearchBox/> client island. The data-testid hook
-// `search-placeholder` is the grep target for that future swap. Waves 2-5
-// ship a header that visually anticipates search so layout doesn't shift
-// when the live SearchBox lands.
 //
 // CategoryNav lives in a sibling left rail (rendered by listing/detail
 // pages, not in the header) — this header carries top-level nav links only:
@@ -17,7 +16,7 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import { LocaleSwitcher } from './locale-switcher';
-import { Input } from '@/components/ui/input';
+import { SearchBox } from './search-box';
 import type { Locale } from '@/lib/metadata';
 
 export interface SiteHeaderProps {
@@ -43,19 +42,7 @@ export async function SiteHeader({ locale }: SiteHeaderProps) {
           <Link href={`/${locale}/manufacturers`}>{t('manufacturers')}</Link>
           <Link href={`/${locale}/search`}>{t('search')}</Link>
         </nav>
-        {/* PLACEHOLDER — Plan 06 swaps this disabled <Input> for the live
-            <SearchBox/> client island. The placeholder anchors layout +
-            reserves space so waves 2–5 ship a header that doesn't visually
-            shift when SearchBox lands in wave 5. data-testid is the
-            grep-replace anchor for Plan 06. */}
-        <Input
-          type="search"
-          disabled
-          placeholder={t('searchPlaceholder')}
-          aria-label={t('searchPlaceholder')}
-          className="w-72"
-          data-testid="search-placeholder"
-        />
+        <SearchBox locale={locale} placeholder={t('searchPlaceholder')} />
         <LocaleSwitcher currentLocale={locale} />
       </div>
     </header>
