@@ -15,6 +15,12 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: path.resolve(__dirname),
   },
+  // Phase 3 Plan 01: enable Next.js 16's stable cacheComponents flag so
+  // public RSC pages may use the `'use cache'` directive + cacheTag pipeline.
+  // Pitfall #1 (RESEARCH §"State of the Art"): the flag became top-level
+  // (not under `experimental`) in Next 16. Admin pages that opt out via
+  // force-dynamic continue to bypass this cache (Pitfall A6).
+  cacheComponents: true,
   experimental: {
     // Next.js 16 defaults: App Router on, React 19 runtime
   },

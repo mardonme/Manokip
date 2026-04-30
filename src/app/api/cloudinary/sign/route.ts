@@ -40,7 +40,11 @@ import { cloudinary } from '@/lib/cloudinary';
 import { auth } from '@/lib/auth';
 import { env } from '@/env';
 
-export const runtime = 'nodejs';
+// Phase 3 Plan 01: removed `export const runtime = 'nodejs'` — incompatible
+// with next.config.ts `cacheComponents: true`. Node remains the default
+// runtime for route handlers in Next 16 (only Edge requires opting in).
+// This handler is implicitly `nodejs` and continues to use cloudinary's
+// Node SDK + crypto for HMAC signing.
 
 const FOLDER_ALLOWLIST = ['products', 'recipes', 'industries', 'manufacturers'] as const;
 type AllowedFolder = (typeof FOLDER_ALLOWLIST)[number];

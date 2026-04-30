@@ -1,6 +1,8 @@
 import { requireAdmin } from '@/lib/auth';
 
-export const runtime = 'nodejs';
+// Phase 3 Plan 01: removed `export const runtime = 'nodejs'` — incompatible
+// with next.config.ts `cacheComponents: true`. Node remains the default
+// runtime for route handlers in Next 16 (only Edge requires opting in).
 
 // Phase 1 manual smoke test: verifies Sentry receives thrown errors from the
 // Node runtime. requireAdmin() gates the throw so unauthenticated callers get

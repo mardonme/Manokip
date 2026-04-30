@@ -22,6 +22,7 @@
 // NOTE: not under `/[locale]/admin/*`, so the admin auth gate in proxy.ts
 // (line 46) does not apply — the invitee is by definition unauthenticated.
 
+import { Suspense } from 'react';
 import { redirect } from 'next/navigation';
 import { setRequestLocale } from 'next-intl/server';
 import Link from 'next/link';
@@ -33,13 +34,18 @@ interface Props {
   searchParams: Promise<{ token?: string }>;
 }
 
-export default async function AcceptInvitePage({
-  params,
-  searchParams,
-}: Props) {
-  const { locale } = await params;
-  setRequestLocale(locale);
+// Phase 3 Plan 01 / Pitfall A6: cacheComponents requires runtime data
+// fetches (here, the searchParams + acceptInvite DB call) to live inside a
+// <Suspense> boundary so the static page shell can prerender while the
+// dynamic invite-consumption streams in.
 
+async function InviteAcceptanceFlow({
+  locale,
+  searchParams,
+}: {
+  locale: string;
+  searchParams: Promise<{ token?: string }>;
+}) {
   const { token } = await searchParams;
 
   // Branch 1: link arrived without a token at all (someone hand-typed the
@@ -88,4 +94,24 @@ export default async function AcceptInvitePage({
   // sign-in is one click away. redirect() throws a special Next.js
   // navigation signal; any code after it is unreachable.
   redirect(`/${locale}/login?email=${encodeURIComponent(result.email)}`);
+}
+
+export default async function AcceptInvitePage({
+  params,
+  searchParams,
+}: Props) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
+  return (
+    <Suspense
+      fallback={
+        <main className="mx-auto max-w-md px-6 py-16 text-center">
+          <p className="text-muted-foreground">Processing your invitation…</p>
+        </main>
+      }
+    >
+      <InviteAcceptanceFlow locale={locale} searchParams={searchParams} />
+    </Suspense>
+  );
 }
