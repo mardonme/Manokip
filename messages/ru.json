@@ -57,6 +57,15 @@
       "requestPrice": "Запросить цену",
       "downloads": "Документация",
       "download": "Скачать ↓"
+    },
+    "manufacturer": {
+      "all": "Производители",
+      "verified": "Проверено",
+      "authorized": "Авторизованный",
+      "productCount": "{count} товаров",
+      "products": "Продукты ({count})",
+      "noProducts": "Нет опубликованных продуктов",
+      "noResults": "Производители не найдены"
     }
   }
 }

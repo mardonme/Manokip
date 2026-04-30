@@ -57,6 +57,15 @@
       "requestPrice": "Request a quote",
       "downloads": "Documentation",
       "download": "Download ↓"
+    },
+    "manufacturer": {
+      "all": "Manufacturers",
+      "verified": "Verified",
+      "authorized": "Authorized",
+      "productCount": "{count} products",
+      "products": "Products ({count})",
+      "noProducts": "No published products",
+      "noResults": "No manufacturers found"
     }
   }
 }
