@@ -40,7 +40,14 @@ export default async function EditManufacturerPage({
   // Reshape the 3 sibling rows into the ManufacturerInput.translations
   // object. Falls back to empty when a locale row is missing — the editor
   // will surface the locale tab as untouched.
-  const emptyLocale = { name: "", slug: "", description: "" };
+  // Plan 03-07 (D-11): include relationshipNote per-locale so the form's
+  // Textarea defaults to the persisted value.
+  const emptyLocale = {
+    name: "",
+    slug: "",
+    description: "",
+    relationshipNote: "",
+  };
   const translations = LOCALES.reduce(
     (acc, l) => {
       const t = translationRows.find((r) => r.locale === l);
@@ -49,6 +56,7 @@ export default async function EditManufacturerPage({
             name: t.name,
             slug: t.slug,
             description: t.description ?? "",
+            relationshipNote: t.relationshipNote ?? "",
           }
         : { ...emptyLocale };
       return acc;
@@ -59,6 +67,7 @@ export default async function EditManufacturerPage({
   const initial: ManufacturerInput = {
     id: row.id,
     logoPublicId: row.logoPublicId,
+    isOfficialRep: row.isOfficialRep,
     translations,
   };
 

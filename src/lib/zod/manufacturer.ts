@@ -31,6 +31,13 @@ const localeFields = z.object({
   name: z.string().min(1).max(200),
   slug: z.string().min(1).max(200).regex(SLUG_RE),
   description: z.string().optional().nullable(),
+  // Plan 03-07 (D-11): per-locale "relationship note" rendered next to the
+  // Verified pill on the public manufacturer detail page (e.g. ru:
+  // "Официальный представитель WIKA в Узбекистане с 2019 г."). Nullable —
+  // manufacturers without a written relationship statement render nothing.
+  // Cap at 500 chars to keep SEO copy tight (well below the column's TEXT
+  // limit; React auto-escapes the rendered output, T-03-07-04).
+  relationshipNote: z.string().max(500).optional().nullable(),
 });
 
 export type ManufacturerLocaleFields = z.infer<typeof localeFields>;
@@ -44,6 +51,13 @@ export const manufacturerInsertSchema = z.object({
    * never store the full URL or Cloudinary asset_id).
    */
   logoPublicId: z.string().min(1).max(500).nullable().optional(),
+  /**
+   * Plan 03-07 (D-11): drives the "Authorized representative" Verified pill
+   * on both the product detail page (D-01 sketch 003) and the manufacturer
+   * landing page (D-10). Defaults to false — existing manufacturers stay
+   * unflagged unless an admin explicitly toggles them.
+   */
+  isOfficialRep: z.boolean().default(false),
   /** Per-locale translations — all three locales required. */
   translations: z.object({
     uz: localeFields,
