@@ -12,6 +12,7 @@
 // setRequestLocale(locale) is mandatory before any getTranslations() call to
 // avoid forced dynamic rendering (Pitfall 4).
 
+import { Suspense } from 'react';
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { LoginForm, type LoginFormLabels } from './login-form';
 
@@ -27,9 +28,27 @@ function normalizeError(raw: string | undefined): string | undefined {
   return undefined;
 }
 
+// Phase 3 Plan 01 / Pitfall A6: cacheComponents requires the searchParams
+// access (`?error=...`) to live inside a <Suspense> boundary so the static
+// shell prerenders cleanly. The form itself is a client island already.
+async function LoginFormShell({
+  locale,
+  searchParams,
+  labels,
+}: {
+  locale: string;
+  searchParams: Promise<{ error?: string }>;
+  labels: LoginFormLabels;
+}) {
+  const sp = await searchParams;
+  const initialError = normalizeError(sp.error);
+  return (
+    <LoginForm locale={locale} labels={labels} initialError={initialError} />
+  );
+}
+
 export default async function LoginPage({ params, searchParams }: Props) {
   const { locale } = await params;
-  const sp = await searchParams;
   setRequestLocale(locale);
   const t = await getTranslations({ locale, namespace: 'auth' });
 
@@ -44,12 +63,16 @@ export default async function LoginPage({ params, searchParams }: Props) {
     accessDenied: t('accessDenied'),
   };
 
-  const initialError = normalizeError(sp.error);
-
   return (
     <main className="mx-auto max-w-md px-6 py-16">
       <h1 className="mb-2 text-2xl font-semibold">{labels.title}</h1>
-      <LoginForm locale={locale} labels={labels} initialError={initialError} />
+      <Suspense fallback={null}>
+        <LoginFormShell
+          locale={locale}
+          searchParams={searchParams}
+          labels={labels}
+        />
+      </Suspense>
     </main>
   );
 }

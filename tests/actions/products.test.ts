@@ -875,3 +875,20 @@ describe("products actions (live Neon)", () => {
     expect(updRows.rows.length).toBe(0);
   }, 30_000);
 });
+
+// Plan 03-01 Task 1.3 — SRCH-05 RED stub appended for Plan 02 Task 2.3
+// (tsvector rebuild on saveProduct). Plan 02 will flip describe.skip →
+// describe and add live-Neon assertions that saveProduct populates
+// product_search rows for all 3 locales in the same transaction.
+describe.skip('SRCH-05: saveProduct rebuilds product_search tsvector rows (closed by plan 02)', () => {
+  it.skip('inserts 3 product_search rows (uz/ru/en) per saved product', () => {
+    // TODO Plan 02 Task 2.3: after saveProduct({ ... translations: {uz, ru, en} }),
+    // expect SELECT count(*) FROM product_search WHERE product_id=<id>
+    // returns 3, one per locale.
+  });
+  it.skip('rebuilds tsvectors when translations change', () => {
+    // TODO Plan 02 Task 2.3: after saveProduct() with renamed translation,
+    // expect product_search.search_tsv contains the new lexemes (assert via
+    // ts_lexize / @@ to_tsquery).
+  });
+});
