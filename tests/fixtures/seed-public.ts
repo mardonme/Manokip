@@ -52,21 +52,30 @@ export interface PublicFixtureIds {
 // using a stable namespace prefix so e2e tests can hardcode IDs across runs.
 // Zero-padded sequence numbers so a debugger query (`SELECT id FROM ...`)
 // shows the row's role at a glance.
+//
+// Plan 03-04 Rule 1 fix: original Plan-01 IDs used non-hex letters (m/p/s)
+// in the suffix, which Postgres uuid type rejects with code 22P02. Replaced
+// with hex-only ranges:
+//   - 0x0c00..0x0cff for categories
+//   - 0x0d00..0x0dff for manufacturers (d = dispatcher)
+//   - 0x0e00..0x0eff for products (e = entity)
+//   - 0x0fa0..0x0fff for spec_field rows (f = field)
+//   - 0xea00..0xeaff for enum_option rows
 const ID = {
   categoryManometers: '00000000-0000-4000-8000-000000000c01',
   categoryTransmitters: '00000000-0000-4000-8000-000000000c02',
-  manufacturerWika: '00000000-0000-4000-8000-00000000m001',
-  manufacturerBd: '00000000-0000-4000-8000-00000000m002',
-  manufacturerMetran: '00000000-0000-4000-8000-00000000m003',
-  productM100: '00000000-0000-4000-8000-00000000p001',
-  productM200: '00000000-0000-4000-8000-00000000p002',
-  productM300: '00000000-0000-4000-8000-00000000p003',
-  productT100: '00000000-0000-4000-8000-00000000p004',
-  productT200: '00000000-0000-4000-8000-00000000p005',
-  productT300: '00000000-0000-4000-8000-00000000p006',
-  specPressureMax: '00000000-0000-4000-8000-00000000s001',
-  specMaterial: '00000000-0000-4000-8000-00000000s002',
-  specCertified: '00000000-0000-4000-8000-00000000s003',
+  manufacturerWika: '00000000-0000-4000-8000-000000000d01',
+  manufacturerBd: '00000000-0000-4000-8000-000000000d02',
+  manufacturerMetran: '00000000-0000-4000-8000-000000000d03',
+  productM100: '00000000-0000-4000-8000-000000000e01',
+  productM200: '00000000-0000-4000-8000-000000000e02',
+  productM300: '00000000-0000-4000-8000-000000000e03',
+  productT100: '00000000-0000-4000-8000-000000000e04',
+  productT200: '00000000-0000-4000-8000-000000000e05',
+  productT300: '00000000-0000-4000-8000-000000000e06',
+  specPressureMax: '00000000-0000-4000-8000-000000000fa1',
+  specMaterial: '00000000-0000-4000-8000-000000000fa2',
+  specCertified: '00000000-0000-4000-8000-000000000fa3',
 } as const;
 
 // Per-product translations: name + slug + short_desc + long_desc per locale.
@@ -355,6 +364,48 @@ const MANUFACTURER_TRANSLATIONS: Record<
 export async function seedPublicFixture(): Promise<PublicFixtureIds> {
   const db = await getTestDb();
 
+  // Plan 03-04 Rule 1 fix: defensive pre-cleanup so re-runs after a partial
+  // seed/teardown failure don't blow up on PK conflicts. Order respects FK
+  // dependencies (children before parents).
+  await db.execute(
+    sql`DELETE FROM product_search WHERE product_id IN (
+        ${ID.productM100}::uuid, ${ID.productM200}::uuid, ${ID.productM300}::uuid,
+        ${ID.productT100}::uuid, ${ID.productT200}::uuid, ${ID.productT300}::uuid)`,
+  );
+  await db.execute(
+    sql`DELETE FROM product_spec_value_translations WHERE value_id IN (
+        SELECT id FROM product_spec_values WHERE product_id IN (
+        ${ID.productM100}::uuid, ${ID.productM200}::uuid, ${ID.productM300}::uuid,
+        ${ID.productT100}::uuid, ${ID.productT200}::uuid, ${ID.productT300}::uuid))`,
+  );
+  await db.execute(
+    sql`DELETE FROM product_spec_values WHERE product_id IN (
+        ${ID.productM100}::uuid, ${ID.productM200}::uuid, ${ID.productM300}::uuid,
+        ${ID.productT100}::uuid, ${ID.productT200}::uuid, ${ID.productT300}::uuid)`,
+  );
+  await db.execute(
+    sql`DELETE FROM product_translations WHERE product_id IN (
+        ${ID.productM100}::uuid, ${ID.productM200}::uuid, ${ID.productM300}::uuid,
+        ${ID.productT100}::uuid, ${ID.productT200}::uuid, ${ID.productT300}::uuid)`,
+  );
+  await db.execute(
+    sql`DELETE FROM product WHERE id IN (
+        ${ID.productM100}::uuid, ${ID.productM200}::uuid, ${ID.productM300}::uuid,
+        ${ID.productT100}::uuid, ${ID.productT200}::uuid, ${ID.productT300}::uuid)`,
+  );
+  await db.execute(
+    sql`DELETE FROM spec_field WHERE id IN (
+        ${ID.specPressureMax}::uuid, ${ID.specMaterial}::uuid, ${ID.specCertified}::uuid)`,
+  );
+  await db.execute(
+    sql`DELETE FROM manufacturer WHERE id IN (
+        ${ID.manufacturerWika}::uuid, ${ID.manufacturerBd}::uuid, ${ID.manufacturerMetran}::uuid)`,
+  );
+  await db.execute(
+    sql`DELETE FROM category WHERE id IN (
+        ${ID.categoryManometers}::uuid, ${ID.categoryTransmitters}::uuid)`,
+  );
+
   // 1. Categories (2 root categories — manometers, transmitters).
   await db.execute(
     sql`INSERT INTO category (id, parent_id, sort_order) VALUES
@@ -458,9 +509,9 @@ export async function seedPublicFixture(): Promise<PublicFixtureIds> {
 
   // 7. spec_field_enum_option rows for the `material` enum field.
   const enumOptionIds = {
-    steel: '00000000-0000-4000-8000-00000000e001',
-    brass: '00000000-0000-4000-8000-00000000e002',
-    inox: '00000000-0000-4000-8000-00000000e003',
+    steel: '00000000-0000-4000-8000-00000000ea01',
+    brass: '00000000-0000-4000-8000-00000000ea02',
+    inox: '00000000-0000-4000-8000-00000000ea03',
   };
   await db.execute(
     sql`INSERT INTO spec_field_enum_option (id, spec_field_id, key, sort_order) VALUES
@@ -496,26 +547,31 @@ export async function seedPublicFixture(): Promise<PublicFixtureIds> {
   //    `manometr/seed/<sku>/...`. Pure fixture data — no actual Cloudinary
   //    asset is required for unit tests; e2e tests that hit Cloudinary
   //    use a real upload sequence (out of scope here).
+  // Plan 03-04 Rule 1 fix: Drizzle's sql`` interpolates a JS array as a
+  // tuple ($1, $2), not as a Postgres ARRAY literal. Use ARRAY[...] explicitly
+  // (or a literal '{...}' string cast) so text[] columns receive the correct
+  // shape. We build the ARRAY expression with sql.join + sql.raw so each
+  // element is still parameterized.
   for (const p of MANOMETER_PRODUCTS) {
-    const imgs = [
-      `manometr/seed/${p.sku}/hero`,
-      `manometr/seed/${p.sku}/side`,
-    ];
-    const datasheets = [`manometr/seed/${p.sku}/datasheet`];
+    const heroId = `manometr/seed/${p.sku}/hero`;
+    const sideId = `manometr/seed/${p.sku}/side`;
+    const dsId = `manometr/seed/${p.sku}/datasheet`;
     await db.execute(
       sql`INSERT INTO product (id, category_id, manufacturer_id, sku, status, published_at, image_public_ids, datasheet_public_ids)
-          VALUES (${p.id}::uuid, ${ID.categoryManometers}::uuid, ${p.manufacturerId}::uuid, ${p.sku}, 'published', now(), ${imgs}, ${datasheets})`,
+          VALUES (${p.id}::uuid, ${ID.categoryManometers}::uuid, ${p.manufacturerId}::uuid, ${p.sku}, 'published', now(),
+                  ARRAY[${heroId}, ${sideId}]::text[],
+                  ARRAY[${dsId}]::text[])`,
     );
   }
   for (const p of TRANSMITTER_PRODUCTS) {
-    const imgs = [
-      `manometr/seed/${p.sku}/hero`,
-      `manometr/seed/${p.sku}/side`,
-    ];
-    const datasheets = [`manometr/seed/${p.sku}/datasheet`];
+    const heroId = `manometr/seed/${p.sku}/hero`;
+    const sideId = `manometr/seed/${p.sku}/side`;
+    const dsId = `manometr/seed/${p.sku}/datasheet`;
     await db.execute(
       sql`INSERT INTO product (id, category_id, manufacturer_id, sku, status, published_at, image_public_ids, datasheet_public_ids)
-          VALUES (${p.id}::uuid, ${ID.categoryTransmitters}::uuid, ${p.manufacturerId}::uuid, ${p.sku}, 'published', now(), ${imgs}, ${datasheets})`,
+          VALUES (${p.id}::uuid, ${ID.categoryTransmitters}::uuid, ${p.manufacturerId}::uuid, ${p.sku}, 'published', now(),
+                  ARRAY[${heroId}, ${sideId}]::text[],
+                  ARRAY[${dsId}]::text[])`,
     );
   }
 

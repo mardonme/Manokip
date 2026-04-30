@@ -41,6 +41,14 @@
       "manufacturers": "Ishlab chiqaruvchilar",
       "search": "Qidiruv",
       "searchPlaceholder": "Mahsulotlar va SKU bo'yicha qidirish..."
+    },
+    "catalog": {
+      "filters": "Filtrlar",
+      "resetAll": "Hammasini tashlash",
+      "showMore": "+ yana {n}",
+      "noResults": "Tanlangan filtrlarga mos mahsulotlar yo'q",
+      "resultsCount": "{count} mahsulot",
+      "categories": "Kategoriyalar"
     }
   }
 }

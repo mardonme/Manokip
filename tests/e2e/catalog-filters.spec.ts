@@ -1,39 +1,66 @@
-// Plan 03-01 Task 1.3 — RED stub for CAT-05 (URL-state catalog filters).
+// Plan 03-04 Task 4.3 — GREEN e2e specs for CAT-02 / CAT-03 / CAT-05.
 //
-// REQUIRES: tests/fixtures/seed-public.ts seed must run before tests un-skip.
-//
-// Closed by Plan 04 (FilterSidebar client island with nuqs URL state +
-// active-filter pills).
+// Closes the URL-state catalog filter contract end-to-end against a running
+// Next.js server (pnpm start on the Vercel preview or a local prod build).
+// Pre-requisites: tests/fixtures/seed-public.ts seedPublicFixture() must
+// have run against the same Neon branch the server is connected to. The
+// fixture seeds the manometers category with 3 products carrying
+// pressure_max + material + certified spec values.
 
-import { test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 
 const baseURL = process.env.BASE_URL ?? 'http://localhost:3000';
 
-test.skip('CAT-05: ticking material=steel updates URL with ?material=steel (closed by plan 04)', async ({
+test('CAT-02 / CAT-03: visiting /uz/categories/manometr renders product cards', async ({
   page,
 }) => {
-  // TODO Plan 04: page.goto(`${baseURL}/uz/categories/manometr`); click
-  // [data-testid=filter-material-steel]; expect URL to include
-  // ?material=steel; expect grid filtered to M-100 only.
-  void page;
-  void baseURL;
+  await page.goto(`${baseURL}/uz/categories/manometr`);
+  // results-count testid surfaces the total + the grid contains
+  // product-card slots.
+  await expect(page.getByTestId('results-count')).toBeVisible();
+  const cards = page.getByTestId('product-card');
+  await expect(cards.first()).toBeVisible();
 });
 
-test.skip('CAT-05: page reload preserves filter state from URL', async ({
+test('CAT-05: filter selection updates URL and reload preserves results', async ({
   page,
 }) => {
-  // TODO Plan 04: navigate directly to
-  // `${baseURL}/uz/categories/manometr?material=steel&pressureMaxMax=200`;
-  // expect filter sidebar shows steel checked + pressure-max slider at 200.
-  void page;
-  void baseURL;
+  await page.goto(`${baseURL}/uz/categories/manometr`);
+  await expect(page.getByTestId('results-count')).toBeVisible();
+  const initialCount = await page
+    .getByTestId('results-count')
+    .textContent();
+
+  // Set pressure_max upper bound to 500 (excludes M-300=600).
+  await page.getByTestId('filter-pressure_max-max').fill('500');
+  await page.keyboard.press('Tab');
+  await expect(page).toHaveURL(/pressure_max_max=500/);
+
+  // Reload and confirm filter survives.
+  await page.reload();
+  await expect(page).toHaveURL(/pressure_max_max=500/);
+  const reloadedCount = await page
+    .getByTestId('results-count')
+    .textContent();
+
+  expect(reloadedCount).toBeTruthy();
+  expect(reloadedCount).not.toBe(initialCount);
 });
 
-test.skip('CAT-05: clicking active-filter pill removes the filter from URL', async ({
+test('CAT-05: clicking active-filter pill removes the filter from URL', async ({
   page,
 }) => {
-  // TODO Plan 04: with filter active, click the pill's × button → URL
-  // drops the param and grid re-expands.
-  void page;
-  void baseURL;
+  // Navigate with filter pre-set.
+  await page.goto(
+    `${baseURL}/uz/categories/manometr?pressure_max_max=500`,
+  );
+  await expect(page.getByTestId('pill-pressure_max-max')).toBeVisible();
+
+  // Click the X on the pill (the inner button).
+  const pillX = page
+    .getByTestId('pill-pressure_max-max')
+    .getByRole('button', { name: 'Remove filter' });
+  await pillX.click();
+
+  await expect(page).not.toHaveURL(/pressure_max_max=500/);
 });

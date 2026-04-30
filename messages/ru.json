@@ -41,6 +41,14 @@
       "manufacturers": "Производители",
       "search": "Поиск",
       "searchPlaceholder": "Поиск по продуктам и SKU..."
+    },
+    "catalog": {
+      "filters": "Фильтры",
+      "resetAll": "Сбросить все",
+      "showMore": "+ ещё {n}",
+      "noResults": "Нет товаров по выбранным фильтрам — попробуйте сбросить какой-нибудь фильтр",
+      "resultsCount": "{count} товаров",
+      "categories": "Категории"
     }
   }
 }
