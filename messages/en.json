@@ -49,6 +49,9 @@
       "noResults": "No products match the selected filters — try clearing one",
       "resultsCount": "{count} products",
       "categories": "Categories"
+    },
+    "product": {
+      "applications": "Applications"
     }
   }
 }

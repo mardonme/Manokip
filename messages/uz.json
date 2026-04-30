@@ -49,6 +49,9 @@
       "noResults": "Tanlangan filtrlarga mos mahsulotlar yo'q",
       "resultsCount": "{count} mahsulot",
       "categories": "Kategoriyalar"
+    },
+    "product": {
+      "applications": "Qo'llanilishi"
     }
   }
 }
