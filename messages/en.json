@@ -51,7 +51,12 @@
       "categories": "Categories"
     },
     "product": {
-      "applications": "Applications"
+      "applications": "Applications",
+      "officialRep": "Authorized representative",
+      "verified": "Verified",
+      "requestPrice": "Request a quote",
+      "downloads": "Documentation",
+      "download": "Download ↓"
     }
   }
 }
