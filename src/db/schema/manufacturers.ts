@@ -5,6 +5,7 @@ import {
   pgTable,
   uuid,
   text,
+  boolean,
   timestamp,
   primaryKey,
   uniqueIndex,
@@ -19,6 +20,11 @@ export const manufacturers = pgTable('manufacturer', {
   websiteUrl: text('website_url'),
   createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
+  // Phase 3 D-11: drives the "Authorized representative" badge on the
+  // manufacturer landing page (D-10) and on the product detail page
+  // (D-01 sketch 003 trust strip). Additive, default false — existing
+  // rows are unaffected.
+  isOfficialRep: boolean('is_official_rep').notNull().default(false),
 });
 
 export const manufacturerTranslations = pgTable(
@@ -31,6 +37,11 @@ export const manufacturerTranslations = pgTable(
     name: text().notNull(),
     slug: text().notNull(),
     description: text(),
+    // Phase 3 D-11: per-locale "relationship note" rendered next to the
+    // official-rep badge (e.g. ru: "Официальный представитель WIKA в
+    // Узбекистане с 2019 г."). Nullable — manufacturers without a written
+    // relationship statement render nothing.
+    relationshipNote: text('relationship_note'),
   },
   (t) => [
     primaryKey({ columns: [t.manufacturerId, t.locale] }),

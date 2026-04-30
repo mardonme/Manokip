@@ -876,19 +876,323 @@ describe("products actions (live Neon)", () => {
   }, 30_000);
 });
 
-// Plan 03-01 Task 1.3 — SRCH-05 RED stub appended for Plan 02 Task 2.3
-// (tsvector rebuild on saveProduct). Plan 02 will flip describe.skip →
-// describe and add live-Neon assertions that saveProduct populates
-// product_search rows for all 3 locales in the same transaction.
-describe.skip('SRCH-05: saveProduct rebuilds product_search tsvector rows (closed by plan 02)', () => {
-  it.skip('inserts 3 product_search rows (uz/ru/en) per saved product', () => {
-    // TODO Plan 02 Task 2.3: after saveProduct({ ... translations: {uz, ru, en} }),
-    // expect SELECT count(*) FROM product_search WHERE product_id=<id>
-    // returns 3, one per locale.
+// Plan 03-02 Task 2.3 — SRCH-05 + Gap 1 GREEN assertions. Closes the
+// Phase-2 silent gaps:
+//   - product_search rows are now rebuilt for all 3 locales in the same
+//     atomic transaction as saveProduct + duplicateProduct (SRCH-05).
+//   - imagePublicIds + datasheetPublicIds are persisted on every save and
+//     cloned by duplicateProduct (Gap 1).
+describe('SRCH-05 + Gap 1 — Phase 3 saveProduct + duplicateProduct extensions (live Neon)', () => {
+  const stamp = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+  const cleanups: Array<() => Promise<void>> = [];
+
+  function buildInput(overrides: {
+    id?: string;
+    categoryId: string;
+    status?: 'draft' | 'published';
+    namePrefix?: string;
+    slugPrefix?: string;
+    imagePublicIds?: string[];
+    datasheetPublicIds?: string[];
+  }): ProductInput {
+    const namePrefix = overrides.namePrefix ?? `p3-${stamp}`;
+    const slugPrefix = overrides.slugPrefix ?? namePrefix;
+    return {
+      ...(overrides.id ? { id: overrides.id } : {}),
+      categoryId: overrides.categoryId,
+      manufacturerId: null,
+      status: overrides.status ?? 'draft',
+      translations: {
+        uz: {
+          name: `${namePrefix} uz`,
+          slug: `${slugPrefix}-uz`,
+          shortDesc: null,
+          longDesc: null,
+        },
+        ru: {
+          name: `${namePrefix} ru`,
+          slug: `${slugPrefix}-ru`,
+          shortDesc: null,
+          longDesc: null,
+        },
+        en: {
+          name: `${namePrefix} en`,
+          slug: `${slugPrefix}-en`,
+          shortDesc: null,
+          longDesc: null,
+        },
+      },
+      specValues: [],
+      imagePublicIds: overrides.imagePublicIds ?? [],
+      datasheetPublicIds: overrides.datasheetPublicIds ?? [],
+      mtFlags: {},
+    };
+  }
+
+  afterEach(async () => {
+    for (let i = cleanups.length - 1; i >= 0; i--) {
+      await cleanups[i]!();
+    }
+    cleanups.length = 0;
   });
-  it.skip('rebuilds tsvectors when translations change', () => {
-    // TODO Plan 02 Task 2.3: after saveProduct() with renamed translation,
-    // expect product_search.search_tsv contains the new lexemes (assert via
-    // ts_lexize / @@ to_tsquery).
-  });
+
+  it('SRCH-05: saveProduct (create) rebuilds product_search rows for all 3 locales', async () => {
+    requireTestDatabaseUrl();
+    const db = await getTestDb();
+
+    const seed = await seedProduct({ name: `srch-c-${stamp}`, locales: {} });
+    cleanups.push(seed.cleanup);
+
+    const input = buildInput({
+      categoryId: seed.categoryId,
+      namePrefix: `manometr-${stamp}`,
+    });
+    const result = await saveProduct(input);
+    expect(result.ok).toBe(true);
+    if (!result.ok) throw new Error('unreachable');
+    const id = result.data.id as string;
+
+    cleanups.push(async () => {
+      await db.execute(sql`DELETE FROM audit_log WHERE entity_id = ${id}`);
+      await db.execute(
+        sql`DELETE FROM product_search WHERE product_id = ${id}::uuid`,
+      );
+      await db.execute(
+        sql`DELETE FROM product_translation_field_flags WHERE product_id = ${id}::uuid`,
+      );
+      await db.execute(
+        sql`DELETE FROM product_spec_values WHERE product_id = ${id}::uuid`,
+      );
+      await db.execute(
+        sql`DELETE FROM product_translations WHERE product_id = ${id}::uuid`,
+      );
+      await db.execute(sql`DELETE FROM product WHERE id = ${id}::uuid`);
+    });
+
+    // 3 product_search rows — one per locale — with non-null search_tsv.
+    const psRows = await db.execute(sql`
+      SELECT locale, search_tsv::text AS tsv_text
+        FROM product_search WHERE product_id = ${id}::uuid
+       ORDER BY locale
+    `);
+    expect(psRows.rows.length).toBe(3);
+    const psLocales = (psRows.rows as Array<{ locale: string }>).map(
+      (r) => r.locale,
+    );
+    expect(psLocales).toEqual(['en', 'ru', 'uz']);
+    for (const r of psRows.rows as Array<{ tsv_text: string | null }>) {
+      // Each row's tsvector should be non-empty (the product's name lives
+      // in weight A).
+      expect(r.tsv_text).not.toBeNull();
+      expect(r.tsv_text!.length).toBeGreaterThan(0);
+    }
+
+    // Concrete FTS check: searching for the namePrefix lexeme matches the
+    // uz row (uses the 'simple' regconfig — no stemming, exact lexeme).
+    const ftsRows = await db.execute(sql`
+      SELECT product_id FROM product_search
+       WHERE product_id = ${id}::uuid
+         AND locale = 'uz'
+         AND search_tsv @@ plainto_tsquery('simple', ${`manometr-${stamp}`})
+    `);
+    expect(ftsRows.rows.length).toBe(1);
+  }, 30_000);
+
+  it('SRCH-05: re-saving a product UPDATES product_search rows (still 3, no duplicates)', async () => {
+    requireTestDatabaseUrl();
+    const db = await getTestDb();
+
+    const seed = await seedProduct({
+      name: `srch-u-${stamp}`,
+      locales: { uz: true, ru: true, en: true },
+    });
+    cleanups.push(async () => {
+      await db.execute(
+        sql`DELETE FROM audit_log WHERE entity_id = ${seed.productId}`,
+      );
+      await db.execute(
+        sql`DELETE FROM product_search WHERE product_id = ${seed.productId}::uuid`,
+      );
+      await seed.cleanup();
+    });
+
+    // First save populates product_search (3 rows).
+    const r1 = await saveProduct(
+      buildInput({
+        id: seed.productId,
+        categoryId: seed.categoryId,
+        namePrefix: `srch-u-${stamp}-v1`,
+      }),
+    );
+    expect(r1.ok).toBe(true);
+
+    let count = await db.execute(
+      sql`SELECT COUNT(*)::int AS n FROM product_search WHERE product_id = ${seed.productId}::uuid`,
+    );
+    expect((count.rows[0] as { n: number }).n).toBe(3);
+
+    // Second save with renamed translations. ON CONFLICT (product_id,
+    // locale) DO UPDATE keeps the count at 3 and refreshes the tsvector.
+    const r2 = await saveProduct(
+      buildInput({
+        id: seed.productId,
+        categoryId: seed.categoryId,
+        namePrefix: `srch-u-${stamp}-v2-renamed`,
+      }),
+    );
+    expect(r2.ok).toBe(true);
+
+    count = await db.execute(
+      sql`SELECT COUNT(*)::int AS n FROM product_search WHERE product_id = ${seed.productId}::uuid`,
+    );
+    expect((count.rows[0] as { n: number }).n).toBe(3);
+
+    // The rebuilt tsvector contains the new lexeme (v2-renamed).
+    const v2 = await db.execute(sql`
+      SELECT product_id FROM product_search
+       WHERE product_id = ${seed.productId}::uuid
+         AND locale = 'uz'
+         AND search_tsv @@ plainto_tsquery('simple', ${`srch-u-${stamp}-v2-renamed`})
+    `);
+    expect(v2.rows.length).toBe(1);
+  }, 30_000);
+
+  it('Gap 1: saveProduct persists imagePublicIds + datasheetPublicIds', async () => {
+    requireTestDatabaseUrl();
+    const db = await getTestDb();
+
+    const seed = await seedProduct({ name: `media-${stamp}`, locales: {} });
+    cleanups.push(seed.cleanup);
+
+    const images = [
+      `manometr/seed/${stamp}/hero`,
+      `manometr/seed/${stamp}/side`,
+    ];
+    const datasheets = [`manometr/seed/${stamp}/datasheet`];
+
+    const result = await saveProduct(
+      buildInput({
+        categoryId: seed.categoryId,
+        namePrefix: `media-${stamp}`,
+        imagePublicIds: images,
+        datasheetPublicIds: datasheets,
+      }),
+    );
+    expect(result.ok).toBe(true);
+    if (!result.ok) throw new Error('unreachable');
+    const id = result.data.id as string;
+
+    cleanups.push(async () => {
+      await db.execute(sql`DELETE FROM audit_log WHERE entity_id = ${id}`);
+      await db.execute(
+        sql`DELETE FROM product_search WHERE product_id = ${id}::uuid`,
+      );
+      await db.execute(
+        sql`DELETE FROM product_translation_field_flags WHERE product_id = ${id}::uuid`,
+      );
+      await db.execute(
+        sql`DELETE FROM product_spec_values WHERE product_id = ${id}::uuid`,
+      );
+      await db.execute(
+        sql`DELETE FROM product_translations WHERE product_id = ${id}::uuid`,
+      );
+      await db.execute(sql`DELETE FROM product WHERE id = ${id}::uuid`);
+    });
+
+    const rows = await db.execute(sql`
+      SELECT image_public_ids, datasheet_public_ids
+        FROM product WHERE id = ${id}::uuid
+    `);
+    expect(rows.rows.length).toBe(1);
+    const row = rows.rows[0] as {
+      image_public_ids: string[];
+      datasheet_public_ids: string[];
+    };
+    expect(row.image_public_ids).toEqual(images);
+    expect(row.datasheet_public_ids).toEqual(datasheets);
+  }, 25_000);
+
+  it('Gap 1: duplicateProduct clones imagePublicIds + datasheetPublicIds', async () => {
+    requireTestDatabaseUrl();
+    const db = await getTestDb();
+
+    const seed = await seedProduct({
+      name: `dup-media-${stamp}`,
+      locales: { uz: true, ru: true, en: true },
+    });
+    cleanups.push(async () => {
+      await db.execute(
+        sql`DELETE FROM audit_log WHERE entity_id = ${seed.productId}`,
+      );
+      await db.execute(
+        sql`DELETE FROM product_search WHERE product_id = ${seed.productId}::uuid`,
+      );
+      await seed.cleanup();
+    });
+
+    const images = [
+      `manometr/seed/${stamp}/dup-hero`,
+      `manometr/seed/${stamp}/dup-side`,
+    ];
+    const datasheets = [`manometr/seed/${stamp}/dup-datasheet`];
+
+    // Populate the source's media arrays via saveProduct (exercises the
+    // production code path — ensures the source row really has the values
+    // before duplicateProduct reads them).
+    const upd = await saveProduct(
+      buildInput({
+        id: seed.productId,
+        categoryId: seed.categoryId,
+        namePrefix: `dup-media-${stamp}`,
+        imagePublicIds: images,
+        datasheetPublicIds: datasheets,
+      }),
+    );
+    expect(upd.ok).toBe(true);
+
+    const dup = await duplicateProduct({ sourceId: seed.productId });
+    expect(dup.ok).toBe(true);
+    if (!dup.ok) throw new Error('unreachable');
+    const cloneId = dup.data.id as string;
+
+    cleanups.push(async () => {
+      await db.execute(sql`DELETE FROM audit_log WHERE entity_id = ${cloneId}`);
+      await db.execute(
+        sql`DELETE FROM product_search WHERE product_id = ${cloneId}::uuid`,
+      );
+      await db.execute(
+        sql`DELETE FROM product_translation_field_flags WHERE product_id = ${cloneId}::uuid`,
+      );
+      await db.execute(
+        sql`DELETE FROM product_spec_value_translations
+             WHERE value_id IN (SELECT id FROM product_spec_values WHERE product_id = ${cloneId}::uuid)`,
+      );
+      await db.execute(
+        sql`DELETE FROM product_spec_values WHERE product_id = ${cloneId}::uuid`,
+      );
+      await db.execute(
+        sql`DELETE FROM product_translations WHERE product_id = ${cloneId}::uuid`,
+      );
+      await db.execute(sql`DELETE FROM product WHERE id = ${cloneId}::uuid`);
+    });
+
+    const cloneRows = await db.execute(sql`
+      SELECT image_public_ids, datasheet_public_ids
+        FROM product WHERE id = ${cloneId}::uuid
+    `);
+    expect(cloneRows.rows.length).toBe(1);
+    const cloneRow = cloneRows.rows[0] as {
+      image_public_ids: string[];
+      datasheet_public_ids: string[];
+    };
+    expect(cloneRow.image_public_ids).toEqual(images);
+    expect(cloneRow.datasheet_public_ids).toEqual(datasheets);
+
+    // Clone also gets product_search rows (rebuildProductSearch fires for
+    // the clone too).
+    const cloneSearch = await db.execute(
+      sql`SELECT COUNT(*)::int AS n FROM product_search WHERE product_id = ${cloneId}::uuid`,
+    );
+    expect((cloneSearch.rows[0] as { n: number }).n).toBe(3);
+  }, 30_000);
 });

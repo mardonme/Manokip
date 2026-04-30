@@ -15,6 +15,13 @@
       "when": 1777305630340,
       "tag": "0001_overrated_shiva",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1777533052090,
+      "tag": "0002_phase3_media_search_manufacturer",
+      "breakpoints": true
     }
   ]
 }

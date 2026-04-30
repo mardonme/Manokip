@@ -31,6 +31,21 @@ export const products = pgTable(
     publishedAt: timestamp('published_at', { withTimezone: true }),
     createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
+    // Phase 3 Gap 1: Cloudinary public_id arrays for product gallery images
+    // and datasheet PDFs. Drives CAT-06 (gallery on product detail page) and
+    // the Documentation section per sketch 003 (D-01). Order is significant —
+    // index 0 is the hero image used for LCP + JSON-LD `image` field.
+    // DB stores public_id only; admin uploads direct to Cloudinary
+    // (Pattern 5 / D-07 from Phase 2). Empty-array default keeps existing
+    // rows valid without backfill.
+    imagePublicIds: text('image_public_ids')
+      .array()
+      .notNull()
+      .default(sql`'{}'::text[]`),
+    datasheetPublicIds: text('datasheet_public_ids')
+      .array()
+      .notNull()
+      .default(sql`'{}'::text[]`),
   },
   (t) => [
     index('product_category_idx').on(t.categoryId),
