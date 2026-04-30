@@ -1,28 +1,41 @@
-// Plan 03-01 Task 1.3 — RED stub for CAT-01 (locale switcher).
+// Plan 03-03 Task 3.3 — GREEN spec for CAT-01 (locale switcher).
 //
-// REQUIRES: tests/fixtures/seed-public.ts seed must run before tests un-skip.
-//
-// Closed by Plan 03 (LocaleSwitcher client island in
-// src/components/public/locale-switcher.tsx + root layout integration).
+// Validates the LocaleSwitcher client island wired into the public root
+// layout via SiteHeader. Two scenarios per the plan:
+//   - Clicking RU on /uz/ navigates to /ru/ (path preserved, locale prefix
+//     swapped).
+//   - The switcher is visible site-wide (rendered by every layout-bound
+//     page) and the current locale's button is the `default` variant
+//     (aria-pressed=true).
 
-import { test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 
 const baseURL = process.env.BASE_URL ?? 'http://localhost:3000';
 
-test.skip('CAT-01: clicking RU button navigates from /uz/... to /ru/... (closed by plan 03)', async ({
-  page,
-}) => {
-  // TODO Plan 03: page.goto(`${baseURL}/uz`); click [data-testid=locale-ru] →
-  // expect URL to match /^.*\/ru\/?$/ — same path, locale prefix swapped.
-  void page;
-  void baseURL;
+test('CAT-01: clicking RU on /uz/ navigates to /ru/', async ({ page }) => {
+  await page.goto(`${baseURL}/uz`);
+  await page.locator('[data-testid="locale-ru"]').click();
+  await expect(page).toHaveURL(/\/ru(\/|$)/);
 });
 
-test.skip('CAT-01: locale switcher highlights the current locale (active variant)', async ({
+test('CAT-01: locale switcher renders 3 buttons site-wide and highlights current locale', async ({
   page,
 }) => {
-  // TODO Plan 03: on /uz, the UZ button has variant=default; RU + EN have
-  // variant=outline. After clicking RU, RU becomes default.
-  void page;
-  void baseURL;
+  await page.goto(`${baseURL}/uz`);
+  await expect(
+    page.getByRole('group', { name: 'Locale switcher' }),
+  ).toBeVisible();
+  // UZ active on /uz: aria-pressed=true; RU + EN aria-pressed=false
+  await expect(page.locator('[data-testid="locale-uz"]')).toHaveAttribute(
+    'aria-pressed',
+    'true',
+  );
+  await expect(page.locator('[data-testid="locale-ru"]')).toHaveAttribute(
+    'aria-pressed',
+    'false',
+  );
+  await expect(page.locator('[data-testid="locale-en"]')).toHaveAttribute(
+    'aria-pressed',
+    'false',
+  );
 });
