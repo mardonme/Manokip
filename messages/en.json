@@ -41,6 +41,14 @@
       "manufacturers": "Manufacturers",
       "search": "Search",
       "searchPlaceholder": "Search products & SKU..."
+    },
+    "catalog": {
+      "filters": "Filters",
+      "resetAll": "Reset all",
+      "showMore": "+ {n} more",
+      "noResults": "No products match the selected filters — try clearing one",
+      "resultsCount": "{count} products",
+      "categories": "Categories"
     }
   }
 }
