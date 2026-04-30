@@ -29,6 +29,7 @@ import { MediaUploader } from "@/components/admin/media-uploader";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
 
 import { saveManufacturer } from "@/actions/manufacturers";
 import {
@@ -45,10 +46,17 @@ export interface ManufacturerFormProps {
   initial?: ManufacturerInput;
 }
 
-const EMPTY_LOCALE_FIELDS = { name: "", slug: "", description: "" };
+// Plan 03-07 (D-11): relationshipNote field added to per-locale shape.
+const EMPTY_LOCALE_FIELDS = {
+  name: "",
+  slug: "",
+  description: "",
+  relationshipNote: "",
+};
 
 const EMPTY_INITIAL: ManufacturerInput = {
   logoPublicId: null,
+  isOfficialRep: false,
   translations: {
     uz: { ...EMPTY_LOCALE_FIELDS },
     ru: { ...EMPTY_LOCALE_FIELDS },
@@ -118,6 +126,31 @@ export function ManufacturerForm({ locale, initial }: ManufacturerFormProps) {
           ) : null}
         </div>
 
+        {/* Plan 03-07 (D-11): isOfficialRep flag — drives the Verified pill on
+            the public manufacturer landing page (D-10) + the manufacturer
+            card on the product detail page (D-01 sketch 003). Shared across
+            locales (one row in `manufacturer.is_official_rep`). */}
+        <div className="flex items-center justify-between gap-4 rounded-md border border-slate-200 bg-slate-50 p-3">
+          <div className="grid gap-1">
+            <Label htmlFor="isOfficialRep" className="text-sm">
+              Official representative
+            </Label>
+            <p className="text-xs text-slate-500">
+              Toggle on if Manometr is the authorised representative for this
+              manufacturer. Renders a Verified badge on public pages.
+            </p>
+          </div>
+          <Switch
+            id="isOfficialRep"
+            data-testid="is-official-rep-switch"
+            checked={form.watch("isOfficialRep") === true}
+            onCheckedChange={(v: boolean) =>
+              form.setValue("isOfficialRep", v, { shouldDirty: true })
+            }
+            disabled={pending}
+          />
+        </div>
+
         {/* Translatable fields — ONE form instance, three tabs swap in place (D-01) */}
         <LocaleTabs errors={tabErrors}>
           {(l) => (
@@ -158,6 +191,30 @@ export function ManufacturerForm({ locale, initial }: ManufacturerFormProps) {
                   {...form.register(`translations.${l}.description`)}
                   disabled={pending}
                 />
+              </div>
+              {/* Plan 03-07 (D-11): per-locale relationship note. Renders on
+                  the public manufacturer landing page next to the Verified
+                  badge — write a short paragraph describing your relationship
+                  with this manufacturer (e.g. "Authorized representative
+                  since 2019"). */}
+              <div className="grid gap-2">
+                <Label htmlFor={`relationshipNote-${l}`}>
+                  Relationship note ({l.toUpperCase()})
+                </Label>
+                <Textarea
+                  id={`relationshipNote-${l}`}
+                  data-testid={`relationship-note-${l}`}
+                  rows={3}
+                  placeholder="Renders next to the Verified badge on the public manufacturer page."
+                  {...form.register(`translations.${l}.relationshipNote`)}
+                  disabled={pending}
+                />
+                {form.formState.errors.translations?.[l]?.relationshipNote ? (
+                  <p className="text-sm text-destructive">
+                    {form.formState.errors.translations[l]?.relationshipNote
+                      ?.message ?? "Note is too long (max 500 chars)."}
+                  </p>
+                ) : null}
               </div>
             </div>
           )}

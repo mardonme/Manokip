@@ -57,6 +57,15 @@
       "requestPrice": "Narxni so'rash",
       "downloads": "Hujjatlar",
       "download": "Yuklab olish ↓"
+    },
+    "manufacturer": {
+      "all": "Ishlab chiqaruvchilar",
+      "verified": "Tasdiqlangan",
+      "authorized": "Vakolatli",
+      "productCount": "{count} mahsulot",
+      "products": "Mahsulotlar ({count})",
+      "noProducts": "Chop etilgan mahsulotlar yo'q",
+      "noResults": "Ishlab chiqaruvchilar topilmadi"
     }
   }
 }

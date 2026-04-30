@@ -65,12 +65,15 @@ export const saveManufacturer = withAdminAction(
       : null;
 
     // 2. Mutation — base row + 3 translation rows + audit row, atomic.
+    //    Plan 03-07 (D-11): is_official_rep persists on the base row;
+    //    relationship_note persists per-locale on each translation row.
     const result = await dbTx.transaction(async (tx) => {
       const [row] = input.id
         ? await tx
             .update(manufacturers)
             .set({
               logoPublicId: input.logoPublicId ?? null,
+              isOfficialRep: input.isOfficialRep,
               updatedAt: new Date(),
             })
             .where(eq(manufacturers.id, input.id))
@@ -79,6 +82,7 @@ export const saveManufacturer = withAdminAction(
             .insert(manufacturers)
             .values({
               logoPublicId: input.logoPublicId ?? null,
+              isOfficialRep: input.isOfficialRep,
             })
             .returning();
 
@@ -90,6 +94,9 @@ export const saveManufacturer = withAdminAction(
 
       for (const locale of LOCALES) {
         const t = input.translations[locale];
+        // Plan 03-07 (D-11): relationship_note persists per-locale alongside
+        // the existing description column.
+        const relationshipNote = t.relationshipNote ?? null;
         await tx
           .insert(manufacturerTranslations)
           .values({
@@ -98,6 +105,7 @@ export const saveManufacturer = withAdminAction(
             name: t.name,
             slug: t.slug,
             description: t.description ?? null,
+            relationshipNote,
           })
           .onConflictDoUpdate({
             target: [
@@ -108,6 +116,7 @@ export const saveManufacturer = withAdminAction(
               name: t.name,
               slug: t.slug,
               description: t.description ?? null,
+              relationshipNote,
             },
           });
       }
