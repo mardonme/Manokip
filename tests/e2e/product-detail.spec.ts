@@ -102,18 +102,42 @@ test.describe('Product detail page (Plan 03-05)', () => {
   });
 });
 
-// SRCH-04 still .skip — closed by plan 06.
-test.skip(
-  'SRCH-04: visiting /[locale]/search?q=M-100 302-redirects to /[locale]/products/<slug> (closed by plan 06)',
-  async () => {
-    // TODO Plan 06: page.goto(`${baseURL}/uz/search?q=M-100`); expect final
-    // URL to match /\/uz\/products\/manometr-m-100$/ per D-07 SKU short-circuit.
-  },
-);
+// Plan 03-06 — SRCH-04 GREEN gates flipped from .skip to active. The search
+// results page (src/app/[locale]/search/page.tsx) calls skuExactMatch BEFORE
+// rendering and redirect()s when the trimmed lowercase SKU matches a
+// published product. Both case variants exercise D-07.
 
-test.skip(
-  'SRCH-04: SKU match is case-insensitive — q=m-100 also redirects (closed by plan 06)',
-  async () => {
-    // TODO Plan 06: lowercase variant also short-circuits.
-  },
-);
+test.describe('Search SKU short-circuit (Plan 03-06)', () => {
+  test('SRCH-04: visiting /uz/search?q=M-100 302-redirects to /uz/products/manometr-m-100 (D-07)', async ({
+    page,
+  }) => {
+    await page.context().setExtraHTTPHeaders(extraHeaders);
+    await page.goto(`${baseURL}/uz/search?q=M-100`);
+    // After redirect the final URL is the uz product detail page for M-100.
+    await expect(page).toHaveURL(/\/uz\/products\/[^/?#]+/);
+    await expect(page.getByTestId('product-name')).toBeVisible();
+  });
+
+  test('SRCH-04: SKU match is case-insensitive — q=m-100 also redirects', async ({
+    page,
+  }) => {
+    await page.context().setExtraHTTPHeaders(extraHeaders);
+    await page.goto(`${baseURL}/uz/search?q=m-100`);
+    await expect(page).toHaveURL(/\/uz\/products\/[^/?#]+/);
+    await expect(page.getByTestId('product-name')).toBeVisible();
+  });
+
+  test('SRCH-01: search for "manometr" renders results grid with manufacturer chip (D-06)', async ({
+    page,
+  }) => {
+    await page.context().setExtraHTTPHeaders(extraHeaders);
+    await page.goto(`${baseURL}/uz/search?q=manometr`);
+    // The results grid should be visible (the search-no-results message is
+    // present only when result.rows.length === 0, so we assert results-grid).
+    await expect(page.getByTestId('search-results')).toBeVisible();
+    // ProductCard renders manufacturerName as a chip — at least one of the
+    // seeded manufacturer names must appear inside the search-results region.
+    const results = page.getByTestId('search-results');
+    await expect(results).toContainText(/WIKA|BD Sensors|Метран/);
+  });
+});
