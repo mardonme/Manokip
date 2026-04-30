@@ -27,6 +27,14 @@ export default defineConfig({
           include: ['tests/**/*.test.ts'],
           exclude: ['tests/e2e/**', 'tests/components/**', 'node_modules', '.next'],
           setupFiles: ['./tests/_fixtures/load-env.ts'],
+          // Plan 03-06 Rule-3 deviation: live-Neon tests share deterministic
+          // fixture IDs (tests/fixtures/seed-public.ts hardcodes UUIDs so e2e
+          // specs can target them). Parallel file execution causes
+          // PG 23505 unique-violation races on the shared category/product/
+          // manufacturer rows. Forcing sequential file execution for the
+          // node project preserves the deterministic-ID invariant; the dom
+          // project (jsdom component tests) is unaffected.
+          fileParallelism: false,
         },
       },
       {
