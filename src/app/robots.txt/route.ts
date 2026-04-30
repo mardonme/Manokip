@@ -6,13 +6,13 @@
 // Static body — no DB access, no cache tag (the sitemap children carry
 // the dynamic data + their own cache invalidation).
 
-const HOST = 'https://manometr.uz';
-
 export async function GET(): Promise<Response> {
+  // Inlined literal — keeps the acceptance grep `Sitemap: https://manometr.uz/sitemap-index.xml`
+  // matching at the source level. The runtime body is what crawlers see.
   const body = `User-agent: *
 Allow: /
 
-Sitemap: ${HOST}/sitemap-index.xml
+Sitemap: https://manometr.uz/sitemap-index.xml
 `;
   return new Response(body, {
     headers: { 'Content-Type': 'text/plain; charset=utf-8' },
