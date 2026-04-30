@@ -34,5 +34,13 @@
       "title": "Admin panel",
       "placeholder": "Bu yerda Phase 2 davomida boshqaruv vositalari paydo bo'ladi."
     }
+  },
+  "public": {
+    "header": {
+      "catalog": "Katalog",
+      "manufacturers": "Ishlab chiqaruvchilar",
+      "search": "Qidiruv",
+      "searchPlaceholder": "Mahsulotlar va SKU bo'yicha qidirish..."
+    }
   }
 }

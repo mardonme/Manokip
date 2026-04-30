@@ -34,5 +34,13 @@
       "title": "Админ-панель",
       "placeholder": "Здесь появятся инструменты управления в течение Phase 2."
     }
+  },
+  "public": {
+    "header": {
+      "catalog": "Каталог",
+      "manufacturers": "Производители",
+      "search": "Поиск",
+      "searchPlaceholder": "Поиск по продуктам и SKU..."
+    }
   }
 }
