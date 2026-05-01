@@ -170,10 +170,10 @@ Which phases cover which requirements.
 | SRCH-05 | Phase 3 | Pending |
 | CONT-01 | Phase 4 | Partial (04-02 — Tiptap v3.22.5 stack + TIPTAP_EXTENSIONS shared array + CloudinaryImage extension + tiptap-render server helper landed; recipe Server Actions land in 04-05; admin UI lands in 04-07) |
 | CONT-02 | Phase 4 | Partial (04-02 — same Tiptap foundation; industry Server Actions land in 04-06; admin UI lands in 04-08) |
-| CONT-03 | Phase 4 | Partial (04-02 — server-side renderTiptapToHtml + nodeMapping.image override ready for public RSC consumption; public read sites land in 04-09 + 04-10) |
-| CONT-04 | Phase 4 | Pending |
+| CONT-03 | Phase 4 | Partial (04-02 + 04-03 — server-side renderTiptapToHtml + nodeMapping.image override + getRecipeBySlug/getIndustryBySlug with Phase-3 D-05 fallback cascade + usedFallbackLocale flag + findPublishedRecipes/Industries list helpers; public RSC pages 04-09 + 04-10 wire it together) |
+| CONT-04 | Phase 4 | Partial (04-01 schema + 04-03 lib — getUsedInForProduct reading productUsedInView with cap-at-6 per D-09 + revalidateUsedIn cache-tag fan-out shipped; UsedInSection RSC mounted on product detail page lands in 04-11) |
 | CONT-05 | Phase 4 | Pending |
-| CONT-06 | Phase 4 | Pending |
+| CONT-06 | Phase 4 | Partial (04-03 — techArticleJsonLd helper extending Phase-3 set with WithContext<TechArticle> shape + author=publisher=Manometr Org + optional description/image/mentions conditional-spread + mentions as Product sub-objects with no offers per Phase 3 D-08; consumed by 04-09 + 04-10 RSC pages with XSS escape via Phase-3 D-09 \\u003c pattern) |
 | MFG-01 | Phase 3 | Pending |
 | MFG-02 | Phase 3 | Pending |
 | CTA-01 | Phase 5 | Pending |
