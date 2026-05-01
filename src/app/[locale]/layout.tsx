@@ -1,3 +1,5 @@
+import '../globals.css';
+
 import { Suspense } from 'react';
 import { NextIntlClientProvider, hasLocale } from 'next-intl';
 import { setRequestLocale } from 'next-intl/server';

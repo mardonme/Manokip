@@ -22,7 +22,12 @@ const nextConfig: NextConfig = {
   // force-dynamic continue to bypass this cache (Pitfall A6).
   cacheComponents: true,
   experimental: {
-    // Next.js 16 defaults: App Router on, React 19 runtime
+    // Next.js 16 defaults: App Router on, React 19 runtime.
+    // rootParams: required when cacheComponents + a dynamic root segment
+    // ([locale]) coexist. Without it, GET / short-circuits to _not-found
+    // before the next-intl proxy can run the locale redirect.
+    // See: https://aurorascharff.no/posts/implementing-nextjs-16-use-cache-with-next-intl-internationalization/
+    rootParams: true,
   },
   images: {
     remotePatterns: [
