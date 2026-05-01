@@ -100,7 +100,20 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. A visitor can browse and read recipe and industry pages in their current locale, with graceful fallback when a translation is missing
   3. Every product detail page shows a "Used in" section listing the recipes and industry pages that reference it
   4. Recipe and industry pages emit TechArticle JSON-LD that validates in the Rich Results Test
-**Plans**: TBD
+**Plans**: 12 plans
+Plans:
+- [ ] 04-01-PLAN.md — [BLOCKING] Schema migration: status columns + 2 junction tables + product_used_in_v pgView + verifier + 7 specs
+- [ ] 04-02-PLAN.md — Tiptap v3.22.5 install (11 packages) + shared TIPTAP_EXTENSIONS + tiptap-render server helper + Cloudinary FOLDER_ALLOWLIST
+- [ ] 04-03-PLAN.md — Lib helpers: techArticleJsonLd + revalidateRecipe/Industry/UsedIn + getUsedInForProduct + recipe/industry public-read + Zod schemas
+- [ ] 04-04-PLAN.md — Wave 0 RED test stubs: seed-content fixture + 14 fixme integration specs + 6 jsdom + 8 Playwright e2e
+- [ ] 04-05-PLAN.md — Recipe Server Actions: saveRecipe + publishRecipe + unpublishRecipe + deleteRecipe + 7 GREEN specs (flips 04-04)
+- [ ] 04-06-PLAN.md — Industry Server Actions: saveIndustry + publishIndustry + unpublishIndustry + deleteIndustry + 7 GREEN specs
+- [ ] 04-07-PLAN.md — Recipe admin UI: RecipeBodyEditor (Tiptap immediatelyRender:false) + LinkedProductsPicker + form + list + new/edit pages + sidebar entry
+- [ ] 04-08-PLAN.md — Industry admin UI: IndustryBodyEditor + IndustryForm + list + new/edit + sidebar (mirrors 04-07; reuses LinkedProductsPicker)
+- [ ] 04-09-PLAN.md — Public recipes: /[locale]/recipes index + /[locale]/recipes/[slug] detail with Tiptap static-render + TechArticle JSON-LD + LocaleFallbackBanner + sitemap extension
+- [ ] 04-10-PLAN.md — Public industries: index + detail (mirrors 04-09) + sitemap extension
+- [ ] 04-11-PLAN.md — Used-in section: UsedInSection RSC mounted on product detail page between SpecTable and ManufacturerCard
+- [ ] 04-12-PLAN.md — Verification + closure: flip 8 e2e specs to GREEN + Rich Results / Yandex / glyph manual gates (closed-with-deferred-validation) + 04-VERIFICATION.md + RETROSPECTIVE
 **UI hint**: yes
 
 ### Phase 5: Contact and Launch Polish
