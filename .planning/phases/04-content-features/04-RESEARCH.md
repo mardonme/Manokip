@@ -1114,29 +1114,31 @@ See §saveRecipe sketch above. Mirror saveProduct from `src/actions/products.ts:
 | A6 | The existing FOLDER_ALLOWLIST extension to support `'recipes'` + `'industries'` is forwards-compatible with the Phase-2 widget protocol | Tiptap image upload wiring | If FOLDER_ALLOWLIST mechanism is more constrained than expected, plan 04-02 widens it |
 | A7 | recipe / industry translation completeness can be JS-side computed without a pgView (small denominator) | Translation completeness for Tiptap doc | If product-style pgView is preferred for consistency, planner adds in 04-01 (cheap) |
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **D-03 distinct-AUDIT_ACTIONS-verbs vs Phase-2-pattern of generic verbs.**
+> All 5 questions resolved during planning iteration. Resolutions are encoded in CONTEXT.md (D-03..D-10) and the 12 PLAN.md files. Inline RESOLVED markers below preserve the audit trail.
+
+1. **D-03 distinct-AUDIT_ACTIONS-verbs vs Phase-2-pattern of generic verbs.** — **RESOLVED:** generic `publish`/`unpublish`/`delete`/`update`/`create` verbs with `entity_type: 'recipe' | 'industry'` discriminator (locked in CONTEXT.md D-03 + plans 04-05/04-06 Task 5.1/6.1). No `AUDIT_ACTIONS` enum extension needed.
    - What we know: CONTEXT D-03 phrases lifecycle audit verbs as `publish_recipe` / `unpublish_recipe` / `delete_recipe` (etc.). Phase 2 plan 02-13b shipped product lifecycle using GENERIC verbs (`publish` / `unpublish` / `delete`) with `entity_type: 'product'` discriminator. The current `AUDIT_ACTIONS` enum in `src/lib/audit.ts` has `publish` / `unpublish` / `delete` (generic) PLUS some discriminator-style entries like `duplicate_product`.
    - What's unclear: Does Phase 4 add NEW enum entries (`publish_recipe`, `delete_industry`, etc.) or REUSE generic `publish` / `unpublish` / `delete` with `entity_type` discrimination?
    - Recommendation: **Reuse generic verbs + entity_type discriminator** (Phase 2 lifecycle pattern). This requires NO change to `AUDIT_ACTIONS`. Note this in Phase 4 context as a refinement of D-03 wording. Planner can add `duplicate_recipe` / `duplicate_industry` IF a recipe/industry duplicate flow is added (CONTEXT mentions duplicate_product but Phase 4 has no parallel — probably not needed in v1; deferred).
 
-2. **`mentions` array on TechArticle JSON-LD — `@type: Product` with no `offers` (Phase 3 D-08 stance).**
+2. **`mentions` array on TechArticle JSON-LD — `@type: Product` with no `offers` (Phase 3 D-08 stance).** — **RESOLVED:** ship as `{ '@type': 'Product', name, url }` per linked product (CONTEXT.md D-10 + plan 04-09/04-10 Task 9.3/10.2). Yandex tolerance accepted-deferred to manual gate DEF-4-12-02 in plan 04-12.
    - What we know: The Phase 3 productJsonLd helper omits `offers`. The TechArticle `mentions` array could reference linked products as `{ '@type': 'Product', name, url }`. Google does NOT require `offers` on a Product *referenced* via mentions (only on a primary Product entity that's the page's `mainEntityOfPage`).
    - What's unclear: Whether Yandex's structured-data parser similarly tolerates Product-without-offers in a mentions array.
    - Recommendation: Ship as-designed — `{ '@type': 'Product', name, url }` per linked product. Manual gate post-launch via Yandex Structured Data report.
 
-3. **pgView vs two reads for Used-in — is the view worth the migration complexity?**
+3. **pgView vs two reads for Used-in — is the view worth the migration complexity?** — **RESOLVED:** pgView `product_used_in_v` shipped in plan 04-01 with two-reads as a Rule-2 deviation fallback if Drizzle pgView API limitations surface during execution. Single tag (`used-in:<productId>`) on the canonical path.
    - What we know: A pgView is one round-trip + one cacheTag. Two reads is two round-trips + two cacheTags. Drizzle's pgView API supports UNION ALL.
    - What's unclear: Whether the planner finds the view's complexity (DDL, schema barrel export, type-level row alignment) worth saving one round-trip at v1 scale.
    - Recommendation: Researcher recommends the view (single tag, single read, pgView pattern is established Phase-2). If planner chooses two reads, the cacheTag set becomes `recipes-linked-to:<productId>` + `industries-linked-to:<productId>` — and `revalidateUsedIn(productId)` fires both. Either path is acceptable.
 
-4. **Slug squatting reserved-prefix denylist — admin enters `slug='admin'`.**
+4. **Slug squatting reserved-prefix denylist — admin enters `slug='admin'`.** — **RESOLVED:** 5-element denylist (`admin`, `api`, `_next`, `static`, `assets`) shipped via Zod refinement in `recipeInsertSchema` + `industryInsertSchema` in plan 04-03 Task 3.4.
    - What we know: An admin entering `slug='admin'` for `/uz/recipes/admin` would shadow `/uz/admin` only if the admin route used `/uz/admin/<slug>` (it doesn't — admin routes are `/uz/admin/recipes/<id>`). No actual collision.
    - What's unclear: Whether the planner wants a defense-in-depth denylist (`/admin`, `/api`, `/_next`) anyway.
    - Recommendation: Add a 5-element denylist in `recipeInsertSchema` / `industryInsertSchema` Zod refinement. Cheap, no false-positives. Defense in depth.
 
-5. **Body field in `recipe_translations` is currently `jsonb()` (untyped) in `src/db/schema/recipes.ts:35`. Switch to `jsonb().$type<JSONContent>()`?**
+5. **Body field in `recipe_translations` is currently `jsonb()` (untyped) in `src/db/schema/recipes.ts:35`. Switch to `jsonb().$type<JSONContent>()`?** — **RESOLVED:** apply `$type<JSONContent>()` to `recipe_translations.body` + `industry_translations.body` in plan 04-01 Task 1.1 as a no-op TypeScript narrowing (no runtime / migration impact).
    - What we know: Drizzle's `.$type<T>()` is purely a TypeScript narrowing — no runtime / migration impact.
    - What's unclear: Whether the planner wants the type narrowing as part of the Phase 4 schema diff or as a no-op TypeScript-only edit.
    - Recommendation: Apply `$type<JSONContent>()` in Wave 0 (plan 04-01). Catches drift at compile time when the body shape changes.
