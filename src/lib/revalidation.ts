@@ -110,3 +110,58 @@ export async function revalidateSpecFieldGroup(
 export async function revalidateSubmissionsCollection(): Promise<void> {
   // intentional no-op (D-10: no public submissions tag in v1)
 }
+
+// ─── Phase 4 plan 04-03: content-tier helpers (CONT-03 + CONT-04 + D-04) ──
+//
+// Recipe / industry mutations (saveRecipe / publishRecipe / unpublishRecipe /
+// deleteRecipe + industry mirrors — Wave 1 plans 04-05 + 04-06) call these
+// AFTER tx.commit. Junction-table mutations on either side additionally call
+// `revalidateUsedIn(productId)` for each affected product so the Used-In
+// section on the public product detail page composes fresh.
+//
+// Locales default to ['uz','ru','en']. Callers MAY narrow when only specific
+// locales are affected (rare — recipes that lack a translation in one locale
+// are still reachable via fallback cascade per Phase-3 D-05; the safe posture
+// is to fan out all 3 list tags).
+
+type Locale = "uz" | "ru" | "en";
+const ALL_LOCALES: readonly Locale[] = ["uz", "ru", "en"];
+
+/**
+ * Recipe mutation — recipe detail tag + per-locale recipes list tag + sitemap.
+ * Pattern from RESEARCH §Cache-tag invalidation strategy lines 720-742.
+ */
+export async function revalidateRecipe(
+  id: string,
+  locales: readonly Locale[] = ALL_LOCALES,
+): Promise<void> {
+  await tag(`recipe:${id}`);
+  for (const l of locales) await tag(`recipes:list:${l}`);
+  await tag("sitemap");
+}
+
+/** Industry mutation — same shape mirrored against industry list tags. */
+export async function revalidateIndustry(
+  id: string,
+  locales: readonly Locale[] = ALL_LOCALES,
+): Promise<void> {
+  await tag(`industry:${id}`);
+  for (const l of locales) await tag(`industries:list:${l}`);
+  await tag("sitemap");
+}
+
+/**
+ * Junction-table mutation on either side — invalidates the product's
+ * "Used in" cached read PLUS the product page tag so the surrounding
+ * spec / manufacturer / used-in composition recomputes fresh.
+ *
+ * Ordering matters: tag the narrower used-in cache row before the broader
+ * product page so a concurrent reader between the two calls observes either
+ * stale-everything or fresh-used-in-stale-product (acceptable transient),
+ * never fresh-product-stale-used-in (which would re-render the product page
+ * with stale used-in data and re-cache it).
+ */
+export async function revalidateUsedIn(productId: string): Promise<void> {
+  await tag(`used-in:${productId}`);
+  await tag(`product:${productId}`);
+}
