@@ -22,7 +22,7 @@ See `.planning/PROJECT.md` for the full living project context.
 - **Auth:** Auth.js v5 with Email magic-link provider, `@auth/drizzle-adapter`, magic-link email via Resend
 - **UI (public + admin):** shadcn/ui + Tailwind v4 + Radix + TanStack Table + React Hook Form + Zod + nuqs + sonner + lucide-react
 - **Media:** Cloudinary + `next-cloudinary` (signed direct browser uploads; DB stores `public_id` only)
-- **Rich text:** Tiptap v2 (recipes + industry pages)
+- **Rich text:** Tiptap v3 (3.22.5; pinned, peer-locked) — recipes + industry pages
 - **Email:** Resend + React Email (contact notifications, admin invites, magic-link email)
 - **Full-text search:** Postgres native (`tsvector` + `unaccent` + `pg_trgm`) — per-locale `product_search` GIN index
 - **Deployment:** Vercel Pro (EU region co-located with Neon)
