@@ -20,6 +20,9 @@ import {
   revalidateSpecField,
   revalidateSpecFieldGroup,
   revalidateSubmissionsCollection,
+  revalidateRecipe,
+  revalidateIndustry,
+  revalidateUsedIn,
 } from "@/lib/revalidation";
 
 const mocked = vi.mocked(revalidateTag);
@@ -102,5 +105,64 @@ describe("revalidation helpers — Next 16 2-arg form", () => {
   it("revalidateSubmissionsCollection is a no-op placeholder (admin-only reads)", async () => {
     await revalidateSubmissionsCollection();
     expect(mocked).toHaveBeenCalledTimes(0);
+  });
+
+  // Plan 04-03 Task 3.2 — content-tier helpers (CONT-03 + CONT-04 + D-04 fan-out).
+  // Each helper fans recipe:<id> / industry:<id> + recipes/industries:list:<l> per
+  // locale + sitemap; revalidateUsedIn fans used-in:<pid> + product:<pid> so the
+  // surrounding spec/manufacturer/used-in product page composes fresh.
+
+  it("revalidateRecipe fans recipe:<id>, recipes:list:<l> per locale, sitemap (default 3 locales)", async () => {
+    await revalidateRecipe("rec1");
+    expect(mocked).toHaveBeenCalledWith("recipe:rec1", "max");
+    expect(mocked).toHaveBeenCalledWith("recipes:list:uz", "max");
+    expect(mocked).toHaveBeenCalledWith("recipes:list:ru", "max");
+    expect(mocked).toHaveBeenCalledWith("recipes:list:en", "max");
+    expect(mocked).toHaveBeenCalledWith("sitemap", "max");
+    expect(mocked).toHaveBeenCalledTimes(5);
+  });
+
+  it("revalidateRecipe respects narrowed locales array (1 locale → 3 calls)", async () => {
+    await revalidateRecipe("rec2", ["uz"]);
+    expect(mocked).toHaveBeenCalledWith("recipe:rec2", "max");
+    expect(mocked).toHaveBeenCalledWith("recipes:list:uz", "max");
+    expect(mocked).toHaveBeenCalledWith("sitemap", "max");
+    expect(mocked).toHaveBeenCalledTimes(3);
+    const tags = mocked.mock.calls.map((c) => c[0]);
+    expect(tags).not.toContain("recipes:list:ru");
+    expect(tags).not.toContain("recipes:list:en");
+  });
+
+  it("revalidateIndustry fans industry:<id>, industries:list:<l> per locale, sitemap (default 3 locales)", async () => {
+    await revalidateIndustry("ind1");
+    expect(mocked).toHaveBeenCalledWith("industry:ind1", "max");
+    expect(mocked).toHaveBeenCalledWith("industries:list:uz", "max");
+    expect(mocked).toHaveBeenCalledWith("industries:list:ru", "max");
+    expect(mocked).toHaveBeenCalledWith("industries:list:en", "max");
+    expect(mocked).toHaveBeenCalledWith("sitemap", "max");
+    expect(mocked).toHaveBeenCalledTimes(5);
+  });
+
+  it("revalidateIndustry respects narrowed locales array (2 locales → 4 calls)", async () => {
+    await revalidateIndustry("ind2", ["ru", "en"]);
+    expect(mocked).toHaveBeenCalledWith("industry:ind2", "max");
+    expect(mocked).toHaveBeenCalledWith("industries:list:ru", "max");
+    expect(mocked).toHaveBeenCalledWith("industries:list:en", "max");
+    expect(mocked).toHaveBeenCalledWith("sitemap", "max");
+    expect(mocked).toHaveBeenCalledTimes(4);
+  });
+
+  it("revalidateUsedIn fans used-in:<pid> + product:<pid> (page-level recompose)", async () => {
+    await revalidateUsedIn("prod1");
+    expect(mocked).toHaveBeenCalledWith("used-in:prod1", "max");
+    expect(mocked).toHaveBeenCalledWith("product:prod1", "max");
+    expect(mocked).toHaveBeenCalledTimes(2);
+  });
+
+  it("revalidateUsedIn calls used-in tag BEFORE product tag (defense-in-depth ordering)", async () => {
+    await revalidateUsedIn("prod2");
+    const tags = mocked.mock.calls.map((c) => c[0]);
+    expect(tags[0]).toBe("used-in:prod2");
+    expect(tags[1]).toBe("product:prod2");
   });
 });
