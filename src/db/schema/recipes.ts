@@ -1,6 +1,16 @@
 // Recipe = how-to / application article (Phase 4). body stored as jsonb
 // to hold a Tiptap ProseMirror document. Sibling translations table carries
 // title/slug/excerpt/body per locale with the standard constraint template.
+//
+// Phase 4 plan 04-01 extensions:
+//   - recipe.status: text NOT NULL DEFAULT 'draft' + CHECK ('draft','published')
+//     mirrors product.status from Phase 2 D-11 / migration 0001. Plain text + CHECK
+//     keeps schema homogeneous (no publication_status pgEnum).
+//   - recipe_translations.body: stays as jsonb() at this commit; the
+//     $type<JSONContent>() narrowing is deferred to plan 04-02 because
+//     @tiptap/core is not yet installed (Rule-1 deviation per plan 04-01
+//     <action> note). DDL invariant from this plan is the status column +
+//     CHECK constraint; the JSONContent narrowing is TS-cosmetic.
 import {
   pgTable,
   uuid,
@@ -14,13 +24,20 @@ import {
 } from 'drizzle-orm/pg-core';
 import { sql } from 'drizzle-orm';
 
-export const recipes = pgTable('recipe', {
-  id: uuid().primaryKey().defaultRandom(),
-  featuredImagePublicId: text('featured_image_public_id'),
-  publishedAt: timestamp('published_at', { withTimezone: true }),
-  createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
-  updatedAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
-});
+export const recipes = pgTable(
+  'recipe',
+  {
+    id: uuid().primaryKey().defaultRandom(),
+    featuredImagePublicId: text('featured_image_public_id'),
+    status: text('status').notNull().default('draft'),
+    publishedAt: timestamp('published_at', { withTimezone: true }),
+    createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    check('recipe_status_check', sql`${t.status} IN ('draft','published')`),
+  ],
+);
 
 export const recipeTranslations = pgTable(
   'recipe_translations',
@@ -32,7 +49,7 @@ export const recipeTranslations = pgTable(
     title: text().notNull(),
     slug: text().notNull(),
     excerpt: text(),
-    body: jsonb(), // Tiptap JSON doc
+    body: jsonb(), // Tiptap ProseMirror doc; $type<JSONContent>() narrowing added in plan 04-02
   },
   (t) => [
     primaryKey({ columns: [t.recipeId, t.locale] }),
