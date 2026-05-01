@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Foundations** - Schema, locale routing, auth, pooled Postgres, deployment scaffold
 - [x] **Phase 2: Admin Panel** - Spec-schema editor, product CRUD, media, invites, audit, cache invalidation
-- [ ] **Phase 3: Public Rendering, Search, SEO** - Catalog pages, filters, FTS, hreflang, JSON-LD, manufacturer pages
+- [x] **Phase 3: Public Rendering, Search, SEO** - Catalog pages, filters, FTS, hreflang, JSON-LD, manufacturer pages
 - [ ] **Phase 4: Content Features** - Recipes, industry pages, product cross-links
 - [ ] **Phase 5: Contact and Launch Polish** - Contact form, observability, SEO verification, dogfood, launch bar
 
@@ -80,15 +80,15 @@ Decimal phases appear between their surrounding integers in numeric order.
   4. Every public page emits per-locale canonical + hreflang for `uz`/`ru`/`en` + `x-default`; per-locale XML sitemaps are referenced from `robots.txt`; product / organization / category / breadcrumb JSON-LD validates in the Rich Results Test
   5. A real device on Slow 4G renders the product detail page's LCP within the Core Web Vitals budget, with Uzbek Latin `oʻ`/`gʻ` (U+02BB) and Cyrillic rendering correctly through `next/font` with `['latin','latin-ext','cyrillic']` subsets and `<CldImage>` with responsive `sizes`
 **Plans**: 9 plans
-- [ ] 03-01-PLAN.md — Wave 0: test stubs (12) + seed-public fixture + cacheComponents flag + schema-dts install
-- [ ] 03-02-PLAN.md — [BLOCKING] Schema migration (unaccent + pg_trgm + product media arrays + manufacturer D-11 fields) + saveProduct gap fixes (imagePublicIds persistence + tsvector rebuild for SRCH-05)
-- [ ] 03-03-PLAN.md — Locale-aware shared infra: jsonld helpers, buildAlternates, LocaleSwitcher, SiteHeader, CategoryNav, public layout with Organization JSON-LD
-- [ ] 03-04-PLAN.md — Catalog: /[locale]/categories listing with EAV faceted filters (nuqs URL state), facet aggregate counts, filter sidebar, product card grid
-- [ ] 03-05-PLAN.md — Product detail /[locale]/products/[slug] (sketch 003): grouped spec tables, gallery, key-facts ribbon, sticky CTA rail, manufacturer card, downloads list, Product+BreadcrumbList JSON-LD
-- [ ] 03-06-PLAN.md — Search: /[locale]/search force-dynamic, autocomplete API with cascade fallback (current→uz→ru→en), SKU exact-match 302 redirect, header SearchBox client island
-- [ ] 03-07-PLAN.md — Manufacturer pages /[locale]/manufacturers (index + detail) + admin extension for D-11 (is_official_rep + relationship_note)
-- [ ] 03-08-PLAN.md — SEO infra: per-locale sitemap-{uz,ru,en}.xml + sitemap-index.xml + robots.txt + Phase-2 02-17 admin-edit goto migration
-- [ ] 03-09-PLAN.md — Wave N closure: SEO coverage e2e sweep + Lighthouse CI workflow (LCP) + manual Rich Results / Cyrillic-Uzbek / Search Console gates
+- [x] 03-01-PLAN.md — Wave 0: test stubs (12) + seed-public fixture + cacheComponents flag + schema-dts install
+- [x] 03-02-PLAN.md — [BLOCKING] Schema migration (unaccent + pg_trgm + product media arrays + manufacturer D-11 fields) + saveProduct gap fixes (imagePublicIds persistence + tsvector rebuild for SRCH-05)
+- [x] 03-03-PLAN.md — Locale-aware shared infra: jsonld helpers, buildAlternates, LocaleSwitcher, SiteHeader, CategoryNav, public layout with Organization JSON-LD
+- [x] 03-04-PLAN.md — Catalog: /[locale]/categories listing with EAV faceted filters (nuqs URL state), facet aggregate counts, filter sidebar, product card grid
+- [x] 03-05-PLAN.md — Product detail /[locale]/products/[slug] (sketch 003): grouped spec tables, gallery, key-facts ribbon, sticky CTA rail, manufacturer card, downloads list, Product+BreadcrumbList JSON-LD
+- [x] 03-06-PLAN.md — Search: /[locale]/search force-dynamic, autocomplete API with cascade fallback (current→uz→ru→en), SKU exact-match 302 redirect, header SearchBox client island
+- [x] 03-07-PLAN.md — Manufacturer pages /[locale]/manufacturers (index + detail) + admin extension for D-11 (is_official_rep + relationship_note)
+- [x] 03-08-PLAN.md — SEO infra: per-locale sitemap-{uz,ru,en}.xml + sitemap-index.xml + robots.txt + Phase-2 02-17 admin-edit goto migration
+- [x] 03-09-PLAN.md — Wave N closure: SEO coverage e2e sweep + Lighthouse CI workflow (LCP) + manual Rich Results / Cyrillic-Uzbek / Search Console gates
 **UI hint**: yes
 
 ### Phase 4: Content Features
@@ -124,7 +124,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 |-------|----------------|--------|-----------|
 | 1. Foundations | 7/7 | Complete | 2026-04-23 |
 | 2. Admin Panel | 18/18 | Complete | 2026-04-29 |
-| 3. Public Rendering, Search, SEO | 0/9 | Not started | - |
+| 3. Public Rendering, Search, SEO | 9/9 | Complete | 2026-05-01 |
 | 4. Content Features | 0/TBD | Not started | - |
 | 5. Contact and Launch Polish | 0/TBD | Not started | - |
 
