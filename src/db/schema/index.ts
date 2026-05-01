@@ -13,6 +13,8 @@ export * from './spec-values';
 export * from './search';
 export * from './recipes';
 export * from './industries';
+export * from './junctions';
 export * from './contact';
 export * from './translation-flags';
 export * from './views/product-translation-completeness';
+export * from './views/product-used-in';
