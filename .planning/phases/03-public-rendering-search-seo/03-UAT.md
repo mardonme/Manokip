@@ -99,7 +99,16 @@ blocked: 0
   reason: "User reported: GET / 404 in 5.0s — Next.js compiled /_not-found/page for the root request instead of running the locale-redirect proxy. Sidecars: Sentry disableLogger deprecation warning (Turbopack incompatibility) + Cache Components enabled + clientTraceMetadata experiment active."
   severity: blocker
   test: 1
-  root_cause: ""
-  artifacts: []
-  missing: []
-  debug_session: ""
+  root_cause: "Plan 03-01 enabled cacheComponents: true in next.config.ts but did not migrate the [locale] dynamic segment to a root parameter. Next.js 16 + cacheComponents requires (a) experimental.rootParams flag AND (b) no src/app/layout.tsx above the [locale] segment. Both preconditions are violated: the experimental block is empty, and a no-op src/app/layout.tsx exists. Next routes / → _not-found before the proxy.ts locale-redirect can run (trace: 'Compiling /_not-found/page' for GET /). proxy.ts itself is unchanged since Phase 2 commit c157d7c and is correct in isolation."
+  artifacts:
+    - path: "next.config.ts"
+      issue: "experimental block is empty; cacheComponents enabled without paired rootParams flag"
+      line: "23-26"
+    - path: "src/app/layout.tsx"
+      issue: "no-op root layout above [locale] segment violates Next 16 cacheComponents + rootParams requirement"
+      line: "1-9"
+  missing:
+    - "Delete src/app/layout.tsx (real document shell already lives in src/app/[locale]/layout.tsx)"
+    - "Add experimental: { rootParams: true } to next.config.ts"
+    - "Clear .next cache and restart dev to verify GET / → 307 → /uz/"
+  debug_session: "(inline diagnosis; see commit message for fix)"
