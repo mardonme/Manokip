@@ -14,6 +14,7 @@ import type {
   Organization,
   BreadcrumbList,
   CollectionPage,
+  TechArticle,
   WithContext,
   ListItem,
 } from 'schema-dts';
@@ -87,5 +88,83 @@ export function collectionPageJsonLd(
     '@type': 'CollectionPage',
     name,
     hasPart: urls.map((u) => ({ '@type': 'WebPage', url: u })),
+  };
+}
+
+// Plan 04-03 Task 3.1 — TechArticle helper for recipes + industry pages
+// (CONT-06 / D-10).
+//
+// Field set per RESEARCH §TechArticle JSON-LD field set (lines 547-583): every
+// recommended Article-subtype property Google's Rich Results Test scores. Author
+// = publisher = Manometr Organization (single-author posture for v1). Optional
+// fields conditional-spread so a minimal input renders compact JSON.
+//
+// Hero image uses w_1200 (vs w_800 in productJsonLd) — recipe / industry hero
+// images render at a wider crop than product gallery thumbnails. Same f_auto,q_auto
+// tuple as Phase 3 productJsonLd at jsonld.ts:41 so crawlers + the public
+// <CldImage> hero render agree on the URL.
+//
+// `mentions` array references linked products as Product sub-objects with
+// `{name, url}` only — NO `offers` field (Phase 3 D-08 stance carries forward;
+// Manometr is informational, not transactional). Empty / undefined mentions
+// omits the field entirely rather than emitting an empty array.
+//
+// Caveat (D-10): Schema.org scopes TechArticle to how-to / step-by-step / specs;
+// industry vertical landing pages would technically fit `Article` better. We
+// emit TechArticle for both per locked decision; the manual Yandex gate in
+// plan 04-12 validates whether Yandex parses cleanly. Switching industries to
+// `Article` is a 1-line `@type` change in a v1.1 follow-up if Yandex flags it.
+export interface TechArticleJsonLdInput {
+  headline: string;
+  excerpt?: string | null;
+  featuredImagePublicId?: string | null;
+  /** ISO 8601 — recipe.publishedAt / industry.publishedAt. */
+  datePublished: string;
+  /** ISO 8601 — recipe.updatedAt / industry.updatedAt. */
+  dateModified: string;
+  inLanguage: 'uz' | 'ru' | 'en';
+  /** Per-locale canonical URL (matches Phase 3 SEO-02 hreflang shape). */
+  canonicalUrl: string;
+  /**
+   * Optional linked-products mentions (D-10). Each entry becomes a
+   * `{ '@type': 'Product', name, url }` sub-object — NO `offers` (Phase 3
+   * D-08 stance).
+   */
+  mentions?: Array<{ name: string; url: string }>;
+}
+
+export function techArticleJsonLd(
+  input: TechArticleJsonLdInput,
+): WithContext<TechArticle> {
+  const publisher: Organization = {
+    '@type': 'Organization',
+    name: 'Manometr',
+    url: HOST,
+  };
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'TechArticle',
+    headline: input.headline,
+    inLanguage: input.inLanguage,
+    datePublished: input.datePublished,
+    dateModified: input.dateModified,
+    author: publisher,
+    publisher,
+    mainEntityOfPage: { '@type': 'WebPage', '@id': input.canonicalUrl },
+    ...(input.excerpt ? { description: input.excerpt } : {}),
+    ...(input.featuredImagePublicId
+      ? {
+          image: `https://res.cloudinary.com/${CLOUD}/image/upload/f_auto,q_auto,w_1200/${input.featuredImagePublicId}`,
+        }
+      : {}),
+    ...(input.mentions && input.mentions.length > 0
+      ? {
+          mentions: input.mentions.map((m) => ({
+            '@type': 'Product',
+            name: m.name,
+            url: m.url,
+          })),
+        }
+      : {}),
   };
 }
