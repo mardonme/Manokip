@@ -57,6 +57,11 @@ export const TIPTAP_EXTENSIONS = [
   StarterKit.configure({
     heading: { levels: [1, 2, 3, 4] }, // D-05: H1 reserved for page title; editor uses H1-H4
     codeBlock: false, // D-05 defers code-block syntax highlighting to v1.1
+    // StarterKit v3 bundles the link extension by default. We override it with
+    // our own Link.configure(...) below (added rel/target/openOnClick), so
+    // disable the bundled one to avoid Tiptap's duplicate-extension-name
+    // warning ("Duplicate extension names found: ['link']").
+    link: false,
   }),
   Link.configure({
     openOnClick: false,

@@ -6,11 +6,12 @@
 //   - recipe.status: text NOT NULL DEFAULT 'draft' + CHECK ('draft','published')
 //     mirrors product.status from Phase 2 D-11 / migration 0001. Plain text + CHECK
 //     keeps schema homogeneous (no publication_status pgEnum).
-//   - recipe_translations.body: stays as jsonb() at this commit; the
-//     $type<JSONContent>() narrowing is deferred to plan 04-02 because
-//     @tiptap/core is not yet installed (Rule-1 deviation per plan 04-01
-//     <action> note). DDL invariant from this plan is the status column +
-//     CHECK constraint; the JSONContent narrowing is TS-cosmetic.
+//
+// Phase 4 plan 04-02 narrowing:
+//   - recipe_translations.body now narrowed to jsonb().$type<JSONContent>() so
+//     downstream Server Actions and read sites get a typed Tiptap doc shape
+//     rather than `unknown`. DDL is unchanged (still jsonb at the PG layer);
+//     the narrowing is purely TypeScript metadata.
 import {
   pgTable,
   uuid,
@@ -23,6 +24,7 @@ import {
   check,
 } from 'drizzle-orm/pg-core';
 import { sql } from 'drizzle-orm';
+import type { JSONContent } from '@tiptap/core';
 
 export const recipes = pgTable(
   'recipe',
@@ -49,7 +51,7 @@ export const recipeTranslations = pgTable(
     title: text().notNull(),
     slug: text().notNull(),
     excerpt: text(),
-    body: jsonb(), // Tiptap ProseMirror doc; $type<JSONContent>() narrowing added in plan 04-02
+    body: jsonb().$type<JSONContent>(), // Tiptap ProseMirror doc — narrowed in plan 04-02
   },
   (t) => [
     primaryKey({ columns: [t.recipeId, t.locale] }),

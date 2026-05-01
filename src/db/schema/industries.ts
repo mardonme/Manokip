@@ -4,9 +4,11 @@
 //
 // Phase 4 plan 04-01 extensions (mirror recipes.ts):
 //   - industry.status: text NOT NULL DEFAULT 'draft' + CHECK ('draft','published')
-//   - industry_translations.body: stays as jsonb() at this commit; the
-//     $type<JSONContent>() narrowing is deferred to plan 04-02 (Rule-1
-//     deviation — @tiptap/core not yet installed; DDL invariant unaffected).
+//
+// Phase 4 plan 04-02 narrowing:
+//   - industry_translations.body narrowed to jsonb().$type<JSONContent>().
+//     DDL unchanged; narrowing is purely TypeScript metadata for downstream
+//     Server Actions and read sites.
 import {
   pgTable,
   uuid,
@@ -19,6 +21,7 @@ import {
   check,
 } from 'drizzle-orm/pg-core';
 import { sql } from 'drizzle-orm';
+import type { JSONContent } from '@tiptap/core';
 
 export const industries = pgTable(
   'industry',
@@ -45,7 +48,7 @@ export const industryTranslations = pgTable(
     title: text().notNull(),
     slug: text().notNull(),
     excerpt: text(),
-    body: jsonb(), // Tiptap ProseMirror doc; $type<JSONContent>() narrowing added in plan 04-02
+    body: jsonb().$type<JSONContent>(), // Tiptap ProseMirror doc — narrowed in plan 04-02
   },
   (t) => [
     primaryKey({ columns: [t.industryId, t.locale] }),
