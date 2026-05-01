@@ -168,9 +168,9 @@ Which phases cover which requirements.
 | SRCH-03 | Phase 3 | Pending |
 | SRCH-04 | Phase 3 | Pending |
 | SRCH-05 | Phase 3 | Pending |
-| CONT-01 | Phase 4 | Pending |
-| CONT-02 | Phase 4 | Pending |
-| CONT-03 | Phase 4 | Pending |
+| CONT-01 | Phase 4 | Partial (04-02 — Tiptap v3.22.5 stack + TIPTAP_EXTENSIONS shared array + CloudinaryImage extension + tiptap-render server helper landed; recipe Server Actions land in 04-05; admin UI lands in 04-07) |
+| CONT-02 | Phase 4 | Partial (04-02 — same Tiptap foundation; industry Server Actions land in 04-06; admin UI lands in 04-08) |
+| CONT-03 | Phase 4 | Partial (04-02 — server-side renderTiptapToHtml + nodeMapping.image override ready for public RSC consumption; public read sites land in 04-09 + 04-10) |
 | CONT-04 | Phase 4 | Pending |
 | CONT-05 | Phase 4 | Pending |
 | CONT-06 | Phase 4 | Pending |
