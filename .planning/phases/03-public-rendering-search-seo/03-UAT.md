@@ -23,9 +23,9 @@ updated: 2026-05-01T00:00:00Z
 
 ### 1. Cold Start Smoke Test
 expected: Kill any running `next dev` / `next start`. Run `pnpm dev` (or `pnpm build && pnpm start`) from a clean shell. Server boots without errors, the Phase-3 schema migration is applied to Neon dev, and visiting `http://localhost:3000/` 307-redirects to `/uz/` and renders the homepage.
-result: issue
-reported: "[@sentry/nextjs] DEPRECATION WARNING: disableLogger is deprecated and will be removed in a future version. Use webpack.treeshake.removeDebugLogging instead. (Not supported with Turbopack.) - Cache Components enabled - Experiments (use with caution): · clientTraceMetadata ○ Compiling /_not-found/page ... GET / 404 in 5.0s (next.js: 4.4s, application-code: 579ms) ○ Compiling /[locale] ... GET /favicon.ico 404 in 5.0s (next.js: 4.4s, generate-params: 967ms, application-code: 602ms)"
-severity: blocker
+result: pass
+notes: |
+  Initial run failed (severity: blocker, GET / → 404). Root cause: cacheComponents enabled without rootParams + a no-op root layout above [locale]. Fixed in commit 2c63c24 (delete src/app/layout.tsx, add experimental.rootParams: true, move globals.css import to [locale]/layout.tsx). User re-verified after `rm -rf .next && pnpm dev` — `/` now 307→/uz/ as expected.
 
 ### 2. Locale Switcher Site-Wide
 expected: On any page, click the locale switcher in the site header. Switching from `uz → ru → en` updates the URL prefix (`/uz/...` → `/ru/...` → `/en/...`) and the page content (nav, headings, body copy) re-renders in the chosen locale. Returning to a previous locale preserves the same path shape.
@@ -86,8 +86,9 @@ result: pass
 ## Summary
 
 total: 15
-passed: 14
-issues: 1
+passed: 15
+issues: 0
+issues_closed: 1
 pending: 0
 skipped: 0
 blocked: 0
@@ -112,3 +113,6 @@ blocked: 0
     - "Add experimental: { rootParams: true } to next.config.ts"
     - "Clear .next cache and restart dev to verify GET / → 307 → /uz/"
   debug_session: "(inline diagnosis; see commit message for fix)"
+  resolved: true
+  resolved_in: "2c63c24"
+  resolved_at: "2026-05-01"
