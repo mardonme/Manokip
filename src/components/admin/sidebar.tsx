@@ -16,6 +16,8 @@ export type AdminNavLabels = {
   specFields: string;
   /** Plan 04-07 — Recipes admin surface (CONT-01). */
   recipes: string;
+  /** Plan 04-08 — Industries admin surface (CONT-02). */
+  industries: string;
   submissions: string;
   audit: string;
   admins: string;
@@ -38,6 +40,8 @@ export function AdminSidebar({ labels }: Props) {
     { href: '/admin/spec-fields', label: labels.specFields },
     // Plan 04-07 — Recipes admin surface. Order per plan: after spec-fields.
     { href: '/admin/recipes', label: labels.recipes },
+    // Plan 04-08 — Industries admin surface. Order per plan: after recipes.
+    { href: '/admin/industries', label: labels.industries },
     { href: '/admin/submissions', label: labels.submissions },
     { href: '/admin/audit', label: labels.audit },
     { href: '/admin/admins', label: labels.admins },
