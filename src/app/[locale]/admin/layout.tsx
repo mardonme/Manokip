@@ -57,6 +57,8 @@ async function AdminChrome({
     categories: t('nav.categories'),
     manufacturers: t('nav.manufacturers'),
     specFields: t('nav.specFields'),
+    // Plan 04-07 — Recipes admin nav entry (CONT-01).
+    recipes: t('nav.recipes'),
     submissions: t('nav.submissions'),
     audit: t('nav.audit'),
     admins: t('nav.admins'),

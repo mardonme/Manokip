@@ -36,7 +36,15 @@ import type { JSONContent } from "@tiptap/core";
 import { TIPTAP_EXTENSIONS } from "@/lib/tiptap-extensions";
 import { Button } from "@/components/ui/button";
 
-export type RecipeBodyEditorName = "body.uz" | "body.ru" | "body.en";
+/**
+ * RHF dotted field path the editor controls. Plan 04-07-PLAN's must_haves
+ * spell `body.uz | body.ru | body.en` as the canonical shape; the recipe
+ * form schema actually nests body under translations.{locale}.body, so
+ * either path is acceptable (deviation Rule 1 from 04-07-PLAN — locale-tab
+ * swap shape is the contract, not the path syntax). Typed loose so callers
+ * can pass either path without a Zod-tied generic.
+ */
+export type RecipeBodyEditorName = string;
 
 export interface RecipeBodyEditorProps {
   /** RHF dotted field path. The recipe form provides `FormProvider` so we read `control` via context. */
