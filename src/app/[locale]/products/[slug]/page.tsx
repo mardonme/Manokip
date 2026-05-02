@@ -41,6 +41,7 @@ import {
 import { StickyCtaRail } from '@/components/public/sticky-cta-rail';
 import { ManufacturerCard } from '@/components/public/manufacturer-card';
 import { DownloadsList } from '@/components/public/downloads-list';
+import { UsedInSection } from '@/components/public/used-in-section';
 
 interface PageProps {
   params: Promise<{ locale: string; slug: string }>;
@@ -149,6 +150,14 @@ async function ProductDetailContent({ params }: PageProps) {
           {keyFacts.length > 0 ? <KeyFactsRibbon facts={keyFacts} /> : null}
 
           <SpecTable groups={product.specGroups} />
+
+          {/* Plan 04-11 — Used-In section (CONT-04 / D-09): cross-linked
+              recipes + industries that reference this product. Mounted in
+              the locked slot below the spec table and above the manufacturer
+              card per sketch-003 left column. The component returns null
+              when there are no cross-links, so this slot is invisible for
+              products without any. */}
+          <UsedInSection productId={product.id} locale={locale as Locale} />
 
           {product.manufacturer ? (
             <ManufacturerCard
