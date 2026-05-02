@@ -100,5 +100,10 @@
         "empty": "No published industries yet"
       }
     }
+  },
+  "UsedIn": {
+    "title": "Used in",
+    "recipes": "Application examples",
+    "industries": "Industries"
   }
 }

@@ -100,5 +100,10 @@
         "empty": "Hozircha chop etilgan sohalar yo'q"
       }
     }
+  },
+  "UsedIn": {
+    "title": "Foydalanilgan ma'lumotlar",
+    "recipes": "Foydalanish misollari",
+    "industries": "Sohalar"
   }
 }
