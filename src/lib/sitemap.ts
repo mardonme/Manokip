@@ -71,7 +71,12 @@ export async function buildLocaleSitemapEntries(
   // ── Static paths ─────────────────────────────────────────────────────────
   // Root index, category index, manufacturer index — same path shape across
   // all 3 locales so the alternates map is built by simple substitution.
-  for (const staticPath of ['', '/categories', '/manufacturers'] as const) {
+  for (const staticPath of [
+    '',
+    '/categories',
+    '/manufacturers',
+    '/recipes',
+  ] as const) {
     const alternates: Partial<Record<Locale, string>> = {};
     for (const l of ALL_LOCALES) {
       alternates[l] = `${HOST}/${l}${staticPath}`;
@@ -160,6 +165,35 @@ export async function buildLocaleSitemapEntries(
       loc: `${HOST}/${locale}/manufacturers/${localeSlug}`,
       lastmod: toIso(r.updated_at),
       alternates: buildAlternates(r, '/manufacturers'),
+    });
+  }
+
+  // ── Recipes (Plan 04-09; T-04-INFO-01 — only published rows) ────────────
+  // Same GROUP BY pattern as products: collect all 3 locale slugs in one row
+  // so alternates emit without a second round-trip.
+  const recipeRows = await db.execute<{
+    id: string;
+    updated_at: Date | string;
+    slug_uz: string | null;
+    slug_ru: string | null;
+    slug_en: string | null;
+  }>(sql`
+    SELECT r.id, r.updated_at,
+           MAX(CASE WHEN rt.locale='uz' THEN rt.slug END) AS slug_uz,
+           MAX(CASE WHEN rt.locale='ru' THEN rt.slug END) AS slug_ru,
+           MAX(CASE WHEN rt.locale='en' THEN rt.slug END) AS slug_en
+    FROM recipe r
+    JOIN recipe_translations rt ON rt.recipe_id = r.id
+    WHERE r.status = 'published'
+    GROUP BY r.id, r.updated_at
+  `);
+  for (const r of recipeRows.rows) {
+    const localeSlug = pickSlug(r, locale);
+    if (!localeSlug) continue; // skip if current-locale translation missing
+    entries.push({
+      loc: `${HOST}/${locale}/recipes/${localeSlug}`,
+      lastmod: toIso(r.updated_at),
+      alternates: buildAlternates(r, '/recipes'),
     });
   }
 
