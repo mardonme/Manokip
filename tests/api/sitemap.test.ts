@@ -1,4 +1,7 @@
 // Plan 03-08 Task 8.1 — SEO-03 sitemap + robots.txt tests.
+// Plan 04-12 Task 12.6 — appended recipe + industry entry assertions
+// (Phase 4 sitemap visibility gate; closes the SEO-03 carry-forward for the
+// content tier).
 //
 // Live-Neon tests for the per-locale sitemap builder + XML renderer + the 4
 // route handlers (sitemap-uz/ru/en + sitemap-index) + robots.txt. Tests
@@ -27,6 +30,10 @@ import {
   type PublicFixtureIds,
 } from '../fixtures/seed-public';
 import {
+  seedPhase4Content,
+  teardownPhase4Content,
+} from '../fixtures/seed-content';
+import {
   buildLocaleSitemapEntries,
   renderUrlsetXml,
   escapeXml,
@@ -43,9 +50,13 @@ describe('sitemap XML (SEO-03; live Neon)', () => {
   beforeAll(async () => {
     requireTestDatabaseUrl();
     ids = await seedPublicFixture();
+    // Plan 04-12 Task 12.6 — seed recipes + industries so the appended
+    // assertions below see the content-tier entries in the per-locale sitemap.
+    await seedPhase4Content({ products: ids.productIds });
   }, 60_000);
 
   afterAll(async () => {
+    await teardownPhase4Content();
     if (ids) await teardownPublicFixture(ids);
   }, 30_000);
 
@@ -157,4 +168,59 @@ describe('sitemap XML (SEO-03; live Neon)', () => {
     expect(body).toContain('Allow: /');
     expect(body).toContain('Sitemap: https://manometr.uz/sitemap-index.xml');
   });
+
+  // Plan 04-12 Task 12.6 — Phase-4 sitemap entry assertions for the content
+  // tier (recipes + industries). seedPhase4Content seeds slugs uz-manometr-
+  // installation, uz-transmitter-calibration, uz-oil-and-gas, uz-chemicals.
+  it('Phase-4 CONT-03/CONT-06: uz sitemap includes published recipe entries', async () => {
+    const entries = await buildLocaleSitemapEntries('uz');
+    const recipeOne = entries.find((e) =>
+      e.loc.endsWith('/uz/recipes/uz-manometr-installation'),
+    );
+    expect(recipeOne).toBeDefined();
+    expect(recipeOne?.alternates?.ru).toMatch(
+      /\/ru\/recipes\/ru-manometr-installation$/,
+    );
+    expect(recipeOne?.alternates?.en).toMatch(
+      /\/en\/recipes\/en-manometer-installation$/,
+    );
+
+    const recipeTwo = entries.find((e) =>
+      e.loc.endsWith('/uz/recipes/uz-transmitter-calibration'),
+    );
+    expect(recipeTwo).toBeDefined();
+  }, 30_000);
+
+  it('Phase-4 CONT-03/CONT-06: uz sitemap includes published industry entries', async () => {
+    const entries = await buildLocaleSitemapEntries('uz');
+    const industryOne = entries.find((e) =>
+      e.loc.endsWith('/uz/industries/uz-oil-and-gas'),
+    );
+    expect(industryOne).toBeDefined();
+    expect(industryOne?.alternates?.ru).toMatch(
+      /\/ru\/industries\/ru-oil-and-gas$/,
+    );
+
+    const industryTwo = entries.find((e) =>
+      e.loc.endsWith('/uz/industries/uz-chemicals'),
+    );
+    expect(industryTwo).toBeDefined();
+  }, 30_000);
+
+  it('Phase-4 CONT-03/CONT-06: ru sitemap uses ru-locale slugs for recipes + industries', async () => {
+    const entries = await buildLocaleSitemapEntries('ru');
+    const ruRecipe = entries.find((e) =>
+      e.loc.endsWith('/ru/recipes/ru-manometr-installation'),
+    );
+    expect(ruRecipe).toBeDefined();
+    const ruIndustry = entries.find((e) =>
+      e.loc.endsWith('/ru/industries/ru-oil-and-gas'),
+    );
+    expect(ruIndustry).toBeDefined();
+    // uz-slug should NOT appear in ru locale sitemap (different per-locale slug).
+    const uzSluggedAsRu = entries.find((e) =>
+      e.loc.endsWith('/ru/recipes/uz-manometr-installation'),
+    );
+    expect(uzSluggedAsRu).toBeUndefined();
+  }, 30_000);
 });
