@@ -76,6 +76,7 @@ export async function buildLocaleSitemapEntries(
     '/categories',
     '/manufacturers',
     '/recipes',
+    '/industries',
   ] as const) {
     const alternates: Partial<Record<Locale, string>> = {};
     for (const l of ALL_LOCALES) {
@@ -194,6 +195,36 @@ export async function buildLocaleSitemapEntries(
       loc: `${HOST}/${locale}/recipes/${localeSlug}`,
       lastmod: toIso(r.updated_at),
       alternates: buildAlternates(r, '/recipes'),
+    });
+  }
+
+  // ── Industries (Plan 04-10; T-04-INFO-01 — only published rows) ─────────
+  // Mirror of the recipes block above with industry tables. Same GROUP BY
+  // pattern: collect all 3 locale slugs in one row so alternates emit
+  // without a second round-trip.
+  const industryRows = await db.execute<{
+    id: string;
+    updated_at: Date | string;
+    slug_uz: string | null;
+    slug_ru: string | null;
+    slug_en: string | null;
+  }>(sql`
+    SELECT i.id, i.updated_at,
+           MAX(CASE WHEN it.locale='uz' THEN it.slug END) AS slug_uz,
+           MAX(CASE WHEN it.locale='ru' THEN it.slug END) AS slug_ru,
+           MAX(CASE WHEN it.locale='en' THEN it.slug END) AS slug_en
+    FROM industry i
+    JOIN industry_translations it ON it.industry_id = i.id
+    WHERE i.status = 'published'
+    GROUP BY i.id, i.updated_at
+  `);
+  for (const r of industryRows.rows) {
+    const localeSlug = pickSlug(r, locale);
+    if (!localeSlug) continue; // skip if current-locale translation missing
+    entries.push({
+      loc: `${HOST}/${locale}/industries/${localeSlug}`,
+      lastmod: toIso(r.updated_at),
+      alternates: buildAlternates(r, '/industries'),
     });
   }
 

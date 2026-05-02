@@ -92,6 +92,13 @@
         "subtitle": "Technical guides and applications for pressure measurement equipment",
         "empty": "No published articles yet"
       }
+    },
+    "industries": {
+      "index": {
+        "title": "Industries",
+        "subtitle": "Industrial verticals and applications where Manometr equipment is deployed",
+        "empty": "No published industries yet"
+      }
     }
   }
 }

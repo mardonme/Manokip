@@ -92,6 +92,13 @@
         "subtitle": "Bosim o'lchash uskunalari bo'yicha texnik qo'llanmalar va amaliy misollar",
         "empty": "Hozircha chop etilgan maqolalar yo'q"
       }
+    },
+    "industries": {
+      "index": {
+        "title": "Sohalar",
+        "subtitle": "Manometr uskunalari qo'llaniladigan sanoat sohalari va vertikallar",
+        "empty": "Hozircha chop etilgan sohalar yo'q"
+      }
     }
   }
 }
