@@ -73,6 +73,25 @@
       "products": "Mahsulotlar ({count})",
       "noProducts": "Chop etilgan mahsulotlar yo'q",
       "noResults": "Ishlab chiqaruvchilar topilmadi"
+    },
+    "localeFallback": {
+      "recipe": {
+        "uz": "Hozircha o'zbek tilida ko'rsatilmoqda — boshqa tilda tarjima mavjud emas",
+        "ru": "Pokazano na russkom — o'zbek tilidagi tarjima hali tayyor emas",
+        "en": "Showing in English — Uzbek translation not yet available"
+      },
+      "industry": {
+        "uz": "Hozircha o'zbek tilida ko'rsatilmoqda — boshqa tilda tarjima mavjud emas",
+        "ru": "Pokazano na russkom — o'zbek tilidagi tarjima hali tayyor emas",
+        "en": "Showing in English — Uzbek translation not yet available"
+      }
+    },
+    "recipes": {
+      "index": {
+        "title": "Maqolalar va qo'llanmalar",
+        "subtitle": "Bosim o'lchash uskunalari bo'yicha texnik qo'llanmalar va amaliy misollar",
+        "empty": "Hozircha chop etilgan maqolalar yo'q"
+      }
     }
   }
 }

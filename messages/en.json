@@ -73,6 +73,25 @@
       "products": "Products ({count})",
       "noProducts": "No published products",
       "noResults": "No manufacturers found"
+    },
+    "localeFallback": {
+      "recipe": {
+        "uz": "Showing Uzbek — English translation not yet available",
+        "ru": "Showing Russian — English translation not yet available",
+        "en": "Showing English — other translations not yet available"
+      },
+      "industry": {
+        "uz": "Showing Uzbek — English translation not yet available",
+        "ru": "Showing Russian — English translation not yet available",
+        "en": "Showing English — other translations not yet available"
+      }
+    },
+    "recipes": {
+      "index": {
+        "title": "Articles & Guides",
+        "subtitle": "Technical guides and applications for pressure measurement equipment",
+        "empty": "No published articles yet"
+      }
     }
   }
 }
