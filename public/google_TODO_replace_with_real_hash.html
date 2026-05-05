@@ -1,0 +1,12 @@
+google-site-verification: TODO_replace_with_real_hash.html
+TODO (user, D-12): After registering manometr.uz at https://search.google.com/search-console
+                   download the actual `google<HASH>.html` file Google generates,
+                   commit it to /public/ alongside this placeholder, then DELETE this file.
+                   The Google file's content is a single line of the form:
+                       google-site-verification: google<HASH>.html
+                   Vercel will serve it directly at https://manometr.uz/google<HASH>.html
+                   Search Console verifies via HTTP fetch of that exact path.
+                   Alternative: register via DNS TXT record at the registrar — in that case
+                   this placeholder can remain or be deleted; it has no effect on DNS-based
+                   verification. The placeholder is only consulted if HTML-file verification
+                   is selected in Search Console.
