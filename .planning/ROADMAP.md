@@ -125,7 +125,14 @@ Plans:
   2. Google Search Console and Yandex Webmaster are registered, and the International Targeting panel shows no hreflang errors before launch
   3. A load test of `ab -n 500 -c 50` against a preview deployment completes with no connection errors and bounded latency, and real-device QA on Slow 4G has been signed off across all three locales
   4. The content team has dogfooded at least 10 real trilingual products with each product taking 10 minutes or less from start to published, and has signed off on the admin UX as the launch blocker resolution
-**Plans**: TBD
+**Plans**: 6 plans
+Plans:
+- [ ] 05-01-PLAN.md — Wave 0 [BLOCKING]: contact_rate_limit schema migration + AUDIT_ACTIONS extension + 4 new env vars + messages.public.contact namespace skeleton + 12 RED test stubs (5 vitest server + 3 jsdom + 1 sitemap-extension + 3 Playwright fixme)
+- [ ] 05-02-PLAN.md — Server stack: install @marsidev/react-turnstile + author withPublicAction sibling + turnstile.ts + rate-limit.ts (HMAC + atomic 2-bucket UPSERT) + zod/contact.ts + 2 React Email templates (admin EN + auto-reply uz/ru/en) + email-contact.ts (fire-and-forget) + submitContactForm Server Action; flip 6 vitest stubs RED→GREEN
+- [ ] 05-03-PLAN.md — Visitor UI: ContactForm (RHF + Turnstile widget + off-screen honeypot + sourcePage capture) + ContactButton (sticky shadcn Dialog trigger) + StickyCtaContactButton (product-detail variant with productContext pre-fill) + SiteHeader mount + sticky-cta-rail wiring + 3-locale messages populated; flip 2 jsdom stubs RED→GREEN
+- [ ] 05-04-PLAN.md — Canonical /[locale]/contact RSC page + sitemap.ts /contact extension + sitemap test extension flipped GREEN
+- [ ] 05-05-PLAN.md — Perf + e2e closure: Lighthouse warn→error severity lift + 5-URL workflow expansion + scripts/load-test.sh + workflow_dispatch workflow + 3 Playwright e2e specs flipped GREEN (contact-roundtrip + cloudinary-widget-smoke + glyph-render — absorbs DEF-4-12-03 + DEF-4-12-04)
+- [ ] 05-06-PLAN.md — Closure: Search Console + Yandex verification HTML placeholders + 05-DOGFOOD-PROTOCOL.md + 05-VERIFICATION.md (closed-with-deferred-validation per D-14, 5 DEF-5-06-* entries) + 04-VERIFICATION.md DEF absorption + REQUIREMENTS.md status flips + RETROSPECTIVE.md Phase 5 entry (D-15 two-state) + STATE.md update
 **UI hint**: yes
 
 ## Progress
@@ -139,7 +146,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 2. Admin Panel | 18/18 | Complete | 2026-04-29 |
 | 3. Public Rendering, Search, SEO | 9/9 | Complete | 2026-05-01 |
 | 4. Content Features | 8/12 | In progress | - |
-| 5. Contact and Launch Polish | 0/TBD | Not started | - |
+| 5. Contact and Launch Polish | 0/6 | Not started | - |
 
 ---
 *Roadmap created: 2026-04-21*
