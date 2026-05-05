@@ -15,8 +15,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Foundations** - Schema, locale routing, auth, pooled Postgres, deployment scaffold
 - [x] **Phase 2: Admin Panel** - Spec-schema editor, product CRUD, media, invites, audit, cache invalidation
 - [x] **Phase 3: Public Rendering, Search, SEO** - Catalog pages, filters, FTS, hreflang, JSON-LD, manufacturer pages
-- [ ] **Phase 4: Content Features** - Recipes, industry pages, product cross-links
-- [ ] **Phase 5: Contact and Launch Polish** - Contact form, observability, SEO verification, dogfood, launch bar
+- [x] **Phase 4: Content Features** - Recipes, industry pages, product cross-links
+- [x] **Phase 5: Contact and Launch Polish** - Contact form, observability, SEO verification, dogfood, launch bar
 
 ## Phase Details
 
@@ -132,7 +132,7 @@ Plans:
 - [x] 05-03-PLAN.md — Visitor UI: ContactForm (RHF + Turnstile widget + off-screen honeypot + sourcePage capture) + ContactButton (sticky shadcn Dialog trigger) + StickyCtaContactButton (product-detail variant with productContext pre-fill) + SiteHeader mount + sticky-cta-rail wiring + 3-locale messages populated; flip 2 jsdom stubs RED→GREEN — COMPLETE 2026-05-05 (3 task commits f7967ad ContactForm + 8 specs + 413daf0 ContactButton + StickyCtaContactButton + sticky-cta-rail + site-header + product page caller + 4 specs + 9538907 messages population); CTA-01 + CTA-03 visitor side fully wired; pnpm tsc --noEmit CLEAN; pnpm vitest run --project=dom 32/32 specs across 8 files; 0 it.skip in contact-form/contact-button tests; 0 'TODO: 05-03' across all 3 message files; 24-key public.contact namespace parity verified across uz/ru/en
 - [x] 05-04-PLAN.md — Canonical /[locale]/contact RSC page + sitemap.ts /contact extension + sitemap test extension flipped GREEN — COMPLETE 2026-05-05 (2 task commits a3c02db /[locale]/contact RSC mounting <ContactForm mode='page'> with generateMetadata via buildAlternates({pathPrefix:'/contact'}) for per-locale canonical + hreflang fan-out uz/ru/en + x-default + e8f03fe sitemap staticPath array gains '/contact' + 3 plan-05-01 RED skipped sitemap stubs flipped GREEN with hreflang fan-out assertions on the typed alternates map + appended 4th 'all 3 locale sitemaps include /contact' coverage spec T-05-04-02 mitigation); D-01 SSOT preserved (modal + canonical render the same ContactForm — only mode differs); pnpm tsc --noEmit CLEAN; pnpm vitest run 254/254 across 48 files (16/16 sitemap specs incl. 3 flipped + 1 appended); pnpm next build prerenders /uz/contact, /ru/contact, /en/contact as Partial Prerender; CTA-01 + SEO-06 canonical surface satisfied; Wave 1 closes; Wave 2 plan 05 unblocked
 - [x] 05-05-PLAN.md — Perf + e2e closure: Lighthouse warn→error severity lift + LCP budget loosened 2500→3000 ms for preview headroom + 5-URL workflow expansion + scripts/load-test.sh (ab -n 500 -c 50 across 5 read-only endpoints with p95 budget) + .github/workflows/load-test.yml workflow_dispatch-only per CONTEXT D-11 + 3 Playwright e2e specs flipped GREEN (contact-roundtrip 2 specs CTA-01+CTA-02 with try/finally DB cleanup; cloudinary-widget-smoke 2 specs DEF-4-12-04 absorbed; glyph-render 3 specs DEF-4-12-03 absorbed) — COMPLETE 2026-05-05 (6 task commits 7077699 Lighthouse lift + 27da9cf load-test.sh + ab50de0 chmod +x + 4b25c63 contact-roundtrip GREEN + 71e79ce cloudinary smoke GREEN + a86ef24 glyph-render GREEN); pnpm tsc --noEmit CLEAN; pnpm playwright test --list shows 7 active tests across the 3 plan files (was 7 fixme); Wave 2 closes; closure plan 05-06 unblocked
-- [ ] 05-06-PLAN.md — Closure: Search Console + Yandex verification HTML placeholders + 05-DOGFOOD-PROTOCOL.md + 05-VERIFICATION.md (closed-with-deferred-validation per D-14, 5 DEF-5-06-* entries) + 04-VERIFICATION.md DEF absorption + REQUIREMENTS.md status flips + RETROSPECTIVE.md Phase 5 entry (D-15 two-state) + STATE.md update
+- [x] 05-06-PLAN.md — Closure: Search Console + Yandex verification HTML placeholders + 05-DOGFOOD-PROTOCOL.md + 05-VERIFICATION.md (closed-with-deferred-validation per D-14, 5 DEF-5-06-* entries) + 04-VERIFICATION.md DEF absorption + REQUIREMENTS.md status flips + RETROSPECTIVE.md Phase 5 entry (D-15 two-state) + STATE.md update — COMPLETE 2026-05-05 (7 task commits 377d170 placeholders + 0799ea5 dogfood + 142a328 05-VERIFICATION + dc4b585 04-VERIFICATION absorption + 378d442 REQUIREMENTS flips + final commit RETROSPECTIVE+STATE+ROADMAP); Phase 5 LOCALLY COMPLETE 6/6 per D-14; v1 launch awaits 5 DEF-5-06-* user actions per D-15
 **UI hint**: yes
 
 ## Progress
@@ -146,7 +146,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 2. Admin Panel | 18/18 | Complete | 2026-04-29 |
 | 3. Public Rendering, Search, SEO | 9/9 | Complete | 2026-05-01 |
 | 4. Content Features | 12/12 | Complete | 2026-05-01 |
-| 5. Contact and Launch Polish | 5/6 | In progress | - |
+| 5. Contact and Launch Polish | 6/6 | Complete (locally; v1 launch awaits 5 DEF-5-06-*) | 2026-05-05 |
 
 ---
 *Roadmap created: 2026-04-21*
