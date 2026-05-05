@@ -127,7 +127,7 @@ Plans:
   4. The content team has dogfooded at least 10 real trilingual products with each product taking 10 minutes or less from start to published, and has signed off on the admin UX as the launch blocker resolution
 **Plans**: 6 plans
 Plans:
-- [ ] 05-01-PLAN.md — Wave 0 [BLOCKING]: contact_rate_limit schema migration + AUDIT_ACTIONS extension + 4 new env vars + messages.public.contact namespace skeleton + 12 RED test stubs (5 vitest server + 3 jsdom + 1 sitemap-extension + 3 Playwright fixme)
+- [x] 05-01-PLAN.md — Wave 0 [BLOCKING]: contact_rate_limit schema migration + AUDIT_ACTIONS extension + 4 new env vars + messages.public.contact namespace skeleton + 12 RED test stubs (5 vitest server + 3 jsdom + 1 sitemap-extension + 3 Playwright fixme) — COMPLETE 2026-05-05
 - [ ] 05-02-PLAN.md — Server stack: install @marsidev/react-turnstile + author withPublicAction sibling + turnstile.ts + rate-limit.ts (HMAC + atomic 2-bucket UPSERT) + zod/contact.ts + 2 React Email templates (admin EN + auto-reply uz/ru/en) + email-contact.ts (fire-and-forget) + submitContactForm Server Action; flip 6 vitest stubs RED→GREEN
 - [ ] 05-03-PLAN.md — Visitor UI: ContactForm (RHF + Turnstile widget + off-screen honeypot + sourcePage capture) + ContactButton (sticky shadcn Dialog trigger) + StickyCtaContactButton (product-detail variant with productContext pre-fill) + SiteHeader mount + sticky-cta-rail wiring + 3-locale messages populated; flip 2 jsdom stubs RED→GREEN
 - [ ] 05-04-PLAN.md — Canonical /[locale]/contact RSC page + sitemap.ts /contact extension + sitemap test extension flipped GREEN
@@ -145,8 +145,8 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 1. Foundations | 7/7 | Complete | 2026-04-23 |
 | 2. Admin Panel | 18/18 | Complete | 2026-04-29 |
 | 3. Public Rendering, Search, SEO | 9/9 | Complete | 2026-05-01 |
-| 4. Content Features | 8/12 | In progress | - |
-| 5. Contact and Launch Polish | 0/6 | Not started | - |
+| 4. Content Features | 12/12 | Complete | 2026-05-01 |
+| 5. Contact and Launch Polish | 1/6 | In progress | - |
 
 ---
 *Roadmap created: 2026-04-21*
