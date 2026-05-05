@@ -129,7 +129,7 @@ Plans:
 Plans:
 - [x] 05-01-PLAN.md — Wave 0 [BLOCKING]: contact_rate_limit schema migration + AUDIT_ACTIONS extension + 4 new env vars + messages.public.contact namespace skeleton + 12 RED test stubs (5 vitest server + 3 jsdom + 1 sitemap-extension + 3 Playwright fixme) — COMPLETE 2026-05-05
 - [x] 05-02-PLAN.md — Server stack: @marsidev/react-turnstile installed + withPublicAction sibling to withAdminAction + turnstile.ts + rate-limit.ts (HMAC + atomic 2-bucket UPSERT on dbTx WS Pool) + zod/contact.ts + 2 React Email templates (admin EN + auto-reply uz/ru/en) + email-contact.ts (fire-and-forget) + submitContactForm Server Action with atomic insert + audit row; 6 vitest stubs flipped RED→GREEN (29 specs total) — COMPLETE 2026-05-05 (6 task commits 82f5b1f Turnstile + 8dbc60f rate-limit + b622c7f zod/contact + e39adab withPublicAction + 223c64c emails + b57d408 submitContactForm); CTA-01 + CTA-02 + CTA-04 server side fully wired
-- [ ] 05-03-PLAN.md — Visitor UI: ContactForm (RHF + Turnstile widget + off-screen honeypot + sourcePage capture) + ContactButton (sticky shadcn Dialog trigger) + StickyCtaContactButton (product-detail variant with productContext pre-fill) + SiteHeader mount + sticky-cta-rail wiring + 3-locale messages populated; flip 2 jsdom stubs RED→GREEN
+- [x] 05-03-PLAN.md — Visitor UI: ContactForm (RHF + Turnstile widget + off-screen honeypot + sourcePage capture) + ContactButton (sticky shadcn Dialog trigger) + StickyCtaContactButton (product-detail variant with productContext pre-fill) + SiteHeader mount + sticky-cta-rail wiring + 3-locale messages populated; flip 2 jsdom stubs RED→GREEN — COMPLETE 2026-05-05 (3 task commits f7967ad ContactForm + 8 specs + 413daf0 ContactButton + StickyCtaContactButton + sticky-cta-rail + site-header + product page caller + 4 specs + 9538907 messages population); CTA-01 + CTA-03 visitor side fully wired; pnpm tsc --noEmit CLEAN; pnpm vitest run --project=dom 32/32 specs across 8 files; 0 it.skip in contact-form/contact-button tests; 0 'TODO: 05-03' across all 3 message files; 24-key public.contact namespace parity verified across uz/ru/en
 - [ ] 05-04-PLAN.md — Canonical /[locale]/contact RSC page + sitemap.ts /contact extension + sitemap test extension flipped GREEN
 - [ ] 05-05-PLAN.md — Perf + e2e closure: Lighthouse warn→error severity lift + 5-URL workflow expansion + scripts/load-test.sh + workflow_dispatch workflow + 3 Playwright e2e specs flipped GREEN (contact-roundtrip + cloudinary-widget-smoke + glyph-render — absorbs DEF-4-12-03 + DEF-4-12-04)
 - [ ] 05-06-PLAN.md — Closure: Search Console + Yandex verification HTML placeholders + 05-DOGFOOD-PROTOCOL.md + 05-VERIFICATION.md (closed-with-deferred-validation per D-14, 5 DEF-5-06-* entries) + 04-VERIFICATION.md DEF absorption + REQUIREMENTS.md status flips + RETROSPECTIVE.md Phase 5 entry (D-15 two-state) + STATE.md update
@@ -146,7 +146,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 2. Admin Panel | 18/18 | Complete | 2026-04-29 |
 | 3. Public Rendering, Search, SEO | 9/9 | Complete | 2026-05-01 |
 | 4. Content Features | 12/12 | Complete | 2026-05-01 |
-| 5. Contact and Launch Polish | 2/6 | In progress | - |
+| 5. Contact and Launch Polish | 3/6 | In progress | - |
 
 ---
 *Roadmap created: 2026-04-21*
