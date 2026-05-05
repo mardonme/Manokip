@@ -99,6 +99,38 @@
         "subtitle": "Промышленные отрасли и вертикали, где применяется оборудование Manometr",
         "empty": "Опубликованных отраслей пока нет"
       }
+    },
+    "contact": {
+      "cta": "TODO: 05-03",
+      "pageTitle": "TODO: 05-03",
+      "pageSubtitle": "TODO: 05-03",
+      "form": {
+        "name": "TODO: 05-03",
+        "company": "TODO: 05-03",
+        "email": "TODO: 05-03",
+        "phone": "TODO: 05-03",
+        "message": "TODO: 05-03",
+        "submit": "TODO: 05-03",
+        "submitting": "TODO: 05-03",
+        "successTitle": "TODO: 05-03",
+        "successBody": "TODO: 05-03",
+        "errorValidation": "TODO: 05-03",
+        "errorTurnstile": "TODO: 05-03",
+        "errorRateLimit": "TODO: 05-03",
+        "errorUnknown": "TODO: 05-03",
+        "honeypotLabel": "TODO: 05-03"
+      },
+      "productInquiry": {
+        "inquiryAbout": "TODO: 05-03"
+      },
+      "autoReply": {
+        "subject": "TODO: 05-03",
+        "preview": "TODO: 05-03",
+        "greeting": "TODO: 05-03",
+        "body": "TODO: 05-03",
+        "productLine": "TODO: 05-03",
+        "signature": "TODO: 05-03"
+      }
     }
   },
   "UsedIn": {
