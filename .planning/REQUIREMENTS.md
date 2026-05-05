@@ -67,10 +67,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Contact (CONT-ACT)
 
-- [ ] **CTA-01**: Visitor can submit a site-wide contact form with name, company, email, message; form is gated by honeypot and Cloudflare Turnstile against spam
-- [ ] **CTA-02**: Submission is persisted to the database and an email notification is sent to the admin team via Resend
-- [ ] **CTA-03**: Form records the source page the submission came from (hidden field)
-- [ ] **CTA-04**: Submission endpoint is rate-limited per IP to prevent abuse
+- [x] **CTA-01**: Visitor can submit a site-wide contact form with name, company, email, message; form is gated by honeypot and Cloudflare Turnstile against spam — complete (05-02 withPublicAction triple-gate; 05-03 ContactForm + ContactButton SSOT; 05-04 canonical /[locale]/contact page; 05-05 contact-roundtrip e2e GREEN)
+- [x] **CTA-02**: Submission is persisted to the database and an email notification is sent to the admin team via Resend — complete (05-02 atomic dbTx insert + audit row + 2 React Email templates + fire-and-forget Resend dispatcher; 05-05 e2e roundtrip asserts row in Neon)
+- [x] **CTA-03**: Form records the source page the submission came from (hidden field) — complete (05-02 sourcePage validation against locale path regex + product-context auto-prepend D-03; 05-03 ContactForm captures usePathname(); 05-05 e2e asserts prepend prefix on product-page submission)
+- [x] **CTA-04**: Submission endpoint is rate-limited per IP to prevent abuse — complete (05-01 contact_rate_limit table + (ip_hash, window_kind, window_start) PK; 05-02 HMAC-SHA256 + atomic 2-bucket UPSERT 5/hour AND 20/day; live-Neon tests GREEN)
 
 ### SEO and Internationalization (SEO)
 
@@ -79,12 +79,12 @@ Requirements for initial release. Each maps to roadmap phases.
 - [ ] **SEO-03**: Site emits per-locale XML sitemaps referenced from `robots.txt`
 - [ ] **SEO-04**: Fonts load via `next/font` with subsets `['latin', 'latin-ext', 'cyrillic']`; Uzbek Latin `oʻ`/`gʻ` (U+02BB) renders correctly across locales
 - [ ] **SEO-05**: Product images render through `<CldImage>` with responsive `sizes` attribute; LCP on product detail page passes Core Web Vitals on Slow 4G (emerging-market budget)
-- [ ] **SEO-06**: Site is registered with Google Search Console and Yandex Webmaster; International Targeting panel is clean (no hreflang errors) before launch
+- [x] **SEO-06**: Site is registered with Google Search Console and Yandex Webmaster; International Targeting panel is clean (no hreflang errors) before launch — complete-with-deferred-validation (see DEF-5-06-SEO06-GSC + DEF-5-06-SEO06-YANDEX in 05-VERIFICATION.md — Google Search Console + Yandex Webmaster registration are user-driven post-merge work per D-12; placeholder verification HTML files shipped in /public/; sitemap /contact extension + 5-URL Lighthouse coverage live)
 
 ### Content Operations (OPS)
 
 - [x] **OPS-01**: Admin edits to any product, category, recipe, or industry invalidate the relevant public pages via `revalidateTag` (no stale public pages after publish) — complete-with-deferred-validation (see DEF-2-17-01: workflow green on real PR + RED on regression PR + branch-protection rule as required status check are queued for the user's post-merge environmental work)
-- [ ] **OPS-02**: Content team dogfoods entry of at least 10 real trilingual products, with each product taking 10 minutes or less from start to published — measured before launch
+- [x] **OPS-02**: Content team dogfoods entry of at least 10 real trilingual products, with each product taking 10 minutes or less from start to published — measured before launch — complete-with-deferred-validation (see DEF-5-06-OPS02 in 05-VERIFICATION.md — content team executes 05-DOGFOOD-PROTOCOL.md per D-12; protocol shipped with 10-product timing log template + sign-off line)
 
 ## v2 Requirements
 
@@ -176,18 +176,18 @@ Which phases cover which requirements.
 | CONT-06 | Phase 4 | Partial — recipes complete, industries pending (04-03 — techArticleJsonLd helper extending Phase-3 set with WithContext<TechArticle> shape + author=publisher=Manometr Org + optional description/image/mentions conditional-spread + mentions as Product sub-objects with no offers per Phase 3 D-08; 04-09 — TechArticle JSON-LD shipped on /[locale]/recipes/[slug] detail page: techArticleJsonLd({headline, excerpt, featuredImagePublicId, datePublished:(publishedAt??updatedAt).toISOString(), dateModified:updatedAt.toISOString(), inLanguage:locale, canonicalUrl:HOST+canonicalPath, mentions: linkedProducts.map(...)}) emitted via <script type='application/ld+json' dangerouslySetInnerHTML={{__html: JSON.stringify(ld).replace(/</g,'\\u003c')}}/> for </script> termination guard T-04-XSS-02 / Phase 3 D-09 carry-forward; full closure when industries mirror lands in 04-10 and the manual Yandex Rich Results gate runs in 04-12 — at that point if industry pages fail TechArticle validation post-launch the v1.1 fallback per Phase 4 D-10 is a 1-line @type change to Article on industries) |
 | MFG-01 | Phase 3 | Pending |
 | MFG-02 | Phase 3 | Pending |
-| CTA-01 | Phase 5 | Pending |
-| CTA-02 | Phase 5 | Pending |
-| CTA-03 | Phase 5 | Pending |
-| CTA-04 | Phase 5 | Pending |
+| CTA-01 | Phase 5 | Complete (05-02 — withPublicAction triple-gate honeypot/Turnstile/rate-limit + submitContactForm Server Action; 05-03 — ContactForm SSOT + ContactButton + StickyCtaContactButton + SiteHeader mount; 05-04 — canonical /[locale]/contact page; 05-05 — contact-roundtrip e2e GREEN with try/finally DB cleanup) |
+| CTA-02 | Phase 5 | Complete (05-02 — atomic dbTx insert contact_submission + audit row contact_submission_create + fire-and-forget Resend dispatch via 2 React Email templates contact-admin English-only + contact-auto-reply locale-parameterized; D-07 ADMIN_NOTIFY_EMAILS empty-skip; D-10 fire-and-forget; 05-05 — e2e asserts persisted row in Neon) |
+| CTA-03 | Phase 5 | Complete (05-02 — sourcePage server-side validation against /^\/(uz\|ru\|en)\/[a-z0-9\-\/]*$/ + product-context auto-prepend D-03; 05-03 — ContactForm captures usePathname() at mount and re-syncs on route change; 05-05 — e2e asserts message body contains prepend prefix when sourcePage is /products/<slug>) |
+| CTA-04 | Phase 5 | Complete (05-01 — contact_rate_limit table + (ip_hash, window_kind, window_start) PK + 0004 migration applied to Neon dev branch; 05-02 — HMAC-SHA256 + atomic 2-bucket UPSERT in dbTx 5/hour AND 20/day per hashed IP; T-CTA-01 mitigated; live-Neon tests GREEN) |
 | SEO-01 | Phase 3 | Pending |
 | SEO-02 | Phase 3 | Pending |
 | SEO-03 | Phase 3 | Pending |
 | SEO-04 | Phase 3 | Pending |
 | SEO-05 | Phase 3 | Pending |
-| SEO-06 | Phase 5 | Pending |
+| SEO-06 | Phase 5 | Complete-with-deferred-validation (05-04 — sitemap.ts /contact extension + per-locale hreflang fan-out in test; 05-05 — Lighthouse 5-URL coverage including /uz/contact + warn→error severity lift; 05-06 — verification HTML placeholders in /public/google_TODO_*.html + /public/yandex_TODO_*.html shipped, real registration is DEF-5-06-SEO06-GSC + DEF-5-06-SEO06-YANDEX user post-merge work per D-12) |
 | OPS-01 | Phase 2 | Complete-with-deferred-validation (02-17 — admin-edit-revalidates Playwright spec at tests/e2e/admin-edit-revalidates.spec.ts authored as the OPS-01 merge-blocking gate: drives admin login via DB-direct verification_tokens consumption per Pitfall #12 + edits a seed product's uz name through the real editor + asserts new name visible on reloaded admin list within 5s — admin list reads through SAME cache layer revalidateProduct() invalidates so a missing revalidateTag call per Pitfall #3 fails the spec identically; .github/workflows/e2e-preview.yml waits for Vercel preview via patrickedqvist/wait-for-vercel-preview@v1.3.1 then runs the spec with BASE_URL=$PREVIEW_URL; playwright.config.ts threads BASE_URL + x-vercel-protection-bypass at the config layer so every spec honors preview Deployment Protection automatically; spec asserts via /uz/admin/products until Phase 3 ships /uz/products/<slug> at which point a one-line goto target swap migrates the assertion. Local artifacts shipped + locally verified. DEF-2-17-01 tracks deployment-side validation: workflow green on real PR + RED on regression PR with revalidateProduct removed + branch-protection rule requiring `e2e-preview / OPS-01` status check on main/master. Transitions to fully validated when the user replies with PR URLs + branch protection confirmation.) |
-| OPS-02 | Phase 5 | Pending |
+| OPS-02 | Phase 5 | Complete-with-deferred-validation (05-06 — 05-DOGFOOD-PROTOCOL.md shipped with 10-product timing log template + per-product start/end/minutes columns + sign-off line; content team execution is DEF-5-06-OPS02 user post-merge work per D-12; transition criteria: median ≤10 min AND max ≤15 min + content team lead signature) |
 
 **Coverage:**
 - v1 requirements: 52 total (7 FOUND + 12 ADMIN + 8 CAT + 5 SRCH + 6 CONT + 2 MFG + 4 CTA + 6 SEO + 2 OPS)
@@ -199,8 +199,8 @@ Which phases cover which requirements.
 - Phase 2 (Admin Panel): 13 requirements (12 ADMIN + OPS-01)
 - Phase 3 (Public Rendering + Search + SEO): 20 requirements (8 CAT + 5 SRCH + 2 MFG + 5 SEO)
 - Phase 4 (Content Features): 6 requirements (6 CONT)
-- Phase 5 (Contact + Launch): 6 requirements (4 CTA + SEO-06 + OPS-02)
+- Phase 5 (Contact + Launch): 6 requirements (4 CTA + SEO-06 + OPS-02) — 4/6 complete (CTA-01..04); 2/6 complete-with-deferred-validation (SEO-06 + OPS-02)
 
 ---
 *Requirements defined: 2026-04-21*
-*Last updated: 2026-04-29 — Phase 2 plan 02-17 REVALIDATION-E2E-GATE complete-with-deferred-validation; OPS-01 closes (admin-edit-revalidates Playwright spec authored as the OPS-01 merge-blocking gate + GitHub Actions workflow + playwright.config.ts BASE_URL/bypass threading; admin-session-cap spec flipped from fixme to live, validating ADMIN-01 session-cap guarantee at e2e level). Phase 2 (Admin Panel) is now LOCALLY COMPLETE 18/18 — all 13 Phase-2 requirements (12 ADMIN + OPS-01) are closed in code + tests + admin UI. DEF-2-17-01 tracks the deferred deployment-side OPS-01 validation (workflow green on real PR + RED on regression PR + branch-protection rule requiring `e2e-preview / OPS-01` status check on main/master) as the user's post-merge environmental work. Phase 3 (Public Rendering, Search, SEO) opens next.*
+*Last updated: 2026-05-05 — Phase 5 plan 05-06 LOCALLY COMPLETE — closure ships 2 webmaster verification placeholder HTML files in /public/, OPS-02 dogfood protocol with 10-product timing log template, 05-VERIFICATION.md (closed-with-deferred-validation per D-14), 04-VERIFICATION.md DEF-4-12-01..04 absorption pointers (per D-13), REQUIREMENTS.md status flips for CTA-01..04 (Complete) + SEO-06 (Complete-with-deferred-validation) + OPS-02 (Complete-with-deferred-validation), RETROSPECTIVE.md Phase 5 entry (D-15 two-state model: locally complete vs v1 launched), STATE.md update. Phase 5 (Contact and Launch Polish) is LOCALLY COMPLETE 6/6 — all 6 Phase-5 requirements (4 CTA + SEO-06 + OPS-02) are closed in code + tests; 5 DEF-5-06-* entries track the user's post-merge environmental work (Google Search Console + Yandex Webmaster registration + content team dogfood + 3-phone real-device QA + manual Cloudinary upload smoke). Per D-15: v1 launch awaits all 5 DEF-5-06-* entries clearing. v1 requirement coverage: 52/52 mapped to phases. Phase 5 closure flips 6 REQs (CTA-01..04 Complete; SEO-06 + OPS-02 Complete-with-deferred-validation). DEF-2-17-01 (OPS-01 deployment-side validation) remains outstanding from Phase 2.*
