@@ -17,6 +17,7 @@ import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import { LocaleSwitcher } from './locale-switcher';
 import { SearchBox } from './search-box';
+import { ContactButton } from './contact-button';
 import type { Locale } from '@/lib/metadata';
 
 export interface SiteHeaderProps {
@@ -44,6 +45,8 @@ export async function SiteHeader({ locale }: SiteHeaderProps) {
         </nav>
         <SearchBox locale={locale} placeholder={t('searchPlaceholder')} />
         <LocaleSwitcher currentLocale={locale} />
+        {/* Phase 5 plan 05-03 — sticky 'Contact us' modal trigger (D-01). */}
+        <ContactButton locale={locale} />
       </div>
     </header>
   );

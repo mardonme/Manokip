@@ -182,6 +182,7 @@ async function ProductDetailContent({ params }: PageProps) {
         <StickyCtaRail
           productName={product.name}
           sku={product.sku}
+          locale={locale as Locale}
           labels={{
             requestPrice: t('requestPrice'),
             downloads: t('downloads'),

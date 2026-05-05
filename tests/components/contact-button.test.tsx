@@ -1,52 +1,98 @@
-// FLIP-IN: 05-03-PLAN.md
+// Plan 05-03 task 3.2 — flipped GREEN from plan 05-01 RED stub.
 //
-// Plan 05-01 RED stub for the sticky <ContactButton /> Dialog trigger
-// (CTA-01). Wave 2 plan 05-03 ships
-// src/components/public/contact-button.tsx — a 'use client' wrapper that
-// mounts a shadcn Dialog and renders <ContactForm mode="modal" /> inside.
+// jsdom specs for src/components/public/contact-button.tsx (CTA-01).
+//
+// Mocks:
+//   - @/components/public/contact-form — stub component that records the
+//     props it receives so specs can assert mode="modal" + onSuccess wiring
+//     + productContext forwarding without booting the real ContactForm
+//     (which pulls in Turnstile, env, RHF, etc.).
+//   - next-intl useTranslations — returns identity fn so the cta label
+//     renders as the literal `cta` key string (still satisfies "localized
+//     label" — assertions just compare on the visible token).
 
 import * as React from 'react';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import {
+  render,
+  screen,
+  fireEvent,
+  cleanup,
+  waitFor,
+} from '@testing-library/react';
 
-const dynamicImport = (specifier: string): Promise<unknown> =>
-  import(/* @vite-ignore */ specifier);
-const CONTACT_BUTTON_MODULE = '@/components/public/contact-button';
+// --- Module mocks (must come BEFORE module imports) ----------------------
 
-void React;
+const contactFormPropsLog: Array<Record<string, unknown>> = [];
+
+vi.mock('@/components/public/contact-form', () => ({
+  ContactForm: (props: Record<string, unknown>) => {
+    contactFormPropsLog.push(props);
+    return React.createElement(
+      'div',
+      { 'data-testid': 'contact-form-stub' },
+      'ContactForm stub',
+    );
+  },
+}));
+
+vi.mock('next-intl', () => ({
+  useTranslations: () => (key: string) => key,
+}));
+
+// --- Imports (after mocks) -----------------------------------------------
+
+import { ContactButton } from '@/components/public/contact-button';
+
+beforeEach(() => {
+  cleanup();
+  contactFormPropsLog.length = 0;
+});
 
 describe('<ContactButton />', () => {
-  it.skip('renders sticky button with localized label', async () => {
-    // Label sourced from messages/<locale>.json public.contact.cta
-    // ("Bog'lanish" / "Связаться" / "Contact us").
-    const mod = await dynamicImport(CONTACT_BUTTON_MODULE);
-    void mod;
-    expect.fail(
-      'FLIP-IN: 05-03-PLAN.md task creates src/components/public/contact-button.tsx',
+  it('renders sticky button with localized cta label', () => {
+    render(<ContactButton locale="uz" />);
+    const btn = screen.getByTestId('contact-button');
+    expect(btn).toBeDefined();
+    // The mocked useTranslations returns the key — `cta` resolves to "cta"
+    // verbatim, which is enough to prove the localized lookup happened.
+    expect(btn.textContent).toContain('cta');
+  });
+
+  it('clicking the button opens the shadcn Dialog (ContactForm mounts)', async () => {
+    render(<ContactButton locale="uz" />);
+    const btn = screen.getByTestId('contact-button');
+    fireEvent.click(btn);
+    await waitFor(() => {
+      expect(screen.getByTestId('contact-form-stub')).toBeDefined();
+    });
+  });
+
+  it('Dialog body mounts <ContactForm mode="modal" /> with onSuccess prop', async () => {
+    render(<ContactButton locale="uz" />);
+    fireEvent.click(screen.getByTestId('contact-button'));
+    await waitFor(() => {
+      expect(contactFormPropsLog.length).toBeGreaterThanOrEqual(1);
+    });
+    const lastProps = contactFormPropsLog[contactFormPropsLog.length - 1]!;
+    expect(lastProps.mode).toBe('modal');
+    expect(typeof lastProps.onSuccess).toBe('function');
+    expect(lastProps.locale).toBe('uz');
+  });
+
+  it('forwards productContext prop through to ContactForm when provided', async () => {
+    render(
+      <ContactButton
+        locale="ru"
+        productContext="Manometr MD-100 (SKU-001)"
+      />,
     );
-  });
-
-  it.skip('clicking the button opens shadcn Dialog (open=true)', async () => {
-    const mod = await dynamicImport(CONTACT_BUTTON_MODULE);
-    void mod;
-    expect.fail('FLIP-IN: 05-03-PLAN.md');
-  });
-
-  it.skip('the Dialog body mounts <ContactForm mode="modal" />', async () => {
-    // The same <ContactForm /> component used on /[locale]/contact (D-01);
-    // mode="modal" swaps the success state from "replace form" to "call
-    // onSuccess prop" so the parent Dialog can close.
-    const mod = await dynamicImport(CONTACT_BUTTON_MODULE);
-    void mod;
-    expect.fail('FLIP-IN: 05-03-PLAN.md');
-  });
-
-  it.skip('passes productContext prop through when provided', async () => {
-    // Product detail's sticky CTA rail (Phase-3 sketch 003) wires its
-    // "Get in touch" button to <ContactButton productContext={{...}} />.
-    // The button forwards productContext to <ContactForm /> so the modal
-    // body shows "Inquiry about: <product>" inline.
-    const mod = await dynamicImport(CONTACT_BUTTON_MODULE);
-    void mod;
-    expect.fail('FLIP-IN: 05-03-PLAN.md');
+    fireEvent.click(screen.getByTestId('contact-button'));
+    await waitFor(() => {
+      expect(contactFormPropsLog.length).toBeGreaterThanOrEqual(1);
+    });
+    const lastProps = contactFormPropsLog[contactFormPropsLog.length - 1]!;
+    expect(lastProps.productContext).toBe('Manometr MD-100 (SKU-001)');
+    expect(lastProps.locale).toBe('ru');
   });
 });

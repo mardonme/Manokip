@@ -7,13 +7,23 @@
 //   - Below 1100px viewport (approx Tailwind `lg:` 1024px) the rail collapses
 //     and renders below the main content as a stacked card per D-01.
 //
-// Phase 5 ships the live contact form. v1 ships static CTAs that link to a
-// `#contact` anchor / mailto / tel. The button copy is locale-driven via
-// labels passed as props (the page resolves the public.product namespace).
+// Phase 5 plan 05-03: replaced the placeholder `#contact` anchor with the
+// live <StickyCtaContactButton /> client island that opens the same shadcn
+// Dialog used in the SiteHeader (CTA-01 / CTA-03). The remaining tel: and
+// mailto: anchors stay static — they don't need the modal.
+//
+// The rail now accepts `locale` so the embedded client island can pass it
+// through to ContactButton -> ContactForm. `labels.requestPrice` is no longer
+// rendered (ContactButton sources its own label from public.contact.cta) but
+// the prop is preserved on the Labels interface to avoid breaking page
+// callers; consumers may stop passing it without a TS break next phase.
 
 import type { ReactNode } from 'react';
+import type { Locale } from '@/lib/metadata';
+import { StickyCtaContactButton } from './sticky-cta-contact-button';
 
 export interface StickyCtaRailLabels {
+  /** Retained for back-compat — the live ContactButton supplies its own copy from `public.contact.cta`. */
   requestPrice: string;
   downloads: string;
 }
@@ -21,6 +31,7 @@ export interface StickyCtaRailLabels {
 export interface StickyCtaRailProps {
   productName: string;
   sku: string | null;
+  locale: Locale;
   labels: StickyCtaRailLabels;
   /** DownloadsList is composed in by the page so this component stays presentational. */
   children?: ReactNode;
@@ -29,6 +40,7 @@ export interface StickyCtaRailProps {
 export function StickyCtaRail({
   productName,
   sku,
+  locale,
   labels,
   children,
 }: StickyCtaRailProps) {
@@ -66,14 +78,14 @@ export function StickyCtaRail({
           </li>
         </ul>
         <div className="mt-4 space-y-2">
-          {/* Phase-5 swap: replace #contact href with the live contact-form route. */}
-          <a
-            href="#contact"
-            className="block w-full rounded-md bg-blue-700 py-2.5 text-center text-sm font-medium text-white transition-colors hover:bg-blue-800"
-            data-testid="cta-request-price"
-          >
-            {labels.requestPrice}
-          </a>
+          {/* Phase-5 plan 05-03: live contact-form modal trigger replacing the
+              placeholder `#contact` anchor. Same Dialog/ContactForm SSOT used
+              by SiteHeader; productContext pre-filled to "<name> (<sku>)". */}
+          <StickyCtaContactButton
+            locale={locale}
+            productName={productName}
+            productSku={sku}
+          />
           <a
             href="tel:+998000000000"
             className="block w-full rounded-md border border-slate-200 bg-white py-2.5 text-center text-sm font-medium text-slate-900 transition-colors hover:bg-slate-50"
