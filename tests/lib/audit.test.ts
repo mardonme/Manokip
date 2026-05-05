@@ -93,9 +93,11 @@ describe('logAudit (D-16) writes one audit_log row inside a transaction', () => 
     expect(result.rows).toHaveLength(0);
   }, 15_000);
 
-  it('AUDIT_ACTIONS is a closed const tuple covering all 13 v1 actions', () => {
-    // Sanity: closed enum must match D-16 (CONTEXT.md) verbatim. Adding /
-    // removing items is a contract change — bump the v1 list deliberately.
+  it('AUDIT_ACTIONS is a closed const tuple covering all 16 v1 actions', () => {
+    // Sanity: closed enum must match D-16 (CONTEXT.md) + Phase 5 additions
+    // (D-04 spam_detected, D-05 rate_limited, plus contact_submission_create
+    // for the visitor-flow happy path) verbatim. Adding / removing items is
+    // a contract change — bump the v1 list deliberately.
     expect(AUDIT_ACTIONS).toEqual([
       'create',
       'update',
@@ -110,7 +112,11 @@ describe('logAudit (D-16) writes one audit_log row inside a transaction', () => 
       'login',
       'logout',
       'session_revoked',
+      // Phase 5 plan 05-01 — visitor-flow verbs.
+      'spam_detected',
+      'rate_limited',
+      'contact_submission_create',
     ]);
-    expect(AUDIT_ACTIONS).toHaveLength(13);
+    expect(AUDIT_ACTIONS).toHaveLength(16);
   });
 });

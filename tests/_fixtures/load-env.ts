@@ -41,6 +41,16 @@ const defaults: Record<string, string> = {
   CLOUDINARY_CLOUD_NAME: 'test-cloud',
   CLOUDINARY_API_KEY: 'test-key',
   CLOUDINARY_API_SECRET: 'test-secret',
+  // Phase 5 plan 05-01 — t3-env now requires 4 new keys at boot.
+  // Tests don't exercise the Turnstile / rate-limit path until Wave 1 wires
+  // them up, so safe placeholders prevent the env import from throwing.
+  // RATE_LIMIT_IP_SALT min length is 32 chars per the schema; placeholder
+  // padded to satisfy the constraint without being a real salt.
+  TURNSTILE_SECRET_KEY: '1x0000000000000000000000000000000AA',
+  NEXT_PUBLIC_TURNSTILE_SITE_KEY: '1x00000000000000000000AA',
+  RATE_LIMIT_IP_SALT: 'test-rate-limit-ip-salt-placeholder-padded-to-32-chars',
+  // ADMIN_NOTIFY_EMAILS is .optional(); leaving unset preserves the
+  // empty-recipients-skip path under test (Pitfall 5 / D-07).
 };
 for (const [k, v] of Object.entries(defaults)) {
   if (!process.env[k]) process.env[k] = v;
