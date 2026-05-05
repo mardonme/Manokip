@@ -39,6 +39,10 @@ export const AUDIT_ACTIONS = [
   'login',
   'logout',
   'session_revoked',
+  // Phase 5 plan 05-01 — visitor-flow verbs (anonymous, actorEmail='visitor').
+  'spam_detected', // honeypot trip (D-04)
+  'rate_limited', // per-IP rate-limit denial (D-05)
+  'contact_submission_create', // happy-path visitor submission (CLAUDE.md: every mutation writes audit row)
 ] as const;
 
 export type AuditAction = (typeof AUDIT_ACTIONS)[number];
