@@ -1,58 +1,129 @@
-// FLIP-IN: 05-02-PLAN.md
+// Phase 5 plan 05-02 task 2.2 — contact_rate_limit table contract (CTA-04).
 //
-// Plan 05-01 RED stub for the contact_rate_limit table contract (CTA-04).
-// Wave 1 plan 05-02 ships src/lib/rate-limit.ts and flips these `it.skip`
-// to `it`. Each test asserts the live-DB shape (atomic UPSERT increments
-// count; opportunistic cleanup deletes rows >2 days old).
-//
-// Vitest 4 has no `it.fixme` (Phase 4 plan 04-04 confirmed); use `it.skip`
-// + `expect.fail('FLIP-IN: 05-02-PLAN.md ...')` so the runner output
-// documents the closure plan.
+// Live-Neon SQL probes against the table created by plan 05-01's migration:
+//   - atomic UPSERT increments count via ON CONFLICT DO UPDATE
+//   - HOUR_LIMIT=5: 6th call within an hour throws via checkAndIncrementRateLimit
+//   - DAY_LIMIT=20: 21st call within a day throws even on fresh hour bucket
+//   - opportunistic cleanup deletes rows older than 2 days
 
-import { describe, it, expect } from 'vitest';
-
-// Stub-import strategy (Phase 4 plan 04-04 pattern): the SUT module does not
-// exist yet. Avoid a literal `import('@/lib/rate-limit')` because TypeScript
-// statically resolves string-literal dynamic-import args. Instead, build the
-// specifier at runtime and feed it through `dynamicImport()` which the
-// compiler treats as `Promise<unknown>` — no path resolution.
-const dynamicImport = (specifier: string): Promise<unknown> =>
-  import(/* @vite-ignore */ specifier);
-const RATE_LIMIT_MODULE = '@/lib/rate-limit';
+import { describe, it, expect, afterEach } from 'vitest';
+import { sql } from 'drizzle-orm';
+import { getTestDb, requireTestDatabaseUrl } from '../_fixtures/db';
+import {
+  checkAndIncrementRateLimit,
+  RateLimitError,
+} from '@/lib/rate-limit';
 
 describe('contact_rate_limit table contract', () => {
-  it.skip('atomic UPSERT increments count on conflict', async () => {
-    // Contract: INSERT INTO contact_rate_limit (...) ON CONFLICT (ip_hash, window_kind, window_start)
-    //   DO UPDATE SET count = contact_rate_limit.count + 1 RETURNING count
-    // Asserts the returning count grows 1 → 2 → 3 within the same hour bucket.
-    const mod = await dynamicImport(RATE_LIMIT_MODULE);
-    void mod;
-    expect.fail(
-      'FLIP-IN: 05-02-PLAN.md task creates src/lib/rate-limit.ts with checkAndIncrementRateLimit',
+  const stamp = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+
+  afterEach(async () => {
+    requireTestDatabaseUrl();
+    const db = await getTestDb();
+    await db.execute(
+      sql`DELETE FROM contact_rate_limit WHERE ip_hash LIKE ${'crl-test-' + stamp + '%'}`,
     );
   });
 
-  it.skip('hour bucket overflows when count exceeds 5', async () => {
-    // Contract: 6th call within the same hour throws RateLimitError.
-    const mod = await dynamicImport(RATE_LIMIT_MODULE);
-    void mod;
-    expect.fail('FLIP-IN: 05-02-PLAN.md (HOUR_LIMIT=5)');
-  });
+  it(
+    'atomic UPSERT increments count on conflict',
+    async () => {
+      requireTestDatabaseUrl();
+      const db = await getTestDb();
+      const ipHash = `crl-test-${stamp}-upsert`;
+      const now = new Date();
+      const hourBucket = new Date(Math.floor(now.getTime() / 3_600_000) * 3_600_000);
 
-  it.skip('day bucket overflows when count exceeds 20', async () => {
-    // Contract: 21st call within the day window throws RateLimitError even
-    // when the hour bucket has just rolled over.
-    const mod = await dynamicImport(RATE_LIMIT_MODULE);
-    void mod;
-    expect.fail('FLIP-IN: 05-02-PLAN.md (DAY_LIMIT=20)');
-  });
+      // First insert
+      const r1 = await db.execute(sql`
+        INSERT INTO contact_rate_limit (ip_hash, window_kind, window_start, count)
+        VALUES (${ipHash}, 'hour', ${hourBucket}, 1)
+        ON CONFLICT (ip_hash, window_kind, window_start)
+          DO UPDATE SET count = contact_rate_limit.count + 1
+        RETURNING count
+      `);
+      expect(Number((r1.rows[0] as { count: number | string }).count)).toBe(1);
 
-  it.skip('opportunistic cleanup deletes rows older than 2 days', async () => {
-    // Contract: rate-limit lib's UPSERT path runs
-    //   DELETE FROM contact_rate_limit WHERE window_start < now() - interval '2 days'
-    // before/after the increment so the table self-cleans without a cron.
-    const mod = await dynamicImport(RATE_LIMIT_MODULE);
-    void mod;
-    expect.fail('FLIP-IN: 05-02-PLAN.md (opportunistic 2-day cleanup)');
-  });
+      // Second insert hits the conflict → DO UPDATE → count = 2
+      const r2 = await db.execute(sql`
+        INSERT INTO contact_rate_limit (ip_hash, window_kind, window_start, count)
+        VALUES (${ipHash}, 'hour', ${hourBucket}, 1)
+        ON CONFLICT (ip_hash, window_kind, window_start)
+          DO UPDATE SET count = contact_rate_limit.count + 1
+        RETURNING count
+      `);
+      expect(Number((r2.rows[0] as { count: number | string }).count)).toBe(2);
+
+      // Third
+      const r3 = await db.execute(sql`
+        INSERT INTO contact_rate_limit (ip_hash, window_kind, window_start, count)
+        VALUES (${ipHash}, 'hour', ${hourBucket}, 1)
+        ON CONFLICT (ip_hash, window_kind, window_start)
+          DO UPDATE SET count = contact_rate_limit.count + 1
+        RETURNING count
+      `);
+      expect(Number((r3.rows[0] as { count: number | string }).count)).toBe(3);
+    },
+    30_000,
+  );
+
+  it(
+    'hour bucket overflows when count exceeds 5',
+    async () => {
+      requireTestDatabaseUrl();
+      const ipHash = `crl-test-${stamp}-hr-overflow`;
+      // 5 succeed
+      for (let i = 0; i < 5; i++) {
+        await checkAndIncrementRateLimit(ipHash);
+      }
+      // 6th throws
+      await expect(checkAndIncrementRateLimit(ipHash)).rejects.toBeInstanceOf(
+        RateLimitError,
+      );
+    },
+    30_000,
+  );
+
+  it(
+    'day bucket overflows when count exceeds 20',
+    async () => {
+      requireTestDatabaseUrl();
+      const db = await getTestDb();
+      const ipHash = `crl-test-${stamp}-day-overflow`;
+      const now = new Date();
+      const dayBucket = new Date(Math.floor(now.getTime() / 86_400_000) * 86_400_000);
+      // Pre-seed day bucket at 20 (max allowed). The next call will push it to 21.
+      await db.execute(sql`
+        INSERT INTO contact_rate_limit (ip_hash, window_kind, window_start, count)
+        VALUES (${ipHash}, 'day', ${dayBucket}, 20)
+      `);
+      await expect(checkAndIncrementRateLimit(ipHash)).rejects.toBeInstanceOf(
+        RateLimitError,
+      );
+    },
+    30_000,
+  );
+
+  it(
+    'opportunistic cleanup deletes rows older than 2 days',
+    async () => {
+      requireTestDatabaseUrl();
+      const db = await getTestDb();
+      const staleIpHash = `crl-test-${stamp}-stale`;
+      const freshIpHash = `crl-test-${stamp}-fresh`;
+      // Insert a stale row (>2 days old).
+      await db.execute(sql`
+        INSERT INTO contact_rate_limit (ip_hash, window_kind, window_start, count)
+        VALUES (${staleIpHash}, 'hour', now() - interval '3 days', 99)
+      `);
+      // Trigger the rate-limit lib path which runs the DELETE step.
+      await checkAndIncrementRateLimit(freshIpHash);
+      // Stale row must be gone.
+      const staleAfter = await db.execute(
+        sql`SELECT 1 FROM contact_rate_limit WHERE ip_hash = ${staleIpHash}`,
+      );
+      expect(staleAfter.rows).toHaveLength(0);
+    },
+    30_000,
+  );
 });
