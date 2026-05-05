@@ -1,44 +1,91 @@
-// FLIP-IN: 05-02-PLAN.md
+// Phase 5 plan 05-02 task 2.1 — verifyTurnstile() siteverify client tests.
 //
-// Plan 05-01 RED stub for the Cloudflare Turnstile siteverify client (CTA-01).
-// Wave 1 plan 05-02 ships src/lib/turnstile.ts. Tests vi.mock global fetch
-// to assert the request shape AND the response-handling branches.
+// Mocks globalThis.fetch (vi.spyOn) to assert the request shape AND each
+// response-handling branch:
+//   1. POST to canonical siteverify URL with form-urlencoded body
+//      keys (secret, response, remoteip) — no JSON, no SDK.
+//   2. success:true when Cloudflare returns {success:true}.
+//   3. success:false + error-codes pass-through on a JSON failure body.
+//   4. success:false errorCodes:['siteverify-http-error'] on non-2xx.
 
-import { describe, it, expect } from 'vitest';
-
-const dynamicImport = (specifier: string): Promise<unknown> =>
-  import(/* @vite-ignore */ specifier);
-const TURNSTILE_MODULE = '@/lib/turnstile';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { verifyTurnstile } from '@/lib/turnstile';
 
 describe('verifyTurnstile()', () => {
-  it.skip('POSTs to challenges.cloudflare.com/turnstile/v0/siteverify with secret+response+remoteip body', async () => {
-    // Pattern 5 — siteverify endpoint takes form-urlencoded body with keys
-    // secret, response, remoteip. verifyTurnstile must POST to the canonical
-    // URL (no proxy, no SDK) and pass remoteip from the request context.
-    const mod = await dynamicImport(TURNSTILE_MODULE);
-    void mod;
-    expect.fail('FLIP-IN: 05-02-PLAN.md task creates src/lib/turnstile.ts');
+  let fetchSpy: ReturnType<typeof vi.spyOn>;
+
+  beforeEach(() => {
+    fetchSpy = vi.spyOn(globalThis, 'fetch') as unknown as ReturnType<
+      typeof vi.spyOn
+    >;
   });
 
-  it.skip('returns success:true when Cloudflare returns success', async () => {
-    const mod = await dynamicImport(TURNSTILE_MODULE);
-    void mod;
-    expect.fail('FLIP-IN: 05-02-PLAN.md');
+  afterEach(() => {
+    fetchSpy.mockRestore();
   });
 
-  it.skip('returns success:false with errorCodes when Cloudflare returns failure (e.g., timeout-or-duplicate)', async () => {
-    // Cloudflare returns { success: false, "error-codes": ["timeout-or-duplicate"] }
-    const mod = await dynamicImport(TURNSTILE_MODULE);
-    void mod;
-    expect.fail('FLIP-IN: 05-02-PLAN.md');
+  it('POSTs to challenges.cloudflare.com/turnstile/v0/siteverify with secret+response+remoteip body', async () => {
+    fetchSpy.mockResolvedValueOnce(
+      new Response(JSON.stringify({ success: true }), {
+        status: 200,
+        headers: { 'content-type': 'application/json' },
+      }) as unknown as never,
+    );
+
+    await verifyTurnstile('test-token', '203.0.113.5');
+
+    expect(fetchSpy).toHaveBeenCalledOnce();
+    const [url, init] = fetchSpy.mock.calls[0]! as [string, RequestInit];
+    expect(url).toBe(
+      'https://challenges.cloudflare.com/turnstile/v0/siteverify',
+    );
+    expect(init.method).toBe('POST');
+    expect(init.cache).toBe('no-store');
+    // Body is URLSearchParams (form-urlencoded, NOT JSON)
+    expect(init.body).toBeInstanceOf(URLSearchParams);
+    const body = init.body as URLSearchParams;
+    expect(body.get('response')).toBe('test-token');
+    expect(body.get('remoteip')).toBe('203.0.113.5');
+    expect(body.get('secret')).toBeTruthy();
   });
 
-  it.skip('returns success:false errorCodes:[siteverify-http-error] on non-2xx response', async () => {
-    // Cloudflare 5xx or network error → the wrapper must NOT throw; instead
-    // surface success:false with a synthetic error code so withPublicAction
-    // can short-circuit with error:'turnstile_failed'.
-    const mod = await dynamicImport(TURNSTILE_MODULE);
-    void mod;
-    expect.fail('FLIP-IN: 05-02-PLAN.md');
+  it('returns success:true when Cloudflare returns success', async () => {
+    fetchSpy.mockResolvedValueOnce(
+      new Response(JSON.stringify({ success: true }), {
+        status: 200,
+        headers: { 'content-type': 'application/json' },
+      }) as unknown as never,
+    );
+
+    const result = await verifyTurnstile('valid-token', '127.0.0.1');
+    expect(result.success).toBe(true);
+  });
+
+  it('returns success:false with errorCodes when Cloudflare returns failure (e.g., timeout-or-duplicate)', async () => {
+    fetchSpy.mockResolvedValueOnce(
+      new Response(
+        JSON.stringify({
+          success: false,
+          'error-codes': ['timeout-or-duplicate'],
+        }),
+        { status: 200, headers: { 'content-type': 'application/json' } },
+      ) as unknown as never,
+    );
+
+    const result = await verifyTurnstile('expired-token', '127.0.0.1');
+    expect(result.success).toBe(false);
+    expect(result.errorCodes).toEqual(['timeout-or-duplicate']);
+  });
+
+  it('returns success:false errorCodes:[siteverify-http-error] on non-2xx response', async () => {
+    fetchSpy.mockResolvedValueOnce(
+      new Response('Internal Server Error', {
+        status: 500,
+      }) as unknown as never,
+    );
+
+    const result = await verifyTurnstile('any-token', '127.0.0.1');
+    expect(result.success).toBe(false);
+    expect(result.errorCodes).toEqual(['siteverify-http-error']);
   });
 });

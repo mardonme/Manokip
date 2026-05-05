@@ -28,6 +28,7 @@
     "@dnd-kit/sortable": "10.0.0",
     "@dnd-kit/utilities": "3.2.2",
     "@hookform/resolvers": "3.10.0",
+    "@marsidev/react-turnstile": "^1.5.2",
     "@neondatabase/serverless": "1.1.0",
     "@react-email/components": "1.0.12",
     "@sentry/nextjs": "10.49.0",
