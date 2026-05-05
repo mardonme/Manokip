@@ -15,6 +15,7 @@ export * from './recipes';
 export * from './industries';
 export * from './junctions';
 export * from './contact';
+export * from './contact-rate-limit';
 export * from './translation-flags';
 export * from './views/product-translation-completeness';
 export * from './views/product-used-in';
