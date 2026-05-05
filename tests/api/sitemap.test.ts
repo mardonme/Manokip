@@ -224,3 +224,27 @@ describe('sitemap XML (SEO-03; live Neon)', () => {
     expect(uzSluggedAsRu).toBeUndefined();
   }, 30_000);
 });
+
+// FLIP-IN: 05-04-PLAN.md
+// Plan 05-01 RED stubs for SEO-06 sitemap /contact path coverage.
+// Wave 1 plan 05-04 extends src/lib/sitemap.ts staticPath array with
+// the /contact entry per locale and flips these `it.skip` to `it`.
+describe('contact path coverage (Phase 5)', () => {
+  it.skip('sitemap-uz.xml contains <loc>https://manometr.uz/uz/contact</loc>', async () => {
+    const res = await getSitemapUz();
+    const body = await res.text();
+    expect(body).toContain('<loc>https://manometr.uz/uz/contact</loc>');
+  });
+
+  it.skip('sitemap-ru.xml contains <loc>https://manometr.uz/ru/contact</loc>', async () => {
+    const res = await getSitemapRu();
+    const body = await res.text();
+    expect(body).toContain('<loc>https://manometr.uz/ru/contact</loc>');
+  });
+
+  it.skip('sitemap-en.xml contains <loc>https://manometr.uz/en/contact</loc>', async () => {
+    const res = await getSitemapEn();
+    const body = await res.text();
+    expect(body).toContain('<loc>https://manometr.uz/en/contact</loc>');
+  });
+});
