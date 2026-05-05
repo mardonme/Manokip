@@ -14,15 +14,19 @@ deferred_validation:
   - id: DEF-4-12-01
     title: "Google Rich Results Test for TechArticle on recipe + industry public URLs"
     why_human: "Requires a Vercel preview URL + manual paste into https://search.google.com/test/rich-results — Google's parser cannot be driven from a CLI. JSON-LD shape is asserted in code (vitest unit + Playwright e2e); validation against the actual Google parser is the trigger for transition to fully-validated."
+    absorbed_by: "05-06-PLAN.md (DEF-5-06-SEO06-GSC)"
   - id: DEF-4-12-02
     title: "Yandex Webmaster Structured Data Validator for both URLs in 3 locales"
     why_human: "Same external-service gate as DEF-4-12-01 against https://webmaster.yandex.com/tools/microtest/. P4-4 risk-acknowledged: Yandex MAY flag industry-page TechArticle as type-mismatch (D-10 LOCKED — proceed with TechArticle for both; v1.1 plan exists to downgrade industries to '@type':'Article')."
+    absorbed_by: "05-06-PLAN.md (DEF-5-06-SEO06-YANDEX)"
   - id: DEF-4-12-03
     title: "Cyrillic + Uzbek-Latin glyph visual review on recipe + industry body content"
     why_human: "Pixel-level visual inspection of Inter font rendering for Russian Cyrillic + Uzbek-Latin oʻ/gʻ (U+02BB MODIFIER LETTER TURNED COMMA) cannot be reliably driven via Playwright screenshots; requires human eye on Vercel preview. Inter font subsets locked Phase 1 SEO-04 (visual-regression risk near-zero), but verified manually before launch."
+    absorbed_by: "05-05-PLAN.md (automated portion: tests/e2e/glyph-render.spec.ts) + 05-06-PLAN.md (real-device portion: DEF-5-06-DEVICEQA)"
   - id: DEF-4-12-04
     title: "Cloudinary widget image-insert smoke in admin form e2e"
     why_human: "CldUploadWidget opens a Cloudinary-hosted iframe + dialog; Playwright can drive its Open button but not the cross-origin iframe's file picker / response. Plan 04-12 task 12.2 explicitly defers per `<action>` block — basic Tiptap text-edit + save + publish is sufficient as the CONT-01 GREEN gate. Manual smoke verification required pre-launch."
+    absorbed_by: "05-05-PLAN.md (smoke portion: tests/e2e/cloudinary-widget-smoke.spec.ts) + 05-06-PLAN.md (manual upload portion: DEF-5-06-CLOUDINARY-MANUAL)"
 ---
 
 # Phase 4: Content Features Verification Report
@@ -116,6 +120,19 @@ Per Phase-2 plan 02-17 + Phase-3 plan 03-09 pattern: gates that cross CLI/UI bou
 **What is locally verified:** Tiptap editor + signed-upload widget wiring tested at component level (`tests/components/recipe-body-editor.test.tsx` confirms the toolbar mounts the CldUploadWidget; `/api/cloudinary/sign` exercises the paramsToSign branch).
 **What is deferred:** End-to-end Playwright drive of the cross-origin Cloudinary iframe / dialog (the widget opens an external file picker that the headless browser cannot drive without a Cloudinary mock).
 **Transition criteria:** Manual smoke against Vercel preview — admin opens recipe form, clicks "Insert image" toolbar button, uploads a real image, asserts public detail page renders the inline image via the CloudinaryImage extension's publicId attribute (T-04-XSS-04 mitigation).
+
+## DEF-4-12-XX Absorption Note (added 2026-05-05 by Phase 5 plan 05-06)
+
+Per CONTEXT D-13 + the 05-06 closure plan: DEF-4-12-01..04 fold into Phase 5 plans where they overlap. They are NOT tracked separately in 04-VERIFICATION.md beyond this note. Transition responsibility moves to the corresponding DEF-5-06-* entry in 05-VERIFICATION.md.
+
+| DEF-4 ID | Phase 5 absorber | Phase 5 plan(s) |
+| -------- | ---------------- | --------------- |
+| DEF-4-12-01 | DEF-5-06-SEO06-GSC | 05-06 |
+| DEF-4-12-02 | DEF-5-06-SEO06-YANDEX | 05-06 |
+| DEF-4-12-03 | tests/e2e/glyph-render.spec.ts (GREEN) + DEF-5-06-DEVICEQA | 05-05 + 05-06 |
+| DEF-4-12-04 | tests/e2e/cloudinary-widget-smoke.spec.ts (GREEN) + DEF-5-06-CLOUDINARY-MANUAL | 05-05 + 05-06 |
+
+Phase-4 verification is otherwise unchanged.
 
 ## Threats Closed
 
