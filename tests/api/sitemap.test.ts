@@ -225,26 +225,73 @@ describe('sitemap XML (SEO-03; live Neon)', () => {
   }, 30_000);
 });
 
-// FLIP-IN: 05-04-PLAN.md
-// Plan 05-01 RED stubs for SEO-06 sitemap /contact path coverage.
-// Wave 1 plan 05-04 extends src/lib/sitemap.ts staticPath array with
-// the /contact entry per locale and flips these `it.skip` to `it`.
-describe('contact path coverage (Phase 5)', () => {
-  it.skip('sitemap-uz.xml contains <loc>https://manometr.uz/uz/contact</loc>', async () => {
+// FLIPPED-IN by Plan 05-04 task 4.2.
+// Plan 05-01 task 1.6 authored these as RED skipped stubs locking the SEO-06
+// contact-path coverage contract. Plan 05-04 extends src/lib/sitemap.ts
+// staticPath array with `/contact` and flips the stubs GREEN. Each per-locale
+// sitemap must now advertise /<locale>/contact AND emit the hreflang fan-out
+// to all 3 locales (uz/ru/en) — Search Console / Yandex Webmaster will reject
+// hreflang inconsistencies otherwise (T-05-04-02).
+describe('contact path coverage (Phase 5; SEO-06)', () => {
+  beforeAll(() => {
+    // DB env must be present — buildLocaleSitemapEntries hits Neon for product
+    // / category / manufacturer / recipe / industry rows even though /contact
+    // itself is a static path (the helper doesn't short-circuit DB access).
+    requireTestDatabaseUrl();
+  });
+
+  it('sitemap-uz.xml contains <loc>https://manometr.uz/uz/contact</loc> with hreflang fan-out', async () => {
     const res = await getSitemapUz();
     const body = await res.text();
     expect(body).toContain('<loc>https://manometr.uz/uz/contact</loc>');
+    // Hreflang fan-out: the /uz/contact <url> block must list all 3 locales.
+    const entries = await buildLocaleSitemapEntries('uz');
+    const contactEntry = entries.find(
+      (e) => e.loc === 'https://manometr.uz/uz/contact',
+    );
+    expect(contactEntry).toBeDefined();
+    expect(contactEntry?.alternates.uz).toBe('https://manometr.uz/uz/contact');
+    expect(contactEntry?.alternates.ru).toBe('https://manometr.uz/ru/contact');
+    expect(contactEntry?.alternates.en).toBe('https://manometr.uz/en/contact');
   });
 
-  it.skip('sitemap-ru.xml contains <loc>https://manometr.uz/ru/contact</loc>', async () => {
+  it('sitemap-ru.xml contains <loc>https://manometr.uz/ru/contact</loc> with hreflang fan-out', async () => {
     const res = await getSitemapRu();
     const body = await res.text();
     expect(body).toContain('<loc>https://manometr.uz/ru/contact</loc>');
+    const entries = await buildLocaleSitemapEntries('ru');
+    const contactEntry = entries.find(
+      (e) => e.loc === 'https://manometr.uz/ru/contact',
+    );
+    expect(contactEntry).toBeDefined();
+    expect(contactEntry?.alternates.uz).toBe('https://manometr.uz/uz/contact');
+    expect(contactEntry?.alternates.ru).toBe('https://manometr.uz/ru/contact');
+    expect(contactEntry?.alternates.en).toBe('https://manometr.uz/en/contact');
   });
 
-  it.skip('sitemap-en.xml contains <loc>https://manometr.uz/en/contact</loc>', async () => {
+  it('sitemap-en.xml contains <loc>https://manometr.uz/en/contact</loc> with hreflang fan-out', async () => {
     const res = await getSitemapEn();
     const body = await res.text();
     expect(body).toContain('<loc>https://manometr.uz/en/contact</loc>');
+    const entries = await buildLocaleSitemapEntries('en');
+    const contactEntry = entries.find(
+      (e) => e.loc === 'https://manometr.uz/en/contact',
+    );
+    expect(contactEntry).toBeDefined();
+    expect(contactEntry?.alternates.uz).toBe('https://manometr.uz/uz/contact');
+    expect(contactEntry?.alternates.ru).toBe('https://manometr.uz/ru/contact');
+    expect(contactEntry?.alternates.en).toBe('https://manometr.uz/en/contact');
+  });
+
+  it('all 3 locale sitemaps include /contact (full coverage; no locale missing)', async () => {
+    // Locked invariant: every locale's sitemap MUST include /contact. A
+    // missing locale would cause Search Console / Yandex Webmaster to flag
+    // hreflang inconsistency (T-05-04-02 mitigation — full coverage check).
+    const uzBody = await (await getSitemapUz()).text();
+    const ruBody = await (await getSitemapRu()).text();
+    const enBody = await (await getSitemapEn()).text();
+    expect(uzBody).toContain('<loc>https://manometr.uz/uz/contact</loc>');
+    expect(ruBody).toContain('<loc>https://manometr.uz/ru/contact</loc>');
+    expect(enBody).toContain('<loc>https://manometr.uz/en/contact</loc>');
   });
 });

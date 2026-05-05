@@ -77,6 +77,7 @@ export async function buildLocaleSitemapEntries(
     '/manufacturers',
     '/recipes',
     '/industries',
+    '/contact',
   ] as const) {
     const alternates: Partial<Record<Locale, string>> = {};
     for (const l of ALL_LOCALES) {
