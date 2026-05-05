@@ -1050,34 +1050,40 @@ test('Cloudinary widget mounts in product editor (smoke only — does not upload
 | A9 | `ADMIN_NOTIFY_EMAILS` empty list = silently skip admin notify (D-07) is the right ergonomics for dev-without-secrets | §Pitfall #5 | LOW — CONTEXT-locked |
 | A10 | OPS-02 dogfood is purely operational and ships as a markdown protocol document, not code | §Pattern 8 | LOW — D-12 LOCKED |
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **`contact_rate_limit` PK shape: `(ip_hash, window_kind, window_start)` vs `(ip_hash, window_start)` with separate `hour_count`/`day_count` columns**
+   RESOLVED: Planner adopts `(ip_hash, window_kind, window_start)` and notes the deviation explicitly in the migration plan; flag for user confirmation if `withPublicAction` becomes a discuss-touched surface again.
    - What we know: D-05 specifies 5/hour AND 20/day per hashed IP; the literal PK in D-05 is `(ip_hash, window_start)`.
    - What's unclear: whether D-05 implicitly assumes one bucket type (which contradicts the dual threshold) or whether the literal PK was a discussion shorthand.
    - Recommendation: Planner adopts `(ip_hash, window_kind, window_start)` and notes the deviation explicitly in the migration plan; flag for user confirmation if `withPublicAction` becomes a discuss-touched surface again.
 
 2. **Should denied (rate-limit-exceeded) requests consume the budget or rollback the increment?**
+   RESOLVED: rollback model (reject doesn't burn budget) — matches the most common interpretation. Document in plan.
    - What we know: Rolling back is cleaner semantically ("5 SUCCESSFUL submissions per hour"); not rolling back throttles bots harder.
    - What's unclear: whether D-05's "5/hour AND 20/day" means 5 successful or 5 attempted.
    - Recommendation: rollback model (reject doesn't burn budget) — matches the most common interpretation. Document in plan.
 
 3. **Should `submitContactForm` log a Sentry event for every Turnstile failure, or only above a threshold?**
+   RESOLVED: Don't auto-log Turnstile failures to Sentry. Audit log carries enough signal for forensic analysis. Planner can add a Sentry log if 30-day audit-log review shows a meaningful pattern.
    - What we know: Turnstile fails happen for legitimate reasons (token expired, network glitch, user closed widget).
    - What's unclear: noise vs. signal trade-off in Sentry quota.
    - Recommendation: Don't auto-log Turnstile failures to Sentry. Audit log carries enough signal for forensic analysis. Planner can add a Sentry log if 30-day audit-log review shows a meaningful pattern.
 
 4. **Cloudflare Turnstile widget locale prop: which locale-string does it accept?**
+   RESOLVED: Pass `language={locale === 'uz' ? 'auto' : locale}` (Turnstile auto-detects from browser); confirm at integration time. **[ASSUMED — verify against Turnstile docs at integration time.]**
    - What we know: Turnstile widget supports a `language` parameter (e.g., `'auto'`, `'ru'`, `'en'`); `'uz'` may not be supported.
    - What's unclear: whether Turnstile has Uzbek localization.
    - Recommendation: Pass `language={locale === 'uz' ? 'auto' : locale}` (Turnstile auto-detects from browser); confirm at integration time. **[ASSUMED — verify against Turnstile docs at integration time.]**
 
 5. **DEF-4-12-04 Cloudinary widget: smoke-only sufficient, or invest in a frame-driven full e2e?**
+   RESOLVED: Smoke-only for v1 (documented in DEF entry — accepted limitation). Spike a frame-driven attempt as a v1.1 task if upload bugs slip through.
    - What we know: cross-origin iframe is documented hostile to Playwright; widget triggers OS file picker.
    - What's unclear: whether `page.frameLocator()` + a Cloudinary mock would be feasible.
    - Recommendation: Smoke-only for v1 (documented in DEF entry — accepted limitation). Spike a frame-driven attempt as a v1.1 task if upload bugs slip through.
 
 6. **Should the `/[locale]/contact` page also include a form, or just describe the contact channel + a "Open contact form" button?**
+   RESOLVED: Render `<ContactForm mode="page" />` inline on the `/[locale]/contact` page (no nested Dialog). The `mode` prop differentiates `onSuccess` behavior (page → swap to "Thanks" content; modal → close dialog).
    - What we know: D-01 says the page is "canonical for SEO" and uses the same `<ContactForm>` as the modal.
    - What's unclear: whether the page renders the form inline OR mounts the modal-trigger button (which feels weird since the user already navigated TO the contact page).
    - Recommendation: Render `<ContactForm mode="page" />` inline on the `/[locale]/contact` page (no nested Dialog). The `mode` prop differentiates `onSuccess` behavior (page → swap to "Thanks" content; modal → close dialog).
@@ -1238,12 +1244,12 @@ test('Cloudinary widget mounts in product editor (smoke only — does not upload
 | Glyph render assertion | MEDIUM | Computed font-family check is approximate; visual diff is more decisive but flaky |
 | OPS-02 + SEO-06 manual gates | HIGH | CONTEXT D-12 LOCKED — purely operational user-driven work |
 
-### Open Questions
-1. `contact_rate_limit` PK shape: `(ip_hash, window_kind, window_start)` deviation from D-05 — needs user confirmation if planner deems significant
-2. Rate-limit denied requests: rollback or consume budget? — recommendation: rollback
-3. Cloudflare Turnstile widget locale — `uz` may not be a supported language; recommendation: `language="auto"`
-4. `/[locale]/contact` page — render `<ContactForm mode="page">` inline (not modal-trigger); recommendation: inline
-5. Contact submission retention policy (GDPR) — not discussed in CONTEXT; flag as v1.1
+### Open Questions (RESOLVED)
+1. `contact_rate_limit` PK shape: `(ip_hash, window_kind, window_start)` deviation from D-05 — needs user confirmation if planner deems significant. RESOLVED: planner adopts `(ip_hash, window_kind, window_start)`; noted as enrichment in plan 01 SUMMARY.
+2. Rate-limit denied requests: rollback or consume budget? — recommendation: rollback. RESOLVED: rollback model adopted.
+3. Cloudflare Turnstile widget locale — `uz` may not be a supported language; recommendation: `language="auto"`. RESOLVED: `language={locale === 'uz' ? 'auto' : locale}` adopted.
+4. `/[locale]/contact` page — render `<ContactForm mode="page">` inline (not modal-trigger); recommendation: inline. RESOLVED: inline `<ContactForm mode="page">` adopted.
+5. Contact submission retention policy (GDPR) — not discussed in CONTEXT; flag as v1.1. RESOLVED: deferred to v1.1 backlog (logged in 05-VERIFICATION.md).
 
 ### Ready for Planning
 Research complete. Planner can now create 6-9 PLAN.md files across 3-4 waves:
