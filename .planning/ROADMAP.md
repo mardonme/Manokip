@@ -42,7 +42,12 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full phase goals, success criteri
   2. A developer referencing `src/components/public/` finds `<Gauge>`, `<ProductCard>`, and `<KeyFactsRibbon>` as ready-to-consume components with the correct props interface (configurable size/value/label for Gauge; no price/add-to-cart/quantity on ProductCard; label-value array for KeyFactsRibbon)
   3. A developer opening `src/proxy.ts` (moved from top-level `proxy.ts`) finds the middleware contract intact, and `src/env.ts` passes type-safe validation on cold boot
   4. A developer running `pnpm tsc --noEmit` sees exit 0 after the stashed layout.tsx and contact-form.tsx tweaks are applied alongside the refactor
-**Plans**: TBD
+**Plans**: 5 plans
+- [ ] 06-01-PLAN.md — Wave 0: RED test scaffolding (5 unit tests + glyph-render extension)
+- [ ] 06-02-PLAN.md — Wave 1: Apply stash@{0} (proxy.ts move, env.ts hardening, contact-form direct env read)
+- [ ] 06-03-PLAN.md — Wave 2: Tokens + fonts (globals.css @theme + .mk helpers + next/font Inter Tight + JetBrains Mono + body className=mk)
+- [ ] 06-04-PLAN.md — Wave 3: Components (Gauge SVG port + ProductCard reskin in place + KeyFactsRibbon variant grid)
+- [ ] 06-05-PLAN.md — Wave 4: /design smoke route + full test:all gate + visual sign-off
 **UI hint**: yes
 
 ### Phase 7: Storefront Chrome
@@ -116,7 +121,7 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full phase goals, success criteri
 | 3. Public Rendering, Search, SEO | v1.0 | 9/9 | Complete | 2026-05-01 |
 | 4. Content Features | v1.0 | 12/12 | Complete | 2026-05-01 |
 | 5. Contact and Launch Polish | v1.0 | 6/6 | Complete | 2026-05-05 |
-| 6. Design System Foundation + Refactor | v1.1 | 0/? | Not started | - |
+| 6. Design System Foundation + Refactor | v1.1 | 0/5 | Not started | - |
 | 7. Storefront Chrome | v1.1 | 0/? | Not started | - |
 | 8. Catalog Surfaces | v1.1 | 0/? | Not started | - |
 | 9. Product Detail + Content Surfaces | v1.1 | 0/? | Not started | - |
