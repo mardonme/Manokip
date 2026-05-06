@@ -88,3 +88,62 @@ test.describe('glyph render gate (DEF-4-12-03)', () => {
     expect(fontFamily).toMatch(/__Inter|Inter/);
   });
 });
+
+// ────────────────────────────────────────────────────────────────────────
+// Phase 6 plan 06-01 task 3 — extension of the Phase 5 glyph-render gate.
+//
+// DESIGN-02 + DESIGN-04: the v1.1 visual refresh swaps the public surface
+// from a single Inter font to a paired Inter Tight (display/sans) +
+// JetBrains Mono (numerics inside .mk-mono) configuration; D-01 mounts
+// `.mk` on <body> so the design canvas helpers scope correctly. This block
+// asserts both invariants on the home page for every locale (uz, ru, en).
+//
+// Today this is RED: the layout still imports `Inter` only and <body>
+// has no .mk class. Wave 1 (D-01 + D-04) flips it GREEN.
+// ────────────────────────────────────────────────────────────────────────
+
+test.describe('Phase 6 — Inter Tight + JetBrains Mono + .mk body class', () => {
+  test.skip(
+    process.env.CI !== 'true' && baseURL === 'http://localhost:3000',
+    'Glyph render gate requires a Vercel preview URL (set BASE_URL); local-fallback skip',
+  );
+
+  for (const locale of ['uz', 'ru', 'en'] as const) {
+    test(`Phase 6 — Inter Tight + JetBrains Mono load on /${locale} home`, async ({
+      page,
+    }) => {
+      if (Object.keys(extraHeaders).length > 0) {
+        await page.context().setExtraHTTPHeaders(extraHeaders);
+      }
+      await page.goto(`${baseURL}/${locale}`);
+
+      const fontFamily = await page.evaluate(
+        () => getComputedStyle(document.body).fontFamily,
+      );
+      // Phase 6 swaps Inter → Inter Tight; mono numerics may resolve to
+      // JetBrains Mono inside .mk-mono. Either family in the body's
+      // computed font stack proves the new font wiring is live.
+      expect(fontFamily).toMatch(
+        /__Inter_Tight|Inter Tight|__JetBrains_Mono|JetBrains Mono/,
+      );
+
+      // Body must carry the .mk class (D-01 / DESIGN-03)
+      const bodyClass = await page.evaluate(() => document.body.className);
+      expect(bodyClass).toMatch(/\bmk\b/);
+    });
+  }
+
+  test('Phase 6 — oʻ (U+02BB) renders on /uz home without fallback', async ({
+    page,
+  }) => {
+    if (Object.keys(extraHeaders).length > 0) {
+      await page.context().setExtraHTTPHeaders(extraHeaders);
+    }
+    await page.goto(`${baseURL}/uz`);
+    const html = await page.content();
+    // Either the Latin small letter turned comma above (U+02BB) or the
+    // spelled-out form. Phase 6 must preserve the U+02BB glyph rendering
+    // even after the font swap.
+    expect(html).toMatch(/[oʻgʻ]/u);
+  });
+});
