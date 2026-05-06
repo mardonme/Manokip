@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Visual Refresh
-status: ready-to-plan
-stopped_at: "v1.1 roadmap created 2026-05-06. 6 phases (6-11) derived from 62 requirements mapped 62/62. Phase 6 is next: Design System Foundation + Refactor. Brand wordmark + contact metadata + industry taxonomy decisions still pending (do not block Phase 6 start)."
-last_updated: "2026-05-06T17:00:00Z"
-last_activity: 2026-05-06  -- v1.1 roadmap created: 6 phases (6-11), 62 requirements mapped 62/62
+status: executing
+stopped_at: "Completed 05-03 WAVE-1-VISITOR-UI — ContactForm SSOT (`'use client'`, RHF + zodResolver(contactInsertSchema) + Cloudflare Turnstile widget held in useRef so rejected submits call `reset()` per Pitfall 2 + INLINE-style off-screen honeypot field_extra per T-05-03-01 + sourcePage capture from usePathname() + page/modal modes); ContactButton (shadcn Dialog wrapper using base-ui's `<DialogTrigger render={<Button />} />` idiom) mounted right of LocaleSwitcher in SiteHeader (D-01); StickyCtaContactButton client island swapped into sticky-cta-rail's #contact placeholder anchor with productContext = `<name> (<sku>)` pre-fill; messages/{uz,ru,en}.json public.contact namespace populated with 24 keys per locale (3-locale parity verified, zero TODO placeholders); 2 jsdom RED stubs flipped GREEN (12 specs total — 8 form + 4 button). 3 task commits: f7967ad ContactForm + flip 8 specs; 413daf0 ContactButton + StickyCtaContactButton + sticky-cta-rail + site-header + product page caller + flip 4 specs; 9538907 messages population. Verification: pnpm tsc --noEmit CLEAN exit 0; pnpm vitest run --project=dom 32 specs across 8 files passing; grep `it.skip`/`TODO: 05-03`/`href="#contact"` all return 0; <ContactButton mounted in SiteHeader. Wave 1 plan 05-04 (canonical /[locale]/contact RSC + sitemap.ts /contact extension) unblocked."
+last_updated: "2026-05-06T13:11:21.134Z"
+last_activity: 2026-05-06
 progress:
   total_phases: 6
   completed_phases: 0
-  total_plans: 0
+  total_plans: 5
   completed_plans: 0
   percent: 0
 ---
@@ -27,7 +27,7 @@ See: .planning/PROJECT.md (updated 2026-05-06 after v1.0 close + v1.1 milestone 
 
 Phase: Phase 6 — Design System Foundation + Refactor (not yet started)
 Plan: —
-Status: Roadmap defined. Ready to plan Phase 6.
+Status: Ready to execute
 
 ## Next Steps (v1.1 milestone — Visual Refresh)
 
