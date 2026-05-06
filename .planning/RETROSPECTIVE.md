@@ -117,6 +117,47 @@ Cross-phase milestone log. Append a new section at end-of-phase with what worked
 
 ---
 
+## Milestone: v1.0 MVP — Trilingual B2B Catalog (Shipped: 2026-05-06)
+
+**Phases:** 5 | **Plans:** 34 | **Tasks:** 71 | **Timeline:** 2026-04-21 → 2026-05-05 (15 days)
+
+### What was built
+
+A modern B2B trilingual digital platform for industrial pressure-measurement equipment — schema-correct trilingual content model on Neon Postgres, content-team-friendly admin with Cloudinary direct-upload, server-rendered public catalog with faceted filters and per-locale full-text search, recipe + industry content surfaces with TechArticle JSON-LD, single contact-form CTA hardened with Turnstile + honeypot + per-IP rate limit. SEO infrastructure (per-locale canonical/hreflang/sitemap), observability (Sentry + Vercel Analytics + Speed Insights), perf gates (Lighthouse CI 5-URL fan-out + ab load-test) all live before launch.
+
+### What worked across the milestone
+
+- **Schema-first foundation** prevented all three highest-cost migration risks (Russian-first columns, opaque spec strings, JSONB filter cliff). Phase 1 spent capital up front; Phases 2-5 collected the dividend.
+- **Closed-with-deferred-validation posture** (5/5 phases) cleanly separated codebase-complete from environment-validated. The D-15 two-state model in retrospectives makes stakeholder communication unambiguous.
+- **Wave 0 RED-stub convention** scaled across 4 phases. Downstream waves only flip; never author new contracts.
+- **Per-task atomic commits** survived agent usage-limit interruptions (Phase 5 plan 05-02 mid-plan resumption was recoverable).
+- **Plan-checker pre-execution gate** (Phase 4 introduction) caught BLOCKERs in Phase 5 plan 05-02 before execution started; cheap quality gate.
+- **Textual-mirror plans** (04-06 mirroring 04-05; 04-08 mirroring 04-07) shipped industry surface as 1-line find/replace of recipe surface — aggressive code reuse without abstraction debt.
+
+### What was inefficient
+
+- **PROJECT.md and REQUIREMENTS.md drifted** from end of Phase 2 onward. Active section continued listing Phase 3/4/5 work as `[ ]` even after those phases closed; cleanup landed in this v1.0 close (52/52 reqs flipped, decisions outcomes filled in). Lesson: per-phase doc evolution is non-negotiable, not optional.
+- **No `/gsd-complete-milestone v1.0` triggered until 2026-05-06** despite Phase 5 closing 2026-05-05 — the milestone went a day in limbo with no MILESTONES.md, no archive, no tag. Lesson: milestone close is the immediate next step after the final phase's closure plan lands.
+- **Auto-extracted MILESTONES.md accomplishments were noisy on first generation** — heuristic grabbed garbage lines from SUMMARY bodies (`"Created (17):"`, `"One-liner:"`, `"Goal"`). Required manual rewrite. Lesson: SUMMARY frontmatter `one-liner:` field is canonical; populate it deliberately on every plan close.
+
+### Patterns established (carried forward to v1.1)
+
+1. **D-15 two-state model** — every milestone close distinguishes "locally complete" from "deployed and externally validated".
+2. **DEF-N-XX-* ledger** — every deferred item gets unique ID, ownership note, and explicit transition criteria. STATE.md is the canonical home; MILESTONES.md and per-phase VERIFICATION.md cross-reference.
+3. **Sibling translation tables** — non-negotiable for every translatable entity. Carries to all v1.1 entities.
+4. **Typed `revalidateTag` helper set** — every Server Action mutation calls a typed helper.
+5. **Wave 0 RED-stub authoring** — kick every phase off with failing test stubs that subsequent plans flip GREEN. Closure plan grep-checks for orphan `FLIP-IN: NN-NN` comments.
+6. **Locked design tokens before plan authoring** — v1.1 must run `/gsd-ui-phase` per visual phase to lock typography/color/spacing before the planner creates tasks (avoids ad-hoc styling during execution).
+7. **Brand and commerce decisions are project-level guardrails** — locked in PROJECT.md / CLAUDE.md, never re-litigated mid-build. v1.1 needs a fresh round-trip on brand-name (currently Manometr; design canvas says MANOKIP) and commerce-strip (no price/qty/stock/Add-to-order regardless of design canvas).
+
+### Carry-forward to v1.1
+
+- 7 deferred items (1× DEF-03 manual auth checkpoint, 1× DEF-2-17-01 OPS-01 deployment validation, 5× DEF-5-06-* user environmental work) — see STATE.md `## Deferred Items`.
+- 11 v1.1 backlog items in `phases/05-contact-launch-polish/05-VERIFICATION.md` "v1.1 Backlog".
+- v1.1 milestone scope: public-site visual refresh against `idea/` design canvas. Brand confirmation and commerce-element strip required before requirement authoring.
+
+---
+
 ## Cross-Milestone Trends (after Phase 5)
 
 - **5 of 5 phases shipped** using the closed-with-deferred-validation closure posture for at least one environmental gate (Phase 2 OPS-01 / Phase 3 SEO Rich Results / Phase 4 DEF-4-12-01..04 / Phase 5 DEF-5-06-01..05). The DEF-N-XX-* tracking IS the audit trail; cross-phase DEF absorption pointers (Phase-4 → Phase-5 via `absorbed_by:`) work cleanly.
@@ -127,4 +168,4 @@ Cross-phase milestone log. Append a new section at end-of-phase with what worked
 
 ---
 
-*Last appended: Phase 5 — 2026-05-05.*
+*Last appended: v1.0 MVP milestone close — 2026-05-06.*
