@@ -2,12 +2,12 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Visual Refresh
-status: defining-requirements
-stopped_at: "v1.0 milestone closed and tagged 2026-05-06. v1.1 milestone (Visual Refresh) initialized — PROJECT.md Current Milestone section added; v1.0 phase dirs archived to .planning/milestones/v1.0-phases/; .planning/phases/ cleared for v1.1 phase numbering (continues from 6). REQUIREMENTS.md and ROADMAP.md to be authored next. Brand wordmark + final commerce-strip table pending precise info from user."
-last_updated: "2026-05-06T16:14:00Z"
-last_activity: 2026-05-06 — v1.0 milestone closed and tagged; v1.1 Visual Refresh initialized
+status: ready-to-plan
+stopped_at: "v1.1 roadmap created 2026-05-06. 6 phases (6-11) derived from 62 requirements mapped 62/62. Phase 6 is next: Design System Foundation + Refactor. Brand wordmark + contact metadata + industry taxonomy decisions still pending (do not block Phase 6 start)."
+last_updated: "2026-05-06T17:00:00Z"
+last_activity: 2026-05-06  -- v1.1 roadmap created: 6 phases (6-11), 62 requirements mapped 62/62
 progress:
-  total_phases: 0
+  total_phases: 6
   completed_phases: 0
   total_plans: 0
   completed_plans: 0
@@ -21,13 +21,13 @@ progress:
 See: .planning/PROJECT.md (updated 2026-05-06 after v1.0 close + v1.1 milestone init)
 
 **Core value:** Every product page answers every technical question a specifying engineer would ask — in their language — so they trust Manometr as the authoritative source and contact us when ready.
-**Current focus:** v1.1 Visual Refresh — defining requirements + roadmap.
+**Current focus:** v1.1 Visual Refresh — Phase 6 next (design tokens + refactor + reusable components).
 
 ## Current Position
 
-Phase: Not started (defining requirements)
+Phase: Phase 6 — Design System Foundation + Refactor (not yet started)
 Plan: —
-Status: Defining requirements for v1.1 milestone
+Status: Roadmap defined. Ready to plan Phase 6.
 
 ## Next Steps (v1.1 milestone — Visual Refresh)
 

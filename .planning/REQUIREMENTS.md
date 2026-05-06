@@ -166,29 +166,88 @@ Explicitly excluded for v1.1.
 
 ## Traceability
 
-To be filled during roadmap creation.
+Roadmap created 2026-05-06. All 62 v1.1 requirements mapped to phases 6–11.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| DESIGN-01..04 | TBD | Pending |
-| CHROME-01..08 | TBD | Pending |
-| HOME-01..06 | TBD | Pending |
-| PLP-01..10 | TBD | Pending |
-| PDP-01..11 | TBD | Pending |
-| REUSE-01..03 | TBD | Pending |
-| PAGE-01..05 | TBD | Pending |
-| CONTENT-UI-01..04 | TBD | Pending |
-| CONTACT-UI-01..04 | TBD | Pending |
-| MFG-UI-01..02 | TBD | Pending |
-| VRT-01..02 | TBD | Pending |
-| REFACTOR-01..03 | TBD | Pending |
+| DESIGN-01 | Phase 6 | Pending |
+| DESIGN-02 | Phase 6 | Pending |
+| DESIGN-03 | Phase 6 | Pending |
+| DESIGN-04 | Phase 6 | Pending |
+| REFACTOR-01 | Phase 6 | Pending |
+| REFACTOR-02 | Phase 6 | Pending |
+| REFACTOR-03 | Phase 6 | Pending |
+| REUSE-01 | Phase 6 | Pending |
+| REUSE-02 | Phase 6 | Pending |
+| REUSE-03 | Phase 6 | Pending |
+| CHROME-01 | Phase 7 | Pending |
+| CHROME-02 | Phase 7 | Pending |
+| CHROME-03 | Phase 7 | Pending |
+| CHROME-04 | Phase 7 | Pending |
+| CHROME-05 | Phase 7 | Pending |
+| CHROME-06 | Phase 7 | Pending |
+| CHROME-07 | Phase 7 | Pending |
+| CHROME-08 | Phase 7 | Pending |
+| HOME-01 | Phase 8 | Pending |
+| HOME-02 | Phase 8 | Pending |
+| HOME-03 | Phase 8 | Pending |
+| HOME-04 | Phase 8 | Pending |
+| HOME-05 | Phase 8 | Pending |
+| HOME-06 | Phase 8 | Pending |
+| PLP-01 | Phase 8 | Pending |
+| PLP-02 | Phase 8 | Pending |
+| PLP-03 | Phase 8 | Pending |
+| PLP-04 | Phase 8 | Pending |
+| PLP-05 | Phase 8 | Pending |
+| PLP-06 | Phase 8 | Pending |
+| PLP-07 | Phase 8 | Pending |
+| PLP-08 | Phase 8 | Pending |
+| PLP-09 | Phase 8 | Pending |
+| PLP-10 | Phase 8 | Pending |
+| PDP-01 | Phase 9 | Pending |
+| PDP-02 | Phase 9 | Pending |
+| PDP-03 | Phase 9 | Pending |
+| PDP-04 | Phase 9 | Pending |
+| PDP-05 | Phase 9 | Pending |
+| PDP-06 | Phase 9 | Pending |
+| PDP-07 | Phase 9 | Pending |
+| PDP-08 | Phase 9 | Pending |
+| PDP-09 | Phase 9 | Pending |
+| PDP-10 | Phase 9 | Pending |
+| PDP-11 | Phase 9 | Pending |
+| CONTENT-UI-01 | Phase 9 | Pending |
+| CONTENT-UI-02 | Phase 9 | Pending |
+| CONTENT-UI-03 | Phase 9 | Pending |
+| CONTENT-UI-04 | Phase 9 | Pending |
+| MFG-UI-01 | Phase 9 | Pending |
+| MFG-UI-02 | Phase 9 | Pending |
+| PAGE-01 | Phase 10 | Pending |
+| PAGE-02 | Phase 10 | Pending |
+| PAGE-03 | Phase 10 | Pending |
+| PAGE-04 | Phase 10 | Pending |
+| PAGE-05 | Phase 10 | Pending |
+| CONTACT-UI-01 | Phase 10 | Pending |
+| CONTACT-UI-02 | Phase 10 | Pending |
+| CONTACT-UI-03 | Phase 10 | Pending |
+| CONTACT-UI-04 | Phase 10 | Pending |
+| VRT-01 | Phase 11 | Pending |
+| VRT-02 | Phase 11 | Pending |
 
 **Coverage:**
 - v1.1 requirements: 62 total (4 DESIGN + 8 CHROME + 6 HOME + 10 PLP + 11 PDP + 3 REUSE + 5 PAGE + 4 CONTENT-UI + 4 CONTACT-UI + 2 MFG-UI + 2 VRT + 3 REFACTOR)
-- Mapped to phases: 0
-- Unmapped: 62 ⚠️ (will be mapped during roadmap creation)
+- Mapped to phases: 62 ✓
+- Unmapped: 0
+
+| Phase | Requirements | Count |
+|-------|-------------|-------|
+| Phase 6: Design System Foundation + Refactor | DESIGN-01..04, REFACTOR-01..03, REUSE-01..03 | 10 |
+| Phase 7: Storefront Chrome | CHROME-01..08 | 8 |
+| Phase 8: Catalog Surfaces | HOME-01..06, PLP-01..10 | 16 |
+| Phase 9: Product Detail + Content Surfaces | PDP-01..11, CONTENT-UI-01..04, MFG-UI-01..02 | 17 |
+| Phase 10: New Pages + Contact Refresh | PAGE-01..05, CONTACT-UI-01..04 | 9 |
+| Phase 11: VRT + Closure | VRT-01..02 | 2 |
 
 ---
 *Requirements defined: 2026-05-06*
-*Last updated: 2026-05-06 — v1.1 milestone initialized via /gsd-new-milestone*
-*Pending: brand wordmark + final commerce-strip table + industry-taxonomy reconciliation (see STATE.md ## Next Steps) before phase planning freezes*
+*Last updated: 2026-05-06 — roadmap created, all 62 requirements mapped to phases 6–11*
+*Pending decisions: brand wordmark + final commerce-strip table + industry-taxonomy reconciliation (see STATE.md ## Next Steps)*
