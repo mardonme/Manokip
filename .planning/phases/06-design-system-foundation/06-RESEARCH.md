@@ -988,22 +988,22 @@ The planner MUST honor these non-negotiables when authoring tasks:
 11. **Variable fonts**: Inter Tight + JetBrains Mono are variable; do NOT specify `weight` (Pitfall #5).
 12. **Token namespace prefix**: design canvas accent token MUST be exposed as `--color-mk-accent` in Tailwind theme to avoid collision with shadcn's `--color-accent` (Pitfall #3).
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Does Next.js 16 auto-discover `src/proxy.ts` when `src/` is the source root?**
    - What we know: existing `next.config.ts` lines 11-15 explicitly comment that the file resides at the project root (Phase-1 placement). The repo uses `src/` for app code. Next.js 16's middleware-renamed-to-proxy convention is undocumented for src/ placement explicitly.
    - What's unclear: Whether the auto-discovery works at `src/proxy.ts` without a `next.config.ts` rewrite. The stash author clearly believed it works (else they wouldn't have committed the deletion).
-   - Recommendation: First Phase 6 task after stash apply is `pnpm build`. If it fails with "no proxy.ts found", the planner has two options: (a) revert REFACTOR-01, keeping proxy.ts at root with env+contact-form tweaks; (b) add explicit configuration to next.config.ts pointing to src/proxy.ts. Option (a) is the safer fallback.
+   - **RESOLVED:** First Phase 6 task after stash apply is `pnpm build`. If it fails with "no proxy.ts found", the planner has two options: (a) revert REFACTOR-01, keeping proxy.ts at root with env+contact-form tweaks; (b) add explicit configuration to next.config.ts pointing to src/proxy.ts. Option (a) is the safer fallback. Encoded as live branch logic in `06-02-PLAN.md` Task 2.
 
 2. **ProductCard image aspect ratio: 1:1 (design canvas) vs 4:3 (existing v1.0)?**
    - What we know: REUSE-01 says "image area (1:1 aspect)"; v1.0 product-card.tsx ships 4:3.
    - What's unclear: Whether the existing v1.0 grid container was authored with 4:3 in mind such that 1:1 would break grid alignment. PLP-08 (Phase 8) rebuilds the grid container; once Phase 8 lands, 1:1 will look correct.
-   - Recommendation: Pin 1:1 per REUSE-01 verbatim. If Phase 8 hasn't reskinned the catalog grid yet, the catalog page will visually shift to "tall" cards mid-milestone — acceptable per the explicit visual-drift acknowledgment in CONTEXT.md "Component migration boundary."
+   - **RESOLVED:** Pin 1:1 per REUSE-01 verbatim. If Phase 8 hasn't reskinned the catalog grid yet, the catalog page will visually shift to "tall" cards mid-milestone — acceptable per the explicit visual-drift acknowledgment in CONTEXT.md "Component migration boundary." Encoded in `06-04-PLAN.md` Task 2 (`aspect-square`).
 
 3. **Should the `/design` smoke route ship to production or be dev-only?**
    - What we know: It's the only Phase 6 visual confirmation gate before VRT lands in Phase 11.
    - What's unclear: Whether to gate it via `if (process.env.NODE_ENV !== 'production') notFound()` or leave it discoverable.
-   - Recommendation: Production-discoverable but unlinked + `noindex` meta. Useful for stakeholder review pre-Phase-7-chrome. Delete in Phase 11 closure when VRT covers the surface.
+   - **RESOLVED:** Production-discoverable but unlinked + `noindex` meta. Useful for stakeholder review pre-Phase-7-chrome. Delete in Phase 11 closure when VRT covers the surface. Encoded in `06-05-PLAN.md` Task 1 (robots metadata).
 
 ## Sources
 
