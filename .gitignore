@@ -49,3 +49,6 @@ yarn-error.log*
 
 # sentry
 .sentryclirc
+
+# claude code local settings
+.claude/
