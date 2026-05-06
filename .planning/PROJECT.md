@@ -12,6 +12,29 @@ Inspirational reference: **fiztech.ru** — dense spec tables, clean minimal aes
 
 If every other feature fails but this one works, the platform still wins.
 
+## Current Milestone: v1.1 — Visual Refresh
+
+**Goal:** Rebuild the public surface (storefront chrome + 7 page templates) to match the design canvas in `idea/` while preserving every v1.0 backend contract — non-commerce framing, contact-form CTA only, trilingual content model untouched.
+
+**Target features:**
+- Design system foundation — Tailwind v4 theme tokens mapped from `idea/styles.css` design canvas (Inter Tight + JetBrains Mono, off-white #f5f3ee, ink #14161b, single accent #1240e5, 1px hairline dividers)
+- Storefront chrome redesign — utility ribbon + nav + search button + Request-quote CTA in header; 4-column nav + brand block + cert tags in footer
+- Home page — hero with gauge SVG, 12-category grid, featured-products band, dark "Solutions" band, service strip
+- Catalog (PLP) — top filter chips + 260px subcategory sidebar + range slider + 3-col product cards + pagination
+- Product detail — gallery + gauge SVG, configurator-as-display-only spec selectors, tabs (Specifications / Documentation / Calibration / Compatibility / Reviews), related products. **Commerce affordances stripped:** no price, no quantity stepper, no stock count, no "Add to order" — replaced with single Request-quote CTA wired to existing Phase 5 contact dialog with product-context pre-fill
+- Solutions/Industries landing page (NEW) — 6-industry grid before drilling into individual industry pages
+- Service & calibration page (NEW)
+- About page redesign — timeline + stats facts + manufacturing placeholder
+- Contact page redesign — form + cards + map placeholder. Backend (submitContactForm + Turnstile + rate limit + audit + Resend) preserved verbatim from Phase 5
+- Recipe + industry public pages visual alignment (typography + spacing + LocaleFallbackBanner repositioning)
+- Reusable components — Gauge SVG, ProductCard matching design, KeyFactsRibbon
+- Visual regression test setup (Playwright snapshots per page template per locale)
+- Carry-forward source refactor (stashed at v1.0 close): proxy.ts → src/proxy.ts move + env.ts hardening + layout.tsx tweak + contact-form.tsx tweak
+
+**Pending decisions (must resolve before phase plans freeze):**
+- **Brand wordmark** — design canvas says MANOKIP; project context says Manometr. Real wordmark + logo + contact metadata pending from user.
+- **Industry taxonomy alignment** — design's six industries (Oil & Gas, Mining, Chemical, Power Generation, HVAC, Railway) vs whatever real industry pages were authored in Phase 4 admin. Reconcile during phase planning.
+
 ## Requirements
 
 ### Validated

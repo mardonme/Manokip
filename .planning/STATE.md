@@ -1,42 +1,53 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.3.1
-milestone_name: milestone
-status: verifying
-stopped_at: "Completed 05-03 WAVE-1-VISITOR-UI — ContactForm SSOT (`'use client'`, RHF + zodResolver(contactInsertSchema) + Cloudflare Turnstile widget held in useRef so rejected submits call `reset()` per Pitfall 2 + INLINE-style off-screen honeypot field_extra per T-05-03-01 + sourcePage capture from usePathname() + page/modal modes); ContactButton (shadcn Dialog wrapper using base-ui's `<DialogTrigger render={<Button />} />` idiom) mounted right of LocaleSwitcher in SiteHeader (D-01); StickyCtaContactButton client island swapped into sticky-cta-rail's #contact placeholder anchor with productContext = `<name> (<sku>)` pre-fill; messages/{uz,ru,en}.json public.contact namespace populated with 24 keys per locale (3-locale parity verified, zero TODO placeholders); 2 jsdom RED stubs flipped GREEN (12 specs total — 8 form + 4 button). 3 task commits: f7967ad ContactForm + flip 8 specs; 413daf0 ContactButton + StickyCtaContactButton + sticky-cta-rail + site-header + product page caller + flip 4 specs; 9538907 messages population. Verification: pnpm tsc --noEmit CLEAN exit 0; pnpm vitest run --project=dom 32 specs across 8 files passing; grep `it.skip`/`TODO: 05-03`/`href="#contact"` all return 0; <ContactButton mounted in SiteHeader. Wave 1 plan 05-04 (canonical /[locale]/contact RSC + sitemap.ts /contact extension) unblocked."
-last_updated: "2026-05-06T11:07:20.843Z"
-last_activity: 2026-05-06
+milestone: v1.1
+milestone_name: Visual Refresh
+status: defining-requirements
+stopped_at: "v1.0 milestone closed and tagged 2026-05-06. v1.1 milestone (Visual Refresh) initialized — PROJECT.md Current Milestone section added; v1.0 phase dirs archived to .planning/milestones/v1.0-phases/; .planning/phases/ cleared for v1.1 phase numbering (continues from 6). REQUIREMENTS.md and ROADMAP.md to be authored next. Brand wordmark + final commerce-strip table pending precise info from user."
+last_updated: "2026-05-06T16:14:00Z"
+last_activity: 2026-05-06 — v1.0 milestone closed and tagged; v1.1 Visual Refresh initialized
 progress:
-  total_phases: 5
-  completed_phases: 4
-  total_plans: 34
-  completed_plans: 52
-  percent: 100
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
 ---
 
 # Project State
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-04-21)
+See: .planning/PROJECT.md (updated 2026-05-06 after v1.0 close + v1.1 milestone init)
 
 **Core value:** Every product page answers every technical question a specifying engineer would ask — in their language — so they trust Manometr as the authoritative source and contact us when ready.
-**Current focus:** Phase 5 LOCALLY COMPLETE — v1 launch awaiting 5 DEF-5-06-* user actions per D-15 two-state model.
+**Current focus:** v1.1 Visual Refresh — defining requirements + roadmap.
 
 ## Current Position
 
-Phase: 05 (contact-launch-polish) — LOCALLY COMPLETE 6/6 per D-14 closed-with-deferred-validation posture
-Plan: 6 of 6 complete (05-01 + 05-02 + 05-03 + 05-04 + 05-05 + 05-06 done)
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements for v1.1 milestone
 
-## Next Steps (User-Driven Post-Merge Work per D-15)
+## Next Steps (v1.1 milestone — Visual Refresh)
 
-- User: register manometr.uz in Google Search Console — replace /public/google_TODO_replace_with_real_hash.html with the real google<HASH>.html file Search Console generates; submit sitemap-index.xml URL; screenshot the International Targeting panel showing 0 hreflang errors. Resolves DEF-5-06-SEO06-GSC (also subsumes DEF-4-12-01 Google Rich Results validation for TechArticle on /[locale]/recipes/[slug] + /[locale]/industries/[slug]).
-- User: register manometr.uz in Yandex Webmaster — replace /public/yandex_TODO_replace_with_real_hash.html with the real yandex_<HASH>.html; submit per-locale sitemaps; validate TechArticle JSON-LD via Yandex's structured-data tester. Resolves DEF-5-06-SEO06-YANDEX (P4-4 acceptance: if industry TechArticle flagged as type-mismatch, log v1.1 task to downgrade to '@type':'Article').
-- User: hand .planning/phases/05-contact-launch-polish/05-DOGFOOD-PROTOCOL.md to content team lead — content team enters 10 real trilingual products end-to-end with timing log filled in; median ≤10 min AND max ≤15 min + content team lead signature is the closure trigger. Resolves DEF-5-06-OPS02.
-- User: real-device Slow-4G QA on 3 phones × 3 locales × (homepage + product detail + contact) — total 27 visual checks confirming LCP < CWV budget AND Inter font glyphs render (no fallback) for Russian Cyrillic + Uzbek-Latin oʻ/gʻ U+02BB. Resolves DEF-5-06-DEVICEQA.
-- User: manual Cloudinary upload smoke on admin product editor (Vercel preview) — open admin product editor → upload a real image via the widget → confirm public_id persists to DB AND public detail page renders the inline image via CldImage. Resolves DEF-5-06-CLOUDINARY-MANUAL.
-- After all 5 DEF-5-06-* clear → v1 LAUNCHED.
-- v1.1 backlog tracked in 05-VERIFICATION.md "v1.1 Backlog" section (11 items).
+**Pending user input before requirements + roadmap freeze:**
+
+- **Brand wordmark** — design canvas in `idea/` says MANOKIP; project context (CLAUDE.md, PROJECT.md, codebase, Phase 5 messages) says Manometr. Resolve before phase planning so REQUIREMENTS.md and component copy don't get rewritten mid-build. User said "more precise information will be provided" at v1.0 close.
+- **Final commerce-strip table** — design canvas has price (`474 000 sum`), stock count (`In stock · 124`), quantity stepper, "Add to order" CTA. Project guardrails say no commerce. Confirm element-by-element strip table proposed earlier in this session.
+- **Real contact metadata** — design uses placeholder `Bektemir district, Rohat 13A, Tashkent` + `+998 93 693-92-20` + `manokip@manometr.uz`. If these are real Manometr values, keep; if placeholder, swap.
+- **Industry taxonomy** — design lists 6 industries (Oil & Gas, Mining, Chemical, Power Generation, HVAC, Railway). Reconcile against whatever industries were authored in the Phase 4 admin and any business-stakeholder priorities.
+
+**Carry-forward from v1.0 close:**
+
+- Stashed source work at `stash@{0}: v1.1-wip: proxy.ts move into src/ + env/layout/contact-form tweaks`. Apply via `git stash pop` (or branch the stash) when starting v1.1 phase work that touches that surface.
+- 7 DEF-* items in `## Deferred Items` below carry to v1.1 — all user-driven environmental work, none block development.
+
+**Workflow next:**
+
+- Author REQUIREMENTS.md for v1.1 (visual refresh requirements with VIS-* / CHR-* / DESIGN-* IDs).
+- Spawn `gsd-roadmapper` to derive phases (continues phase numbering from 6).
+- Run `/gsd-discuss-phase 6` (or first v1.1 phase) when phase plans freeze.
 - Carry-forward from Phase 2: DEF-2-17-01 (OPS-01 deployment-side validation: workflow green on real PR + RED on regression PR + branch-protection rule requiring `e2e-preview / OPS-01` status check).
 
 Status: Wave 1 visitor UI complete — shared `<ContactForm />` SSOT (RHF + zodResolver + Cloudflare Turnstile widget + off-screen INLINE-style honeypot + sourcePage capture from usePathname() + page/modal modes) + `<ContactButton />` shadcn Dialog wrapper mounted right of LocaleSwitcher in SiteHeader (D-01) + `<StickyCtaContactButton />` product-detail client island that pre-fills productContext to "<name> (<sku>)" and replaces the placeholder `#contact` anchor in sticky-cta-rail; messages/{uz,ru,en}.json public.contact namespace populated with 24 keys per locale (zero TODO placeholders, key-tree parity verified); 2 jsdom RED stubs flipped GREEN (12 specs across contact-form 8 + contact-button 4); CTA-01 + CTA-03 visitor-side fully wired; Turnstile widget reset() locked into the rejected-submit branch (Pitfall 2) and submit button disabled while turnstileToken === '' (T-CTA-02 mitigation); honeypot uses inline React.CSSProperties so Tailwind v4 purge cannot strip the off-screen rules (T-05-03-01). Wave 1 plan 05-04 (canonical /[locale]/contact RSC page + sitemap.ts /contact extension) unblocked — its only remaining dependency was the visitor-UI ContactForm SSOT shipped here.
