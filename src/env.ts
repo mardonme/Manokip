@@ -29,22 +29,15 @@ export const env = createEnv({
     NEXT_PUBLIC_SENTRY_DSN: z.string().url().optional(),
     NEXT_PUBLIC_TURNSTILE_SITE_KEY: z.string().min(1),
   },
-  runtimeEnv: {
-    DATABASE_URL:           process.env.DATABASE_URL,
-    DATABASE_URL_DIRECT:    process.env.DATABASE_URL_DIRECT,
-    AUTH_SECRET:            process.env.AUTH_SECRET,
-    AUTH_RESEND_KEY:        process.env.AUTH_RESEND_KEY,
-    RESEND_FROM_EMAIL:      process.env.RESEND_FROM_EMAIL,
-    BOOTSTRAP_ADMIN_EMAIL:  process.env.BOOTSTRAP_ADMIN_EMAIL,
-    CLOUDINARY_CLOUD_NAME:  process.env.CLOUDINARY_CLOUD_NAME,
-    CLOUDINARY_API_KEY:     process.env.CLOUDINARY_API_KEY,
-    CLOUDINARY_API_SECRET:  process.env.CLOUDINARY_API_SECRET,
-    SENTRY_DSN:             process.env.SENTRY_DSN,
-    SENTRY_AUTH_TOKEN:      process.env.SENTRY_AUTH_TOKEN,
+  // experimental__runtimeEnv lists ONLY client values — t3-env reads server
+  // values directly from process.env on the server side. This is the
+  // recommended pattern when env.ts can transitively land in a client bundle:
+  // the previous `runtimeEnv` (with every process.env.SERVER_KEY reference)
+  // would inline `undefined` into the client chunk and throw at module-load
+  // ("Attempted to access a server-side environment variable on the client")
+  // whenever the chunk was evaluated during SSR.
+  experimental__runtimeEnv: {
     NEXT_PUBLIC_SENTRY_DSN: process.env.NEXT_PUBLIC_SENTRY_DSN,
-    TURNSTILE_SECRET_KEY:   process.env.TURNSTILE_SECRET_KEY,
-    RATE_LIMIT_IP_SALT:     process.env.RATE_LIMIT_IP_SALT,
-    ADMIN_NOTIFY_EMAILS:    process.env.ADMIN_NOTIFY_EMAILS,
     NEXT_PUBLIC_TURNSTILE_SITE_KEY: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
   },
 });

@@ -70,7 +70,7 @@ export default async function LocaleLayout({ children, params }: Props) {
           dangerouslySetInnerHTML={{ __html: orgJsonLdHtml }}
         />
       </head>
-      <body>
+      <body suppressHydrationWarning>
         <NextIntlClientProvider>
           <NuqsAdapter>
             <Suspense fallback={<div className="h-14 border-b border-slate-200 bg-slate-50/80" />}>

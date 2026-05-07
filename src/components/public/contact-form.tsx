@@ -37,7 +37,15 @@ import { Textarea } from '@/components/ui/textarea';
 
 import { submitContactForm } from '@/actions/contact';
 import { contactInsertSchema, type ContactInsertInput } from '@/lib/zod/contact';
-import { env } from '@/env';
+
+// NEXT_PUBLIC_* is inlined by Next.js at build time, so we read it from
+// process.env directly. We deliberately do NOT import `@/env` here: that
+// module's t3-env Proxy throws on access of any non-NEXT_PUBLIC key, and any
+// stray reference (e.g. via tooling, Sentry instrumentation, or future edits)
+// would crash the client bundle with "Attempted to access a server-side
+// environment variable on the client". Server-only validation of these keys
+// still happens at server boot via src/env.ts.
+const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!;
 
 export interface ContactFormProps {
   locale: 'uz' | 'ru' | 'en';
@@ -264,7 +272,7 @@ export function ContactForm({
         <div data-testid="turnstile-host">
           <Turnstile
             ref={turnstileRef}
-            siteKey={env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+            siteKey={TURNSTILE_SITE_KEY}
             // Open Q §4 — Cloudflare Turnstile widget supports 'ru'/'en' but
             // not 'uz'; fall back to 'auto' for the Uzbek surface so the
             // widget picks the browser locale rather than crashing.
