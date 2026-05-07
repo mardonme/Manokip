@@ -27,7 +27,7 @@ describe('env-validation — FOUND-04 + T-SEC-ENV', () => {
   it('src/env.ts defines CLOUDINARY_API_SECRET only in server: block', () => {
     const envFile = readFileSync(resolve(process.cwd(), 'src/env.ts'), 'utf8');
     const serverBlock = envFile.match(/server:\s*{[\s\S]*?},\s*client:/)?.[0] ?? '';
-    const clientBlock = envFile.match(/client:\s*{[\s\S]*?},\s*runtimeEnv:/)?.[0] ?? '';
+    const clientBlock = envFile.match(/client:\s*{[\s\S]*?},\s*experimental__runtimeEnv:/)?.[0] ?? '';
     expect(serverBlock).toMatch(/CLOUDINARY_API_SECRET/);
     expect(clientBlock).not.toMatch(/CLOUDINARY_API_SECRET/);
     expect(clientBlock).not.toMatch(/AUTH_SECRET/);
