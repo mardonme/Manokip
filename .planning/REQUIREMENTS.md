@@ -123,9 +123,9 @@ v1.1 rebuilds the **public surface** to match the design canvas in `idea/` while
 
 ### Carry-forward Refactor (REFACTOR)
 
-- [ ] **REFACTOR-01**: `proxy.ts` (top level) moves to `src/proxy.ts` (stashed v1.1-wip change applied) with all imports updated and Next.js middleware contract preserved
-- [ ] **REFACTOR-02**: `src/env.ts` hardening (stashed change) applied without breaking `@t3-oss/env-nextjs` validation
-- [ ] **REFACTOR-03**: `src/app/[locale]/layout.tsx` + `src/components/public/contact-form.tsx` stashed tweaks applied and verified against Phase 5 contact-roundtrip e2e
+- [x] **REFACTOR-01**: `proxy.ts` (top level) moves to `src/proxy.ts` (stashed v1.1-wip change applied) with all imports updated and Next.js middleware contract preserved — completed 06-02 (2026-05-07); Next.js 16 auto-discovered src/proxy.ts (`ƒ Proxy (Middleware)` in build report); refactored Edge implementation drops `auth(authConfig)` wrapper to avoid Auth.js v5 MissingAdapter, validates session cookie directly via Neon HTTP with try/catch fail-closed, uses NextResponse.redirect for mutable Set-Cookie clears
+- [x] **REFACTOR-02**: `src/env.ts` hardening (stashed change) applied without breaking `@t3-oss/env-nextjs` validation — completed 06-02 (2026-05-07); switched from `runtimeEnv` (every server key) to `experimental__runtimeEnv` (NEXT_PUBLIC_* only); server values resolve via process.env on the server side; eliminates client-bundle module-load throw; tests/unit/env-validation.test.ts regex updated and 4/4 GREEN
+- [x] **REFACTOR-03**: `src/app/[locale]/layout.tsx` + `src/components/public/contact-form.tsx` stashed tweaks applied and verified against Phase 5 contact-roundtrip e2e — completed 06-02 (2026-05-07); contact-form.tsx reads `process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!` directly (drops `import { env } from '@/env'`); layout.tsx body gained `suppressHydrationWarning`; jsdom contact-form.test.tsx 8/8 GREEN; Playwright contact e2e skipped per Phase 5 protectionBypass+test.skip pattern (preview-side run is the documented idiom)
 
 ## v2 Requirements
 
@@ -174,9 +174,9 @@ Roadmap created 2026-05-06. All 62 v1.1 requirements mapped to phases 6–11.
 | DESIGN-02 | Phase 6 | Pending |
 | DESIGN-03 | Phase 6 | Pending |
 | DESIGN-04 | Phase 6 | Pending |
-| REFACTOR-01 | Phase 6 | Pending |
-| REFACTOR-02 | Phase 6 | Pending |
-| REFACTOR-03 | Phase 6 | Pending |
+| REFACTOR-01 | Phase 6 (06-02) | Complete (2026-05-07) |
+| REFACTOR-02 | Phase 6 (06-02) | Complete (2026-05-07) |
+| REFACTOR-03 | Phase 6 (06-02) | Complete (2026-05-07) |
 | REUSE-01 | Phase 6 | Pending |
 | REUSE-02 | Phase 6 | Pending |
 | REUSE-03 | Phase 6 | Pending |

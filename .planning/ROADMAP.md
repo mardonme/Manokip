@@ -42,9 +42,9 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full phase goals, success criteri
   2. A developer referencing `src/components/public/` finds `<Gauge>`, `<ProductCard>`, and `<KeyFactsRibbon>` as ready-to-consume components with the correct props interface (configurable size/value/label for Gauge; no price/add-to-cart/quantity on ProductCard; label-value array for KeyFactsRibbon)
   3. A developer opening `src/proxy.ts` (moved from top-level `proxy.ts`) finds the middleware contract intact, and `src/env.ts` passes type-safe validation on cold boot
   4. A developer running `pnpm tsc --noEmit` sees exit 0 after the stashed layout.tsx and contact-form.tsx tweaks are applied alongside the refactor
-**Plans**: 5 plans
-- [ ] 06-01-PLAN.md — Wave 0: RED test scaffolding (5 unit tests + glyph-render extension)
-- [ ] 06-02-PLAN.md — Wave 1: Apply stash@{0} (proxy.ts move, env.ts hardening, contact-form direct env read)
+**Plans**: 5 plans (2/5 complete)
+- [x] 06-01-PLAN.md — Wave 0: RED test scaffolding (5 unit tests + glyph-render extension) — completed 2026-05-06
+- [x] 06-02-PLAN.md — Wave 1: Apply stash@{0} (proxy.ts move, env.ts hardening, contact-form direct env read) — completed 2026-05-07
 - [ ] 06-03-PLAN.md — Wave 2: Tokens + fonts (globals.css @theme + .mk helpers + next/font Inter Tight + JetBrains Mono + body className=mk)
 - [ ] 06-04-PLAN.md — Wave 3: Components (Gauge SVG port + ProductCard reskin in place + KeyFactsRibbon variant grid)
 - [ ] 06-05-PLAN.md — Wave 4: /design smoke route + full test:all gate + visual sign-off
