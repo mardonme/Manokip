@@ -2,7 +2,7 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Visual Refresh
-status: executing
+status: phase_complete
 stopped_at: "Completed 06-05 WAVE-4-SMOKE-ROUTE-AND-PHASE-VERIFICATION — Phase 6 closes (visual sign-off pending human review on Vercel preview). (1) src/app/design/page.tsx CREATED (110 lines, RSC, robots noindex+nofollow): renders <Gauge size=280 value=6.4 max=10 danger=8> + 3-card <ProductCard> grid (placeholder/heroPublicId/manufacturer-null variants exposed) + 3 <KeyFactsRibbon> instances (3/4/6-fact variants) + 5 .mk-btn variants + 3 .mk-tag variants — all inside <main className='mk'> wrapper since /design lives outside [locale]/ and bypasses body-level .mk class. ProductCard grid wrapped in <Suspense fallback>: Rule-3 deviation auto-fix: Next.js 16 cacheComponents flagged next-intl <Link>'s request-scoped locale read as 'uncached data outside Suspense' on static prerender; force-dynamic incompatible with cacheComponents. Result: /design renders as PPR (◐) — static shell + streamed cards island. (2) Full Phase 6 verification gate GREEN: pnpm tsc --noEmit exits 0; pnpm test 53 files / 316 tests all GREEN in 727s; pnpm build exits 0 with /design ◐ in route table; .next/static/chunks/0pox.wf3lykb~.css contains literal --bg:#f5f3ee, --bg-2:#ebe8e1, --ink:#14161b, --ink-2/3/4, --line family, .mk-eyebrow/.mk-ph/.mk-ph-corners/.mk-btn family/.mk-tag family + .bg-mk-accent/.text-mk-accent/.bg-mk-accent-soft Tailwind utilities (D-01..D-04 fully compiled into production CSS); grep -l 'AUTH_SECRET|CLOUDINARY_API_SECRET|RATE_LIMIT_IP_SALT' .next/static/chunks/*.js returns nothing (REFACTOR-02 / T-VAR-LEAK gate intact); test ! -d src/components/public/v1-1 true (REUSE-03 final gate). 2 task commits: ead2c9c feat /design route; 3b5bc4d fix Suspense boundary. 1 deviation Rule-3 auto-fixed: cacheComponents vs static prerender — Suspense boundary chosen over force-dynamic (cacheComponents rejects force-dynamic at build). Phase 6 success criteria #2/#3/#4 confirmed GREEN by automation; criterion #1 (visual against design-canvas.jsx at 1440px on Vercel preview) is human-verify checkpoint pending user review. Phase 7 storefront-chrome unblocked."
 
 previous_stopped_at: "Completed 06-04 WAVE-3-COMPONENTS — final 3 Wave 0 RED gates flipped GREEN. (1) src/components/public/gauge.tsx CREATED (168 lines, pure RSC SVG <Gauge>, DESIGN-04). (2) src/components/public/product-card.tsx RESKINNED in place (REUSE-01, props frozen): aspect-[4/3]→aspect-square, Badge→.mk-eyebrow, ◯→.mk-ph .mk-ph-corners, text-ink, ring utility. (3) src/components/public/key-facts-ribbon.tsx RESKINNED (REUSE-02, props frozen): variant grid columns from facts.length, .mk-eyebrow labels, .mk-mono values. REUSE-03 verified: NO src/components/public/v1-1/. 3 task commits: cb9c967 + 47277af + edbbaf7. DESIGN-04 + REUSE-01 + REUSE-02 + REUSE-03 complete. Phase 6 RED→GREEN cycle closed."
@@ -12,7 +12,7 @@ last_updated: "2026-05-08T07:40:38Z"
 last_activity: 2026-05-08
 progress:
   total_phases: 6
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 5
   completed_plans: 5
   percent: 100

@@ -24,7 +24,7 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full phase goals, success criteri
 
 ### 🚧 v1.1 — Visual Refresh
 
-- [ ] **Phase 6: Design System Foundation + Refactor** - Design tokens, reusable components (Gauge, ProductCard, KeyFactsRibbon), and stashed source refactor
+- [x] **Phase 6: Design System Foundation + Refactor** - Design tokens, reusable components (Gauge, ProductCard, KeyFactsRibbon), and stashed source refactor — completed 2026-05-08 (visual sign-off deferred to /gsd-verify-work, tracked in 06-HUMAN-UAT.md)
 - [ ] **Phase 7: Storefront Chrome** - Redesigned SiteHeader (utility ribbon + nav + CTA) and SiteFooter (4-col nav + brand block + cert tags)
 - [ ] **Phase 8: Catalog Surfaces** - Home page and Product Listing Page rebuilt on top of design system and chrome
 - [ ] **Phase 9: Product Detail + Content Surfaces** - PDP non-commerce reframe + recipe/industry/manufacturer visual alignment
