@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import { Gauge } from '@/components/public/gauge';
 import { ProductCard } from '@/components/public/product-card';
@@ -14,6 +15,14 @@ export const metadata: Metadata = {
   title: 'Design Smoke — Manometr v1.1 (internal)',
   robots: { index: false, follow: false },
 };
+
+// Phase 6 plan 06-05 — Rule-3 deviation auto-fix: wrap data-reading
+// children in <Suspense>. /design lives OUTSIDE [locale]/ but renders
+// <ProductCard>, whose `<Link>` from `@/i18n/navigation` reads
+// request-scoped locale data via next-intl. With Next.js 16 Cache
+// Components enabled (next.config), uncached data access during static
+// prerender must be wrapped in <Suspense>. `force-dynamic` is not
+// compatible with cacheComponents, so we use Suspense boundaries here.
 
 const mockProduct = {
   id: 'demo-1',
@@ -67,11 +76,13 @@ export default function DesignSmokePage() {
 
       <section className="space-y-4">
         <span className="mk-eyebrow">ProductCard — REUSE-01</span>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl">
-          <ProductCard product={mockProduct} locale="uz" />
-          <ProductCard product={{ ...mockProduct, id: 'demo-2', heroPublicId: 'demo/manometer' }} locale="ru" />
-          <ProductCard product={{ ...mockProduct, id: 'demo-3', manufacturerName: null }} locale="en" />
-        </div>
+        <Suspense fallback={<div className="text-ink-3">Loading product cards…</div>}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl">
+            <ProductCard product={mockProduct} locale="uz" />
+            <ProductCard product={{ ...mockProduct, id: 'demo-2', heroPublicId: 'demo/manometer' }} locale="ru" />
+            <ProductCard product={{ ...mockProduct, id: 'demo-3', manufacturerName: null }} locale="en" />
+          </div>
+        </Suspense>
       </section>
 
       <section className="space-y-4">
