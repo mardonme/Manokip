@@ -31,9 +31,9 @@ v1.1 rebuilds the **public surface** to match the design canvas in `idea/` while
 
 ### Design System (DESIGN)
 
-- [ ] **DESIGN-01**: Tailwind v4 theme exposes the design canvas tokens — colors (`--bg #f5f3ee`, `--ink #14161b`, `--accent #1240e5`, plus the 4 line/surface variants), typography (Inter Tight + JetBrains Mono with Russian Cyrillic + Uzbek-Latin subsets), and spacing scale matching `idea/styles.css`
-- [ ] **DESIGN-02**: Visitor sees `next/font` loading Inter Tight (4 weights: 400/500/600/700) and JetBrains Mono (2 weights: 400/500) with `subsets: ['latin', 'latin-ext', 'cyrillic']` — no FOIT, no fallback rendering of Uzbek-Latin `oʻ`/`gʻ` (U+02BB) or Cyrillic glyphs
-- [ ] **DESIGN-03**: Every public page applies the global `mk` design class (or its Tailwind equivalent) so design tokens cascade consistently across all 7 page templates
+- [x] **DESIGN-01**: Tailwind v4 theme exposes the design canvas tokens — colors (`--bg #f5f3ee`, `--ink #14161b`, `--accent #1240e5`, plus the 4 line/surface variants), typography (Inter Tight + JetBrains Mono with Russian Cyrillic + Uzbek-Latin subsets), and spacing scale matching `idea/styles.css`
+- [x] **DESIGN-02**: Visitor sees `next/font` loading Inter Tight (4 weights: 400/500/600/700) and JetBrains Mono (2 weights: 400/500) with `subsets: ['latin', 'latin-ext', 'cyrillic']` — no FOIT, no fallback rendering of Uzbek-Latin `oʻ`/`gʻ` (U+02BB) or Cyrillic glyphs
+- [x] **DESIGN-03**: Every public page applies the global `mk` design class (or its Tailwind equivalent) so design tokens cascade consistently across all 7 page templates
 - [ ] **DESIGN-04**: Reusable `<Gauge>` SVG component renders the design canvas gauge (configurable size, value, max, unit, label, danger threshold) and is consumed by home hero + product detail pages
 
 ### Site Chrome (CHROME)
@@ -170,9 +170,9 @@ Roadmap created 2026-05-06. All 62 v1.1 requirements mapped to phases 6–11.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| DESIGN-01 | Phase 6 | Pending |
-| DESIGN-02 | Phase 6 | Pending |
-| DESIGN-03 | Phase 6 | Pending |
+| DESIGN-01 | Phase 6 | Complete (06-03) |
+| DESIGN-02 | Phase 6 | Complete (06-03) |
+| DESIGN-03 | Phase 6 | Complete (06-03) |
 | DESIGN-04 | Phase 6 | Pending |
 | REFACTOR-01 | Phase 6 (06-02) | Complete (2026-05-07) |
 | REFACTOR-02 | Phase 6 (06-02) | Complete (2026-05-07) |
