@@ -83,11 +83,16 @@ describe('app/[locale]/layout — DESIGN-02 / DESIGN-03 mounts', () => {
 
     const { container } = render(element as React.ReactElement);
 
-    // RTL strips <html>/<body> wrappers because jsdom already has them, but
-    // the SSR'd attributes flow through to container.outerHTML (the actual
-    // <html>/<body> become a div tree). We grep both .innerHTML and
-    // .outerHTML so the assertion catches whichever surface jsdom keeps.
-    const haystack = container.outerHTML + container.innerHTML;
+    // React 19 hoists <html>/<body> to document.documentElement / document.body
+    // (RSC document-element behavior). Their className SSRs onto the live
+    // jsdom html/body elements rather than into the container tree. Grep
+    // BOTH document.documentElement and the rendered container so the test
+    // remains tolerant of either render path (current React 19 vs hypothetical
+    // future RTL versions that re-introduce the wrapper into container).
+    const haystack =
+      document.documentElement.outerHTML +
+      container.outerHTML +
+      container.innerHTML;
 
     expect(haystack).toContain('__test_inter_tight__');
     expect(haystack).toContain('__test_jetbrains_mono__');
