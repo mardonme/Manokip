@@ -34,7 +34,7 @@ v1.1 rebuilds the **public surface** to match the design canvas in `idea/` while
 - [x] **DESIGN-01**: Tailwind v4 theme exposes the design canvas tokens — colors (`--bg #f5f3ee`, `--ink #14161b`, `--accent #1240e5`, plus the 4 line/surface variants), typography (Inter Tight + JetBrains Mono with Russian Cyrillic + Uzbek-Latin subsets), and spacing scale matching `idea/styles.css`
 - [x] **DESIGN-02**: Visitor sees `next/font` loading Inter Tight (4 weights: 400/500/600/700) and JetBrains Mono (2 weights: 400/500) with `subsets: ['latin', 'latin-ext', 'cyrillic']` — no FOIT, no fallback rendering of Uzbek-Latin `oʻ`/`gʻ` (U+02BB) or Cyrillic glyphs
 - [x] **DESIGN-03**: Every public page applies the global `mk` design class (or its Tailwind equivalent) so design tokens cascade consistently across all 7 page templates
-- [ ] **DESIGN-04**: Reusable `<Gauge>` SVG component renders the design canvas gauge (configurable size, value, max, unit, label, danger threshold) and is consumed by home hero + product detail pages
+- [x] **DESIGN-04**: Reusable `<Gauge>` SVG component renders the design canvas gauge (configurable size, value, max, unit, label, danger threshold) and is consumed by home hero + product detail pages
 
 ### Site Chrome (CHROME)
 
@@ -85,9 +85,9 @@ v1.1 rebuilds the **public surface** to match the design canvas in `idea/` while
 
 ### Reusable Components (REUSE)
 
-- [ ] **REUSE-01**: `<ProductCard>` matches the design canvas: image area (1:1 aspect, hairline border, mono SKU overlay), title, category eyebrow, key spec metadata, single Request-info / Browse arrow link — **no price, no add-to-cart, no quantity stepper**
-- [ ] **REUSE-02**: `<KeyFactsRibbon>` reusable across home (4 stats) + product detail (4 facts) + service page (3 trust facts), driven by a `[label, value]` array prop
-- [ ] **REUSE-03**: All redesigned components live under `src/components/public/v1-1/` (or replace existing `src/components/public/*` after a clear migration boundary chosen during phase planning)
+- [x] **REUSE-01**: `<ProductCard>` matches the design canvas: image area (1:1 aspect, hairline border, mono SKU overlay), title, category eyebrow, key spec metadata, single Request-info / Browse arrow link — **no price, no add-to-cart, no quantity stepper**
+- [x] **REUSE-02**: `<KeyFactsRibbon>` reusable across home (4 stats) + product detail (4 facts) + service page (3 trust facts), driven by a `[label, value]` array prop
+- [x] **REUSE-03**: All redesigned components live under `src/components/public/v1-1/` (or replace existing `src/components/public/*` after a clear migration boundary chosen during phase planning)
 
 ### New Static Pages (PAGE)
 
@@ -173,13 +173,13 @@ Roadmap created 2026-05-06. All 62 v1.1 requirements mapped to phases 6–11.
 | DESIGN-01 | Phase 6 | Complete (06-03) |
 | DESIGN-02 | Phase 6 | Complete (06-03) |
 | DESIGN-03 | Phase 6 | Complete (06-03) |
-| DESIGN-04 | Phase 6 | Pending |
+| DESIGN-04 | Phase 6 | Complete (06-04) |
 | REFACTOR-01 | Phase 6 (06-02) | Complete (2026-05-07) |
 | REFACTOR-02 | Phase 6 (06-02) | Complete (2026-05-07) |
 | REFACTOR-03 | Phase 6 (06-02) | Complete (2026-05-07) |
-| REUSE-01 | Phase 6 | Pending |
-| REUSE-02 | Phase 6 | Pending |
-| REUSE-03 | Phase 6 | Pending |
+| REUSE-01 | Phase 6 | Complete (06-04) |
+| REUSE-02 | Phase 6 | Complete (06-04) |
+| REUSE-03 | Phase 6 | Complete (06-04) |
 | CHROME-01 | Phase 7 | Pending |
 | CHROME-02 | Phase 7 | Pending |
 | CHROME-03 | Phase 7 | Pending |
