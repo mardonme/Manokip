@@ -1,20 +1,24 @@
 ---
-status: partial
+status: testing
 phase: 06-design-system-foundation
 source: [06-VERIFICATION.md]
 started: 2026-05-08T00:00:00Z
-updated: 2026-05-08T00:00:00Z
+updated: 2026-05-09T00:00:00Z
 ---
 
 ## Current Test
 
-[awaiting human testing on Vercel preview]
+number: 2
+name: Glyph rendering verification on Vercel preview /uz, /ru, /en home pages
+expected: |
+  Uzbek-Latin oʻ/gʻ (U+02BB) renders correctly without fallback; Cyrillic glyphs render correctly without fallback; no FOIT flash on first paint with Slow 3G throttle in fresh incognito
+awaiting: user response
 
 ## Tests
 
 ### 1. Visual fidelity of /design route on Vercel preview at 1440px against idea/design-canvas.jsx
 expected: Background #f5f3ee, ink #14161b, accent #1240e5, Inter Tight body + JetBrains Mono eyebrows/tick numbers, gauge geometry (11 major + 40 minor ticks + needle at 6.4 + danger arc 8→10), ProductCard placeholder cross-hatched .mk-ph + corner brackets, KeyFactsRibbon 3/4/6 column variants, no console errors
-result: [pending]
+result: pass
 
 ### 2. Glyph rendering verification on Vercel preview /uz, /ru, /en home pages
 expected: Uzbek-Latin oʻ/gʻ (U+02BB) renders correctly without fallback; Cyrillic glyphs render correctly without fallback; no FOIT flash on first paint with Slow 3G throttle in fresh incognito
@@ -31,9 +35,9 @@ result: [pending]
 ## Summary
 
 total: 4
-passed: 0
+passed: 1
 issues: 0
-pending: 4
+pending: 3
 skipped: 0
 blocked: 0
 
