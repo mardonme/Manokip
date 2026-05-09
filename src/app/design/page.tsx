@@ -24,36 +24,96 @@ export const metadata: Metadata = {
 // prerender must be wrapped in <Suspense>. `force-dynamic` is not
 // compatible with cacheComponents, so we use Suspense boundaries here.
 
-const mockProduct = {
-  id: 'demo-1',
-  name: 'WIKA 232.50 Bourdon-Tube Gauge',
-  slug: 'wika-232-50',
-  shortDesc: 'Stainless 100mm dial, 1/2" NPT, 0–10 MPa',
-  heroPublicId: null,
-  manufacturerName: 'WIKA',
-  sku: 'WK-232-50',
-};
+const mockProducts: Array<{
+  id: string;
+  name: string;
+  slug: string;
+  shortDesc: string | null;
+  heroPublicId: string | null;
+  manufacturerName: string | null;
+  sku: string | null;
+}> = [
+  {
+    id: 'demo-1',
+    name: 'WIKA 232.50 Bourdon-Tube Gauge',
+    slug: 'wika-232-50-bourdon',
+    shortDesc: 'Stainless 100mm dial, 1/2" NPT, 0–10 MPa',
+    heroPublicId: 'demo/wika-232-bourdon',
+    manufacturerName: 'WIKA',
+    sku: 'WK-232-50',
+  },
+  {
+    id: 'demo-2',
+    name: 'AFRISO D4 Diaphragm Pressure Gauge',
+    slug: 'afriso-d4-diaphragm',
+    shortDesc: 'Korroziyaga chidamli diafragmali manometr, 0–25 bar',
+    heroPublicId: null,
+    manufacturerName: 'AFRISO',
+    sku: 'AF-D4-160',
+  },
+  {
+    id: 'demo-3',
+    name: 'Endress+Hauser Cerabar PMP23 Digital Transmitter',
+    slug: 'endress-hauser-cerabar-pmp23',
+    shortDesc: 'Цифровой датчик давления 4–20 mA, 0–40 бар, IP67',
+    heroPublicId: 'demo/eh-cerabar-pmp23',
+    manufacturerName: 'Endress+Hauser',
+    sku: 'EH-PMP23-A2',
+  },
+  {
+    id: 'demo-4',
+    name: 'Rosemount 3051CD Differential Pressure Transmitter',
+    slug: 'rosemount-3051cd-differential',
+    shortDesc: 'Coplanar DP transmitter, ±0.025% accuracy, HART output',
+    heroPublicId: 'demo/rosemount-3051cd',
+    manufacturerName: 'Rosemount',
+    sku: 'RM-3051CD-1A',
+  },
+  {
+    id: 'demo-5',
+    name: 'BD Sensors DMK 331 Capsule Low-Pressure Gauge',
+    slug: 'bd-sensors-dmk-331-capsule',
+    shortDesc: 'Капсульный манометр для газов низкого давления, 0–600 mbar',
+    heroPublicId: null,
+    manufacturerName: null,
+    sku: 'BD-DMK331-LP',
+  },
+  {
+    id: 'demo-6',
+    name: 'Honeywell PX2 Electronic Pressure Switch',
+    slug: 'honeywell-px2-pressure-switch',
+    shortDesc: 'Programmable electronic switch, 1–250 bar, M12 connector',
+    heroPublicId: 'demo/honeywell-px2',
+    manufacturerName: 'Honeywell',
+    sku: 'HW-PX2-250',
+  },
+];
+
+// Locale rotation across uz/ru/en for visual variety only — /design is outside
+// the next-intl request scope, so these are static literals (matches the prior
+// 3-card pattern's hardcoded uz/ru/en triple).
+const productLocales: Array<'uz' | 'ru' | 'en'> = ['uz', 'ru', 'en', 'uz', 'ru', 'en'];
 
 const facts3 = [
   { label: 'Range', value: '0–10 MPa' },
-  { label: 'Dial', value: 'Ø100 mm' },
-  { label: 'Class', value: '1.0' },
+  { label: 'Accuracy', value: 'Class 1.0' },
+  { label: 'IP Rating', value: 'IP65' },
 ];
 
 const facts4 = [
-  { label: 'Range', value: '0–10 MPa' },
-  { label: 'Dial', value: 'Ø100 mm' },
-  { label: 'Class', value: '1.0' },
-  { label: 'Connection', value: '1/2" NPT' },
+  { label: 'Range', value: '0–25 bar' },
+  { label: 'Temperature', value: '−40…+85 °C' },
+  { label: 'Accuracy', value: 'Class 0.5' },
+  { label: 'Connection', value: 'G 1/2"' },
 ];
 
 const facts6 = [
-  { label: 'Range', value: '0–10 MPa' },
-  { label: 'Dial', value: 'Ø100 mm' },
-  { label: 'Class', value: '1.0' },
-  { label: 'Connection', value: '1/2" NPT' },
-  { label: 'Material', value: 'Stainless' },
-  { label: 'Output', value: '4–20 mA' },
+  { label: 'Range', value: '0–40 bar' },
+  { label: 'Temperature', value: '−25…+125 °C' },
+  { label: 'Accuracy', value: '±0.025%' },
+  { label: 'IP Rating', value: 'IP67' },
+  { label: 'Output', value: '4–20 mA HART' },
+  { label: 'Material', value: 'Stainless 316L' },
 ];
 
 export default function DesignSmokePage() {
@@ -78,9 +138,13 @@ export default function DesignSmokePage() {
         <span className="mk-eyebrow">ProductCard — REUSE-01</span>
         <Suspense fallback={<div className="text-ink-3">Loading product cards…</div>}>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl">
-            <ProductCard product={mockProduct} locale="uz" />
-            <ProductCard product={{ ...mockProduct, id: 'demo-2', heroPublicId: 'demo/manometer' }} locale="ru" />
-            <ProductCard product={{ ...mockProduct, id: 'demo-3', manufacturerName: null }} locale="en" />
+            {mockProducts.map((product, idx) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                locale={productLocales[idx] ?? 'uz'}
+              />
+            ))}
           </div>
         </Suspense>
       </section>
