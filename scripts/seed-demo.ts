@@ -60,9 +60,18 @@ import { config as loadEnv } from 'dotenv';
 loadEnv({ path: '.env.local' });
 loadEnv();
 
-import { Pool } from '@neondatabase/serverless';
+import { Pool, neonConfig } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-serverless';
 import { sql } from 'drizzle-orm';
+import ws from 'ws';
+
+// Node <22 has no global WebSocket. The neon-serverless Pool driver opens
+// a WS to Neon for transaction-mode connections; without an explicit
+// constructor the connect throws `fetch failed` on Node CLI. Next.js
+// runtime auto-polyfills, which is why src/db/client-ws.ts doesn't need
+// this — but a CLI seed runs on bare Node and does. `ws` is already a
+// devDep. Safe-and-correct on Node 22+ too (assignment is idempotent).
+neonConfig.webSocketConstructor = ws;
 import {
   categories,
   categoryTranslations,
