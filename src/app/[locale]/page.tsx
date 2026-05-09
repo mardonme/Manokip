@@ -25,8 +25,11 @@ import { HomeStatTicker } from './_components/home-stat-ticker';
 
 type Props = { params: Promise<{ locale: string }> };
 
-// ISR with a 60s window — throwaway mock; avoids unstable_cache plumbing.
-export const revalidate = 60;
+// NOTE: this project's next.config has `cacheComponents` enabled, which
+// is incompatible with the route-segment-level `export const revalidate`.
+// The data helpers in src/lib/catalog.ts and src/lib/industries.ts already
+// use `'use cache'` + cacheTag() so revalidation flows through Phase-2's
+// revalidateCategory / revalidateIndustry actions — no per-page knob needed.
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
@@ -180,7 +183,7 @@ export default async function HomePage({ params }: Props) {
           {rootCategories.map((cat, idx) => (
             <div
               key={cat.id}
-              className="group relative aspect-[4/3] border-r border-b border-line p-5 flex flex-col justify-between bg-surface hover:bg-white transition-colors"
+              className="group relative aspect-4/3 border-r border-b border-line p-5 flex flex-col justify-between bg-surface hover:bg-white transition-colors"
             >
               <div className="flex items-start justify-between text-xs">
                 <span className="mk-mono text-ink-3">
@@ -211,7 +214,7 @@ export default async function HomePage({ params }: Props) {
           }).map((_, i) => (
             <div
               key={`ph-${i}`}
-              className="relative aspect-[4/3] border-r border-b border-line p-5 flex flex-col justify-between mk-ph mk-ph-corners"
+              className="relative aspect-4/3 border-r border-b border-line p-5 flex flex-col justify-between mk-ph mk-ph-corners"
             >
               <div className="flex items-start justify-between text-xs">
                 <span className="mk-mono text-ink-3">
