@@ -137,5 +137,69 @@
     "title": "Foydalanilgan ma'lumotlar",
     "recipes": "Foydalanish misollari",
     "industries": "Sohalar"
+  },
+  "home": {
+    "hero": {
+      "eyebrow": "SANOAT BOSIM ASBOBLARI",
+      "titleLine1": "Muhandislar uchun",
+      "titleLine2": "to'liq texnik ma'lumot",
+      "lede": "Manometr — sanoat bosim o'lchov asboblari bo'yicha O'zbekistonning ishonchli ma'lumot manbai. Har bir mahsulot sahifasida to'liq texnik xarakteristikalar, datasheet hujjatlari va qo'llash misollari mavjud.",
+      "ctaBrowse": "Katalogni ochish",
+      "gaugeLabel": "BOSIM",
+      "callout1": "Class 1.0",
+      "callout2": "0–10 MPa",
+      "callout3": "IP65",
+      "stats": {
+        "label1": "Katalogdagi mahsulotlar",
+        "value1": "240",
+        "suffix1": "+",
+        "label2": "Xizmat ko'rsatilgan sohalar",
+        "value2": "18",
+        "suffix2": "",
+        "label3": "Bozordagi yillar",
+        "value3": "12",
+        "suffix3": "",
+        "label4": "Texnik qo'llab-quvvatlash",
+        "value4": "24",
+        "suffix4": "/7"
+      }
+    },
+    "categories": {
+      "eyebrow": "KATALOG",
+      "title": "Mahsulot kategoriyalari",
+      "cardCaption": "Mahsulotlarni ko'rish →",
+      "viewAll": "Barcha kategoriyalar →",
+      "placeholder": "Tez orada"
+    },
+    "featured": {
+      "eyebrow": "TANLOV",
+      "title": "Tanlangan mahsulotlar",
+      "viewAll": "Katalogga o'tish →",
+      "pillAll": "Hammasi",
+      "empty": "Mahsulotlar tez orada qo'shiladi"
+    },
+    "solutions": {
+      "eyebrow": "YECHIMLAR",
+      "title": "Biz xizmat ko'rsatadigan sohalar",
+      "lede": "Neft-gaz, kimyo, energetika, suv tayyorlash — har bir sohaga mos asbob va texnik yechimlar.",
+      "cta": "Tavsiya etilgan asboblar",
+      "placeholderTitles": "Neft va gaz|Kimyo|Energetika|Suv tayyorlash"
+    },
+    "service": {
+      "eyebrow": "XIZMATLAR",
+      "title": "Nega muhandislar bizni tanlaydi",
+      "fact1": {
+        "title": "Kalibrlash",
+        "body": "Akkreditlangan laboratoriyada O'zStandart talablariga muvofiq sertifikatlangan kalibrlash."
+      },
+      "fact2": {
+        "title": "Kafolat",
+        "body": "Barcha asboblar uchun 24 oy ishlab chiqaruvchi kafolati va texnik qo'llab-quvvatlash."
+      },
+      "fact3": {
+        "title": "Sertifikatlar",
+        "body": "ISO 9001, GOST R, EAC va O'zStandart sertifikatlariga ega original mahsulotlar."
+      }
+    }
   }
 }

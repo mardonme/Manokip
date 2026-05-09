@@ -137,5 +137,69 @@
     "title": "Used in",
     "recipes": "Application examples",
     "industries": "Industries"
+  },
+  "home": {
+    "hero": {
+      "eyebrow": "INDUSTRIAL PRESSURE INSTRUMENTATION",
+      "titleLine1": "The technical reference",
+      "titleLine2": "for specifying engineers",
+      "lede": "Manometr is the authoritative source for industrial pressure instrumentation in Uzbekistan and the CIS. Every product page carries the full specification, datasheet, and real-world application notes engineers need to specify with confidence.",
+      "ctaBrowse": "Browse catalog",
+      "gaugeLabel": "PRESSURE",
+      "callout1": "Class 1.0",
+      "callout2": "0–10 MPa",
+      "callout3": "IP65",
+      "stats": {
+        "label1": "Products in catalog",
+        "value1": "240",
+        "suffix1": "+",
+        "label2": "Industries served",
+        "value2": "18",
+        "suffix2": "",
+        "label3": "Years on market",
+        "value3": "12",
+        "suffix3": "",
+        "label4": "Technical support",
+        "value4": "24",
+        "suffix4": "/7"
+      }
+    },
+    "categories": {
+      "eyebrow": "CATALOG",
+      "title": "Browse the catalog",
+      "cardCaption": "View products →",
+      "viewAll": "All categories →",
+      "placeholder": "Coming soon"
+    },
+    "featured": {
+      "eyebrow": "FEATURED",
+      "title": "Selected products",
+      "viewAll": "Open catalog →",
+      "pillAll": "All",
+      "empty": "Products will be added soon"
+    },
+    "solutions": {
+      "eyebrow": "SOLUTIONS",
+      "title": "Industries we serve",
+      "lede": "Oil & gas, chemical processing, energy, water treatment — instruments and technical solutions matched to each industry's specifying requirements.",
+      "cta": "Recommended instruments",
+      "placeholderTitles": "Oil & gas|Chemical processing|Energy|Water treatment"
+    },
+    "service": {
+      "eyebrow": "SERVICE",
+      "title": "Why specifying engineers choose us",
+      "fact1": {
+        "title": "Calibration",
+        "body": "Certified calibration at an accredited laboratory, conforming to UzStandart and GOST requirements."
+      },
+      "fact2": {
+        "title": "Warranty",
+        "body": "24-month factory warranty and full technical support across every instrument we supply."
+      },
+      "fact3": {
+        "title": "Certification",
+        "body": "Original equipment carrying ISO 9001, GOST R, EAC, and UzStandart certificates of conformity."
+      }
+    }
   }
 }
