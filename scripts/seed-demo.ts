@@ -518,8 +518,17 @@ async function main(): Promise<void> {
 
 main()
   .catch((err: unknown) => {
-    const msg = err instanceof Error ? err.message : String(err);
-    console.error('[DEMO-SEED] FATAL:', msg);
+    if (err instanceof Error) {
+      console.error('[DEMO-SEED] FATAL:', err.message);
+      if (err.stack) console.error(err.stack);
+    } else {
+      console.error('[DEMO-SEED] FATAL (non-Error):');
+      try {
+        console.error(JSON.stringify(err, Object.getOwnPropertyNames(err as object), 2));
+      } catch {
+        console.error(err);
+      }
+    }
     process.exitCode = 1;
   })
   .finally(async () => {
