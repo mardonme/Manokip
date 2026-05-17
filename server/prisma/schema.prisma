@@ -1,0 +1,122 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int       @id @default(autoincrement())
+  email        String    @unique
+  passwordHash String
+  name         String?
+  phone        String?
+  company      String?
+  role         String    @default("CUSTOMER")
+  createdAt    DateTime  @default(now())
+  reviews      Review[]
+  orders       Order[]
+  carts        Cart[]
+}
+
+model Category {
+  id        Int       @id @default(autoincrement())
+  slug      String    @unique
+  nameEn    String
+  nameRu    String
+  nameUz    String
+  count     Int       @default(0)
+  products  Product[]
+}
+
+model Product {
+  id          Int        @id @default(autoincrement())
+  sku         String     @unique
+  model       String
+  descEn      String
+  descRu      String
+  descUz      String
+  range       String
+  diameter    Int?
+  priceText   String
+  priceMinor  Int?
+  accuracy    String?
+  inStock     Boolean    @default(true)
+  stockCount  Int        @default(0)
+  categoryId  Int
+  category    Category   @relation(fields: [categoryId], references: [id])
+  reviews     Review[]
+  cartItems   CartItem[]
+  orderItems  OrderItem[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model Review {
+  id        Int      @id @default(autoincrement())
+  productId Int
+  userId    Int
+  rating    Int
+  body      String
+  createdAt DateTime @default(now())
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([productId, userId])
+}
+
+model Cart {
+  id        Int        @id @default(autoincrement())
+  token     String     @unique
+  userId    Int?
+  user      User?      @relation(fields: [userId], references: [id])
+  items     CartItem[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model CartItem {
+  id        Int     @id @default(autoincrement())
+  cartId    Int
+  productId Int
+  qty       Int     @default(1)
+  cart      Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  product   Product @relation(fields: [productId], references: [id])
+
+  @@unique([cartId, productId])
+}
+
+model Order {
+  id        Int         @id @default(autoincrement())
+  userId    Int
+  user      User        @relation(fields: [userId], references: [id])
+  status    String      @default("PENDING")
+  notes     String?
+  items     OrderItem[]
+  createdAt DateTime    @default(now())
+}
+
+model OrderItem {
+  id        Int     @id @default(autoincrement())
+  orderId   Int
+  productId Int
+  qty       Int
+  priceText String
+  productModel String
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product   Product @relation(fields: [productId], references: [id])
+}
+
+model QuoteRequest {
+  id            Int      @id @default(autoincrement())
+  companyName   String
+  contactPerson String
+  email         String
+  phone         String?
+  industry      String?
+  specs         String
+  status        String   @default("new")
+  createdAt     DateTime @default(now())
+}

@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=1440" />
+<title>Manokip — Precision instruments, quietly engineered</title>
+<meta name="description" content="Manokip designs and manufactures pressure gauges, transducers, level meters and protection relays for industry. Calibrated in Tashkent, trusted across 14 sectors." />
+<link rel="stylesheet" href="styles.css" />
+<style>
+  html, body { margin: 0; padding: 0; background: var(--bg); }
+  body { font-family: var(--font); }
+  /* nav links reset */
+  .nav-link { text-decoration: none; }
+  /* category & product card hover lift */
+  .cat-cell, .prod-card { transition: transform .18s ease, box-shadow .18s ease; }
+  .cat-cell:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(20,22,27,0.06); }
+  .prod-card:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(20,22,27,0.08); }
+  .mk-btn:hover { filter: brightness(0.96); }
+  .mk-btn-primary:hover { filter: brightness(1.05); }
+  /* ticker spacing */
+  .ticker > span + span { margin-left: auto; }
+</style>
+</head>
+<body>
+
+<div class="mk" style="background: var(--bg);">
+  <!-- HEADER -->
+  <header style="border-bottom: 1px solid var(--line); background: rgba(245,243,238,0.92); backdrop-filter: blur(14px); position: sticky; top: 0; z-index: 50;">
+    <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 40px; border-bottom:1px solid var(--line); font-family: var(--mono); font-size:10.5px; color: var(--ink-3); letter-spacing:0.06em;">
+      <div style="display:flex; gap:22px;">
+        <span>● TASHKENT · MOSCOW · ALMATY</span>
+        <span>SHIPS TO 14 COUNTRIES</span>
+      </div>
+      <div style="display:flex; gap:22px;">
+        <a href="tel:+998936939220">+998 93 693-92-220</a>
+        <span>RU · EN · UZ</span>
+      </div>
+    </div>
+    <div style="display:flex; align-items:center; justify-content:space-between; padding:22px 40px; gap:40px;">
+      <a href="index.html" class="nav-link" style="display:flex; align-items:center; gap:9px; color: var(--ink);">
+        <svg width="24" height="24" viewBox="0 0 28 28" aria-hidden="true">
+          <circle cx="14" cy="14" r="11.5" fill="none" stroke="currentColor" stroke-width="1.2" />
+          <circle cx="14" cy="14" r="2.2" fill="#1240e5" />
+          <line x1="14" y1="14" x2="20" y2="8.5" stroke="#1240e5" stroke-width="1.8" stroke-linecap="round" />
+          <line x1="22.5" y1="14" x2="25" y2="14" stroke="currentColor" stroke-width="1" />
+          <line x1="14" y1="22.5" x2="14" y2="25" stroke="currentColor" stroke-width="1" />
+          <line x1="5.5" y1="14" x2="3" y2="14" stroke="currentColor" stroke-width="1" />
+          <line x1="14" y1="5.5" x2="14" y2="3" stroke="currentColor" stroke-width="1" />
+        </svg>
+        <span style="font-family: var(--font); font-size:13px; font-weight:700; letter-spacing:0.22em; text-transform:uppercase;">MANOKIP</span>
+      </a>
+      <nav style="display:flex; gap:30px; flex:1; justify-content:center;">
+        <a class="nav-link" href="catalog.html" style="font-size:14px; font-weight:500; color: var(--ink-3); padding-bottom:4px; border-bottom:2px solid transparent;">Catalog</a>
+        <a class="nav-link" href="solutions.html" style="font-size:14px; font-weight:500; color: var(--ink-3); padding-bottom:4px; border-bottom:2px solid transparent;">Solutions</a>
+        <a class="nav-link" href="service.html" style="font-size:14px; font-weight:500; color: var(--ink-3); padding-bottom:4px; border-bottom:2px solid transparent;">Service</a>
+        <a class="nav-link" href="about.html" style="font-size:14px; font-weight:500; color: var(--ink-3); padding-bottom:4px; border-bottom:2px solid transparent;">About</a>
+        <a class="nav-link" href="contact.html" style="font-size:14px; font-weight:500; color: var(--ink-3); padding-bottom:4px; border-bottom:2px solid transparent;">Contact</a>
+      </nav>
+      <div style="display:flex; align-items:center; gap:14px;">
+        <button style="display:flex; align-items:center; gap:8px; background:transparent; border:1px solid var(--line); padding:8px 12px; border-radius:999px; color:var(--ink); font-size:13px; cursor:pointer; font-family:inherit; min-width:200px;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" /></svg>
+          <span style="color:var(--ink-3); flex:1; text-align:left;">Search part №…</span>
+          <span style="font-family: var(--mono); font-size:10px; color:var(--ink-3);">⌘K</span>
+        </button>
+        <a class="nav-link" href="signin.html" style="font-size:13px; color:var(--ink); cursor:pointer;">Sign in</a>
+        <a class="nav-link" href="contact.html"><button class="mk-btn mk-btn-sm mk-btn-primary">Request quote</button></a>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section style="padding: 80px 40px 100px; position: relative;">
+    <div style="display:grid; grid-template-columns: 1.3fr 1fr; gap: 80px; align-items: center;">
+      <div>
+        <div style="display:flex; gap:10px; align-items:center; margin-bottom:24px;">
+          <span class="mk-tag mk-tag-accent">● NEW · 2026</span>
+          <span class="mk-eyebrow">Manokip series IV — pressure transducers</span>
+        </div>
+        <h1 style="font-size:92px; font-weight:600; line-height:0.96; letter-spacing:-0.035em; margin:0;">
+          Precision instruments,<br />
+          <span style="color: var(--ink-3);">quietly</span> engineered.
+        </h1>
+        <p style="font-size:19px; line-height:1.5; color: var(--ink-2); margin-top:28px; max-width:520px;">
+          Manokip designs and manufactures pressure gauges, transducers, level meters and protection relays for industry. Calibrated in Tashkent. Trusted from oil &amp; gas to HVAC across 14 sectors.
+        </p>
+        <div style="display:flex; gap:12px; margin-top:36px;">
+          <a class="nav-link" href="catalog.html"><button class="mk-btn mk-btn-primary">Browse catalog →</button></a>
+          <a class="nav-link" href="contact.html"><button class="mk-btn mk-btn-light">Request a quote</button></a>
+        </div>
+        <div style="display:flex; gap:48px; margin-top:64px; padding-top:32px; border-top:1px solid var(--line);">
+          <div>
+            <div style="font-size:28px; font-weight:600; letter-spacing:-0.02em;">7+</div>
+            <div style="font-size:12.5px; color: var(--ink-3); margin-top:4px;">years in production</div>
+          </div>
+          <div>
+            <div style="font-size:28px; font-weight:600; letter-spacing:-0.02em;">1 200+</div>
+            <div style="font-size:12.5px; color: var(--ink-3); margin-top:4px;">enterprise clients</div>
+          </div>
+          <div>
+            <div style="font-size:28px; font-weight:600; letter-spacing:-0.02em;">ISO 9001</div>
+            <div style="font-size:12.5px; color: var(--ink-3); margin-top:4px;">certified facility</div>
+          </div>
+          <div>
+            <div style="font-size:28px; font-weight:600; letter-spacing:-0.02em;">±0.5%</div>
+            <div style="font-size:12.5px; color: var(--ink-3); margin-top:4px;">measurement class</div>
+          </div>
+        </div>
+      </div>
+      <!-- hero gauge -->
+      <div style="position:relative; display:flex; justify-content:center; align-items:center; min-height:500px;">
+        <div style="position:absolute; inset:0; opacity:0.5;" class="mk-dotgrid"></div>
+        <div style="position:relative;">
+          <div data-gauge data-size="420" data-value="6.4" data-max="10" data-unit="MPa" data-label="MANOBAR PG · 0.5%" data-danger="8.5"></div>
+          <div style="position:absolute; top:30px; right:-50px; font-family: var(--mono); font-size:10.5px; color: var(--ink-3);">
+            <div style="width:60px; height:1px; background: var(--ink-3); margin-bottom:4px;"></div>
+            STAINLESS Ø100mm
+          </div>
+          <div style="position:absolute; bottom:60px; left:-70px; font-family: var(--mono); font-size:10.5px; color: var(--ink-3); text-align:right;">
+            <div style="width:60px; height:1px; background: var(--ink-3); margin-bottom:4px; margin-left:auto;"></div>
+            4–20 mA · HART
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ticker -->
+    <div class="ticker" style="margin-top:60px; padding-top:28px; border-top:1px solid var(--line); display:flex; justify-content:space-between; font-family: var(--mono); font-size:11px; color: var(--ink-3); letter-spacing:0.06em;">
+      <span>TRUSTED BY</span>
+      <span>NGMK</span><span>JPETROL</span><span>UZBEKNEFTEGAZ</span><span>TTZ</span><span>ENT-EN</span>
+      <span>+1 200 MORE</span>
+    </div>
+  </section>
+
+  <!-- CATEGORIES -->
+  <section style="padding: 0 40px 80px;">
+    <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:32px;">
+      <div>
+        <div class="mk-eyebrow">01 — Catalog</div>
+        <h2 style="font-size:48px; font-weight:600; letter-spacing:-0.025em; margin:12px 0 0;">Twelve product families.</h2>
+      </div>
+      <a class="nav-link" href="catalog.html" style="font-size:14px; color: var(--accent); cursor:pointer;">See all 230 products →</a>
+    </div>
+    <div id="categories" style="display:grid; grid-template-columns: repeat(4, 1fr); gap:1px; background: var(--line); border:1px solid var(--line);"></div>
+  </section>
+
+  <!-- FEATURED -->
+  <section style="padding: 0 40px 80px;">
+    <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:32px;">
+      <div>
+        <div class="mk-eyebrow">02 — Featured</div>
+        <h2 style="font-size:48px; font-weight:600; letter-spacing:-0.025em; margin:12px 0 0;">This quarter's instruments.</h2>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <button class="mk-tag" style="background:#14161b; color:#fff; border-color:#14161b; cursor:pointer;">All</button>
+        <button class="mk-tag" style="cursor:pointer;">Gauges</button>
+        <button class="mk-tag" style="cursor:pointer;">Transducers</button>
+        <button class="mk-tag" style="cursor:pointer;">Level</button>
+        <button class="mk-tag" style="cursor:pointer;">Relays</button>
+      </div>
+    </div>
+    <div id="featured" style="display:grid; grid-template-columns: repeat(4, 1fr); gap:16px;"></div>
+  </section>
+
+  <!-- SOLUTIONS -->
+  <section style="background:#14161b; color:#f5f3ee; padding:88px 40px;">
+    <div style="display:grid; grid-template-columns: 1fr 1.4fr; gap:64px;">
+      <div>
+        <div class="mk-eyebrow" style="color:#a7a9af;">03 — Solutions</div>
+        <h2 style="font-size:48px; font-weight:600; letter-spacing:-0.025em; margin:12px 0 24px;">Built for the field.</h2>
+        <p style="font-size:16px; color:#a7a9af; line-height:1.6; max-width:380px;">
+          From −60°C in Siberian wellheads to +200°C in Uzbek refineries — Manokip instruments are engineered to survive the conditions that destroy ordinary gauges.
+        </p>
+        <a class="nav-link" href="solutions.html"><button class="mk-btn mk-btn-light" style="margin-top:28px; background:transparent; color:#f5f3ee; border-color:#3a3d44;">All solutions →</button></a>
+      </div>
+      <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:1px; background:#2a2c32;">
+        <div style="background:#14161b; padding:32px 28px;">
+          <div style="font-size:22px; font-weight:600; letter-spacing:-0.015em;">Oil &amp; Gas</div>
+          <div style="font-size:13.5px; color:#a7a9af; margin-top:6px; line-height:1.5;">Wellhead pressure, separator, transport pipelines</div>
+          <div class="mk-mono" style="font-size:10.5px; color:#74777e; margin-top:18px; letter-spacing:0.08em;">↳ JPETROL · UZBEKNEFTEGAZ</div>
+        </div>
+        <div style="background:#14161b; padding:32px 28px;">
+          <div style="font-size:22px; font-weight:600; letter-spacing:-0.015em;">Mining</div>
+          <div style="font-size:13.5px; color:#a7a9af; margin-top:6px; line-height:1.5;">Hydraulic systems, ventilation, slurry pipelines</div>
+          <div class="mk-mono" style="font-size:10.5px; color:#74777e; margin-top:18px; letter-spacing:0.08em;">↳ NGMK</div>
+        </div>
+        <div style="background:#14161b; padding:32px 28px;">
+          <div style="font-size:22px; font-weight:600; letter-spacing:-0.015em;">Chemical</div>
+          <div style="font-size:13.5px; color:#a7a9af; margin-top:6px; line-height:1.5;">Corrosion-resistant, ammonia-rated</div>
+          <div class="mk-mono" style="font-size:10.5px; color:#74777e; margin-top:18px; letter-spacing:0.08em;">↳ ENT-EN</div>
+        </div>
+        <div style="background:#14161b; padding:32px 28px;">
+          <div style="font-size:22px; font-weight:600; letter-spacing:-0.015em;">Power &amp; HVAC</div>
+          <div style="font-size:13.5px; color:#a7a9af; margin-top:6px; line-height:1.5;">Steam, condensate, chilled water loops</div>
+          <div class="mk-mono" style="font-size:10.5px; color:#74777e; margin-top:18px; letter-spacing:0.08em;">↳ TTZ</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICE / CTA -->
+  <section style="padding: 88px 40px;">
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1px; background: var(--line); border:1px solid var(--line);">
+      <div style="background:#fff; padding:48px 40px;">
+        <div class="mk-eyebrow">04 — Service &amp; Calibration</div>
+        <h3 style="font-size:36px; font-weight:600; letter-spacing:-0.02em; margin:14px 0 16px;">We service what we ship.</h3>
+        <p style="font-size:15px; color: var(--ink-2); line-height:1.55; max-width:460px;">
+          Calibration, repair and verification of any pressure or temperature instrument — Manokip-built or otherwise. O'zStandart-accredited laboratory.
+        </p>
+        <div style="display:flex; gap:28px; margin-top:32px; padding-top:28px; border-top:1px solid var(--line-soft);">
+          <div><div style="font-size:24px; font-weight:600;">48h</div><div style="font-size:12px; color: var(--ink-3);">turnaround</div></div>
+          <div><div style="font-size:24px; font-weight:600;">±0.05%</div><div style="font-size:12px; color: var(--ink-3);">uncertainty</div></div>
+          <div><div style="font-size:24px; font-weight:600;">14k+</div><div style="font-size:12px; color: var(--ink-3);">verified / yr</div></div>
+        </div>
+        <a class="nav-link" href="service.html"><button class="mk-btn mk-btn-light" style="margin-top:28px;">Learn about service →</button></a>
+      </div>
+      <div style="background:#fff; padding:48px 40px; display:flex; flex-direction:column; justify-content:space-between;">
+        <div>
+          <div class="mk-eyebrow">05 — Bulk &amp; custom orders</div>
+          <h3 style="font-size:36px; font-weight:600; letter-spacing:-0.02em; margin:14px 0 16px;">Specify it. We'll build it.</h3>
+          <p style="font-size:15px; color: var(--ink-2); line-height:1.55; max-width:460px;">
+            Project quantities, non-standard ranges, custom dial markings and process connections. Send us a parts list — we'll respond within one business hour with pricing and lead time.
+          </p>
+          <div style="display:flex; gap:28px; margin-top:32px; padding-top:28px; border-top:1px solid var(--line-soft);">
+            <div><div style="font-size:24px; font-weight:600;">1h</div><div style="font-size:12px; color: var(--ink-3);">quote response</div></div>
+            <div><div style="font-size:24px; font-weight:600;">−18%</div><div style="font-size:12px; color: var(--ink-3);">100+ unit pricing</div></div>
+            <div><div style="font-size:24px; font-weight:600;">14</div><div style="font-size:12px; color: var(--ink-3);">countries shipped</div></div>
+          </div>
+        </div>
+        <a class="nav-link" href="contact.html"><button class="mk-btn mk-btn-primary" style="align-self:flex-start; margin-top:32px;">Start an order →</button></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer style="background:#14161b; color:#f5f3ee; padding:72px 40px 28px;">
+    <div style="display:grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; gap:56px; padding-bottom:48px; border-bottom:1px solid #2a2c32;">
+      <div>
+        <div style="display:flex; align-items:center; gap:9px; color:#f5f3ee;">
+          <svg width="26" height="26" viewBox="0 0 28 28" aria-hidden="true">
+            <circle cx="14" cy="14" r="11.5" fill="none" stroke="currentColor" stroke-width="1.2" />
+            <circle cx="14" cy="14" r="2.2" fill="#1240e5" />
+            <line x1="14" y1="14" x2="20" y2="8.5" stroke="#1240e5" stroke-width="1.8" stroke-linecap="round" />
+            <line x1="22.5" y1="14" x2="25" y2="14" stroke="currentColor" stroke-width="1" />
+            <line x1="14" y1="22.5" x2="14" y2="25" stroke="currentColor" stroke-width="1" />
+            <line x1="5.5" y1="14" x2="3" y2="14" stroke="currentColor" stroke-width="1" />
+            <line x1="14" y1="5.5" x2="14" y2="3" stroke="currentColor" stroke-width="1" />
+          </svg>
+          <span style="font-family: var(--font); font-size:14px; font-weight:700; letter-spacing:0.22em; text-transform:uppercase;">MANOKIP</span>
+        </div>
+        <p style="margin-top:24px; color:#a7a9af; font-size:14px; line-height:1.6; max-width:320px;">
+          Production and supply of control &amp; measuring instruments. Engineered in Tashkent, trusted across 14 industries from oil &amp; gas to mining and HVAC.
+        </p>
+        <div style="margin-top:24px; display:flex; gap:8px; flex-wrap:wrap;">
+          <span class="mk-tag" style="background:transparent; border-color:#2a2c32; color:#a7a9af;">ISO 9001</span>
+          <span class="mk-tag" style="background:transparent; border-color:#2a2c32; color:#a7a9af;">GOST R</span>
+          <span class="mk-tag" style="background:transparent; border-color:#2a2c32; color:#a7a9af;">EAC</span>
+          <span class="mk-tag" style="background:transparent; border-color:#2a2c32; color:#a7a9af;">O'zStandart</span>
+        </div>
+      </div>
+      <div id="footer-cols-anchor" style="display:contents;"></div>
+    </div>
+    <div style="display:flex; justify-content:space-between; align-items:center; padding-top:28px; font-family: var(--mono); font-size:10.5px; color:#74777e; letter-spacing:0.06em;">
+      <span>© 2018–2026 MANOKIP — TASHKENT, UZBEKISTAN · BEKTEMIR DISTRICT, ROHAT 13A</span>
+      <span>UPDATED 2026.04.30</span>
+    </div>
+  </footer>
+</div>
+
+<script>
+// ─── data ───────────────────────────────────────────────────────────
+const CATEGORIES = [
+  { name: 'Pressure gauges', count: 84, ru: 'Манометры' },
+  { name: 'Electrocontact gauges', count: 22, ru: 'Электроконтактные' },
+  { name: 'Reference gauges', count: 14, ru: 'Образцовые' },
+  { name: 'Corrosion-resistant', count: 19, ru: 'Коррозионностойкие' },
+  { name: 'Ammonia gauges', count: 11, ru: 'Аммиачные' },
+  { name: 'Explosion-proof', count: 8, ru: 'Взрывозащищённые' },
+  { name: 'Railway gauges', count: 6, ru: 'Железнодорожные' },
+  { name: 'Vibration-resistant', count: 24, ru: 'Виброустойчивые' },
+  { name: 'Digital gauges', count: 9, ru: 'Цифровые' },
+  { name: 'Pressure transducers', count: 17, ru: 'Преобразователи' },
+  { name: 'Level meters', count: 12, ru: 'Уровнемеры' },
+  { name: 'Protection relays', count: 5, ru: 'Реле защиты' },
+];
+
+const PRODUCTS = [
+  { id: 1, model: 'DA8008-VU', desc: 'Vibration-resistant gauge', range: '−1…+24 kgf/cm²', dia: 100, price: 'from 474 000', cat: 'Vibration-resistant' },
+  { id: 2, model: 'DM8008-VU', desc: 'Vibration-resistant gauge', range: '0–400 kgf/cm²', dia: 100, price: 'from 474 000', cat: 'Vibration-resistant' },
+  { id: 3, model: 'DM8008-VU', desc: 'Vibration-resistant gauge', range: '0–2.5 kgf/cm²', dia: 100, price: 'from 420 000', cat: 'Vibration-resistant' },
+  { id: 4, model: 'MVP2-U',   desc: 'Vacuum / pressure gauge',   range: '−1…+24 kgf/cm²', dia: 63,  price: 'on request',   cat: 'Compact' },
+];
+
+const FOOTER_COLS = [
+  { t: 'Catalog',   i: ['Pressure gauges','Electrocontact gauges','Vibration-resistant','Vacuum gauges','Pressure transducers','Level meters','Solar panels'] },
+  { t: 'Solutions', i: ['Oil & gas','Mining','Chemical','HVAC','Railway','Power generation'] },
+  { t: 'Service',   i: ['Calibration','Verification','Repair','Custom orders','Documentation','Training'] },
+  { t: 'Company',   i: ['About Manokip','Manufacturing','Certificates','Partners','Press','Careers'] },
+];
+
+// ─── gauge SVG ──────────────────────────────────────────────────────
+function renderGauge(host) {
+  const size   = +host.dataset.size || 280;
+  const value  = +host.dataset.value || 0;
+  const max    = +host.dataset.max || 10;
+  const unit   = host.dataset.unit || '';
+  const label  = host.dataset.label || '';
+  const danger = +host.dataset.danger || max + 1;
+  const cx = size/2, cy = size/2, r = size*0.42;
+  const startA = 135, sweep = 270;
+  const polar = (a, rad) => [cx + Math.cos(a*Math.PI/180)*rad, cy + Math.sin(a*Math.PI/180)*rad];
+  const angleFor = v => startA + (v/max) * sweep;
+
+  const SVG = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(SVG, 'svg');
+  svg.setAttribute('width', size);
+  svg.setAttribute('height', size);
+  svg.setAttribute('viewBox', `0 0 ${size} ${size}`);
+  svg.style.display = 'block';
+
+  const ring  = '#14161b', face = '#fafaf7', tickC = '#14161b';
+  const tickMinor = '#a7a9af', txt = '#14161b', dim = '#74777e';
+
+  const el = (tag, attrs) => {
+    const e = document.createElementNS(SVG, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    return e;
+  };
+
+  svg.appendChild(el('circle', { cx, cy, r: r + size*0.05, fill: 'none', stroke: ring, 'stroke-width': size*0.01 }));
+  svg.appendChild(el('circle', { cx, cy, r: r + size*0.022, fill: face, stroke: ring, 'stroke-width': 1 }));
+
+  const [dx1, dy1] = polar(angleFor(danger), r + 4);
+  const [dx2, dy2] = polar(angleFor(max), r + 4);
+  svg.appendChild(el('path', { d: `M ${dx1} ${dy1} A ${r+4} ${r+4} 0 0 1 ${dx2} ${dy2}`, stroke: '#1240e5', 'stroke-width': size*0.014, fill: 'none' }));
+
+  const N = 11, m = 5;
+  for (let i = 0; i < N; i++) {
+    const v = (i/(N-1)) * max;
+    const a = angleFor(v);
+    const [x1, y1] = polar(a, r);
+    const [x2, y2] = polar(a, r - size*0.06);
+    const isD = v >= danger;
+    svg.appendChild(el('line', { x1, y1, x2, y2, stroke: isD ? '#1240e5' : tickC, 'stroke-width': 1.8 }));
+    const [tx, ty] = polar(a, r - size*0.115);
+    const t = el('text', { x: tx, y: ty, fill: isD ? '#1240e5' : txt, 'font-family': 'JetBrains Mono', 'font-size': size*0.05, 'font-weight': 600, 'text-anchor': 'middle', 'dominant-baseline': 'central' });
+    t.textContent = Math.round(v);
+    svg.appendChild(t);
+    if (i < N - 1) for (let j = 1; j < m; j++) {
+      const vm = v + (j/m) * (max/(N-1));
+      const am = angleFor(vm);
+      const [a1, b1] = polar(am, r), [a2, b2] = polar(am, r - size*0.022);
+      svg.appendChild(el('line', { x1: a1, y1: b1, x2: a2, y2: b2, stroke: tickMinor, 'stroke-width': 0.8 }));
+    }
+  }
+
+  const lblEl = el('text', { x: cx, y: cy - size*0.13, 'text-anchor': 'middle', 'font-family': 'JetBrains Mono', 'font-size': size*0.04, fill: dim, 'letter-spacing': '0.18em' });
+  lblEl.textContent = label;
+  svg.appendChild(lblEl);
+  const unitEl = el('text', { x: cx, y: cy + size*0.18, 'text-anchor': 'middle', 'font-family': 'JetBrains Mono', 'font-size': size*0.045, fill: dim, 'letter-spacing': '0.14em' });
+  unitEl.textContent = unit;
+  svg.appendChild(unitEl);
+
+  const nA = angleFor(Math.min(value, max));
+  const [nx, ny] = polar(nA, r - size*0.07);
+  const [tlx, tly] = polar(nA + 180, size*0.04);
+  svg.appendChild(el('line', { x1: tlx, y1: tly, x2: nx, y2: ny, stroke: '#1240e5', 'stroke-width': size*0.016, 'stroke-linecap': 'round' }));
+  svg.appendChild(el('circle', { cx, cy, r: size*0.038, fill: ring }));
+  svg.appendChild(el('circle', { cx, cy, r: size*0.016, fill: '#1240e5' }));
+
+  host.appendChild(svg);
+}
+
+// ─── product art (small gauge for cards) ────────────────────────────
+function productArt(model) {
+  return `
+    <div class="mk-ph mk-ph-corners" style="width:100%; height:180px; position:relative; background:#fafaf7;">
+      <svg width="126" height="126" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="42" fill="none" stroke="#d6d2c8" stroke-width="1" />
+        <circle cx="50" cy="50" r="36" fill="#fff" stroke="#d6d2c8" stroke-width="0.6" />
+        ${Array.from({length: 24}).map((_, i) => {
+          const a = (i/24) * Math.PI * 2 - Math.PI/2;
+          const x1 = 50 + Math.cos(a)*32, y1 = 50 + Math.sin(a)*32;
+          const x2 = 50 + Math.cos(a)*36, y2 = 50 + Math.sin(a)*36;
+          return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#a7a9af" stroke-width="${i%6===0?1.2:0.5}" />`;
+        }).join('')}
+        <line x1="50" y1="50" x2="68" y2="34" stroke="#1240e5" stroke-width="1.4" stroke-linecap="round" />
+        <circle cx="50" cy="50" r="2.5" fill="#14161b" />
+        <rect x="46" y="86" width="8" height="10" fill="#a7a9af" />
+      </svg>
+      <div style="position:absolute; top:12px; right:14px; font-family: 'JetBrains Mono', monospace; font-size:9px; color:#74777e; letter-spacing:0.1em;">${model}</div>
+      <div style="position:absolute; bottom:10px; left:14px; font-family: 'JetBrains Mono', monospace; font-size:9px; color:#a7a9af; letter-spacing:0.05em;">product render</div>
+    </div>`;
+}
+
+// ─── render lists ───────────────────────────────────────────────────
+const cats = document.getElementById('categories');
+CATEGORIES.forEach((c, i) => {
+  const d = document.createElement('a');
+  d.href = 'catalog.html';
+  d.className = 'cat-cell nav-link';
+  d.style.cssText = 'background:#fff; padding:32px 28px; display:flex; flex-direction:column; gap:18px; min-height:200px; cursor:pointer; color:inherit;';
+  d.innerHTML = `
+    <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+      <span class="mk-mono" style="font-size:11px; color:#a7a9af;">${String(i+1).padStart(2,'0')}</span>
+      <span class="mk-mono" style="font-size:11px; color:#74777e;">${c.count} items</span>
+    </div>
+    <div style="flex:1;">
+      <div style="font-size:18px; font-weight:600; letter-spacing:-0.015em;">${c.name}</div>
+      <div style="font-size:12.5px; color:#74777e; margin-top:4px; font-family: 'JetBrains Mono', monospace;">${c.ru}</div>
+    </div>
+    <div style="font-size:13px; color:#1240e5; display:flex; align-items:center; gap:6px;">
+      Browse <span style="font-size:16px;">→</span>
+    </div>`;
+  cats.appendChild(d);
+});
+
+const feat = document.getElementById('featured');
+PRODUCTS.forEach(p => {
+  const d = document.createElement('a');
+  d.href = 'product.html';
+  d.className = 'prod-card nav-link';
+  d.style.cssText = 'background:#fff; border:1px solid var(--line); display:flex; flex-direction:column; color:inherit;';
+  d.innerHTML = `
+    <div style="padding:18px; border-bottom:1px solid var(--line-soft);">${productArt(p.model)}</div>
+    <div style="padding:16px 18px 18px; display:flex; flex-direction:column; gap:8px;">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px;">
+        <div>
+          <div class="mk-mono" style="font-size:11px; color:#74777e; letter-spacing:0.06em; text-transform:uppercase;">${p.cat}</div>
+          <div style="font-size:15px; font-weight:600; margin-top:2px;">${p.model}</div>
+          <div style="font-size:13px; color:#74777e; margin-top:1px;">${p.desc}</div>
+        </div>
+        ${p.dia ? `<span class="mk-tag">Ø ${p.dia}</span>` : ''}
+      </div>
+      <div style="display:flex; justify-content:space-between; align-items:baseline; margin-top:4px; padding-top:12px; border-top:1px solid var(--line-soft);">
+        <div>
+          <div style="font-size:10.5px; color:#a7a9af; font-family: 'JetBrains Mono', monospace; text-transform:uppercase; letter-spacing:0.08em;">Range</div>
+          <div class="mk-mono" style="font-size:12.5px; color:#14161b; margin-top:2px;">${p.range}</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:10.5px; color:#a7a9af; font-family: 'JetBrains Mono', monospace; text-transform:uppercase; letter-spacing:0.08em;">Price</div>
+          <div class="mk-mono" style="font-size:12.5px; color:#14161b; margin-top:2px;">${p.price}<span style="color:#a7a9af;"> sum</span></div>
+        </div>
+      </div>
+    </div>`;
+  feat.appendChild(d);
+});
+
+// footer link columns
+const anchor = document.getElementById('footer-cols-anchor');
+FOOTER_COLS.forEach(c => {
+  const col = document.createElement('div');
+  col.innerHTML = `
+    <div class="mk-eyebrow" style="color:#74777e; margin-bottom:16px;">${c.t}</div>
+    ${c.i.map(i => `<div style="font-size:13.5px; margin-bottom:10px; color:#f5f3ee; cursor:pointer;">${i}</div>`).join('')}`;
+  anchor.parentNode.insertBefore(col, anchor);
+});
+anchor.remove();
+
+// gauges
+document.querySelectorAll('[data-gauge]').forEach(renderGauge);
+</script>
+
+</body>
+</html>

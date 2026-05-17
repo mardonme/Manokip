@@ -1,0 +1,325 @@
+/* MANOKIP — premium minimal design system */
+@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+  --bg: #f5f3ee;
+  --bg-2: #ebe8e1;
+  --surface: #ffffff;
+  --ink: #14161b;
+  --ink-2: #3a3d44;
+  --ink-3: #74777e;
+  --ink-4: #a7a9af;
+  --line: #e5e1d8;
+  --line-2: #d6d2c8;
+  --line-soft: #efece5;
+  --accent: #1240e5;
+  --accent-soft: #e8edff;
+  --accent-ink: #0926a8;
+  --warn: #b8531a;
+  --ok: #1d7a4f;
+
+  --font: 'Inter Tight', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+html, body { margin: 0; padding: 0; background: var(--bg); overflow-x: hidden; }
+body { font-family: var(--font); }
+
+.mk { font-family: var(--font); color: var(--ink); background: var(--bg); -webkit-font-smoothing: antialiased; letter-spacing: -0.011em; }
+.mk *, .mk *::before, .mk *::after { box-sizing: border-box; }
+.mk img, .mk svg, .mk iframe { max-width: 100%; }
+.mk-mono { font-family: var(--mono); letter-spacing: 0; }
+.mk-eyebrow { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--ink-3); }
+
+.mk-ph {
+  background:
+    repeating-linear-gradient(135deg, rgba(20,22,27,0.04) 0 1px, transparent 1px 11px),
+    var(--surface);
+  border: 1px solid var(--line);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 10.5px; color: var(--ink-3);
+  text-align: center; position: relative;
+  padding: 12px;
+}
+.mk-ph-corners::before, .mk-ph-corners::after {
+  content: ''; position: absolute; width: 10px; height: 10px;
+  border: 1px solid var(--ink-3);
+}
+.mk-ph-corners::before { top: 8px; left: 8px; border-right: none; border-bottom: none; }
+.mk-ph-corners::after { bottom: 8px; right: 8px; border-left: none; border-top: none; }
+
+.mk-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font); font-weight: 500; font-size: 14px;
+  padding: 11px 18px; border-radius: 999px;
+  border: 1px solid var(--ink); background: var(--ink); color: #fff;
+  cursor: pointer; transition: all .15s; letter-spacing: -0.005em;
+}
+.mk-btn-primary { background: var(--accent); border-color: var(--accent); }
+.mk-btn-ghost { background: transparent; color: var(--ink); }
+.mk-btn-light { background: var(--surface); color: var(--ink); border-color: var(--line); }
+.mk-btn-sm { padding: 8px 14px; font-size: 13px; }
+.mk-btn:hover { filter: brightness(0.96); }
+.mk-btn-primary:hover { filter: brightness(1.05); }
+
+.mk-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--mono); font-size: 10.5px;
+  padding: 4px 9px; border-radius: 999px;
+  border: 1px solid var(--line-2); background: var(--surface); color: var(--ink-2);
+  letter-spacing: 0.04em; text-transform: uppercase;
+}
+.mk-tag-solid { background: var(--ink); color: #fff; border-color: var(--ink); }
+.mk-tag-accent { background: var(--accent-soft); color: var(--accent-ink); border-color: var(--accent-soft); }
+
+.mk-rule { height: 1px; background: var(--line); }
+
+.mk-dotgrid {
+  background-image: radial-gradient(rgba(20,22,27,0.08) 1px, transparent 1px);
+  background-size: 18px 18px;
+}
+
+a { color: inherit; text-decoration: none; }
+input, textarea, button { font-family: inherit; }
+
+/* Hamburger toggle — only shown on narrow screens via media query below. */
+.mk-burger {
+  display: none;
+  width: 38px; height: 38px;
+  background: transparent; border: 1px solid var(--line-2);
+  border-radius: 8px; cursor: pointer; padding: 0;
+  align-items: center; justify-content: center;
+}
+.mk-burger span {
+  display: block; width: 16px; height: 1.5px;
+  background: var(--ink); position: relative;
+}
+.mk-burger span::before, .mk-burger span::after {
+  content: ''; position: absolute; left: 0; width: 16px; height: 1.5px; background: var(--ink);
+}
+.mk-burger span::before { top: -5px; }
+.mk-burger span::after  { top:  5px; }
+
+/* ============================================================
+   RESPONSIVE OVERRIDES
+   Inline style={{}} props beat normal CSS, so the rules below
+   use attribute selectors + !important to win specificity.
+   Breakpoints:  ≤1024 tablet · ≤768 mobile · ≤480 small mobile
+   ============================================================ */
+
+/* ---------- Tablet (≤1024px) ---------- */
+@media (max-width: 1024px) {
+  .mk h1 { font-size: 56px !important; line-height: 1.02 !important; }
+  .mk h2 { font-size: 36px !important; }
+  .mk h3 { font-size: 26px !important; }
+
+  /* Outer section padding: shrink 80/40 → 48/24 */
+  .mk section[style*="80px 40px"],
+  .mk section[style*="72px 40px"],
+  .mk section[style*="88px 40px"] { padding: 48px 24px !important; }
+  .mk section[style*="0 40px"]    { padding-left: 24px !important; padding-right: 24px !important; }
+  .mk div[style*="20px 40px"]     { padding: 16px 24px !important; }
+
+  /* All two-column grids collapse to one column */
+  .mk section[style*="gridTemplateColumns: '1fr 1fr'"],
+  .mk section[style*="gridTemplateColumns: '1.3fr 1fr'"],
+  .mk section[style*="gridTemplateColumns: '1.4fr 1fr'"],
+  .mk section[style*="gridTemplateColumns: '1.2fr 1fr'"],
+  .mk section[style*="grid-template-columns: 1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+    gap: 40px !important;
+  }
+
+  /* 4-up product / category grids → 2-up */
+  .mk div[style*="repeat(4, 1fr)"],
+  .mk div[style*="repeat(5, 1fr)"] {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  /* 3-up catalog grid → 2-up */
+  .mk div[style*="repeat(3, 1fr)"] {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  /* Catalog page: sidebar + grid → stacked */
+  .mk div[style*="gridTemplateColumns: '260px 1fr'"] {
+    grid-template-columns: 1fr !important;
+  }
+  .mk aside[style*="border-right"] { border-right: none !important; border-bottom: 1px solid var(--line) !important; }
+
+  /* Product page service-row 4-column → 2-column */
+  .mk div[style*="80px 1fr 1.4fr 1fr"] {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  /* Footer 5-column → 2-column */
+  .mk footer div[style*="2fr 1fr 1fr 1fr 1fr"] {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 32px !important;
+  }
+
+  /* Topbar font shrink so it still fits */
+  .mk header > div:first-child { font-size: 9.5px !important; padding-left: 16px !important; padding-right: 16px !important; }
+  .mk header > div:first-child > div:first-child { gap: 12px !important; }
+}
+
+/* ---------- Mobile (≤768px) ---------- */
+@media (max-width: 768px) {
+  .mk h1 { font-size: 40px !important; letter-spacing: -0.02em !important; }
+  .mk h2 { font-size: 28px !important; }
+  .mk h3 { font-size: 22px !important; }
+
+  .mk section { padding-left: 16px !important; padding-right: 16px !important; }
+  .mk section[style*="80px 40px"],
+  .mk section[style*="72px 40px"],
+  .mk section[style*="88px 40px"],
+  .mk section[style*="60px 40px"],
+  .mk section[style*="48px 40px"] { padding: 36px 16px !important; }
+  .mk section[style*="0 40px"]    { padding-left: 16px !important; padding-right: 16px !important; }
+
+  /* Hide secondary topbar text and shrink lang switcher */
+  .mk header > div:first-child > div:first-child { display: none !important; }
+  .mk header > div:first-child { justify-content: flex-end !important; gap: 12px !important; padding: 6px 12px !important; }
+
+  /* Main header row */
+  .mk header > div:nth-child(2) { padding: 14px 16px !important; gap: 12px !important; }
+
+  /* Hide desktop top nav, show burger. The drawer's nav is also inside <header>,
+     so we target only the top-bar nav via its direct-parent flex row. */
+  .mk header > div:nth-child(2) > nav { display: none !important; }
+  .mk-burger { display: inline-flex !important; }
+
+  /* Hide search pill + desktop sign-in + desktop "Request quote" — but ONLY
+     the ones in the top-bar action cluster (third child of the second row),
+     not anything inside the slide-out drawer. */
+  .mk header > div:nth-child(2) > div:last-child > button[style*="min-width"] { display: none !important; }
+  .mk header > div:nth-child(2) > div:last-child > a                          { display: none !important; }
+  .mk header > div:nth-child(2) > div:last-child > div                        { display: none !important; } /* user block */
+  .mk header > div:nth-child(2) > div:last-child > a > button.mk-btn-sm,
+  .mk header > div:nth-child(2) > div:last-child > .mk-btn-sm                  { display: none !important; }
+  /* The Request-Quote link wraps a button; hide the wrapping Link too */
+  .mk header > div:nth-child(2) > div:last-child > a[href="/contact"]          { display: none !important; }
+  /* Cart link in top bar - keep visible (it's an <a>/<Link>) — restore it */
+  .mk header > div:nth-child(2) > div:last-child > a[href="/cart"]             { display: inline-flex !important; }
+
+  /* All multi-column grids → single column */
+  .mk div[style*="repeat(2, 1fr)"],
+  .mk div[style*="repeat(3, 1fr)"],
+  .mk div[style*="repeat(4, 1fr)"],
+  .mk div[style*="repeat(5, 1fr)"],
+  .mk section[style*="gridTemplateColumns: '1fr 1fr'"],
+  .mk section[style*="gridTemplateColumns: '1.3fr 1fr'"],
+  .mk section[style*="gridTemplateColumns: '1.4fr 1fr'"],
+  .mk section[style*="gridTemplateColumns: '1.2fr 1fr'"],
+  .mk section[style*="gridTemplateColumns: '1.6fr 1fr'"] {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  /* Footer — compact: brand block full-width, then 2-up link columns */
+  .mk footer { padding: 40px 20px 16px !important; }
+  .mk footer div[style*="2fr 1fr 1fr 1fr 1fr"] {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 24px 20px !important;
+    padding-bottom: 24px !important;
+  }
+  /* Brand block (first child of the grid) spans both columns */
+  .mk footer div[style*="2fr 1fr 1fr 1fr 1fr"] > div:first-child {
+    grid-column: 1 / -1 !important;
+    margin-bottom: 4px !important;
+  }
+  /* Tighter rhythm inside each link column */
+  .mk footer div[style*="2fr 1fr 1fr 1fr 1fr"] > div .mk-eyebrow {
+    margin-bottom: 10px !important;
+    font-size: 10px !important;
+  }
+  .mk footer div[style*="2fr 1fr 1fr 1fr 1fr"] > div > a {
+    font-size: 13px !important;
+    margin-bottom: 6px !important;
+  }
+  /* Brand paragraph */
+  .mk footer p { font-size: 13px !important; line-height: 1.55 !important; margin-top: 16px !important; }
+  /* Certification tag chips wrap nicely */
+  .mk footer div[style*="2fr 1fr 1fr 1fr 1fr"] > div:first-child > div:last-child {
+    gap: 6px !important; margin-top: 18px !important;
+  }
+  /* Bottom rights/updated row */
+  .mk footer > div:last-child {
+    flex-direction: column !important;
+    gap: 6px !important;
+    align-items: flex-start !important;
+    text-align: left !important;
+    font-size: 9px !important;
+    padding-top: 20px !important;
+    line-height: 1.5 !important;
+  }
+}
+
+/* Even tighter on very small phones */
+@media (max-width: 380px) {
+  .mk footer div[style*="2fr 1fr 1fr 1fr 1fr"] {
+    gap: 20px 16px !important;
+  }
+  .mk footer { padding: 32px 16px 14px !important; }
+
+  /* Hero numbers row: wrap */
+  .mk div[style*="gap: 48px"][style*="paddingTop"] { flex-wrap: wrap !important; gap: 24px !important; }
+
+  /* Cart summary stops sticking */
+  .mk aside[style*="position: sticky"] { position: static !important; }
+
+  /* Tabs strip on product page becomes scrollable */
+  .mk div[style*="borderBottom: '1px solid var(--line)'"][style*="display: 'flex'"] {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  /* "Trusted by" mono row wraps */
+  .mk div[style*="JetBrains Mono"][style*="justifyContent: 'space-between'"] {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+
+  /* Service-page list rows */
+  .mk div[style*="80px 1fr 1.4fr 1fr"] {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+    padding: 24px 16px !important;
+  }
+
+  /* Catalog: filter-pills toolbar wraps tighter */
+  .mk div[style*="borderTop: '1px solid var(--line)'"][style*="borderBottom"] {
+    gap: 8px !important; padding: 12px 16px !important;
+  }
+
+  /* Generic font shrinks for big lead paragraphs */
+  .mk p[style*="fontSize: 19"], .mk p[style*="fontSize: 18"], .mk p[style*="fontSize: 17"] {
+    font-size: 15px !important;
+  }
+
+  /* Hero/featured gauges shouldn't overflow */
+  .mk div[style*="minHeight: 500"] { min-height: auto !important; }
+
+  /* Sign-in modal (rendered at root, outside .mk wrapper) */
+  body > div#root > div[style*="position: fixed"][style*="inset: 0"] { padding: 12px !important; }
+  body > div#root > div[style*="position: fixed"][style*="inset: 0"] > div { width: 100% !important; padding: 20px !important; }
+
+  /* Documents grid full-width images */
+  .mk button[style*="aspectRatio"] img { object-fit: contain !important; }
+}
+
+/* ---------- Small mobile (≤480px) ---------- */
+@media (max-width: 480px) {
+  .mk h1 { font-size: 32px !important; }
+  .mk h2 { font-size: 24px !important; }
+  .mk-btn { padding: 10px 14px !important; font-size: 13px !important; }
+  .mk-btn-sm { padding: 7px 12px !important; font-size: 12px !important; }
+
+  /* Hide the +998 phone link on the tiniest screens — the burger menu still has Contact */
+  .mk header > div:first-child a[href^="tel:"] { display: none !important; }
+
+  /* Product page price / actions row */
+  .mk div[style*="display: 'flex'"][style*="gap: 8"][style*="marginTop: 28"] {
+    flex-direction: column !important; gap: 8px !important;
+  }
+}

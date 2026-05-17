@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\Xensa\\\\Desktop\\\\mardin\" -Recurse -Name)"
+    ]
+  }
+}
