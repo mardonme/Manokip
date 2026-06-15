@@ -3,55 +3,59 @@ import { StoreHeader, StoreFooter } from '../components/Chrome.jsx';
 import { useLang } from '../lib/LangContext.jsx';
 
 const COPY = {
-  intro1: {
-    ru: 'Manokip основан в 2018 году в Бектемирском районе Ташкента — трое инженеров, поверочный стенд и убеждение, что Центральная Азия заслуживает собственного производства точных приборов.',
-    uz: 'Manokip 2018-yilda Toshkentning Bektemir tumanida tashkil etilgan — uchta muhandis, kalibrlash stendi va Markaziy Osiyo oʻzining aniq asboblar sanoatiga loyiq degan ishonch.',
-    en: 'Manokip began in 2018 in Bektemir, Tashkent — three engineers, a calibration bench, and a conviction that Central Asia deserved its own precision instrument industry.',
+  storyTitle: {
+    ru: 'О нашей компании',
+    uz: 'Kompaniyamiz haqida',
+    en: 'About our company',
   },
-  intro2: {
-    ru: 'Сегодня мы выпускаем 90+ приборов в пяти товарных группах и отгружаем в четырнадцать стран. Каждый прибор, покидающий завод, поверен по эталону «Узстандарт».',
-    uz: 'Bugun beshta mahsulot guruhida 90+ asbob ishlab chiqaramiz va oʻn toʻrt davlatga yetkazib beramiz. Zavoddan chiqayotgan har bir asbob “Oʻzstandart” etaloni boʻyicha tekshiriladi.',
-    en: 'Today we manufacture 90+ instruments across five product families and ship to fourteen countries. Every gauge that leaves our facility is verified against an O\'zStandart-traceable reference.',
+  story: {
+    ru: 'Наша компания занимается производством контрольно-измерительных приборов на протяжении более чем 5 лет. Мы занимаемся производством и поставкой манометров, термоманометров, вакуумметров, термометров, индикаторов давления, преобразователей давления и дополнительного оборудования. Наша компания обеспечивает качественную сборку и точную калибровку измерительных приборов. Наша компания может предложить вам широкую линейку предлагаемых приборов, возможность производства приборов под заказ, также у нас имеется склад полу готовой продукции что обеспечит минимальные сроки поставки. Более того компания предоставляет услуги ремонта и калибровки контрольно-измерительных приборов. Вы можете купить наши манометры в Ташкенте, а так же в других крупных городах Узбекистана.',
+    uz: 'Kompaniyamiz 5 yildan ortiq vaqt davomida nazorat-oʻlchov asboblarini ishlab chiqarish bilan shugʻullanadi. Biz manometrlar, termomanometrlar, vakuummetrlar, termometrlar, bosim indikatorlari, bosim oʻzgartkichlari va qoʻshimcha jihozlarni ishlab chiqaramiz va yetkazib beramiz. Kompaniyamiz oʻlchov asboblarini sifatli yigʻish va aniq kalibrlashni taʼminlaydi. Biz sizga keng turdagi asboblarni, buyurtma asosida asbob ishlab chiqarish imkoniyatini taklif eta olamiz, shuningdek bizda yarim tayyor mahsulotlar ombori mavjud boʻlib, bu yetkazib berishning eng qisqa muddatlarini taʼminlaydi. Bundan tashqari, kompaniya nazorat-oʻlchov asboblarini taʼmirlash va kalibrlash xizmatlarini koʻrsatadi. Bizning manometrlarimizni Toshkentda, shuningdek Oʻzbekistonning boshqa yirik shaharlarida ham sotib olishingiz mumkin.',
+    en: 'Our company has been manufacturing control and measuring instruments for more than 5 years. We produce and supply pressure gauges, thermomanometers, vacuum gauges, thermometers, pressure indicators, pressure transducers, and additional equipment. We ensure high-quality assembly and precise calibration of every measuring instrument. We can offer you a wide range of instruments, the option to build devices to order, and a stock of semi-finished products that keeps delivery times to a minimum. Beyond that, the company provides repair and calibration services for control and measuring instruments. You can buy our pressure gauges in Tashkent, as well as in other major cities of Uzbekistan.',
   },
 };
 
-const STATS = [
-  { n: '7+',     l: { ru: 'лет производства',        uz: 'yillik ishlab chiqarish', en: 'years in production' }, s: { ru: 'основан в 2018', uz: '2018-yilda tashkil etilgan', en: 'Founded 2018' } },
-  { n: '90+',   l: { ru: 'приборов в каталоге',     uz: 'katalogdagi asbob',       en: 'instruments cataloged' }, s: { ru: '5 групп',       uz: '5 guruh',                    en: '5 families' } },
-  { n: '1 200+', l: { ru: 'корпоративных клиентов', uz: 'korxona mijozlari',       en: 'enterprise clients' },    s: { ru: '14 стран',     uz: '14 davlatda',                en: 'Across 14 countries' } },
-  { n: '14 000+', l: { ru: 'поверок в год',         uz: 'yiliga tekshiruv',        en: 'units verified / year' }, s: { ru: '«Узстандарт»',  uz: '“Oʻzstandart”',             en: "O'zStandart accredited" } },
-];
-
 export default function About() {
-  const { lang, t } = useLang();
+  const { lang } = useLang();
+  const title = COPY.storyTitle[lang] || COPY.storyTitle.en;
+  const story = COPY.story[lang] || COPY.story.en;
+
   return (
     <div className="mk" style={{ background: 'var(--bg)' }}>
       <StoreHeader />
-      <section style={{ padding: '80px 40px 60px', display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 80 }}>
+
+      {/* Full-screen autoplay background video */}
+      <section style={{ width: '100%', height: '100vh', background: '#000', overflow: 'hidden' }}>
+        <video
+          src="/about/aboutbgvideo.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+        />
+      </section>
+
+      {/* Story + gif */}
+      <section style={{ padding: '80px 40px 96px', display: 'grid', gridTemplateColumns: '1.3fr 1fr', gap: 72, alignItems: 'center' }}>
         <div>
-          <div className="mk-eyebrow">{t('about.eyebrow')}</div>
-          <h1 style={{ fontSize: 76, fontWeight: 600, letterSpacing: '-0.035em', lineHeight: 1, margin: '16px 0 0' }}>
-            {t('about.title.a')}<br />
-            <span style={{ color: '#74777e' }}>{t('about.title.b')}</span><br />
-            {t('about.title.c')}
+          <div className="mk-eyebrow">{title}</div>
+          <h1 style={{ fontSize: 60, fontWeight: 600, letterSpacing: '-0.035em', lineHeight: 1.04, margin: '16px 0 0' }}>
+            {title}
           </h1>
+          <p style={{ fontSize: 16.5, color: '#3a3d44', lineHeight: 1.7, margin: '28px 0 0' }}>
+            {story}
+          </p>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 20, paddingTop: 80 }}>
-          <p style={{ fontSize: 16.5, color: '#3a3d44', lineHeight: 1.65, margin: 0 }}>{COPY.intro1[lang] || COPY.intro1.en}</p>
-          <p style={{ fontSize: 16.5, color: '#3a3d44', lineHeight: 1.65, margin: 0 }}>{COPY.intro2[lang] || COPY.intro2.en}</p>
-        </div>
+        <img
+          src="/about/aboutgif.gif"
+          alt={title}
+          loading="lazy"
+          style={{ width: '100%', display: 'block', border: '1px solid var(--line)' }}
+        />
       </section>
-      <section style={{ padding: '0 40px 96px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 1, background: 'var(--line)', border: '1px solid var(--line)' }}>
-          {STATS.map((it) => (
-            <div key={it.n} style={{ background: '#fff', padding: '36px 28px' }}>
-              <div style={{ fontSize: 56, fontWeight: 600, letterSpacing: '-0.03em', lineHeight: 1 }}>{it.n}</div>
-              <div style={{ fontSize: 14, marginTop: 14 }}>{it.l[lang] || it.l.en}</div>
-              <div style={{ fontSize: 12, color: '#74777e', marginTop: 4 }}>{it.s[lang] || it.s.en}</div>
-            </div>
-          ))}
-        </div>
-      </section>
+
       <StoreFooter />
     </div>
   );

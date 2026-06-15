@@ -4,6 +4,7 @@ import { prisma } from '../prisma.js';
 import { requireUser } from '../middleware/auth.js';
 import { validate } from '../middleware/validate.js';
 import { HttpError } from '../middleware/error.js';
+import { notifyOrder } from '../lib/telegram.js';
 
 const router = Router();
 
@@ -56,6 +57,9 @@ router.post('/', requireUser, validate(checkoutSchema), async (req, res, next) =
 
     // Clear the cart used for this checkout
     await prisma.cartItem.deleteMany({ where: { cartId: cart.id } });
+
+    // Fire-and-forget: a Telegram failure must not break order creation.
+    notifyOrder(order, req.user).catch(() => {});
 
     res.status(201).json(order);
   } catch (e) { next(e); }

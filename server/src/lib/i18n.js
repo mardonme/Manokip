@@ -36,6 +36,7 @@ export function pickProduct(p, lang) {
     priceMinor: p.priceMinor,
     accuracy: p.accuracy,
     acc: p.accuracy,
+    imageUrl: p.imageUrl,
     inStock: p.inStock,
     stockCount: p.stockCount,
     cat: p.category ? (lang === 'ru' ? p.category.nameRu : lang === 'uz' ? p.category.nameUz : p.category.nameEn) : undefined,

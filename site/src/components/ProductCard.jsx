@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { mediaUrl } from '../lib/api.js';
 
 export function ProductArt({ model, kind = 'gauge', size = 200 }) {
   return (
@@ -55,7 +56,14 @@ export default function ProductCard({ p, compact = false }) {
       onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 28px rgba(20,22,27,0.08)'; }}
       onMouseLeave={(e) => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = ''; }}>
       <div style={{ padding: 18, borderBottom: '1px solid var(--line-soft)' }}>
-        <ProductArt model={p.model} kind={kind} size={compact ? 150 : 180} />
+        {p.imageUrl ? (
+          <div className="mk-ph mk-ph-corners" style={{ width: '100%', height: compact ? 150 : 180, position: 'relative', background: '#fafaf7' }}>
+            <img src={mediaUrl(p.imageUrl)} alt={p.model} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+            <div style={{ position: 'absolute', top: 12, right: 14, fontFamily: 'JetBrains Mono', fontSize: 9, color: '#74777e', letterSpacing: '0.1em' }}>{p.model}</div>
+          </div>
+        ) : (
+          <ProductArt model={p.model} kind={kind} size={compact ? 150 : 180} />
+        )}
       </div>
       <div style={{ padding: '16px 18px 18px', display: 'flex', flexDirection: 'column', gap: 8 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8 }}>

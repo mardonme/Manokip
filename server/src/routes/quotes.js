@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { z } from 'zod';
 import { prisma } from '../prisma.js';
 import { validate } from '../middleware/validate.js';
+import { notifyQuoteRequest } from '../lib/telegram.js';
 
 const router = Router();
 
@@ -26,6 +27,8 @@ router.post('/', validate(quoteSchema), async (req, res, next) => {
         specs: req.body.specs,
       },
     });
+    // Fire-and-forget: a Telegram failure must not break quote creation.
+    notifyQuoteRequest(q).catch(() => {});
     res.status(201).json({ id: q.id, createdAt: q.createdAt });
   } catch (e) { next(e); }
 });

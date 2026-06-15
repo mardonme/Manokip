@@ -43,6 +43,7 @@ model Product {
   priceText   String
   priceMinor  Int?
   accuracy    String?
+  imageUrl    String?
   inStock     Boolean    @default(true)
   stockCount  Int        @default(0)
   categoryId  Int

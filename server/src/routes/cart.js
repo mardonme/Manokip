@@ -6,6 +6,7 @@ import { optionalUser, requireUser } from '../middleware/auth.js';
 import { validate } from '../middleware/validate.js';
 import { HttpError } from '../middleware/error.js';
 import { env } from '../env.js';
+import { normalizeLang } from '../lib/i18n.js';
 
 const router = Router();
 
@@ -82,7 +83,7 @@ async function mergeCarts(fromId, toId) {
   await prisma.cart.delete({ where: { id: fromId } });
 }
 
-async function loadCartView(cartId) {
+async function loadCartView(cartId, lang = 'ru') {
   const cart = await prisma.cart.findUnique({
     where: { id: cartId },
     include: {
@@ -95,19 +96,21 @@ async function loadCartView(cartId) {
     },
   });
   if (!cart) return { items: [], total: 0, count: 0 };
+  const pickDesc = (p) => (lang === 'ru' ? p.descRu : lang === 'uz' ? p.descUz : p.descEn);
+  const pickCat = (c) => (!c ? undefined : lang === 'ru' ? c.nameRu : lang === 'uz' ? c.nameUz : c.nameEn);
   return {
     id: cart.id,
     items: cart.items.map((it) => ({
       productId: it.productId,
       qty: it.qty,
       model: it.product.model,
-      desc: it.product.descEn,
+      desc: pickDesc(it.product),
       range: it.product.range,
       diameter: it.product.diameter,
       priceText: it.product.priceText,
       priceMinor: it.product.priceMinor,
       sku: it.product.sku,
-      categoryName: it.product.category?.nameEn,
+      categoryName: pickCat(it.product.category),
     })),
     count: cart.items.reduce((n, it) => n + it.qty, 0),
   };
@@ -116,7 +119,7 @@ async function loadCartView(cartId) {
 router.get('/', optionalUser, async (req, res, next) => {
   try {
     const cartId = await resolveCart(req, res);
-    const view = await loadCartView(cartId);
+    const view = await loadCartView(cartId, normalizeLang(req.query.lang));
     res.json(view);
   } catch (e) { next(e); }
 });
@@ -145,7 +148,7 @@ router.post('/items', optionalUser, validate(addSchema), async (req, res, next) 
       await prisma.cartItem.create({ data: { cartId, productId, qty } });
     }
 
-    const view = await loadCartView(cartId);
+    const view = await loadCartView(cartId, normalizeLang(req.query.lang));
     res.status(201).json(view);
   } catch (e) { next(e); }
 });
@@ -165,7 +168,7 @@ router.patch('/items/:productId', optionalUser, validate(patchSchema), async (re
     } else {
       await prisma.cartItem.update({ where: { id: existing.id }, data: { qty: req.body.qty } });
     }
-    const view = await loadCartView(cartId);
+    const view = await loadCartView(cartId, normalizeLang(req.query.lang));
     res.json(view);
   } catch (e) { next(e); }
 });
@@ -178,7 +181,7 @@ router.delete('/items/:productId', optionalUser, async (req, res, next) => {
       where: { cartId_productId: { cartId, productId } },
     });
     if (existing) await prisma.cartItem.delete({ where: { id: existing.id } });
-    const view = await loadCartView(cartId);
+    const view = await loadCartView(cartId, normalizeLang(req.query.lang));
     res.json(view);
   } catch (e) { next(e); }
 });
@@ -187,7 +190,7 @@ router.delete('/items/:productId', optionalUser, async (req, res, next) => {
 router.post('/merge', requireUser, async (req, res, next) => {
   try {
     const cartId = await resolveCart(req, res); // handles merge internally
-    const view = await loadCartView(cartId);
+    const view = await loadCartView(cartId, normalizeLang(req.query.lang));
     res.json(view);
   } catch (e) { next(e); }
 });

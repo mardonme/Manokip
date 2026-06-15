@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { StoreHeader, StoreFooter } from '../components/Chrome.jsx';
+import { api } from '../lib/api.js';
 import { useLang } from '../lib/LangContext.jsx';
 
 const SERVICES = [
@@ -39,8 +40,53 @@ const SERVICES = [
   },
 ];
 
+// Build a CSV price list from the live catalog and trigger a download.
+async function fetchAllProducts() {
+  const first = await api.get('/api/products', { page: 1, limit: 60 });
+  let items = first.items || [];
+  const pages = first.pages || 1;
+  for (let p = 2; p <= pages; p++) {
+    const next = await api.get('/api/products', { page: p, limit: 60 });
+    items = items.concat(next.items || []);
+  }
+  return items;
+}
+
+function csvCell(v) {
+  const s = String(v ?? '');
+  return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+}
+
 export default function Service() {
   const { lang, t } = useLang();
+  const [priceBusy, setPriceBusy] = useState(false);
+
+  async function downloadPriceList() {
+    setPriceBusy(true);
+    try {
+      const products = await fetchAllProducts();
+      const header = ['SKU', 'Model', 'Category', 'Range', 'Accuracy', 'Price'];
+      const rows = products.map((p) => [
+        p.sku, p.model, p.category?.name || p.cat || '', p.range, p.accuracy || '', p.priceText,
+      ]);
+      const csv = [header, ...rows].map((r) => r.map(csvCell).join(',')).join('\r\n');
+      const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `manokip-price-list-${lang}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      console.error('Price list failed:', e);
+      window.alert(t('service.priceList.error'));
+    } finally {
+      setPriceBusy(false);
+    }
+  }
+
   return (
     <div className="mk" style={{ background: 'var(--bg)' }}>
       <StoreHeader />
@@ -60,7 +106,9 @@ export default function Service() {
           <p style={{ fontSize: 17, color: '#3a3d44', lineHeight: 1.6, margin: 0 }}>{t('service.lead')}</p>
           <div style={{ display: 'flex', gap: 12, marginTop: 24 }}>
             <Link to="/contact"><button className="mk-btn mk-btn-primary mk-btn-sm">{t('service.schedule')}</button></Link>
-            <button className="mk-btn mk-btn-light mk-btn-sm">{t('service.priceList')}</button>
+            <button className="mk-btn mk-btn-light mk-btn-sm" onClick={downloadPriceList} disabled={priceBusy}>
+              {priceBusy ? t('service.priceList.preparing') : t('service.priceList')}
+            </button>
           </div>
         </div>
       </section>

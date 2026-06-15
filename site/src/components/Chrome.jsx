@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../lib/AuthContext.jsx';
 import { useCart } from '../lib/CartContext.jsx';
 import { useLang } from '../lib/LangContext.jsx';
@@ -40,10 +40,32 @@ export function StoreHeader({ dark = false }) {
   const { cart } = useCart();
   const { lang, setLang, t } = useLang();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [search, setSearch] = useState('');
+  const searchRef = useRef(null);
   const location = useLocation();
+  const navigate = useNavigate();
 
   // Close drawer on route change.
   useEffect(() => { setMenuOpen(false); }, [location.pathname]);
+
+  function submitSearch(e) {
+    e.preventDefault();
+    const q = search.trim();
+    if (q) navigate(`/search?q=${encodeURIComponent(q)}`);
+    else navigate('/search');
+  }
+
+  // ⌘K / Ctrl+K focuses the header search.
+  useEffect(() => {
+    function onKey(e) {
+      if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) {
+        e.preventDefault();
+        searchRef.current?.focus();
+      }
+    }
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
 
   // Prevent scroll when drawer open.
   useEffect(() => {
@@ -113,17 +135,25 @@ export function StoreHeader({ dark = false }) {
           ))}
         </nav>
         <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-          <button style={{
+          <form onSubmit={submitSearch} style={{
             display: 'flex', alignItems: 'center', gap: 8, background: 'transparent',
             border: `1px solid ${line}`, padding: '8px 12px', borderRadius: 999,
-            color: fg, fontSize: 13, cursor: 'pointer', minWidth: 200,
+            color: fg, fontSize: 13, minWidth: 220,
           }}>
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" />
-            </svg>
-            <span style={{ color: dim, flex: 1, textAlign: 'left' }}>{t('nav.search')}</span>
+            <button type="submit" aria-label={t('search.submit')} style={{ background: 'transparent', border: 'none', padding: 0, margin: 0, cursor: 'pointer', color: dim, display: 'flex' }}>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" />
+              </svg>
+            </button>
+            <input
+              ref={searchRef}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder={t('nav.search')}
+              style={{ flex: 1, border: 'none', outline: 'none', background: 'transparent', color: fg, fontSize: 13, minWidth: 0 }}
+            />
             <span style={{ fontFamily: 'JetBrains Mono', fontSize: 10, color: dim }}>⌘K</span>
-          </button>
+          </form>
           <Link to="/cart" style={{ color: fg, fontSize: 13, display: 'flex', alignItems: 'center', gap: 6, textDecoration: 'none' }}>
             <span>{t('nav.cart')}</span>
             <span style={{
@@ -139,6 +169,7 @@ export function StoreHeader({ dark = false }) {
           </Link>
           {user ? (
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: fg }}>
+              {user.role === 'ADMIN' && <Link to="/admin" style={{ color: '#1240e5', fontWeight: 600 }}>{t('admin.link')}</Link>}
               <Link to="/orders" style={{ color: fg }}>{user.name || user.email}</Link>
               <a onClick={logout} style={{ color: dim, cursor: 'pointer', fontSize: 12 }}>{t('nav.signOut')}</a>
             </div>
@@ -181,6 +212,22 @@ export function StoreHeader({ dark = false }) {
                 style={{ background: 'transparent', border: 'none', fontSize: 26, lineHeight: 1, cursor: 'pointer', color: '#14161b' }}
               >×</button>
             </div>
+            <form onSubmit={submitSearch} style={{ display: 'flex', alignItems: 'center', gap: 8, border: '1px solid var(--line-2)', borderRadius: 999, padding: '8px 12px', marginBottom: 14 }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#74777e" strokeWidth="2">
+                <circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" />
+              </svg>
+              <input
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder={t('nav.search')}
+                style={{ flex: 1, border: 'none', outline: 'none', background: 'transparent', fontSize: 15, minWidth: 0 }}
+              />
+            </form>
+            {user?.role === 'ADMIN' && (
+              <Link to="/admin" style={{ display: 'block', padding: '12px 4px', fontSize: 16, fontWeight: 600, color: '#1240e5', borderBottom: '1px solid var(--line-soft)' }}>
+                {t('admin.link')}
+              </Link>
+            )}
             {NAV.map((it) => (
               <NavLink
                 key={it.to}
@@ -239,25 +286,33 @@ export function StoreHeader({ dark = false }) {
 export function StoreFooter() {
   const { t, lang } = useLang();
 
+  // Destinations are shared across languages; labels are localized.
+  const LINKS = {
+    catalog:  ['/catalog?category=manometers', '/catalog?category=pressure-switches', '/catalog?category=solar-panels', '/catalog?category=level-gauges', '/catalog?category=protection-relays', '/documents'],
+    solutions: ['/solutions', '/solutions', '/solutions', '/solutions', '/solutions', '/solutions'],
+    service:  ['/service', '/service', '/service', '/service', '/service', '/service'],
+    company:  ['/about', '/manufacturing', '/documents', '/partners', '/press', '/careers'],
+  };
+
   // Footer link lists per language. Kept compact to match the existing chrome.
   const COLS = {
     en: [
-      { t: t('footer.col.catalog'),   to: '/catalog',   i: ['Manometers', 'Pressure transmitters', 'Solar panels', 'Level gauges', 'Protection relays', 'Documents'] },
-      { t: t('footer.col.solutions'), to: '/solutions', i: ['Oil & gas', 'Mining', 'Chemical', 'HVAC', 'Power generation', 'Railway'] },
-      { t: t('footer.col.service'),   to: '/service',   i: ['Calibration', 'Verification', 'Repair', 'Custom orders', 'Documentation', 'Training'] },
-      { t: t('footer.col.company'),   to: '/about',     i: ['About Manokip', 'Manufacturing', 'Certificates', 'Partners', 'Press', 'Careers'] },
+      { key: 'catalog',   t: t('footer.col.catalog'),   i: ['Manometers', 'Pressure switches', 'Solar panels', 'Level gauges', 'Protection relays', 'Documents'] },
+      { key: 'solutions', t: t('footer.col.solutions'), i: ['Oil & gas', 'Mining', 'Chemical', 'HVAC', 'Power generation', 'Railway'] },
+      { key: 'service',   t: t('footer.col.service'),   i: ['Calibration', 'Verification', 'Repair', 'Custom orders', 'Documentation', 'Training'] },
+      { key: 'company',   t: t('footer.col.company'),   i: ['About Manokip', 'Manufacturing', 'Certificates', 'Partners', 'Press', 'Careers'] },
     ],
     ru: [
-      { t: t('footer.col.catalog'),   to: '/catalog',   i: ['Манометры', 'Преобразователь давления', 'Солнечные панели', 'Уровнемеры', 'Реле защиты', 'Документы'] },
-      { t: t('footer.col.solutions'), to: '/solutions', i: ['Нефть и газ', 'Горнодобыча', 'Химия', 'Отопление', 'Энергетика', 'Железные дороги'] },
-      { t: t('footer.col.service'),   to: '/service',   i: ['Калибровка', 'Поверка', 'Ремонт', 'Спецзаказы', 'Документация', 'Обучение'] },
-      { t: t('footer.col.company'),   to: '/about',     i: ['О Manokip', 'Производство', 'Сертификаты', 'Партнёры', 'Пресса', 'Карьера'] },
+      { key: 'catalog',   t: t('footer.col.catalog'),   i: ['Манометры', 'Реле давления', 'Солнечные панели', 'Уровнемеры', 'Реле защиты', 'Документы'] },
+      { key: 'solutions', t: t('footer.col.solutions'), i: ['Нефть и газ', 'Горнодобыча', 'Химия', 'Отопление', 'Энергетика', 'Железные дороги'] },
+      { key: 'service',   t: t('footer.col.service'),   i: ['Калибровка', 'Поверка', 'Ремонт', 'Спецзаказы', 'Документация', 'Обучение'] },
+      { key: 'company',   t: t('footer.col.company'),   i: ['О Manokip', 'Производство', 'Сертификаты', 'Партнёры', 'Пресса', 'Карьера'] },
     ],
     uz: [
-      { t: t('footer.col.catalog'),   to: '/catalog',   i: ['Manometrlar', "Bosim o'tkazgich", 'Quyosh panellari', 'Sath oʻlchagichlari', 'Himoya relelari', 'Hujjatlar'] },
-      { t: t('footer.col.solutions'), to: '/solutions', i: ['Neft va gaz', 'Togʻ-kon', 'Kimyo', 'Isitish', 'Energetika', 'Temir yoʻl'] },
-      { t: t('footer.col.service'),   to: '/service',   i: ['Kalibrlash', 'Tekshirish', 'Taʼmirlash', 'Maxsus buyurtmalar', 'Hujjatlar', 'Trening'] },
-      { t: t('footer.col.company'),   to: '/about',     i: ['Manokip haqida', 'Ishlab chiqarish', 'Sertifikatlar', 'Hamkorlar', 'Matbuot', 'Karyera'] },
+      { key: 'catalog',   t: t('footer.col.catalog'),   i: ['Manometrlar', 'Bosim relelari', 'Quyosh panellari', 'Sath oʻlchagichlari', 'Himoya relelari', 'Hujjatlar'] },
+      { key: 'solutions', t: t('footer.col.solutions'), i: ['Neft va gaz', 'Togʻ-kon', 'Kimyo', 'Isitish', 'Energetika', 'Temir yoʻl'] },
+      { key: 'service',   t: t('footer.col.service'),   i: ['Kalibrlash', 'Tekshirish', 'Taʼmirlash', 'Maxsus buyurtmalar', 'Hujjatlar', 'Trening'] },
+      { key: 'company',   t: t('footer.col.company'),   i: ['Manokip haqida', 'Ishlab chiqarish', 'Sertifikatlar', 'Hamkorlar', 'Matbuot', 'Karyera'] },
     ],
   };
   const cols = COLS[lang] || COLS.en;
@@ -277,10 +332,10 @@ export function StoreFooter() {
           </div>
         </div>
         {cols.map((c) => (
-          <div key={c.t}>
+          <div key={c.key}>
             <div className="mk-eyebrow" style={{ color: '#74777e', marginBottom: 16 }}>{c.t}</div>
-            {c.i.map((label) => (
-              <Link key={label} to={c.to} style={{ display: 'block', fontSize: 13.5, marginBottom: 10, color: '#f5f3ee', textDecoration: 'none' }}>
+            {c.i.map((label, idx) => (
+              <Link key={label} to={(LINKS[c.key] && LINKS[c.key][idx]) || '/'} style={{ display: 'block', fontSize: 13.5, marginBottom: 10, color: '#f5f3ee', textDecoration: 'none' }}>
                 {label}
               </Link>
             ))}

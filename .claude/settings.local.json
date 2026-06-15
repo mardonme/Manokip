@@ -1,7 +1,46 @@
 {
   "permissions": {
     "allow": [
-      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\Xensa\\\\Desktop\\\\mardin\" -Recurse -Name)"
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\Xensa\\\\Desktop\\\\mardin\" -Recurse -Name)",
+      "Read(//c/Users/hp elitebook/OneDrive/Desktop/site/node_modules/.bin/**)",
+      "Bash(npx prisma *)",
+      "Bash(npm run *)",
+      "Bash(npm start *)",
+      "Bash(curl -s http://localhost:4000/api/health)",
+      "Bash(curl -s \"http://localhost:4000/api/products?limit=2\")",
+      "Bash(curl -s -X POST http://localhost:4000/api/auth/login -H \"Content-Type: application/json\" -d \"{\\\\\"email\\\\\":\\\\\"admin@manokip.local\\\\\",\\\\\"password\\\\\":\\\\\"admin1234\\\\\"}\")",
+      "Bash(curl -s \"http://localhost:4000/api/products?q=DM8008&limit=3\")",
+      "Bash(curl -s -X POST http://localhost:4000/api/quotes -H \"Content-Type: application/json\" -d \"{\\\\\"companyName\\\\\":\\\\\"T\\\\\",\\\\\"contactPerson\\\\\":\\\\\"T\\\\\",\\\\\"email\\\\\":\\\\\"t@t.com\\\\\",\\\\\"specs\\\\\":\\\\\"test\\\\\"}\")",
+      "Bash(curl -s -c /tmp/cj.txt -X POST http://localhost:4000/api/cart/items -H \"Content-Type: application/json\" -d \"{\\\\\"productId\\\\\":105,\\\\\"qty\\\\\":2}\")",
+      "Bash(curl -s -b /tmp/cj.txt http://localhost:4000/api/cart)",
+      "Bash(curl -s \"http://localhost:4000/api/products/105/reviews\")",
+      "Bash(cat .env)",
+      "Bash(cat .env.example)",
+      "Bash(cat ../.gitignore)",
+      "Bash(cat .gitignore)",
+      "PowerShell($psql = Get-ChildItem \"C:\\\\Program Files\\\\PostgreSQL\" -Recurse -Filter psql.exe -ErrorAction SilentlyContinue | Select-Object -First 1 -ExpandProperty FullName; \"psql: $psql\"; if \\($psql\\) { $env:PGPASSWORD='postgres'; & $psql -U postgres -h localhost -p 5432 -c \"SELECT version\\(\\);\" 2>&1 | Select-Object -First 3 })",
+      "PowerShell(Get-Process node -ErrorAction SilentlyContinue)",
+      "PowerShell(Get-CimInstance Win32_Process -Filter \"Name='node.exe'\" | Select-Object ProcessId, @{n='Cmd';e={$_.CommandLine}} | Format-List)",
+      "Bash(node prisma/seed.js)",
+      "Bash(node src/index.js)",
+      "Bash(npx vite *)",
+      "Bash(node -e ' *)",
+      "Bash(grep -q ''\\\\''__TRACKED_VAR__'\\\\'':' src/lib/i18n.js)",
+      "Bash(git worktree *)",
+      "PowerShell($src=\"C:\\\\Users\\\\hp elitebook\\\\OneDrive\\\\Desktop\\\\mardin\\\\server\\\\node_modules\"; $dst=\"C:\\\\Users\\\\hp elitebook\\\\OneDrive\\\\Desktop\\\\mardin-telegram\\\\server\\\\node_modules\"; New-Item -ItemType Junction -Path $dst -Target $src | Out-Null; if \\(Test-Path \"$dst\\\\@prisma\"\\) { \"junction-ok\" } else { \"FAIL\" })",
+      "Read(//c/Users/hp elitebook/OneDrive/Desktop/mardin-telegram/server/**)",
+      "Bash(ADMIN_CHAT_ID=999999999 node -e ' *)",
+      "Bash(timeout 6 node -e ' *)",
+      "Bash(echo \"exit: $?\")",
+      "Bash(git checkout *)",
+      "Bash(curl -s -m 3 http://localhost:4000/api/health)",
+      "Bash(curl -s -m 10 -X POST http://localhost:4000/api/quotes -H \"Content-Type: application/json\" -d '{\"companyName\":\"Test ОАО \\\\\"Завод\\\\\"\",\"contactPerson\":\"Mardon\",\"email\":\"test@mardin.uz\",\"phone\":\"+998901234567\",\"industry\":\"Neft-gaz\",\"specs\":\"PT100 datchik, 0-150°C, 5 dona <test>\"}')",
+      "Read(//tmp/**)",
+      "Bash(docker --version)",
+      "Bash(docker compose *)",
+      "Bash(curl -sS -m 45 -X POST http://localhost:4000/api/chat -H \"Content-Type: application/json\" -d \"{\\\\\"message\\\\\":\\\\\"Manometr kerak edi, qanaqa modellaringiz bor va narxi qancha?\\\\\",\\\\\"lang\\\\\":\\\\\"uz\\\\\"}\" -w \"\\\\n[HTTP %{http_code} | %{time_total}s]\\\\n\")",
+      "Bash(curl -sS -m 45 -X POST http://localhost:4000/api/chat -H \"Content-Type: application/json\" -d \"{\\\\\"message\\\\\":\\\\\"Menga Python da fibonacci kodini yozib ber\\\\\",\\\\\"lang\\\\\":\\\\\"uz\\\\\"}\" -w \"\\\\n[HTTP %{http_code} | %{time_total}s]\\\\n\")",
+      "Bash(curl -sS -m 45 -X POST http://localhost:4000/api/chat -H \"Content-Type: application/json\" -d \"{\\\\\"message\\\\\":\\\\\"Operator bilan gaplashmoqchiman\\\\\",\\\\\"lang\\\\\":\\\\\"uz\\\\\"}\" -w \"\\\\n[HTTP %{http_code} | %{time_total}s]\\\\n\")"
     ]
   }
 }

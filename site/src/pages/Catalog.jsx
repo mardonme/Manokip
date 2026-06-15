@@ -6,11 +6,16 @@ import { api } from '../lib/api.js';
 import { useLang } from '../lib/LangContext.jsx';
 
 const PAGE_SIZE = 9;
+const DIAMETERS = [50, 63, 100, 160, 250];
+const ACCURACIES = ['0.4', '0.6', '1.0', '1.5', '2.5'];
 
 export default function Catalog() {
   const { t } = useLang();
   const [params, setParams] = useSearchParams();
   const activeCategory = params.get('category') || '';
+  const activeDia = params.get('dia') || '';
+  const activeAcc = params.get('accuracy') || '';
+  const activeSort = params.get('sort') || 'popular';
   const page = Math.max(1, parseInt(params.get('page') || '1', 10) || 1);
 
   const [categories, setCategories] = useState([]);
@@ -36,6 +41,10 @@ export default function Catalog() {
       try {
         const data = await api.get('/api/products', {
           category: activeCategory || undefined,
+          accuracy: activeAcc || undefined,
+          minDia: activeDia || undefined,
+          maxDia: activeDia || undefined,
+          sort: activeSort !== 'popular' ? activeSort : undefined,
           page,
           limit: PAGE_SIZE,
         });
@@ -49,24 +58,37 @@ export default function Catalog() {
       }
     })();
     return () => { cancelled = true; };
-  }, [activeCategory, page]);
+  }, [activeCategory, activeDia, activeAcc, activeSort, page]);
 
   const activeCat = categories.find((c) => c.slug === activeCategory);
   const heading = activeCat ? activeCat.name : t('catalog.all');
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  const hasFilters = !!(activeCategory || activeDia || activeAcc || activeSort !== 'popular');
 
-  function setCategory(slug) {
+  // Mutate a single param and always reset pagination.
+  function setParam(key, value) {
     const next = new URLSearchParams(params);
-    if (slug) next.set('category', slug); else next.delete('category');
+    if (value) next.set(key, value); else next.delete(key);
     next.delete('page');
     setParams(next);
   }
-
+  function setCategory(slug) { setParam('category', slug); }
   function setPage(p) {
     const next = new URLSearchParams(params);
     next.set('page', String(p));
     setParams(next);
   }
+  function resetFilters() {
+    setParams(new URLSearchParams());
+  }
+
+  const selectStyle = {
+    appearance: 'none', WebkitAppearance: 'none', background: '#fff',
+    border: '1px solid var(--line-2)', borderRadius: 6, padding: '8px 30px 8px 12px',
+    fontSize: 13, color: '#14161b', cursor: 'pointer', fontFamily: 'inherit',
+    backgroundImage: 'url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'10\' height=\'10\' viewBox=\'0 0 10 10\'><path d=\'M1 3l4 4 4-4\' fill=\'none\' stroke=\'%2374777e\' stroke-width=\'1.5\'/></svg>")',
+    backgroundRepeat: 'no-repeat', backgroundPosition: 'right 10px center',
+  };
 
   return (
     <div className="mk" style={{ background: 'var(--bg)' }}>
@@ -90,21 +112,37 @@ export default function Catalog() {
         </div>
       </div>
 
-      <div style={{ padding: '16px 40px', borderTop: '1px solid var(--line)', borderBottom: '1px solid var(--line)', background: '#fff', display: 'flex', alignItems: 'center', gap: 24, flexWrap: 'wrap' }}>
-        {[
-          [t('catalog.filter.diameter'),    '50, 63, 100, 160, 250'],
-          [t('catalog.filter.accuracy'),    '0.4, 0.6, 1.0, 1.5, 2.5'],
-          [t('catalog.filter.connection'),  t('catalog.filter.connection.values')],
-          [t('catalog.filter.protection'),  'IP40 — IP67'],
-          [t('catalog.filter.material'),    t('catalog.filter.material.values')],
-        ].map(([t1, v]) => (
-          <button key={t1} className="mk-tag" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', padding: '6px 12px', textTransform: 'none', letterSpacing: 0, gap: 0 }}>
-            <span style={{ fontSize: 9.5, color: '#a7a9af', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{t1}</span>
-            <span style={{ fontSize: 11.5, color: '#14161b', fontFamily: 'JetBrains Mono', marginTop: 2 }}>{v} ▾</span>
-          </button>
-        ))}
+      {/* Wired filter bar: diameter + accuracy filter, sort, reset. */}
+      <div style={{ padding: '16px 40px', borderTop: '1px solid var(--line)', borderBottom: '1px solid var(--line)', background: '#fff', display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
+        <label style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+          <span style={{ fontSize: 9.5, color: '#a7a9af', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{t('catalog.filter.diameter')}</span>
+          <select style={selectStyle} value={activeDia} onChange={(e) => setParam('dia', e.target.value)}>
+            <option value="">{t('catalog.filter.diameterAll')}</option>
+            {DIAMETERS.map((d) => <option key={d} value={d}>Ø {d} mm</option>)}
+          </select>
+        </label>
+        <label style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+          <span style={{ fontSize: 9.5, color: '#a7a9af', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{t('catalog.filter.accuracy')}</span>
+          <select style={selectStyle} value={activeAcc} onChange={(e) => setParam('accuracy', e.target.value)}>
+            <option value="">{t('catalog.filter.accuracyAll')}</option>
+            {ACCURACIES.map((a) => <option key={a} value={a}>{a}</option>)}
+          </select>
+        </label>
         <div style={{ flex: 1 }} />
-        <button className="mk-btn mk-btn-sm mk-btn-light">{t('catalog.filter.all')}</button>
+        <label style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+          <span style={{ fontSize: 9.5, color: '#a7a9af', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{t('catalog.sort')}</span>
+          <select style={selectStyle} value={activeSort} onChange={(e) => setParam('sort', e.target.value === 'popular' ? '' : e.target.value)}>
+            <option value="popular">{t('catalog.sort.popular')}</option>
+            <option value="price_asc">{t('catalog.sort.priceAsc')}</option>
+            <option value="price_desc">{t('catalog.sort.priceDesc')}</option>
+            <option value="newest">{t('catalog.sort.newest')}</option>
+          </select>
+        </label>
+        {hasFilters && (
+          <button onClick={resetFilters} className="mk-btn mk-btn-sm mk-btn-light" style={{ alignSelf: 'flex-end' }}>
+            {t('catalog.reset')}
+          </button>
+        )}
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '260px 1fr', gap: 0 }}>
@@ -131,52 +169,31 @@ export default function Catalog() {
               </a>
             ))}
           </div>
-
-          <div className="mk-eyebrow" style={{ marginTop: 36, marginBottom: 14 }}>{t('catalog.range')}</div>
-          <div style={{ background: '#fff', border: '1px solid var(--line)', padding: 16, borderRadius: 4 }}>
-            <div className="mk-mono" style={{ fontSize: 12, display: 'flex', justifyContent: 'space-between', marginBottom: 14 }}>
-              <span>−1 kgf/cm²</span><span>400 kgf/cm²</span>
-            </div>
-            <div style={{ position: 'relative', height: 4, background: 'var(--line)', borderRadius: 2 }}>
-              <div style={{ position: 'absolute', left: '20%', right: '30%', top: 0, bottom: 0, background: '#1240e5' }} />
-              <div style={{ position: 'absolute', left: '20%', top: -4, width: 12, height: 12, background: '#fff', border: '2px solid #1240e5', borderRadius: '50%', transform: 'translateX(-50%)' }} />
-              <div style={{ position: 'absolute', left: '70%', top: -4, width: 12, height: 12, background: '#fff', border: '2px solid #1240e5', borderRadius: '50%', transform: 'translateX(-50%)' }} />
-            </div>
-          </div>
-
-          <div className="mk-eyebrow" style={{ marginTop: 36, marginBottom: 14 }}>{t('catalog.certs')}</div>
-          {['GOST R', 'EAC', 'ATEX', "O'zStandart", 'CE'].map((c) => (
-            <label key={c} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '6px 0', fontSize: 13 }}>
-              <span style={{
-                width: 14, height: 14, border: '1.5px solid var(--line-2)', borderRadius: 3,
-                background: c === 'GOST R' || c === 'EAC' ? '#1240e5' : '#fff',
-                borderColor: c === 'GOST R' || c === 'EAC' ? '#1240e5' : 'var(--line-2)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 10,
-              }}>
-                {(c === 'GOST R' || c === 'EAC') && '✓'}
-              </span>
-              {c}
-            </label>
-          ))}
         </aside>
 
         <div style={{ padding: '40px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
-            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24, minHeight: 28 }}>
+            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
               {activeCat && (
                 <span className="mk-tag mk-tag-solid" onClick={() => setCategory('')} style={{ cursor: 'pointer' }}>
                   {activeCat.name} ✕
                 </span>
               )}
-              {activeCat && (
-                <button onClick={() => setCategory('')} style={{ background: 'transparent', border: 'none', fontSize: 12, color: '#74777e', cursor: 'pointer' }}>
+              {activeDia && (
+                <span className="mk-tag mk-tag-solid" onClick={() => setParam('dia', '')} style={{ cursor: 'pointer' }}>
+                  Ø {activeDia} mm ✕
+                </span>
+              )}
+              {activeAcc && (
+                <span className="mk-tag mk-tag-solid" onClick={() => setParam('accuracy', '')} style={{ cursor: 'pointer' }}>
+                  {t('catalog.filter.accuracy')} {activeAcc} ✕
+                </span>
+              )}
+              {hasFilters && (
+                <button onClick={resetFilters} style={{ background: 'transparent', border: 'none', fontSize: 12, color: '#74777e', cursor: 'pointer' }}>
                   {t('catalog.clearAll')}
                 </button>
               )}
-            </div>
-            <div style={{ display: 'flex', gap: 12, alignItems: 'center', fontSize: 13 }}>
-              <span style={{ color: '#74777e' }}>{t('catalog.sort')}</span>
-              <span style={{ fontWeight: 500 }}>{t('catalog.popular')}</span>
             </div>
           </div>
 

@@ -1,4 +1,9 @@
+import path from 'node:path';
+import crypto from 'node:crypto';
+import fs from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { Router } from 'express';
+import multer from 'multer';
 import { z } from 'zod';
 import { prisma } from '../prisma.js';
 import { requireUser, requireAdmin } from '../middleware/auth.js';
@@ -8,6 +13,46 @@ import { HttpError } from '../middleware/error.js';
 const router = Router();
 
 router.use(requireUser, requireAdmin);
+
+// ---------- Image uploads ----------
+// Files land in server/uploads and are served statically at /uploads (see index.js).
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+export const UPLOAD_DIR = path.resolve(__dirname, '../../uploads');
+fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+
+const ALLOWED_MIME = new Set(['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/avif']);
+const EXT_BY_MIME = {
+  'image/jpeg': '.jpg', 'image/png': '.png', 'image/webp': '.webp',
+  'image/gif': '.gif', 'image/avif': '.avif',
+};
+
+const upload = multer({
+  storage: multer.diskStorage({
+    destination: (req, file, cb) => cb(null, UPLOAD_DIR),
+    filename: (req, file, cb) => {
+      const ext = EXT_BY_MIME[file.mimetype] || '.jpg';
+      cb(null, crypto.randomBytes(12).toString('hex') + ext);
+    },
+  }),
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5 MB
+  fileFilter: (req, file, cb) => {
+    if (ALLOWED_MIME.has(file.mimetype)) cb(null, true);
+    else cb(new HttpError(400, 'Unsupported image type (use JPG, PNG, WebP, GIF or AVIF)'));
+  },
+});
+
+router.post('/uploads', (req, res, next) => {
+  upload.single('image')(req, res, (err) => {
+    if (err) {
+      const msg = err instanceof multer.MulterError
+        ? (err.code === 'LIMIT_FILE_SIZE' ? 'Image too large (max 5 MB)' : err.message)
+        : (err.message || 'Upload failed');
+      return next(new HttpError(400, msg));
+    }
+    if (!req.file) return next(new HttpError(400, 'No file uploaded'));
+    res.status(201).json({ url: `/uploads/${req.file.filename}` });
+  });
+});
 
 // ---------- Products ----------
 const productCreateSchema = z.object({
@@ -21,6 +66,7 @@ const productCreateSchema = z.object({
   priceText: z.string().min(1).max(80),
   priceMinor: z.number().int().nullable().optional(),
   accuracy: z.string().max(40).nullable().optional(),
+  imageUrl: z.string().max(500).nullable().optional(),
   inStock: z.boolean().optional(),
   stockCount: z.number().int().min(0).optional(),
   categoryId: z.number().int().positive(),

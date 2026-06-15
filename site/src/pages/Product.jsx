@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { StoreHeader, StoreFooter } from '../components/Chrome.jsx';
 import Gauge from '../components/Gauge.jsx';
 import ProductCard from '../components/ProductCard.jsx';
-import { api } from '../lib/api.js';
+import { api, mediaUrl } from '../lib/api.js';
 import { useCart } from '../lib/CartContext.jsx';
 import { useAuth } from '../lib/AuthContext.jsx';
 import { useLang } from '../lib/LangContext.jsx';
 
 export default function Product() {
   const { id } = useParams();
-  const navigate = useNavigate();
   const { add } = useCart();
   const { user, openSignIn } = useAuth();
   const { t } = useLang();
@@ -107,7 +106,11 @@ export default function Product() {
               <span style={{ fontSize: 10.5, color: '#74777e', letterSpacing: '0.08em' }}>SKU · {p.sku}</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 400 }}>
-              <Gauge size={400} value={120} max={400} unit="kgf/cm²" label={p.model} danger={350} />
+              {p.imageUrl ? (
+                <img src={mediaUrl(p.imageUrl)} alt={p.model} style={{ maxWidth: '100%', maxHeight: 400, objectFit: 'contain' }} />
+              ) : (
+                <Gauge size={400} value={120} max={400} unit="kgf/cm²" label={p.model} danger={350} />
+              )}
             </div>
           </div>
         </div>
@@ -185,7 +188,6 @@ export default function Product() {
             ['specs', t('product.tab.specs')],
             ['docs', t('product.tab.docs')],
             ['cal', t('product.tab.cal')],
-            ['compat', t('product.tab.compat')],
             ['reviews', `${t('product.tab.reviews')} · ${p.reviewsCount ?? 0}`],
           ].map(([key, label]) => (
             <button
@@ -214,11 +216,28 @@ export default function Product() {
           </div>
         )}
 
-        {tab === 'reviews' && <ReviewsTab productId={p.id} onReviewAdded={() => navigate(0)} user={user} openSignIn={openSignIn} />}
+        {tab === 'reviews' && <ReviewsTab productId={p.id} user={user} openSignIn={openSignIn} />}
 
-        {(tab === 'docs' || tab === 'cal' || tab === 'compat') && (
-          <div style={{ marginTop: 32, padding: 40, background: '#fff', border: '1px solid var(--line)', textAlign: 'center', color: '#74777e' }}>
-            {t('product.comingSoon')}
+        {tab === 'docs' && (
+          <div style={{ marginTop: 32, padding: 32, background: '#fff', border: '1px solid var(--line)' }}>
+            <p style={{ fontSize: 15, color: '#3a3d44', lineHeight: 1.6, margin: '0 0 20px', maxWidth: 640 }}>{t('product.docs.intro')}</p>
+            <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 10 }}>
+              <li style={{ fontSize: 14, color: '#14161b', display: 'flex', gap: 10 }}><span style={{ color: '#1240e5' }}>—</span>{t('product.docs.passport')}</li>
+              <li style={{ fontSize: 14, color: '#14161b', display: 'flex', gap: 10 }}><span style={{ color: '#1240e5' }}>—</span>{t('product.docs.calCert')}</li>
+            </ul>
+            <Link to="/documents" style={{ display: 'inline-block', marginTop: 20, fontSize: 13.5, color: '#1240e5' }}>{t('product.docs.viewCerts')}</Link>
+          </div>
+        )}
+
+        {tab === 'cal' && (
+          <div style={{ marginTop: 32, padding: 32, background: '#fff', border: '1px solid var(--line)' }}>
+            <p style={{ fontSize: 15, color: '#3a3d44', lineHeight: 1.6, margin: '0 0 24px', maxWidth: 640 }}>{t('product.cal.intro')}</p>
+            <div style={{ display: 'flex', gap: 40, flexWrap: 'wrap', paddingTop: 20, borderTop: '1px solid var(--line-soft)' }}>
+              <div><div style={{ fontSize: 22, fontWeight: 600 }}>24 mo</div><div style={{ fontSize: 12, color: '#74777e' }}>{t('product.cal.interval')}</div></div>
+              <div><div style={{ fontSize: 22, fontWeight: 600 }}>±0.05%</div><div style={{ fontSize: 12, color: '#74777e' }}>{t('product.cal.uncertainty')}</div></div>
+              <div><div style={{ fontSize: 22, fontWeight: 600 }}>48h</div><div style={{ fontSize: 12, color: '#74777e' }}>{t('product.cal.turnaround')}</div></div>
+            </div>
+            <Link to="/service" style={{ display: 'inline-block', marginTop: 24, fontSize: 13.5, color: '#1240e5' }}>{t('product.cal.book')}</Link>
           </div>
         )}
       </section>

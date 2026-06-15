@@ -27,21 +27,31 @@ router.get('/', async (req, res, next) => {
     }
     if (req.query.q) {
       const q = String(req.query.q);
+      const ci = { contains: q, mode: 'insensitive' };
       where.OR = [
-        { model: { contains: q } },
-        { descEn: { contains: q } },
-        { descRu: { contains: q } },
-        { descUz: { contains: q } },
-        { sku: { contains: q } },
+        { model: ci },
+        { descEn: ci },
+        { descRu: ci },
+        { descUz: ci },
+        { sku: ci },
       ];
     }
+
+    // Sort: popular (default), price low→high, price high→low, newest.
+    const SORTS = {
+      popular: { id: 'asc' },
+      price_asc: [{ priceMinor: 'asc' }, { id: 'asc' }],
+      price_desc: [{ priceMinor: 'desc' }, { id: 'asc' }],
+      newest: { createdAt: 'desc' },
+    };
+    const orderBy = SORTS[String(req.query.sort)] || SORTS.popular;
 
     const [total, items] = await Promise.all([
       prisma.product.count({ where }),
       prisma.product.findMany({
         where,
         include: { category: true, _count: { select: { reviews: true } } },
-        orderBy: { id: 'asc' },
+        orderBy,
         skip,
         take: limit,
       }),
