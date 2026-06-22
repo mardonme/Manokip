@@ -40,7 +40,8 @@
       "Bash(docker compose *)",
       "Bash(curl -sS -m 45 -X POST http://localhost:4000/api/chat -H \"Content-Type: application/json\" -d \"{\\\\\"message\\\\\":\\\\\"Manometr kerak edi, qanaqa modellaringiz bor va narxi qancha?\\\\\",\\\\\"lang\\\\\":\\\\\"uz\\\\\"}\" -w \"\\\\n[HTTP %{http_code} | %{time_total}s]\\\\n\")",
       "Bash(curl -sS -m 45 -X POST http://localhost:4000/api/chat -H \"Content-Type: application/json\" -d \"{\\\\\"message\\\\\":\\\\\"Menga Python da fibonacci kodini yozib ber\\\\\",\\\\\"lang\\\\\":\\\\\"uz\\\\\"}\" -w \"\\\\n[HTTP %{http_code} | %{time_total}s]\\\\n\")",
-      "Bash(curl -sS -m 45 -X POST http://localhost:4000/api/chat -H \"Content-Type: application/json\" -d \"{\\\\\"message\\\\\":\\\\\"Operator bilan gaplashmoqchiman\\\\\",\\\\\"lang\\\\\":\\\\\"uz\\\\\"}\" -w \"\\\\n[HTTP %{http_code} | %{time_total}s]\\\\n\")"
+      "Bash(curl -sS -m 45 -X POST http://localhost:4000/api/chat -H \"Content-Type: application/json\" -d \"{\\\\\"message\\\\\":\\\\\"Operator bilan gaplashmoqchiman\\\\\",\\\\\"lang\\\\\":\\\\\"uz\\\\\"}\" -w \"\\\\n[HTTP %{http_code} | %{time_total}s]\\\\n\")",
+      "WebFetch(domain:www.ideabrowser.com)"
     ]
   }
 }
