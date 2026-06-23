@@ -1,5 +1,6 @@
 import React from 'react';
 import { StoreHeader, StoreFooter } from '../components/Chrome.jsx';
+import { Reveal, Icon, Section } from '../components/ui/index.js';
 import { useLang } from '../lib/LangContext.jsx';
 
 const COPY = {
@@ -15,47 +16,70 @@ const COPY = {
   },
 };
 
+const HIGHLIGHTS = [
+  ['gauge', { ru: 'Производство КИП', uz: 'KIP ishlab chiqarish', en: 'Instrument manufacturing' }],
+  ['layers', { ru: 'Склад полуфабрикатов', uz: 'Yarim tayyor mahsulot ombori', en: 'Semi-finished stock' }],
+  ['shield', { ru: 'Точная калибровка', uz: 'Aniq kalibrlash', en: 'Precise calibration' }],
+  ['truck', { ru: 'Минимальные сроки', uz: 'Eng qisqa muddatlar', en: 'Minimal lead times' }],
+];
+
 export default function About() {
   const { lang } = useLang();
   const title = COPY.storyTitle[lang] || COPY.storyTitle.en;
   const story = COPY.story[lang] || COPY.story.en;
 
   return (
-    <div className="mk" style={{ background: 'var(--bg)' }}>
+    <div className="mk">
       <StoreHeader />
+      <main id="main">
 
-      {/* Full-screen autoplay background video */}
-      <section style={{ width: '100%', height: '100vh', background: '#000', overflow: 'hidden' }}>
-        <video
-          src="/about/aboutbgvideo.mp4"
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="auto"
-          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-        />
-      </section>
+        {/* Full-screen autoplay background video */}
+        <section style={{ width: '100%', height: '100vh', background: 'var(--ink-bg)', overflow: 'hidden' }}>
+          <video
+            src="/about/aboutbgvideo.mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            aria-label={title}
+            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+          />
+        </section>
 
-      {/* Story + gif */}
-      <section style={{ padding: '80px 40px 96px', display: 'grid', gridTemplateColumns: '1.3fr 1fr', gap: 72, alignItems: 'center' }}>
-        <div>
-          <div className="mk-eyebrow">{title}</div>
-          <h1 style={{ fontSize: 60, fontWeight: 600, letterSpacing: '-0.035em', lineHeight: 1.04, margin: '16px 0 0' }}>
-            {title}
-          </h1>
-          <p style={{ fontSize: 16.5, color: '#3a3d44', lineHeight: 1.7, margin: '28px 0 0' }}>
-            {story}
-          </p>
-        </div>
-        <img
-          src="/about/aboutgif.gif"
-          alt={title}
-          loading="lazy"
-          style={{ width: '100%', display: 'block', border: '1px solid var(--line)' }}
-        />
-      </section>
+        {/* Story + gif */}
+        <Section as="section">
+          <div className="mk-split" style={{ alignItems: 'center' }}>
+            <Reveal variant="left">
+              <div className="mk-eyebrow">{title}</div>
+              <h1 style={{ fontSize: 'clamp(34px,5vw,64px)', fontWeight: 600, letterSpacing: '-0.03em', margin: '16px 0 0' }}>
+                {title}
+              </h1>
+              <p className="mk-muted" style={{ fontSize: 16.5, lineHeight: 1.7, margin: '28px 0 0', maxWidth: 560 }}>
+                {story}
+              </p>
+              <div className="mk-grid mk-cards-2" style={{ marginTop: 36 }}>
+                {HIGHLIGHTS.map(([icon, names], i) => (
+                  <Reveal key={icon} index={i} className="mk-row" style={{ gap: 10 }}>
+                    <Icon name={icon} size={18} style={{ color: 'var(--accent-ink)' }} />
+                    <span style={{ fontSize: 14.5, fontWeight: 500 }}>{names[lang] || names.en}</span>
+                  </Reveal>
+                ))}
+              </div>
+            </Reveal>
 
+            <Reveal variant="scale" index={1} className="mk-card" style={{ overflow: 'hidden' }}>
+              <img
+                src="/about/aboutgif.gif"
+                alt={title}
+                loading="lazy"
+                style={{ width: '100%', display: 'block' }}
+              />
+            </Reveal>
+          </div>
+        </Section>
+
+      </main>
       <StoreFooter />
     </div>
   );

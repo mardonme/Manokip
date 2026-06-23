@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function Gauge({ size = 280, value = 6.4, max = 10, unit = 'MPa', label = 'PRESSURE', danger = 8, theme = 'light' }) {
+export default function Gauge({ size = 280, value = 6.4, max = 10, unit = 'MPa', label = 'PRESSURE', danger = 8, theme = 'light', animate = false }) {
   const cx = size / 2, cy = size / 2;
   const r = size * 0.42;
   const startA = 135, endA = 405;
@@ -58,7 +58,9 @@ export default function Gauge({ size = 280, value = 6.4, max = 10, unit = 'MPa',
         fontFamily="JetBrains Mono" fontSize={size * 0.04} fill={dim} letterSpacing="0.18em">{label}</text>
       <text x={cx} y={cy + size * 0.18} textAnchor="middle"
         fontFamily="JetBrains Mono" fontSize={size * 0.045} fill={dim} letterSpacing="0.14em">{unit}</text>
-      <line x1={tlx} y1={tly} x2={nx} y2={ny} stroke="#1240e5" strokeWidth={size * 0.016} strokeLinecap="round" />
+      <g className={animate ? 'mk-gauge-needle' : undefined} style={animate ? { transformOrigin: `${cx}px ${cy}px` } : undefined}>
+        <line x1={tlx} y1={tly} x2={nx} y2={ny} stroke="#1240e5" strokeWidth={size * 0.016} strokeLinecap="round" />
+      </g>
       <circle cx={cx} cy={cy} r={size * 0.038} fill={ring} />
       <circle cx={cx} cy={cy} r={size * 0.016} fill="#1240e5" />
     </svg>

@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../lib/AuthContext.jsx';
 import { useLang } from '../lib/LangContext.jsx';
+import Icon from './ui/Icon.jsx';
 
 export default function SignInModal() {
   const { t } = useLang();
@@ -9,10 +10,21 @@ export default function SignInModal() {
   const [form, setForm] = useState({ email: '', password: '', name: '', phone: '', company: '' });
   const [err, setErr] = useState(null);
   const [busy, setBusy] = useState(false);
+  const firstRef = useRef(null);
+
+  // Escape to close + lock scroll + focus the first field when opened.
+  useEffect(() => {
+    if (!signInOpen) return;
+    const onKey = (e) => { if (e.key === 'Escape') closeSignIn(); };
+    window.addEventListener('keydown', onKey);
+    document.body.style.overflow = 'hidden';
+    const tmr = setTimeout(() => firstRef.current?.focus(), 30);
+    return () => { window.removeEventListener('keydown', onKey); document.body.style.overflow = ''; clearTimeout(tmr); };
+  }, [signInOpen, closeSignIn]);
 
   if (!signInOpen) return null;
 
-  function update(k, v) { setForm((f) => ({ ...f, [k]: v })); }
+  const update = (k, v) => setForm((f) => ({ ...f, [k]: v }));
 
   async function submit(e) {
     e.preventDefault();
@@ -23,11 +35,8 @@ export default function SignInModal() {
         await login(form.email, form.password);
       } else {
         await register({
-          email: form.email,
-          password: form.password,
-          name: form.name || undefined,
-          phone: form.phone || undefined,
-          company: form.company || undefined,
+          email: form.email, password: form.password,
+          name: form.name || undefined, phone: form.phone || undefined, company: form.company || undefined,
         });
       }
       closeSignIn();
@@ -39,55 +48,42 @@ export default function SignInModal() {
   }
 
   return (
-    <div
-      onClick={closeSignIn}
-      style={{
-        position: 'fixed', inset: 0, background: 'rgba(20,22,27,0.55)',
-        zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20,
-      }}
-    >
-      <div
-        onClick={(e) => e.stopPropagation()}
-        style={{ background: '#fff', width: 420, maxWidth: '100%', border: '1px solid var(--line)', padding: 32 }}
-      >
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
-          <div>
-            <div className="mk-eyebrow">{mode === 'signin' ? t('auth.signin.eyebrow') : t('auth.register.eyebrow')}</div>
-            <h2 style={{ fontSize: 28, fontWeight: 600, letterSpacing: '-0.02em', margin: '8px 0 4px' }}>
-              {mode === 'signin' ? t('auth.signin.title') : t('auth.register.title')}
-            </h2>
+    <div className="mk mk-modal-scrim" onClick={closeSignIn}>
+      <div className="mk-modal" role="dialog" aria-modal="true" aria-labelledby="auth-title" onClick={(e) => e.stopPropagation()}>
+        <div className="mk-between" style={{ alignItems: 'flex-start', marginBottom: 16 }}>
+          <div className="mk-seg" role="tablist">
+            <button className={mode === 'signin' ? 'is-active' : ''} aria-selected={mode === 'signin'} onClick={() => setMode('signin')}>{t('auth.signin.btn')}</button>
+            <button className={mode === 'register' ? 'is-active' : ''} aria-selected={mode === 'register'} onClick={() => setMode('register')}>{t('auth.register.btn')}</button>
           </div>
-          <button onClick={closeSignIn} style={{ background: 'transparent', border: 'none', fontSize: 20, cursor: 'pointer', color: '#74777e' }}>×</button>
+          <button onClick={closeSignIn} className="mk-iconbtn" aria-label="Close"><Icon name="close" size={18} /></button>
         </div>
 
-        <form onSubmit={submit} style={{ marginTop: 20, display: 'flex', flexDirection: 'column', gap: 14 }}>
+        <div className="mk-eyebrow">{mode === 'signin' ? t('auth.signin.eyebrow') : t('auth.register.eyebrow')}</div>
+        <h2 id="auth-title" style={{ fontSize: 26, fontWeight: 600, letterSpacing: '-0.02em', margin: '8px 0 0' }}>
+          {mode === 'signin' ? t('auth.signin.title') : t('auth.register.title')}
+        </h2>
+
+        <form onSubmit={submit} className="mk-stack" style={{ marginTop: 20, gap: 14 }}>
           {mode === 'register' && (
             <>
-              <Field label={t('auth.field.name')}    value={form.name}    onChange={(v) => update('name', v)} />
-              <Field label={t('auth.field.company')} value={form.company} onChange={(v) => update('company', v)} />
-              <Field label={t('auth.field.phone')}   value={form.phone}   onChange={(v) => update('phone', v)} placeholder="+998 __ ___-__-__" />
+              <Field id="a-name" label={t('auth.field.name')} value={form.name} onChange={(v) => update('name', v)} autoComplete="name" />
+              <Field id="a-company" label={t('auth.field.company')} value={form.company} onChange={(v) => update('company', v)} autoComplete="organization" />
+              <Field id="a-phone" label={t('auth.field.phone')} value={form.phone} onChange={(v) => update('phone', v)} placeholder="+998 __ ___-__-__" type="tel" autoComplete="tel" />
             </>
           )}
-          <Field label={t('auth.field.email')} type="email" value={form.email} onChange={(v) => update('email', v)} placeholder="you@company.uz" required />
-          <Field label={t('auth.field.password')} type="password" value={form.password} onChange={(v) => update('password', v)} placeholder={t('auth.field.passwordPh')} required />
+          <Field ref={mode === 'signin' ? firstRef : undefined} id="a-email" label={t('auth.field.email')} type="email" value={form.email} onChange={(v) => update('email', v)} placeholder="you@company.uz" autoComplete="email" required />
+          <Field id="a-password" label={t('auth.field.password')} type="password" value={form.password} onChange={(v) => update('password', v)} placeholder={t('auth.field.passwordPh')} autoComplete={mode === 'signin' ? 'current-password' : 'new-password'} required />
 
-          {err && <div style={{ color: '#b8531a', fontSize: 13 }}>{err}</div>}
+          {err && <div className="mk-error" role="alert">{err}</div>}
 
-          <button
-            type="submit"
-            disabled={busy}
-            className="mk-btn mk-btn-primary"
-            style={{ justifyContent: 'center', marginTop: 4, opacity: busy ? 0.7 : 1 }}
-          >
-            {busy ? '…' : mode === 'signin' ? t('auth.signin.btn') : t('auth.register.btn')}
+          <button type="submit" disabled={busy} className="mk-btn mk-btn-primary mk-btn-lg" style={{ marginTop: 4 }}>
+            {busy ? <span className="mk-spinner" /> : (mode === 'signin' ? t('auth.signin.btn') : t('auth.register.btn'))}
           </button>
 
-          <div style={{ fontSize: 13, color: '#74777e', textAlign: 'center', marginTop: 4 }}>
-            {mode === 'signin' ? (
-              <>{t('auth.toRegister.q')} <a style={{ cursor: 'pointer', color: '#1240e5' }} onClick={() => setMode('register')}>{t('auth.toRegister.a')}</a></>
-            ) : (
-              <>{t('auth.toSignin.q')} <a style={{ cursor: 'pointer', color: '#1240e5' }} onClick={() => setMode('signin')}>{t('auth.toSignin.a')}</a></>
-            )}
+          <div className="mk-muted mk-center" style={{ fontSize: 13, marginTop: 2 }}>
+            {mode === 'signin'
+              ? <>{t('auth.toRegister.q')} <button type="button" className="mk-ulink" style={{ background: 'none', border: 0, cursor: 'pointer', padding: 0, font: 'inherit' }} onClick={() => setMode('register')}>{t('auth.toRegister.a')}</button></>
+              : <>{t('auth.toSignin.q')} <button type="button" className="mk-ulink" style={{ background: 'none', border: 0, cursor: 'pointer', padding: 0, font: 'inherit' }} onClick={() => setMode('signin')}>{t('auth.toSignin.a')}</button></>}
           </div>
         </form>
       </div>
@@ -95,18 +91,11 @@ export default function SignInModal() {
   );
 }
 
-function Field({ label, value, onChange, type = 'text', placeholder, required }) {
+const Field = React.forwardRef(function Field({ id, label, value, onChange, type = 'text', placeholder, required, autoComplete }, ref) {
   return (
-    <div>
-      <div style={{ fontSize: 11.5, color: '#74777e', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 6 }}>{label}</div>
-      <input
-        type={type}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder={placeholder}
-        required={required}
-        style={{ width: '100%', border: 'none', borderBottom: '1px solid var(--line-2)', padding: '8px 0', fontSize: 14.5, outline: 'none', background: 'transparent' }}
-      />
-    </div>
+    <label className="mk-field" htmlFor={id}>
+      <span className="mk-label">{label}{required && <span style={{ color: 'var(--danger)' }}> *</span>}</span>
+      <input ref={ref} id={id} className="mk-input" type={type} value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} required={required} autoComplete={autoComplete} />
+    </label>
   );
-}
+});

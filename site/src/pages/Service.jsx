@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { StoreHeader, StoreFooter } from '../components/Chrome.jsx';
+import { Reveal, Icon, Section } from '../components/ui/index.js';
 import { api } from '../lib/api.js';
 import { useLang } from '../lib/LangContext.jsx';
 
@@ -88,55 +89,72 @@ export default function Service() {
   }
 
   return (
-    <div className="mk" style={{ background: 'var(--bg)' }}>
+    <div className="mk">
       <StoreHeader />
-      <div style={{ padding: '20px 40px', borderBottom: '1px solid var(--line)' }} className="mk-mono">
-        <span style={{ fontSize: 11, color: '#74777e', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-          <Link to="/">{t('catalog.crumbHome')}</Link> / {t('nav.service')}
-        </span>
-      </div>
-      <section style={{ padding: '72px 40px 56px', display: 'grid', gridTemplateColumns: '1.3fr 1fr', gap: 80 }}>
-        <div>
-          <div className="mk-eyebrow">{t('service.eyebrow')}</div>
-          <h1 style={{ fontSize: 76, fontWeight: 600, letterSpacing: '-0.035em', lineHeight: 1, margin: '16px 0 0' }}>
-            {t('service.title.a')}<br />{t('service.title.b')}
-          </h1>
+      <main id="main">
+
+        {/* BREADCRUMB */}
+        <div className="mk-container mk-mono" style={{ paddingTop: 16, paddingBottom: 16, borderBottom: '1px solid var(--line)' }}>
+          <span className="mk-eyebrow">
+            <Link to="/" className="mk-ulink">{t('catalog.crumbHome')}</Link> / {t('nav.service')}
+          </span>
         </div>
-        <div style={{ paddingTop: 80 }}>
-          <p style={{ fontSize: 17, color: '#3a3d44', lineHeight: 1.6, margin: 0 }}>{t('service.lead')}</p>
-          <div style={{ display: 'flex', gap: 12, marginTop: 24 }}>
-            <Link to="/contact"><button className="mk-btn mk-btn-primary mk-btn-sm">{t('service.schedule')}</button></Link>
-            <button className="mk-btn mk-btn-light mk-btn-sm" onClick={downloadPriceList} disabled={priceBusy}>
-              {priceBusy ? t('service.priceList.preparing') : t('service.priceList')}
-            </button>
+
+        {/* HERO */}
+        <Section as="section" size="sm" style={{ paddingTop: 72, paddingBottom: 56 }}>
+          <div className="mk-split">
+            <Reveal variant="left">
+              <div className="mk-eyebrow">{t('service.eyebrow')}</div>
+              <h1 style={{ fontSize: 'clamp(34px,5vw,64px)', fontWeight: 600, letterSpacing: '-0.03em', lineHeight: 1.02, margin: '16px 0 0' }}>
+                {t('service.title.a')}<br />{t('service.title.b')}
+              </h1>
+            </Reveal>
+            <Reveal index={1} style={{ alignSelf: 'center' }}>
+              <p className="mk-muted" style={{ fontSize: 17, lineHeight: 1.6, margin: 0 }}>{t('service.lead')}</p>
+              <div className="mk-row mk-wrap" style={{ gap: 12, marginTop: 24 }}>
+                <Link to="/contact"><button className="mk-btn mk-btn-primary">{t('service.schedule')} <Icon name="arrow-right" size={15} className="mk-arrow" /></button></Link>
+                <button className="mk-btn mk-btn-light" onClick={downloadPriceList} disabled={priceBusy}>
+                  {priceBusy ? <><span className="mk-spinner" /> {t('service.priceList.preparing')}</> : <>{t('service.priceList')} <Icon name="file" size={15} /></>}
+                </button>
+              </div>
+            </Reveal>
           </div>
-        </div>
-      </section>
-      <section style={{ padding: '0 40px 80px' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 1, background: 'var(--line)', border: '1px solid var(--line)' }}>
-          {SERVICES.map((s) => (
-            <div key={s.n} style={{ background: '#fff', display: 'grid', gridTemplateColumns: '80px 1fr 1.4fr 1fr', gap: 32, padding: '40px 36px', alignItems: 'flex-start' }}>
-              <span className="mk-mono" style={{ fontSize: 12, color: '#a7a9af', letterSpacing: '0.06em' }}>{s.n}</span>
-              <div>
-                <h3 style={{ fontSize: 28, fontWeight: 600, letterSpacing: '-0.02em', margin: 0 }}>{s.t[lang] || s.t.en}</h3>
-                <div style={{ fontSize: 13, color: '#74777e', marginTop: 6 }}>{s.sub[lang] || s.sub.en}</div>
-              </div>
-              <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 8 }}>
-                {(s.d[lang] || s.d.en).map((line) => (
-                  <li key={line} style={{ fontSize: 14, color: '#1240e5', display: 'flex', gap: 10, lineHeight: 1.5 }}>
-                    <span style={{ color: '#a7a9af', flexShrink: 0 }}>—</span>{line}
-                  </li>
-                ))}
-              </ul>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                {s.meta.map((m) => (
-                  <div key={m} className="mk-mono" style={{ fontSize: 13, color: '#14161b', textAlign: 'right' }}>{m}</div>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
+        </Section>
+
+        {/* SERVICES */}
+        <Section as="section" size="sm" style={{ paddingTop: 0, paddingBottom: 80 }}>
+          <div className="mk-grid-hair">
+            {SERVICES.map((s, i) => (
+              <Reveal key={s.n} index={i} style={{ background: 'var(--surface)', padding: '40px 36px' }}>
+                <div className="mk-2col" style={{ gap: 32 }}>
+                  <div className="mk-row" style={{ alignItems: 'flex-start', gap: 24 }}>
+                    <span className="mk-mono" style={{ fontSize: 12, color: 'var(--ink-4)', letterSpacing: '0.06em', flexShrink: 0 }}>{s.n}</span>
+                    <div>
+                      <h3 style={{ fontSize: 'clamp(22px,2.6vw,28px)', fontWeight: 600, letterSpacing: '-0.02em', margin: 0 }}>{s.t[lang] || s.t.en}</h3>
+                      <div className="mk-muted" style={{ fontSize: 13, marginTop: 6 }}>{s.sub[lang] || s.sub.en}</div>
+                    </div>
+                  </div>
+                  <div className="mk-row mk-wrap" style={{ alignItems: 'flex-start', gap: 32, justifyContent: 'space-between' }}>
+                    <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 8, flex: 1, minWidth: 220 }}>
+                      {(s.d[lang] || s.d.en).map((line) => (
+                        <li key={line} className="mk-accent" style={{ fontSize: 14, display: 'flex', gap: 10, lineHeight: 1.5 }}>
+                          <Icon name="check" size={15} style={{ color: 'var(--ink-4)', marginTop: 2 }} />{line}
+                        </li>
+                      ))}
+                    </ul>
+                    <div className="mk-stack" style={{ gap: 10 }}>
+                      {s.meta.map((m) => (
+                        <div key={m} className="mk-mono mk-num" style={{ fontSize: 13, color: 'var(--ink)' }}>{m}</div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </Section>
+
+      </main>
       <StoreFooter />
     </div>
   );

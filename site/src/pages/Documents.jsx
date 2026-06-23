@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StoreHeader, StoreFooter } from '../components/Chrome.jsx';
+import { Reveal, Icon } from '../components/ui/index.js';
 import { useLang } from '../lib/LangContext.jsx';
 
 // 7 certificates, each with a trilingual display name and an image in /certs.
@@ -80,90 +81,122 @@ export default function Documents() {
   const { lang, t } = useLang();
   const [open, setOpen] = useState(null);
 
+  // Escape to close + lock scroll while the lightbox is open.
+  useEffect(() => {
+    if (open == null) return;
+    const onKey = (e) => { if (e.key === 'Escape') setOpen(null); };
+    window.addEventListener('keydown', onKey);
+    document.body.style.overflow = 'hidden';
+    return () => { window.removeEventListener('keydown', onKey); document.body.style.overflow = ''; };
+  }, [open]);
+
+  // The translated "view original" copy ships with a trailing arrow glyph;
+  // strip it so we can render a consistent icon instead.
+  const viewFull = t('docs.viewFull').replace(/\s*→\s*$/, '');
+
   return (
-    <div className="mk" style={{ background: 'var(--bg)' }}>
+    <div className="mk">
       <StoreHeader />
+      <main id="main">
 
-      <section style={{ padding: '80px 40px 56px', display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: 80 }}>
-        <div>
-          <div className="mk-eyebrow">{t('docs.eyebrow')}</div>
-          <h1 style={{ fontSize: 72, fontWeight: 600, letterSpacing: '-0.035em', lineHeight: 1, margin: '16px 0 0' }}>
-            {t('docs.title')}
-          </h1>
+        <div className="mk-container" style={{ paddingTop: 72, paddingBottom: 48 }}>
+          <div className="mk-split" style={{ alignItems: 'flex-end' }}>
+            <Reveal variant="left">
+              <div className="mk-eyebrow">{t('docs.eyebrow')}</div>
+              <h1 style={{ fontSize: 'clamp(34px,5vw,64px)', fontWeight: 600, letterSpacing: '-0.03em', lineHeight: 1.02, margin: '16px 0 0' }}>
+                {t('docs.title')}
+              </h1>
+            </Reveal>
+            <Reveal index={1}>
+              <p className="mk-muted" style={{ fontSize: 17, lineHeight: 1.6, margin: 0, maxWidth: 460 }}>
+                {t('docs.lead')}
+              </p>
+            </Reveal>
+          </div>
         </div>
-        <div style={{ paddingTop: 80 }}>
-          <p style={{ fontSize: 17, color: '#3a3d44', lineHeight: 1.6, margin: 0 }}>
-            {t('docs.lead')}
-          </p>
-        </div>
-      </section>
 
-      <section style={{ padding: '0 40px 96px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 20 }}>
-          {CERTIFICATES.map((c, i) => (
-            <button
-              key={c.file}
-              onClick={() => setOpen(i)}
-              style={{
-                background: '#fff', border: '1px solid var(--line)', padding: 0,
-                cursor: 'pointer', textAlign: 'left', display: 'flex', flexDirection: 'column',
-                transition: 'transform .18s, box-shadow .18s',
-              }}
-              onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = '0 12px 32px rgba(20,22,27,0.09)'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = ''; }}
-            >
-              <div style={{
-                aspectRatio: '3 / 4', width: '100%', overflow: 'hidden',
-                background: '#fafaf7', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                borderBottom: '1px solid var(--line-soft)',
-              }}>
-                <img
-                  src={`/certs/${c.file}`}
-                  alt={c.name[lang] || c.name.en}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }}
-                />
-              </div>
-              <div style={{ padding: '18px 20px 20px' }}>
-                <div className="mk-mono" style={{ fontSize: 10.5, color: '#a7a9af', letterSpacing: '0.08em' }}>
-                  № {String(i + 1).padStart(2, '0')} · {c.year}
-                </div>
-                <div style={{ fontSize: 15, fontWeight: 600, marginTop: 6, lineHeight: 1.35, letterSpacing: '-0.01em' }}>
-                  {c.name[lang] || c.name.en}
-                </div>
-                <div style={{ fontSize: 12.5, color: '#74777e', marginTop: 6 }}>
-                  {c.issuer[lang] || c.issuer.en}
-                </div>
-                <div style={{ fontSize: 12.5, color: '#1240e5', marginTop: 12, display: 'flex', alignItems: 'center', gap: 6 }}>
-                  {t('docs.viewFull')}
-                </div>
-              </div>
-            </button>
-          ))}
+        <div className="mk-container" style={{ paddingBottom: 96 }}>
+          <div className="mk-grid mk-cards-4">
+            {CERTIFICATES.map((c, i) => {
+              const label = c.name[lang] || c.name.en;
+              return (
+                <Reveal
+                  key={c.file}
+                  as="button"
+                  index={i}
+                  variant="up"
+                  type="button"
+                  onClick={() => setOpen(i)}
+                  className="mk-card mk-card-hover"
+                  aria-label={`${label} — ${viewFull}`}
+                  style={{ padding: 0, cursor: 'pointer', textAlign: 'left', display: 'flex', flexDirection: 'column' }}
+                >
+                  <div style={{
+                    aspectRatio: '3 / 4', width: '100%', overflow: 'hidden',
+                    background: 'var(--surface-sunken)', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    borderBottom: '1px solid var(--line-soft)',
+                  }}>
+                    <img
+                      src={`/certs/${c.file}`}
+                      alt={`${label} — ${c.issuer[lang] || c.issuer.en}, ${c.year}`}
+                      loading="lazy"
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }}
+                    />
+                  </div>
+                  <div style={{ padding: '18px 20px 20px' }}>
+                    <div className="mk-mono mk-num" style={{ fontSize: 10.5, color: 'var(--ink-4)', letterSpacing: '0.08em' }}>
+                      № {String(i + 1).padStart(2, '0')} · {c.year}
+                    </div>
+                    <div className="mk-row" style={{ gap: 8, marginTop: 8 }}>
+                      <Icon name="file" size={16} style={{ color: 'var(--accent-ink)' }} />
+                      <div style={{ fontSize: 15, fontWeight: 600, lineHeight: 1.35, letterSpacing: '-0.01em' }}>
+                        {label}
+                      </div>
+                    </div>
+                    <div className="mk-muted" style={{ fontSize: 12.5, marginTop: 6 }}>
+                      {c.issuer[lang] || c.issuer.en}
+                    </div>
+                    <div className="mk-accent mk-row" style={{ fontSize: 12.5, marginTop: 12, gap: 6 }}>
+                      {viewFull} <Icon name="arrow-right" size={15} className="mk-arrow" />
+                    </div>
+                  </div>
+                </Reveal>
+              );
+            })}
+          </div>
         </div>
-      </section>
+
+      </main>
 
       {open != null && (
         <div
+          className="mk mk-modal-scrim"
           onClick={() => setOpen(null)}
-          style={{
-            position: 'fixed', inset: 0, background: 'rgba(20,22,27,0.78)',
-            zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center',
-            padding: 40, cursor: 'zoom-out',
-          }}
+          style={{ cursor: 'zoom-out' }}
         >
-          <img
-            src={`/certs/${CERTIFICATES[open].file}`}
-            alt={CERTIFICATES[open].name[lang] || CERTIFICATES[open].name.en}
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label={CERTIFICATES[open].name[lang] || CERTIFICATES[open].name.en}
             onClick={(e) => e.stopPropagation()}
-            style={{ maxWidth: '92%', maxHeight: '92%', objectFit: 'contain', background: '#fff', boxShadow: '0 30px 80px rgba(0,0,0,0.5)' }}
-          />
-          <button
-            onClick={() => setOpen(null)}
-            style={{
-              position: 'absolute', top: 24, right: 28, background: 'transparent',
-              border: 'none', color: '#fff', fontSize: 28, cursor: 'pointer',
-            }}
-          >×</button>
+            style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', maxWidth: '92%', maxHeight: '92%', cursor: 'default' }}
+          >
+            <img
+              src={`/certs/${CERTIFICATES[open].file}`}
+              alt={CERTIFICATES[open].name[lang] || CERTIFICATES[open].name.en}
+              style={{ maxWidth: '100%', maxHeight: '90vh', objectFit: 'contain', background: 'var(--surface)', boxShadow: 'var(--shadow-pop)' }}
+            />
+            <button
+              type="button"
+              onClick={() => setOpen(null)}
+              className="mk-iconbtn"
+              aria-label="Close"
+              autoFocus
+              style={{ position: 'absolute', top: -48, right: 0, color: 'var(--on-ink)' }}
+            >
+              <Icon name="close" size={22} />
+            </button>
+          </div>
         </div>
       )}
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { StoreHeader, StoreFooter } from '../components/Chrome.jsx';
+import { Reveal, Icon, Section, SectionHead } from '../components/ui/index.js';
 import { useLang } from '../lib/LangContext.jsx';
 
 // Each solution maps to a real product category in the Manokip catalog.
@@ -86,34 +87,43 @@ const SOL = [
 export default function Solutions() {
   const { lang, t } = useLang();
   return (
-    <div className="mk" style={{ background: 'var(--bg)' }}>
+    <div className="mk">
       <StoreHeader />
-      <section style={{ padding: '80px 40px 60px' }}>
-        <div className="mk-eyebrow">{t('solutions.eyebrow')}</div>
-        <h1 style={{ fontSize: 80, fontWeight: 600, letterSpacing: '-0.035em', lineHeight: 1, margin: '16px 0 0', maxWidth: 900 }}>
-          {t('solutions.title')}
-        </h1>
-        <p style={{ fontSize: 18, color: '#3a3d44', marginTop: 24, maxWidth: 660 }}>{t('solutions.lead')}</p>
-      </section>
-      <section style={{ padding: '0 40px 96px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 1, background: 'var(--line)', border: '1px solid var(--line)' }}>
-          {SOL.map((s) => (
-            <div key={s.n} style={{ background: '#fff', padding: '40px 36px', minHeight: 280, display: 'flex', flexDirection: 'column' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 20 }}>
-                <span className="mk-mono" style={{ fontSize: 11, color: '#a7a9af' }}>{s.n}</span>
-                <div style={{ display: 'flex', gap: 6 }}>
-                  {(s.ind[lang] || s.ind.en).map((i) => <span key={i} className="mk-tag">{i}</span>)}
+      <main id="main">
+
+        {/* HERO */}
+        <Section as="section" size="sm" style={{ paddingTop: 80, paddingBottom: 56 }}>
+          <Reveal variant="left">
+            <div className="mk-eyebrow">{t('solutions.eyebrow')}</div>
+            <h1 style={{ fontSize: 'clamp(34px,5vw,64px)', fontWeight: 600, letterSpacing: '-0.03em', margin: '16px 0 0', maxWidth: 900 }}>
+              {t('solutions.title')}
+            </h1>
+            <p className="mk-muted" style={{ fontSize: 18, marginTop: 24, maxWidth: 660, lineHeight: 1.55 }}>{t('solutions.lead')}</p>
+          </Reveal>
+        </Section>
+
+        {/* SOLUTIONS GRID */}
+        <Section as="section" size="sm" style={{ paddingTop: 0, paddingBottom: 96 }}>
+          <div className="mk-grid-hair mk-cards-2">
+            {SOL.map((s, i) => (
+              <Reveal key={s.n} index={i} style={{ background: 'var(--surface)', padding: '40px 36px', minHeight: 280, display: 'flex', flexDirection: 'column' }}>
+                <div className="mk-between" style={{ alignItems: 'flex-start', marginBottom: 20 }}>
+                  <span className="mk-mono" style={{ fontSize: 11, color: 'var(--ink-4)' }}>{s.n}</span>
+                  <div className="mk-row mk-wrap" style={{ gap: 6, justifyContent: 'flex-end' }}>
+                    {(s.ind[lang] || s.ind.en).map((ind) => <span key={ind} className="mk-tag">{ind}</span>)}
+                  </div>
                 </div>
-              </div>
-              <h3 style={{ fontSize: 32, fontWeight: 600, letterSpacing: '-0.02em', margin: 0 }}>{s.t[lang] || s.t.en}</h3>
-              <p style={{ fontSize: 14.5, color: '#3a3d44', lineHeight: 1.55, marginTop: 12, flex: 1 }}>{s.d[lang] || s.d.en}</p>
-              <Link to={`/catalog?category=${s.slug}`} style={{ fontSize: 13, color: '#1240e5', marginTop: 16, textDecoration: 'none' }}>
-                {t('solutions.recommended')}
-              </Link>
-            </div>
-          ))}
-        </div>
-      </section>
+                <h3 style={{ fontSize: 'clamp(24px,3vw,32px)', fontWeight: 600, letterSpacing: '-0.02em', margin: 0 }}>{s.t[lang] || s.t.en}</h3>
+                <p className="mk-muted" style={{ fontSize: 14.5, lineHeight: 1.55, marginTop: 12, flex: 1 }}>{s.d[lang] || s.d.en}</p>
+                <Link to={`/catalog?category=${s.slug}`} className="mk-row mk-accent" style={{ fontSize: 13, marginTop: 16, gap: 6 }}>
+                  {t('solutions.recommended')} <Icon name="arrow-right" size={15} className="mk-arrow" />
+                </Link>
+              </Reveal>
+            ))}
+          </div>
+        </Section>
+
+      </main>
       <StoreFooter />
     </div>
   );

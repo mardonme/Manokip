@@ -3,12 +3,13 @@ import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../lib/AuthContext.jsx';
 import { useCart } from '../lib/CartContext.jsx';
 import { useLang } from '../lib/LangContext.jsx';
+import Icon from './ui/Icon.jsx';
 
 export function Logo({ dark = false, size = 13 }) {
   const c = dark ? '#f5f3ee' : '#14161b';
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
-      <svg width={size * 1.85} height={size * 1.85} viewBox="0 0 28 28">
+      <svg width={size * 1.85} height={size * 1.85} viewBox="0 0 28 28" aria-hidden="true">
         <circle cx="14" cy="14" r="11.5" fill="none" stroke={c} strokeWidth="1.2" />
         <circle cx="14" cy="14" r="2.2" fill="#1240e5" />
         <line x1="14" y1="14" x2="20" y2="8.5" stroke="#1240e5" strokeWidth="1.8" strokeLinecap="round" />
@@ -31,11 +32,6 @@ export function Logo({ dark = false, size = 13 }) {
 }
 
 export function StoreHeader({ dark = false }) {
-  const fg = dark ? '#f5f3ee' : '#14161b';
-  const dim = dark ? '#a7a9af' : '#74777e';
-  const line = dark ? '#2a2c32' : '#e5e1d8';
-  const surf = dark ? '#14161b' : 'rgba(245,243,238,0.92)';
-
   const { user, logout, openSignIn } = useAuth();
   const { cart } = useCart();
   const { lang, setLang, t } = useLang();
@@ -45,32 +41,31 @@ export function StoreHeader({ dark = false }) {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Close drawer on route change.
   useEffect(() => { setMenuOpen(false); }, [location.pathname]);
 
   function submitSearch(e) {
     e.preventDefault();
     const q = search.trim();
-    if (q) navigate(`/search?q=${encodeURIComponent(q)}`);
-    else navigate('/search');
+    navigate(q ? `/search?q=${encodeURIComponent(q)}` : '/search');
   }
 
-  // ⌘K / Ctrl+K focuses the header search.
+  // ⌘K / Ctrl+K focuses the header search if visible, else opens the search page.
   useEffect(() => {
     function onKey(e) {
       if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) {
         e.preventDefault();
-        searchRef.current?.focus();
+        const el = searchRef.current;
+        if (el && el.offsetParent !== null) el.focus();
+        else navigate('/search');
       }
+      if (e.key === 'Escape') setMenuOpen(false);
     }
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, []);
+  }, [navigate]);
 
-  // Prevent scroll when drawer open.
   useEffect(() => {
-    if (menuOpen) document.body.style.overflow = 'hidden';
-    else document.body.style.overflow = '';
+    document.body.style.overflow = menuOpen ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
   }, [menuOpen]);
 
@@ -84,198 +79,138 @@ export function StoreHeader({ dark = false }) {
   ];
 
   return (
-    <header style={{ borderBottom: `1px solid ${line}`, background: surf, backdropFilter: 'blur(14px)', position: 'sticky', top: 0, zIndex: 50 }}>
-      <div style={{
-        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-        padding: '8px 40px', borderBottom: `1px solid ${line}`,
-        fontFamily: 'JetBrains Mono', fontSize: 10.5, color: dim, letterSpacing: '0.06em',
-      }}>
-        <div style={{ display: 'flex', gap: 22 }}>
-          <span>{t('topbar.cities')}</span>
-          <span>{t('topbar.ships')}</span>
-        </div>
-        <div style={{ display: 'flex', gap: 22, alignItems: 'center' }}>
-          <a href="tel:+998936939220">+998 93 693-92-20</a>
-          <div style={{ display: 'flex', gap: 4 }}>
-            {['ru', 'uz', 'en'].map((code) => (
-              <button
-                key={code}
-                onClick={() => setLang(code)}
-                style={{
-                  background: 'transparent', border: 'none', cursor: 'pointer',
-                  padding: '2px 4px', letterSpacing: '0.06em',
-                  color: lang === code ? fg : dim,
-                  fontWeight: lang === code ? 700 : 400,
-                  fontFamily: 'JetBrains Mono', fontSize: 10.5, textTransform: 'uppercase',
-                }}
-              >
-                {code}
-              </button>
-            )).reduce((acc, el, i, arr) => {
-              acc.push(el);
-              if (i < arr.length - 1) acc.push(<span key={`s${i}`}>·</span>);
-              return acc;
-            }, [])}
+    <header className="mk-header">
+      <div className="mk-topbar">
+        <div className="mk-container mk-topbar-inner">
+          <div className="mk-topbar-info">
+            {/* <span>{t('topbar.cities')}</span> */}
+            {/* <span>{t('topbar.ships')}</span> */}
+          </div>
+          <div className="mk-topbar-meta">
+            <a href="tel:+998936939220">+998 93 693-92-20</a>
+            <div className="mk-langswitch" role="group" aria-label="Language">
+              {['ru', 'uz', 'en'].map((code, i) => (
+                <React.Fragment key={code}>
+                  {i > 0 && <span aria-hidden="true">·</span>}
+                  <button
+                    className={`mk-lang ${lang === code ? 'is-active' : ''}`}
+                    aria-pressed={lang === code}
+                    onClick={() => setLang(code)}
+                  >{code}</button>
+                </React.Fragment>
+              ))}
+            </div>
           </div>
         </div>
       </div>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '22px 40px', gap: 40 }}>
-        <Link to="/" style={{ color: fg }}><Logo dark={dark} size={13} /></Link>
-        <nav style={{ display: 'flex', gap: 26, flex: 1, justifyContent: 'center' }}>
+
+      <div className="mk-container mk-headbar-inner">
+        <Link to="/" aria-label="Manokip home"><Logo dark={dark} size={13} /></Link>
+
+        <nav className="mk-nav" aria-label="Primary">
           {NAV.map((it) => (
             <NavLink key={it.to} to={it.to}
-              style={({ isActive }) => ({
-                fontSize: 14, fontWeight: isActive ? 600 : 500,
-                color: isActive ? fg : dim,
-                borderBottom: isActive ? '2px solid #1240e5' : '2px solid transparent',
-                paddingBottom: 4,
-              })}>
+              className={({ isActive }) => `mk-navlink ${isActive ? 'is-active' : ''}`}>
               {it.label}
             </NavLink>
           ))}
         </nav>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-          <form onSubmit={submitSearch} style={{
-            display: 'flex', alignItems: 'center', gap: 8, background: 'transparent',
-            border: `1px solid ${line}`, padding: '8px 12px', borderRadius: 999,
-            color: fg, fontSize: 13, minWidth: 220,
-          }}>
-            <button type="submit" aria-label={t('search.submit')} style={{ background: 'transparent', border: 'none', padding: 0, margin: 0, cursor: 'pointer', color: dim, display: 'flex' }}>
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" />
-              </svg>
+
+        <div className="mk-actions">
+          <form className="mk-search" onSubmit={submitSearch} role="search">
+            <button type="submit" aria-label={t('search.submit')} style={{ background: 'transparent', border: 'none', padding: 0, cursor: 'pointer', color: 'var(--ink-3)', display: 'flex' }}>
+              <Icon name="search" size={15} />
             </button>
-            <input
-              ref={searchRef}
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder={t('nav.search')}
-              style={{ flex: 1, border: 'none', outline: 'none', background: 'transparent', color: fg, fontSize: 13, minWidth: 0 }}
-            />
-            <span style={{ fontFamily: 'JetBrains Mono', fontSize: 10, color: dim }}>⌘K</span>
+            <input ref={searchRef} value={search} onChange={(e) => setSearch(e.target.value)}
+              placeholder={t('nav.search')} aria-label={t('nav.search')} />
+            <span className="mk-kbd" aria-hidden="true">⌘K</span>
           </form>
-          <Link to="/cart" style={{ color: fg, fontSize: 13, display: 'flex', alignItems: 'center', gap: 6, textDecoration: 'none' }}>
-            <span>{t('nav.cart')}</span>
-            <span style={{
-              minWidth: 22, height: 22, padding: '0 6px', borderRadius: 999,
-              background: cart.count > 0 ? '#1240e5' : 'transparent',
-              border: cart.count > 0 ? 'none' : `1px solid ${line}`,
-              color: cart.count > 0 ? '#fff' : dim,
-              fontFamily: 'JetBrains Mono', fontSize: 11,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-            }}>
-              {cart.count || 0}
-            </span>
+
+          <Link to="/cart" className="mk-iconbtn" aria-label={`${t('nav.cart')} (${cart.count || 0})`}>
+            <Icon name="cart" size={19} />
+            {cart.count > 0 && <span className="mk-cart-count mk-num">{cart.count}</span>}
           </Link>
-          {user ? (
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: fg }}>
-              {user.role === 'ADMIN' && <Link to="/admin" style={{ color: '#1240e5', fontWeight: 600 }}>{t('admin.link')}</Link>}
-              <Link to="/orders" style={{ color: fg }}>{user.name || user.email}</Link>
-              <a onClick={logout} style={{ color: dim, cursor: 'pointer', fontSize: 12 }}>{t('nav.signOut')}</a>
-            </div>
-          ) : (
-            <a onClick={openSignIn} style={{ fontSize: 13, color: fg, cursor: 'pointer' }}>{t('nav.signIn')}</a>
-          )}
-          <Link to="/contact"><button className="mk-btn mk-btn-sm mk-btn-primary">{t('nav.requestQuote')}</button></Link>
-          <button
-            className="mk-burger"
-            aria-label="Menu"
-            aria-expanded={menuOpen}
-            onClick={() => setMenuOpen((v) => !v)}
-          ><span /></button>
+
+          <div className="mk-account">
+            {user ? (
+              <>
+                {user.role === 'ADMIN' && <Link to="/admin" style={{ color: 'var(--accent-ink)', fontWeight: 600 }}>{t('admin.link')}</Link>}
+                <Link to="/orders">{user.name || user.email}</Link>
+                <button onClick={logout} className="mk-btn-ghost" style={{ border: 'none', background: 'none', cursor: 'pointer', color: 'var(--ink-3)', fontSize: 12, padding: 0 }}>{t('nav.signOut')}</button>
+              </>
+            ) : (
+              <button onClick={openSignIn} style={{ border: 'none', background: 'none', cursor: 'pointer', color: 'var(--ink)', fontSize: 13, padding: 0 }}>{t('nav.signIn')}</button>
+            )}
+          </div>
+
+          <Link to="/contact" className="mk-cta-desktop">
+            <button className="mk-btn mk-btn-sm mk-btn-primary">{t('nav.requestQuote')}</button>
+          </Link>
+
+          <button className="mk-burger" aria-label="Menu" aria-expanded={menuOpen} onClick={() => setMenuOpen((v) => !v)}>
+            <span />
+          </button>
         </div>
       </div>
 
       {menuOpen && (
-        <div
-          onClick={() => setMenuOpen(false)}
-          style={{
-            position: 'fixed', inset: 0, top: 0, background: 'rgba(20,22,27,0.45)',
-            zIndex: 90, backdropFilter: 'blur(2px)',
-          }}
-        >
-          <nav
-            onClick={(e) => e.stopPropagation()}
-            style={{
-              position: 'absolute', top: 0, right: 0, bottom: 0,
-              width: 'min(320px, 86vw)', background: '#fff',
-              padding: '20px 22px', display: 'flex', flexDirection: 'column', gap: 4,
-              boxShadow: '-12px 0 32px rgba(20,22,27,0.18)',
-              overflowY: 'auto',
-            }}
-          >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 18 }}>
+        <div className="mk-scrim" onClick={() => setMenuOpen(false)}>
+          <nav className="mk-drawer" onClick={(e) => e.stopPropagation()} aria-label="Mobile">
+            <div className="mk-between" style={{ marginBottom: 16 }}>
               <Logo size={12} />
-              <button
-                onClick={() => setMenuOpen(false)}
-                aria-label="Close menu"
-                style={{ background: 'transparent', border: 'none', fontSize: 26, lineHeight: 1, cursor: 'pointer', color: '#14161b' }}
-              >×</button>
+              <button onClick={() => setMenuOpen(false)} className="mk-iconbtn" aria-label="Close menu">
+                <Icon name="close" size={20} />
+              </button>
             </div>
-            <form onSubmit={submitSearch} style={{ display: 'flex', alignItems: 'center', gap: 8, border: '1px solid var(--line-2)', borderRadius: 999, padding: '8px 12px', marginBottom: 14 }}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#74777e" strokeWidth="2">
-                <circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" />
-              </svg>
-              <input
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder={t('nav.search')}
-                style={{ flex: 1, border: 'none', outline: 'none', background: 'transparent', fontSize: 15, minWidth: 0 }}
-              />
+
+            <form className="mk-search" onSubmit={submitSearch} role="search" style={{ display: 'flex', minWidth: 0, marginBottom: 12 }}>
+              <Icon name="search" size={15} style={{ color: 'var(--ink-3)' }} />
+              <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder={t('nav.search')} aria-label={t('nav.search')} style={{ fontSize: 15 }} />
             </form>
+
             {user?.role === 'ADMIN' && (
-              <Link to="/admin" style={{ display: 'block', padding: '12px 4px', fontSize: 16, fontWeight: 600, color: '#1240e5', borderBottom: '1px solid var(--line-soft)' }}>
-                {t('admin.link')}
-              </Link>
+              <NavLink to="/admin" className="mk-drawer-link" style={{ color: 'var(--accent-ink)', fontWeight: 600 }}>{t('admin.link')}</NavLink>
             )}
             {NAV.map((it) => (
-              <NavLink
-                key={it.to}
-                to={it.to}
-                style={({ isActive }) => ({
-                  display: 'block', padding: '12px 4px', fontSize: 16,
-                  fontWeight: isActive ? 600 : 500,
-                  color: isActive ? '#1240e5' : '#14161b',
-                  borderBottom: '1px solid var(--line-soft)',
-                })}
-              >
+              <NavLink key={it.to} to={it.to} className={({ isActive }) => `mk-drawer-link ${isActive ? 'is-active' : ''}`}>
                 {it.label}
               </NavLink>
             ))}
-            <Link to="/cart" style={{ padding: '12px 4px', fontSize: 16, fontWeight: 500, color: '#14161b', borderBottom: '1px solid var(--line-soft)' }}>
-              {t('nav.cart')} ({cart.count || 0})
-            </Link>
+            <NavLink to="/cart" className="mk-drawer-link">
+              <span>{t('nav.cart')}</span>
+              <span className="mk-mono mk-muted">{cart.count || 0}</span>
+            </NavLink>
+
             {user ? (
-              <a onClick={() => { logout(); setMenuOpen(false); }} style={{ padding: '12px 4px', fontSize: 16, color: '#74777e', cursor: 'pointer' }}>
+              <button onClick={() => { logout(); setMenuOpen(false); }} className="mk-drawer-link" style={{ background: 'none', border: 0, borderBottom: '1px solid var(--line-soft)', textAlign: 'left', cursor: 'pointer', color: 'var(--ink-3)' }}>
                 {t('nav.signOut')}
-              </a>
-            ) : (
-              <a onClick={() => { openSignIn(); setMenuOpen(false); }} style={{ padding: '12px 4px', fontSize: 16, color: '#14161b', cursor: 'pointer' }}>
-                {t('nav.signIn')}
-              </a>
-            )}
-            <Link to="/contact" style={{ marginTop: 12 }}>
-              <button className="mk-btn mk-btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
-                {t('nav.requestQuote')}
               </button>
+            ) : (
+              <button onClick={() => { openSignIn(); setMenuOpen(false); }} className="mk-drawer-link" style={{ background: 'none', border: 0, borderBottom: '1px solid var(--line-soft)', textAlign: 'left', cursor: 'pointer' }}>
+                {t('nav.signIn')}
+              </button>
+            )}
+
+            <Link to="/contact" style={{ marginTop: 14 }}>
+              <button className="mk-btn mk-btn-primary" style={{ width: '100%' }}>{t('nav.requestQuote')}</button>
             </Link>
-            <div style={{ marginTop: 24, paddingTop: 16, borderTop: '1px solid var(--line)', display: 'flex', gap: 8, alignItems: 'center', fontFamily: 'JetBrains Mono', fontSize: 11 }}>
-              <span style={{ color: '#74777e', marginRight: 4 }}>LANG:</span>
+
+            <div className="mk-row" style={{ marginTop: 22, paddingTop: 16, borderTop: '1px solid var(--line)', gap: 8 }}>
+              <span className="mk-mono mk-muted" style={{ fontSize: 11, marginRight: 4 }}>LANG</span>
               {['ru', 'uz', 'en'].map((code) => (
-                <button
-                  key={code}
-                  onClick={() => setLang(code)}
+                <button key={code} onClick={() => setLang(code)}
+                  className="mk-mono"
                   style={{
-                    background: lang === code ? '#14161b' : 'transparent',
-                    color: lang === code ? '#fff' : '#74777e',
-                    border: '1px solid ' + (lang === code ? '#14161b' : 'var(--line-2)'),
-                    borderRadius: 4, padding: '4px 10px', cursor: 'pointer',
-                    fontFamily: 'JetBrains Mono', fontSize: 11, textTransform: 'uppercase',
-                  }}
-                >{code}</button>
+                    background: lang === code ? 'var(--ink)' : 'transparent',
+                    color: lang === code ? '#fff' : 'var(--ink-3)',
+                    border: `1px solid ${lang === code ? 'var(--ink)' : 'var(--line-2)'}`,
+                    borderRadius: 4, padding: '5px 11px', cursor: 'pointer', fontSize: 11, textTransform: 'uppercase',
+                  }}>{code}</button>
               ))}
             </div>
-            <a href="tel:+998936939220" style={{ marginTop: 16, fontSize: 14, color: '#14161b' }}>+998 93 693-92-20</a>
+            <a href="tel:+998936939220" className="mk-row" style={{ marginTop: 16, fontSize: 14, gap: 8 }}>
+              <Icon name="phone" size={15} style={{ color: 'var(--ink-3)' }} /> +998 93 693-92-20
+            </a>
           </nav>
         </div>
       )}
@@ -286,7 +221,6 @@ export function StoreHeader({ dark = false }) {
 export function StoreFooter() {
   const { t, lang } = useLang();
 
-  // Destinations are shared across languages; labels are localized.
   const LINKS = {
     catalog:  ['/catalog?category=manometers', '/catalog?category=pressure-switches', '/catalog?category=solar-panels', '/catalog?category=level-gauges', '/catalog?category=protection-relays', '/documents'],
     solutions: ['/solutions', '/solutions', '/solutions', '/solutions', '/solutions', '/solutions'],
@@ -294,7 +228,6 @@ export function StoreFooter() {
     company:  ['/about', '/manufacturing', '/documents', '/partners', '/press', '/careers'],
   };
 
-  // Footer link lists per language. Kept compact to match the existing chrome.
   const COLS = {
     en: [
       { key: 'catalog',   t: t('footer.col.catalog'),   i: ['Manometers', 'Pressure switches', 'Solar panels', 'Level gauges', 'Protection relays', 'Documents'] },
@@ -318,33 +251,33 @@ export function StoreFooter() {
   const cols = COLS[lang] || COLS.en;
 
   return (
-    <footer style={{ background: '#14161b', color: '#f5f3ee', padding: '72px 40px 28px' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr 1fr', gap: 56, paddingBottom: 48, borderBottom: '1px solid #2a2c32' }}>
-        <div>
-          <Logo dark size={14} />
-          <p style={{ marginTop: 24, color: '#a7a9af', fontSize: 14, lineHeight: 1.6, maxWidth: 320 }}>
-            {t('footer.tagline')}
-          </p>
-          <div style={{ marginTop: 24, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-            {['ISO 9001', 'GOST R', 'EAC', "O'zStandart"].map((s) => (
-              <span key={s} className="mk-tag" style={{ background: 'transparent', borderColor: '#2a2c32', color: '#a7a9af' }}>{s}</span>
-            ))}
+    <footer className="mk-footer">
+      <div className="mk-container">
+        <div className="mk-footer-grid">
+          <div className="mk-footer-brand">
+            <Logo dark size={14} />
+            <p style={{ marginTop: 20, color: 'var(--on-ink-dim)', fontSize: 14, lineHeight: 1.6, maxWidth: 320 }}>
+              {t('footer.tagline')}
+            </p>
+            <div style={{ marginTop: 22, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+              {['ISO 9001', 'GOST R', 'EAC', "O'zStandart"].map((s) => (
+                <span key={s} className="mk-tag" style={{ background: 'transparent', borderColor: 'var(--ink-line)', color: 'var(--on-ink-dim)' }}>{s}</span>
+              ))}
+            </div>
           </div>
+          {cols.map((c) => (
+            <div key={c.key}>
+              <div className="mk-eyebrow" style={{ color: 'var(--on-ink-dim)', marginBottom: 16 }}>{c.t}</div>
+              {c.i.map((label, idx) => (
+                <Link key={label} to={(LINKS[c.key] && LINKS[c.key][idx]) || '/'} className="mk-footer-link">{label}</Link>
+              ))}
+            </div>
+          ))}
         </div>
-        {cols.map((c) => (
-          <div key={c.key}>
-            <div className="mk-eyebrow" style={{ color: '#74777e', marginBottom: 16 }}>{c.t}</div>
-            {c.i.map((label, idx) => (
-              <Link key={label} to={(LINKS[c.key] && LINKS[c.key][idx]) || '/'} style={{ display: 'block', fontSize: 13.5, marginBottom: 10, color: '#f5f3ee', textDecoration: 'none' }}>
-                {label}
-              </Link>
-            ))}
-          </div>
-        ))}
-      </div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 28, fontFamily: 'JetBrains Mono', fontSize: 10.5, color: '#74777e', letterSpacing: '0.06em' }}>
-        <span>{t('footer.rights')}</span>
-        <span>{t('footer.updated')} 2026.05.15</span>
+        <div className="mk-footer-bottom">
+          <span>{t('footer.rights')}</span>
+          <span>{t('footer.updated')} 2026.05.15</span>
+        </div>
       </div>
     </footer>
   );

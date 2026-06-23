@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { StoreHeader, StoreFooter } from '../components/Chrome.jsx';
 import Gauge from '../components/Gauge.jsx';
 import ProductCard from '../components/ProductCard.jsx';
+import { Reveal, Icon, Skeleton, SectionHead } from '../components/ui/index.js';
 import { api, mediaUrl } from '../lib/api.js';
 import { useCart } from '../lib/CartContext.jsx';
 import { useAuth } from '../lib/AuthContext.jsx';
@@ -24,16 +25,13 @@ export default function Product() {
   useEffect(() => {
     if (!id) return;
     let cancelled = false;
+    setProduct(null);
     (async () => {
       try {
         const p = await api.get(`/api/products/${id}`);
         if (cancelled) return;
         setProduct(p);
-
-        const list = await api.get('/api/products', {
-          category: p.category?.slug,
-          limit: 5,
-        });
+        const list = await api.get('/api/products', { category: p.category?.slug, limit: 5 });
         if (cancelled) return;
         setRelated((list.items || []).filter((x) => x.id !== p.id).slice(0, 4));
       } catch (e) {
@@ -59,9 +57,18 @@ export default function Product() {
 
   if (!product) {
     return (
-      <div className="mk" style={{ background: 'var(--bg)' }}>
+      <div className="mk">
         <StoreHeader />
-        <div style={{ padding: 80, textAlign: 'center', color: '#74777e' }}>{t('product.loading')}</div>
+        <main id="main" className="mk-container" style={{ paddingTop: 48 }}>
+          <Skeleton w="40%" h={14} style={{ marginBottom: 28 }} />
+          <div className="mk-product-grid">
+            <Skeleton h={520} r={4} />
+            <div>
+              <Skeleton w="50%" h={14} /><Skeleton w="70%" h={48} style={{ marginTop: 14 }} />
+              <Skeleton h={90} style={{ marginTop: 28 }} /><Skeleton h={44} style={{ marginTop: 24 }} />
+            </div>
+          </div>
+        </main>
         <StoreFooter />
       </div>
     );
@@ -82,174 +89,149 @@ export default function Product() {
     [t('product.spec.ip'), 'IP65'],
     [t('product.spec.verification'), '24 mo'],
   ];
+  const TABS = [
+    ['specs', t('product.tab.specs')],
+    ['docs', t('product.tab.docs')],
+    ['cal', t('product.tab.cal')],
+    ['reviews', `${t('product.tab.reviews')} · ${p.reviewsCount ?? 0}`],
+  ];
 
   return (
-    <div className="mk" style={{ background: 'var(--bg)' }}>
+    <div className="mk">
       <StoreHeader />
+      <main id="main">
+        <div className="mk-container mk-mono" style={{ padding: '18px 40px', borderBottom: '1px solid var(--line)' }}>
+          <nav aria-label="Breadcrumb" style={{ fontSize: 11, color: 'var(--ink-3)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+            <Link to="/" className="mk-ulink">{t('catalog.crumbHome')}</Link> / <Link to="/catalog" className="mk-ulink">{t('catalog.crumb')}</Link>
+            {p.category && <> / <Link to={`/catalog?category=${p.category.slug}`} className="mk-ulink">{p.category.name}</Link></>}
+            {' / '}{p.model}
+          </nav>
+        </div>
 
-      <div style={{ padding: '20px 40px', borderBottom: '1px solid var(--line)' }} className="mk-mono">
-        <span style={{ fontSize: 11, color: '#74777e', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-          <Link to="/">{t('catalog.crumbHome')}</Link> / <Link to="/catalog">{t('catalog.crumb')}</Link>
-          {p.category && <> / <Link to={`/catalog?category=${p.category.slug}`}>{p.category.name}</Link></>}
-          {' / '}{p.model}
-        </span>
-      </div>
+        <div className="mk-container" style={{ paddingTop: 44, paddingBottom: 56 }}>
+          <div className="mk-product-grid">
+            <div className="mk-product-media">
+              <div className="mk-card" style={{ padding: 56, position: 'relative', minHeight: 500, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ position: 'absolute', top: 16, left: 16, display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                  <span className={`mk-tag ${p.inStock ? 'mk-tag-ok' : ''}`}><span className="mk-dot" />{p.inStock ? `${t('product.inStock')} · ${p.stockCount}` : t('product.onOrder')}</span>
+                  <span className="mk-tag">{t('product.shipDays')}</span>
+                </div>
+                <div className="mk-mono" style={{ position: 'absolute', top: 18, right: 18, fontSize: 10.5, color: 'var(--ink-3)', letterSpacing: '0.08em' }}>SKU · {p.sku}</div>
+                {p.imageUrl
+                  ? <img src={mediaUrl(p.imageUrl)} alt={p.model} style={{ maxWidth: '100%', maxHeight: 400, objectFit: 'contain' }} />
+                  : <Gauge size={380} value={120} max={400} unit="kgf/cm²" label={p.model} danger={350} animate />}
+              </div>
+            </div>
 
-      <section style={{ padding: '48px 40px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 56 }}>
-        <div>
-          <div style={{ background: '#fff', border: '1px solid var(--line)', padding: 60, position: 'relative', minHeight: 520 }}>
-            <div style={{ position: 'absolute', top: 16, left: 16, display: 'flex', gap: 6 }}>
-              <span className="mk-tag mk-tag-accent">● {p.inStock ? `${t('product.inStock')} · ${p.stockCount}` : t('product.onOrder')}</span>
-              <span className="mk-tag">{t('product.shipDays')}</span>
-            </div>
-            <div style={{ position: 'absolute', top: 16, right: 16 }} className="mk-mono">
-              <span style={{ fontSize: 10.5, color: '#74777e', letterSpacing: '0.08em' }}>SKU · {p.sku}</span>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 400 }}>
-              {p.imageUrl ? (
-                <img src={mediaUrl(p.imageUrl)} alt={p.model} style={{ maxWidth: '100%', maxHeight: 400, objectFit: 'contain' }} />
-              ) : (
-                <Gauge size={400} value={120} max={400} unit="kgf/cm²" label={p.model} danger={350} />
-              )}
+            <div>
+              <div className="mk-eyebrow">{p.category?.name} · GOST 2405-88</div>
+              <h1 style={{ fontSize: 'clamp(34px,4.5vw,56px)', fontWeight: 600, letterSpacing: '-0.03em', margin: '12px 0 8px' }}>{p.model}</h1>
+              <p className="mk-muted" style={{ fontSize: 17, marginTop: 0 }}>{p.desc}</p>
+
+              <div className="mk-card" style={{ marginTop: 28, padding: '20px 24px' }}>
+                <div className="mk-between" style={{ alignItems: 'baseline' }}>
+                  <div>
+                    <div className="mk-eyebrow">{t('product.price1')}</div>
+                    <div className="mk-num" style={{ fontSize: 36, fontWeight: 600, marginTop: 4 }}>{p.priceText} <span style={{ fontSize: 16, color: 'var(--ink-3)', fontWeight: 400 }}>{p.priceMinor ? 'sum' : ''}</span></div>
+                  </div>
+                  <div style={{ textAlign: 'right' }}>
+                    <div className="mk-eyebrow">{t('product.priceVolume')}</div>
+                    <div style={{ fontSize: 24, fontWeight: 600, color: 'var(--accent-ink)', marginTop: 4 }}>−18%</div>
+                  </div>
+                </div>
+              </div>
+
+              <div style={{ marginTop: 22 }}>
+                <div className="mk-eyebrow" style={{ marginBottom: 10 }}>{t('product.qty')}</div>
+                <div className="mk-row" style={{ gap: 12 }}>
+                  <div className="mk-stepper">
+                    <button onClick={() => setQty((q) => Math.max(1, q - 1))} aria-label="Decrease quantity"><Icon name="minus" size={15} /></button>
+                    <input value={qty} inputMode="numeric" aria-label={t('product.qty')}
+                      onChange={(e) => setQty(Math.max(1, parseInt(e.target.value || '1', 10) || 1))} />
+                    <button onClick={() => setQty((q) => q + 1)} aria-label="Increase quantity"><Icon name="plus" size={15} /></button>
+                  </div>
+                  <span className="mk-muted" style={{ fontSize: 12.5 }}>{p.stockCount} {t('product.inStockN')}</span>
+                </div>
+              </div>
+
+              <div className="mk-row" style={{ gap: 8, marginTop: 26 }}>
+                <button className="mk-btn mk-btn-primary mk-btn-lg" onClick={addToOrder} disabled={adding} style={{ flex: 1 }}>
+                  {adding ? <><span className="mk-spinner" /> {t('product.adding')}</> : <>{t('product.addToOrder')} <Icon name="cart" size={16} /></>}
+                </button>
+                <Link to="/contact" style={{ flex: 1 }}><button className="mk-btn mk-btn-light mk-btn-lg" style={{ width: '100%' }}>{t('nav.requestQuote')}</button></Link>
+              </div>
+
+              <div aria-live="polite" style={{ minHeight: feedback ? 'auto' : 0 }}>
+                {feedback && (
+                  <div className="mk-row" style={{ marginTop: 12, fontSize: 13, gap: 6, color: feedback.kind === 'ok' ? 'var(--ok)' : 'var(--danger)' }}>
+                    <Icon name={feedback.kind === 'ok' ? 'check-circle' : 'close'} size={15} />
+                    {feedback.text}{feedback.kind === 'ok' && <> · <Link to="/cart" className="mk-ulink">{t('product.viewCart')}</Link></>}
+                  </div>
+                )}
+              </div>
+
+              <div className="mk-row mk-wrap mk-muted" style={{ marginTop: 24, gap: 18, fontSize: 12.5 }}>
+                <span className="mk-row" style={{ gap: 6 }}><Icon name="shield" size={15} />{t('product.warranty')}</span>
+                <span className="mk-row" style={{ gap: 6 }}><Icon name="award" size={15} />{t('product.calIncluded')}</span>
+                <span className="mk-row" style={{ gap: 6 }}><Icon name="truck" size={15} />{t('product.freeShip')}</span>
+              </div>
             </div>
           </div>
         </div>
 
-        <div>
-          <div className="mk-eyebrow">{p.category?.name} · GOST 2405-88</div>
-          <h1 style={{ fontSize: 56, fontWeight: 600, letterSpacing: '-0.03em', margin: '12px 0 8px' }}>{p.model}</h1>
-          <p style={{ fontSize: 17, color: '#3a3d44', marginTop: 0 }}>{p.desc}</p>
+        <div className="mk-container" style={{ paddingBottom: 72 }}>
+          <div className="mk-tabs" role="tablist">
+            {TABS.map(([key, label]) => (
+              <button key={key} role="tab" aria-selected={tab === key} onClick={() => setTab(key)} className={`mk-tab ${tab === key ? 'is-active' : ''}`}>{label}</button>
+            ))}
+          </div>
 
-          <div style={{ marginTop: 32, padding: '20px 24px', background: '#fff', border: '1px solid var(--line)' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
-              <div>
-                <div className="mk-eyebrow">{t('product.price1')}</div>
-                <div style={{ fontSize: 36, fontWeight: 600, marginTop: 4 }}>
-                  {p.priceText} <span style={{ fontSize: 16, color: '#74777e', fontWeight: 400 }}>{p.priceMinor ? 'sum' : ''}</span>
+          {tab === 'specs' && (
+            <div className="mk-specs mk-grid-hair" style={{ marginTop: 28 }}>
+              {specs.map(([k, v]) => (
+                <div key={k} className="mk-between" style={{ padding: '15px 22px' }}>
+                  <span className="mk-muted" style={{ fontSize: 13.5 }}>{k}</span>
+                  <span className="mk-mono" style={{ fontSize: 13, textAlign: 'right' }}>{v}</span>
                 </div>
-              </div>
-              <div style={{ textAlign: 'right' }}>
-                <div className="mk-eyebrow">{t('product.priceVolume')}</div>
-                <div style={{ fontSize: 24, fontWeight: 600, color: '#1240e5', marginTop: 4 }}>−18%</div>
-              </div>
-            </div>
-          </div>
-
-          <div style={{ marginTop: 24, display: 'flex', flexDirection: 'column', gap: 18 }}>
-            <div>
-              <div className="mk-eyebrow" style={{ marginBottom: 10 }}>{t('product.qty')}</div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                <div style={{ display: 'flex', border: '1px solid var(--line)', borderRadius: 999, background: '#fff' }}>
-                  <button onClick={() => setQty((q) => Math.max(1, q - 1))} style={{ width: 36, height: 36, background: 'transparent', border: 'none', cursor: 'pointer', fontSize: 16 }}>−</button>
-                  <input
-                    value={qty}
-                    onChange={(e) => setQty(Math.max(1, parseInt(e.target.value || '1', 10) || 1))}
-                    style={{ width: 56, border: 'none', textAlign: 'center', fontFamily: 'JetBrains Mono', fontSize: 14, background: 'transparent' }}
-                  />
-                  <button onClick={() => setQty((q) => q + 1)} style={{ width: 36, height: 36, background: 'transparent', border: 'none', cursor: 'pointer', fontSize: 16 }}>+</button>
-                </div>
-                <span style={{ fontSize: 12.5, color: '#74777e' }}>{p.stockCount} {t('product.inStockN')}</span>
-              </div>
-            </div>
-          </div>
-
-          <div style={{ display: 'flex', gap: 8, marginTop: 28 }}>
-            <button
-              className="mk-btn mk-btn-primary"
-              onClick={addToOrder}
-              disabled={adding}
-              style={{ flex: 1, justifyContent: 'center', opacity: adding ? 0.7 : 1 }}
-            >
-              {adding ? t('product.adding') : t('product.addToOrder')}
-            </button>
-            <Link to="/contact" style={{ flex: 1 }}><button className="mk-btn mk-btn-light" style={{ width: '100%', justifyContent: 'center' }}>{t('nav.requestQuote')}</button></Link>
-          </div>
-
-          {feedback && (
-            <div style={{
-              marginTop: 12, fontSize: 13,
-              color: feedback.kind === 'ok' ? '#1d7a4f' : '#b8531a',
-            }}>
-              {feedback.text} · <Link to="/cart" style={{ color: 'inherit', textDecoration: 'underline' }}>{t('product.viewCart')}</Link>
+              ))}
             </div>
           )}
 
-          <div style={{ marginTop: 24, display: 'flex', gap: 24, fontSize: 12.5, color: '#74777e' }}>
-            <span>{t('product.warranty')}</span>
-            <span>{t('product.calIncluded')}</span>
-            <span>{t('product.freeShip')}</span>
-          </div>
-        </div>
-      </section>
+          {tab === 'reviews' && <ReviewsTab productId={p.id} user={user} openSignIn={openSignIn} />}
 
-      <section style={{ padding: '0 40px 80px' }}>
-        <div style={{ display: 'flex', borderBottom: '1px solid var(--line)' }}>
-          {[
-            ['specs', t('product.tab.specs')],
-            ['docs', t('product.tab.docs')],
-            ['cal', t('product.tab.cal')],
-            ['reviews', `${t('product.tab.reviews')} · ${p.reviewsCount ?? 0}`],
-          ].map(([key, label]) => (
-            <button
-              key={key}
-              onClick={() => setTab(key)}
-              style={{
-                padding: '16px 0', marginRight: 36, background: 'transparent', border: 'none',
-                borderBottom: tab === key ? '2px solid #14161b' : '2px solid transparent',
-                fontSize: 14, fontWeight: tab === key ? 600 : 500,
-                color: tab === key ? '#14161b' : '#74777e', cursor: 'pointer',
-              }}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-
-        {tab === 'specs' && (
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', marginTop: 32, background: 'var(--line)', border: '1px solid var(--line)', gap: 1 }}>
-            {specs.map(([k, v]) => (
-              <div key={k} style={{ background: '#fff', padding: '16px 24px', display: 'flex', justifyContent: 'space-between' }}>
-                <span style={{ fontSize: 13.5, color: '#74777e' }}>{k}</span>
-                <span className="mk-mono" style={{ fontSize: 13, color: '#14161b' }}>{v}</span>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {tab === 'reviews' && <ReviewsTab productId={p.id} user={user} openSignIn={openSignIn} />}
-
-        {tab === 'docs' && (
-          <div style={{ marginTop: 32, padding: 32, background: '#fff', border: '1px solid var(--line)' }}>
-            <p style={{ fontSize: 15, color: '#3a3d44', lineHeight: 1.6, margin: '0 0 20px', maxWidth: 640 }}>{t('product.docs.intro')}</p>
-            <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 10 }}>
-              <li style={{ fontSize: 14, color: '#14161b', display: 'flex', gap: 10 }}><span style={{ color: '#1240e5' }}>—</span>{t('product.docs.passport')}</li>
-              <li style={{ fontSize: 14, color: '#14161b', display: 'flex', gap: 10 }}><span style={{ color: '#1240e5' }}>—</span>{t('product.docs.calCert')}</li>
-            </ul>
-            <Link to="/documents" style={{ display: 'inline-block', marginTop: 20, fontSize: 13.5, color: '#1240e5' }}>{t('product.docs.viewCerts')}</Link>
-          </div>
-        )}
-
-        {tab === 'cal' && (
-          <div style={{ marginTop: 32, padding: 32, background: '#fff', border: '1px solid var(--line)' }}>
-            <p style={{ fontSize: 15, color: '#3a3d44', lineHeight: 1.6, margin: '0 0 24px', maxWidth: 640 }}>{t('product.cal.intro')}</p>
-            <div style={{ display: 'flex', gap: 40, flexWrap: 'wrap', paddingTop: 20, borderTop: '1px solid var(--line-soft)' }}>
-              <div><div style={{ fontSize: 22, fontWeight: 600 }}>24 mo</div><div style={{ fontSize: 12, color: '#74777e' }}>{t('product.cal.interval')}</div></div>
-              <div><div style={{ fontSize: 22, fontWeight: 600 }}>±0.05%</div><div style={{ fontSize: 12, color: '#74777e' }}>{t('product.cal.uncertainty')}</div></div>
-              <div><div style={{ fontSize: 22, fontWeight: 600 }}>48h</div><div style={{ fontSize: 12, color: '#74777e' }}>{t('product.cal.turnaround')}</div></div>
+          {tab === 'docs' && (
+            <div className="mk-card" style={{ marginTop: 28, padding: 32 }}>
+              <p className="mk-muted" style={{ fontSize: 15, lineHeight: 1.6, margin: '0 0 20px', maxWidth: 640 }}>{t('product.docs.intro')}</p>
+              <ul className="mk-stack" style={{ margin: 0, padding: 0, listStyle: 'none', gap: 10 }}>
+                <li className="mk-row" style={{ fontSize: 14, gap: 10 }}><Icon name="file" size={16} style={{ color: 'var(--accent-ink)' }} />{t('product.docs.passport')}</li>
+                <li className="mk-row" style={{ fontSize: 14, gap: 10 }}><Icon name="file" size={16} style={{ color: 'var(--accent-ink)' }} />{t('product.docs.calCert')}</li>
+              </ul>
+              <Link to="/documents" className="mk-ulink mk-row" style={{ display: 'inline-flex', marginTop: 20, fontSize: 13.5, gap: 6 }}>{t('product.docs.viewCerts')} <Icon name="arrow-right" size={15} /></Link>
             </div>
-            <Link to="/service" style={{ display: 'inline-block', marginTop: 24, fontSize: 13.5, color: '#1240e5' }}>{t('product.cal.book')}</Link>
+          )}
+
+          {tab === 'cal' && (
+            <div className="mk-card" style={{ marginTop: 28, padding: 32 }}>
+              <p className="mk-muted" style={{ fontSize: 15, lineHeight: 1.6, margin: '0 0 24px', maxWidth: 640 }}>{t('product.cal.intro')}</p>
+              <div className="mk-row mk-wrap" style={{ gap: 40, paddingTop: 20, borderTop: '1px solid var(--line-soft)' }}>
+                {[['24 mo', t('product.cal.interval')], ['±0.05%', t('product.cal.uncertainty')], ['48h', t('product.cal.turnaround')]].map(([n, l]) => (
+                  <div key={l}><div className="mk-num" style={{ fontSize: 22, fontWeight: 600 }}>{n}</div><div className="mk-stat-l">{l}</div></div>
+                ))}
+              </div>
+              <Link to="/service" className="mk-ulink mk-row" style={{ display: 'inline-flex', marginTop: 24, fontSize: 13.5, gap: 6 }}>{t('product.cal.book')} <Icon name="arrow-right" size={15} /></Link>
+            </div>
+          )}
+        </div>
+
+        {related.length > 0 && (
+          <div className="mk-container" style={{ paddingBottom: 80 }}>
+            <SectionHead eyebrow={t('product.related')} title={`${t('product.relatedWith')} ${p.model}`} />
+            <div className="mk-grid mk-cards-4">
+              {related.map((rp, i) => <ProductCard key={rp.id} p={rp} index={i} />)}
+            </div>
           </div>
         )}
-      </section>
-
-      <section style={{ padding: '0 40px 80px' }}>
-        <div className="mk-eyebrow">{t('product.related')}</div>
-        <h3 style={{ fontSize: 32, fontWeight: 600, letterSpacing: '-0.02em', margin: '12px 0 24px' }}>{t('product.relatedWith')} {p.model}</h3>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
-          {related.map((rp) => <ProductCard key={rp.id} p={rp} />)}
-        </div>
-      </section>
-
+      </main>
       <StoreFooter />
     </div>
   );
@@ -290,27 +272,23 @@ function ReviewsTab({ productId, user, openSignIn }) {
   }
 
   return (
-    <div style={{ marginTop: 32, display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 40 }}>
+    <div className="mk-reviews" style={{ marginTop: 28 }}>
       <div>
-        <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+        <div className="mk-between" style={{ marginBottom: 16, alignItems: 'baseline' }}>
           <h3 style={{ margin: 0, fontSize: 22, fontWeight: 600 }}>{data.total} {t('product.tab.reviews').toLowerCase()}</h3>
-          {data.avgRating != null && (
-            <div className="mk-mono" style={{ color: '#74777e' }}>{t('product.reviews.avg')} · {data.avgRating.toFixed(1)} / 5</div>
-          )}
+          {data.avgRating != null && <div className="mk-mono mk-muted">{t('product.reviews.avg')} · {data.avgRating.toFixed(1)} / 5</div>}
         </div>
         {data.items.length === 0 && (
-          <div style={{ padding: 24, background: '#fff', border: '1px solid var(--line)', color: '#74777e', fontSize: 14 }}>
-            {t('product.reviews.empty')}
-          </div>
+          <div className="mk-card mk-muted" style={{ padding: 24, fontSize: 14 }}>{t('product.reviews.empty')}</div>
         )}
         {data.items.map((r) => (
-          <div key={r.id} style={{ padding: 20, background: '#fff', border: '1px solid var(--line)', marginBottom: 12 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <div key={r.id} className="mk-card" style={{ padding: 20, marginBottom: 12 }}>
+            <div className="mk-between">
               <strong style={{ fontSize: 14 }}>{r.author}</strong>
-              <span className="mk-mono" style={{ fontSize: 12, color: '#1240e5' }}>{'★'.repeat(r.rating)}{'☆'.repeat(5 - r.rating)}</span>
+              <span aria-label={`${r.rating} / 5`} style={{ fontSize: 12, color: 'var(--accent)', letterSpacing: 1 }}>{'★'.repeat(r.rating)}<span style={{ color: 'var(--ink-4)' }}>{'★'.repeat(5 - r.rating)}</span></span>
             </div>
-            <p style={{ marginTop: 8, fontSize: 14, color: '#3a3d44', lineHeight: 1.5 }}>{r.body}</p>
-            <div className="mk-mono" style={{ fontSize: 11, color: '#a7a9af', marginTop: 6 }}>{new Date(r.createdAt).toLocaleDateString()}</div>
+            <p className="mk-muted" style={{ marginTop: 8, fontSize: 14, lineHeight: 1.5 }}>{r.body}</p>
+            <div className="mk-mono" style={{ fontSize: 11, color: 'var(--ink-4)', marginTop: 6 }}>{new Date(r.createdAt).toLocaleDateString()}</div>
           </div>
         ))}
       </div>
@@ -318,43 +296,26 @@ function ReviewsTab({ productId, user, openSignIn }) {
       <div>
         <h3 style={{ margin: '0 0 16px', fontSize: 18, fontWeight: 600 }}>{t('product.reviews.write')}</h3>
         {!user && (
-          <div style={{ marginBottom: 16, fontSize: 13, color: '#74777e' }}>
-            <a onClick={openSignIn} style={{ color: '#1240e5', cursor: 'pointer' }}>{t('nav.signIn')}</a> — {t('product.reviews.signin')}
+          <div className="mk-muted" style={{ marginBottom: 16, fontSize: 13 }}>
+            <button onClick={openSignIn} className="mk-ulink" style={{ background: 'none', border: 0, cursor: 'pointer', padding: 0, font: 'inherit' }}>{t('nav.signIn')}</button> — {t('product.reviews.signin')}
           </div>
         )}
-        <form onSubmit={submit} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <div>
-            <div className="mk-eyebrow" style={{ marginBottom: 6 }}>{t('product.reviews.rating')}</div>
-            <div style={{ display: 'flex', gap: 6 }}>
+        <form onSubmit={submit} className="mk-stack" style={{ gap: 14 }}>
+          <div className="mk-field">
+            <span className="mk-label">{t('product.reviews.rating')}</span>
+            <div className="mk-row" style={{ gap: 6 }}>
               {[1, 2, 3, 4, 5].map((n) => (
-                <button type="button" key={n} onClick={() => setRating(n)} style={{
-                  width: 32, height: 32, border: '1px solid var(--line)',
-                  background: n <= rating ? '#1240e5' : '#fff',
-                  color: n <= rating ? '#fff' : '#74777e',
-                  borderRadius: 4, cursor: 'pointer', fontSize: 16,
-                }}>★</button>
+                <button type="button" key={n} onClick={() => setRating(n)} className={`mk-starbtn ${n <= rating ? 'is-on' : ''}`} aria-label={`${n} stars`} aria-pressed={n === rating}>★</button>
               ))}
             </div>
           </div>
-          <div>
-            <div className="mk-eyebrow" style={{ marginBottom: 6 }}>{t('product.reviews.body')}</div>
-            <textarea
-              value={body}
-              onChange={(e) => setBody(e.target.value)}
-              placeholder={t('product.reviews.placeholder')}
-              required
-              disabled={!user}
-              style={{ width: '100%', minHeight: 110, border: '1px solid var(--line-2)', padding: 12, fontSize: 14, background: 'transparent', resize: 'vertical' }}
-            />
-          </div>
-          {err && <div style={{ color: '#b8531a', fontSize: 13 }}>{err}</div>}
-          <button
-            type="submit"
-            className="mk-btn mk-btn-primary"
-            disabled={submitting || !user}
-            style={{ alignSelf: 'flex-start', opacity: submitting || !user ? 0.7 : 1 }}
-          >
-            {submitting ? '…' : t('product.reviews.submit')}
+          <label className="mk-field">
+            <span className="mk-label">{t('product.reviews.body')}</span>
+            <textarea className="mk-textarea" value={body} onChange={(e) => setBody(e.target.value)} placeholder={t('product.reviews.placeholder')} required disabled={!user} />
+          </label>
+          {err && <div className="mk-error" role="alert">{err}</div>}
+          <button type="submit" className="mk-btn mk-btn-primary" disabled={submitting || !user} style={{ alignSelf: 'flex-start' }}>
+            {submitting ? <span className="mk-spinner" /> : t('product.reviews.submit')}
           </button>
         </form>
       </div>
