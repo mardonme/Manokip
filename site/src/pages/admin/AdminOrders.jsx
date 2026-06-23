@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { api } from '../../lib/api.js';
 import { useLang } from '../../lib/LangContext.jsx';
-import { Select, StatusPill, tableStyles } from './ui.jsx';
+import { Select, StatusPill, PageHead, AdminLoading, AdminEmpty } from './ui.jsx';
 
 const STATUSES = ['PENDING', 'CONFIRMED', 'FULFILLED', 'CANCELLED'];
 const TONE = { PENDING: 'amber', CONFIRMED: 'blue', FULFILLED: 'green', CANCELLED: 'default' };
@@ -31,49 +31,43 @@ export default function AdminOrders() {
 
   return (
     <div>
-      <h1 style={{ fontSize: 32, fontWeight: 600, letterSpacing: '-0.02em', margin: '0 0 20px' }}>{t('admin.nav.orders')}</h1>
+      <PageHead title={t('admin.nav.orders')} />
 
-      {loading ? (
-        <div style={{ padding: 40, color: '#74777e' }}>{t('admin.loading')}</div>
-      ) : items.length === 0 ? (
-        <div style={{ padding: 40, color: '#74777e' }}>{t('admin.empty')}</div>
-      ) : (
-        <table style={tableStyles.table}>
+      {loading ? <AdminLoading /> : items.length === 0 ? <AdminEmpty icon="cart" text={t('admin.empty')} /> : (
+        <table className="mk-table">
           <thead>
             <tr>
-              <th style={tableStyles.th}>{t('admin.order.id')}</th>
-              <th style={tableStyles.th}>{t('admin.order.customer')}</th>
-              <th style={tableStyles.th}>{t('admin.order.items')}</th>
-              <th style={tableStyles.th}>{t('admin.order.date')}</th>
-              <th style={tableStyles.th}>{t('admin.order.status')}</th>
+              <th>{t('admin.order.id')}</th>
+              <th>{t('admin.order.customer')}</th>
+              <th>{t('admin.order.items')}</th>
+              <th>{t('admin.order.date')}</th>
+              <th>{t('admin.order.status')}</th>
             </tr>
           </thead>
           <tbody>
             {items.map((o) => (
               <tr key={o.id}>
-                <td style={{ ...tableStyles.td, fontFamily: 'JetBrains Mono', fontSize: 12.5 }}>#{o.id}</td>
-                <td style={tableStyles.td}>
+                <td className="mk-mono" style={{ fontSize: 12.5 }}>#{o.id}</td>
+                <td>
                   <div style={{ fontWeight: 600 }}>{o.user?.name || o.user?.email || '—'}</div>
-                  {o.user?.company && <div style={{ color: '#74777e', fontSize: 12.5 }}>{o.user.company}</div>}
-                  {o.user?.email && <div style={{ color: '#1240e5', fontSize: 12.5 }}>{o.user.email}</div>}
+                  {o.user?.company && <div className="mk-muted" style={{ fontSize: 12.5 }}>{o.user.company}</div>}
+                  {o.user?.email && <div style={{ color: 'var(--accent-ink)', fontSize: 12.5 }}>{o.user.email}</div>}
                 </td>
-                <td style={tableStyles.td}>
+                <td>
                   {o.items.map((it) => (
-                    <div key={it.id} style={{ fontSize: 13, color: '#3a3d44' }}>
-                      <span className="mk-mono" style={{ color: '#74777e' }}>{it.qty}×</span> {it.productModel}
-                      <span style={{ color: '#a7a9af' }}> · {it.priceText}</span>
+                    <div key={it.id} style={{ fontSize: 13, color: 'var(--ink-2)' }}>
+                      <span className="mk-mono mk-muted">{it.qty}×</span> {it.productModel}
+                      <span style={{ color: 'var(--ink-4)' }}> · {it.priceText}</span>
                     </div>
                   ))}
                   {o.notes && (
-                    <div style={{ marginTop: 6, padding: 8, background: '#fafaf7', fontSize: 12, color: '#74777e', borderRadius: 4 }}>
+                    <div className="mk-muted" style={{ marginTop: 6, padding: 8, background: 'var(--surface-sunken)', fontSize: 12, borderRadius: 'var(--r-sm)' }}>
                       {t('admin.order.notes')}: {o.notes}
                     </div>
                   )}
                 </td>
-                <td style={{ ...tableStyles.td, fontFamily: 'JetBrains Mono', fontSize: 12, color: '#74777e', whiteSpace: 'nowrap' }}>
-                  {new Date(o.createdAt).toLocaleDateString()}
-                </td>
-                <td style={{ ...tableStyles.td, whiteSpace: 'nowrap' }}>
+                <td className="mk-mono mk-muted" style={{ fontSize: 12, whiteSpace: 'nowrap' }}>{new Date(o.createdAt).toLocaleDateString()}</td>
+                <td style={{ whiteSpace: 'nowrap' }}>
                   <div style={{ marginBottom: 6 }}><StatusPill label={t(`admin.order.status.${o.status}`)} tone={TONE[o.status]} /></div>
                   <Select value={o.status} onChange={(v) => setStatus(o, v)} options={statusOptions} />
                 </td>

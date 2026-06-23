@@ -3,8 +3,9 @@ import { api } from '../../lib/api.js';
 import { useLang } from '../../lib/LangContext.jsx';
 import {
   AdminModal, Labeled, TextInput, NumberInput,
-  PrimaryBtn, LightBtn, AdminError, tableStyles,
+  PrimaryBtn, LightBtn, AdminError, PageHead, RowActions, AdminLoading, AdminEmpty,
 } from './ui.jsx';
+import Icon from '../../components/ui/Icon.jsx';
 
 const EMPTY = { slug: '', nameEn: '', nameRu: '', nameUz: '', count: 0 };
 
@@ -58,38 +59,30 @@ export default function AdminCategories() {
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-        <h1 style={{ fontSize: 32, fontWeight: 600, letterSpacing: '-0.02em', margin: 0 }}>{t('admin.nav.categories')}</h1>
-        <PrimaryBtn onClick={openNew}>+ {t('admin.cat.new')}</PrimaryBtn>
-      </div>
+      <PageHead title={t('admin.nav.categories')} action={
+        <PrimaryBtn onClick={openNew}><Icon name="plus" size={15} /> {t('admin.cat.new')}</PrimaryBtn>
+      } />
 
-      {loading ? (
-        <div style={{ padding: 40, color: '#74777e' }}>{t('admin.loading')}</div>
-      ) : categories.length === 0 ? (
-        <div style={{ padding: 40, color: '#74777e' }}>{t('admin.empty')}</div>
-      ) : (
-        <table style={tableStyles.table}>
+      {loading ? <AdminLoading rows={4} /> : categories.length === 0 ? <AdminEmpty icon="sliders" text={t('admin.empty')} /> : (
+        <table className="mk-table">
           <thead>
             <tr>
-              <th style={tableStyles.th}>{t('admin.cat.nameEn')}</th>
-              <th style={tableStyles.th}>Slug</th>
-              <th style={tableStyles.th}>{t('admin.cat.count')}</th>
-              <th style={{ ...tableStyles.th, textAlign: 'right' }} />
+              <th>{t('admin.cat.nameEn')}</th>
+              <th>Slug</th>
+              <th>{t('admin.cat.count')}</th>
+              <th aria-label="Actions" />
             </tr>
           </thead>
           <tbody>
             {categories.map((c) => (
               <tr key={c.id}>
-                <td style={tableStyles.td}>
+                <td>
                   <div style={{ fontWeight: 600 }}>{c.nameEn}</div>
-                  <div style={{ color: '#74777e', fontSize: 12.5 }}>{c.nameRu} · {c.nameUz}</div>
+                  <div className="mk-muted" style={{ fontSize: 12.5 }}>{c.nameRu} · {c.nameUz}</div>
                 </td>
-                <td style={{ ...tableStyles.td, fontFamily: 'JetBrains Mono', fontSize: 12 }}>{c.slug}</td>
-                <td style={{ ...tableStyles.td, fontFamily: 'JetBrains Mono', fontSize: 12.5 }}>{c.count}</td>
-                <td style={{ ...tableStyles.td, textAlign: 'right', whiteSpace: 'nowrap' }}>
-                  <button onClick={() => openEdit(c)} style={linkBtn}>{t('admin.edit')}</button>
-                  <button onClick={() => remove(c)} style={{ ...linkBtn, color: '#b8531a' }}>{t('admin.delete')}</button>
-                </td>
+                <td className="mk-mono" style={{ fontSize: 12 }}>{c.slug}</td>
+                <td className="mk-mono" style={{ fontSize: 12.5 }}>{c.count}</td>
+                <RowActions onEdit={() => openEdit(c)} onDelete={() => remove(c)} />
               </tr>
             ))}
           </tbody>
@@ -118,8 +111,3 @@ export default function AdminCategories() {
     </div>
   );
 }
-
-const linkBtn = {
-  background: 'transparent', border: 'none', cursor: 'pointer',
-  fontSize: 13, color: '#1240e5', marginLeft: 14, padding: 0,
-};

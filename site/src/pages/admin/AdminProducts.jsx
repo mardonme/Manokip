@@ -3,8 +3,9 @@ import { api, mediaUrl } from '../../lib/api.js';
 import { useLang } from '../../lib/LangContext.jsx';
 import {
   AdminModal, Labeled, TextInput, TextArea, NumberInput, Select, ImageUpload,
-  PrimaryBtn, LightBtn, AdminError, tableStyles,
+  PrimaryBtn, LightBtn, AdminError, PageHead, RowActions, AdminLoading, AdminEmpty,
 } from './ui.jsx';
+import Icon from '../../components/ui/Icon.jsx';
 
 // Fetch every product across pages (storefront caps limit at 60).
 async function fetchAllProducts() {
@@ -29,7 +30,7 @@ export default function AdminProducts() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [editing, setEditing] = useState(null); // null | {…product} | EMPTY (with _isNew)
+  const [editing, setEditing] = useState(null);
   const [saving, setSaving] = useState(false);
   const [err, setErr] = useState(null);
 
@@ -45,8 +46,7 @@ export default function AdminProducts() {
   useEffect(() => { load(); }, [load]);
 
   function openNew() {
-    const defaultCat = categories[0]?.id ?? null;
-    setEditing({ ...EMPTY, categoryId: defaultCat, _isNew: true });
+    setEditing({ ...EMPTY, categoryId: categories[0]?.id ?? null, _isNew: true });
     setErr(null);
   }
   function openEdit(p) {
@@ -61,7 +61,6 @@ export default function AdminProducts() {
     });
     setErr(null);
   }
-
   function set(k, v) { setEditing((e) => ({ ...e, [k]: v })); }
 
   async function save() {
@@ -98,51 +97,41 @@ export default function AdminProducts() {
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-        <h1 style={{ fontSize: 32, fontWeight: 600, letterSpacing: '-0.02em', margin: 0 }}>{t('admin.nav.products')}</h1>
-        <PrimaryBtn onClick={openNew} disabled={categories.length === 0}>+ {t('admin.prod.new')}</PrimaryBtn>
-      </div>
+      <PageHead title={t('admin.nav.products')} action={
+        <PrimaryBtn onClick={openNew} disabled={categories.length === 0}><Icon name="plus" size={15} /> {t('admin.prod.new')}</PrimaryBtn>
+      } />
 
-      {loading ? (
-        <div style={{ padding: 40, color: '#74777e' }}>{t('admin.loading')}</div>
-      ) : products.length === 0 ? (
-        <div style={{ padding: 40, color: '#74777e' }}>{t('admin.empty')}</div>
-      ) : (
-        <table style={tableStyles.table}>
+      {loading ? <AdminLoading /> : products.length === 0 ? <AdminEmpty icon="layers" text={t('admin.empty')} /> : (
+        <table className="mk-table">
           <thead>
             <tr>
-              <th style={tableStyles.th}>{t('admin.prod.colModel')}</th>
-              <th style={tableStyles.th}>SKU</th>
-              <th style={tableStyles.th}>{t('admin.prod.colCategory')}</th>
-              <th style={tableStyles.th}>{t('admin.prod.colPrice')}</th>
-              <th style={tableStyles.th}>{t('admin.prod.colStock')}</th>
-              <th style={{ ...tableStyles.th, textAlign: 'right' }} />
+              <th>{t('admin.prod.colModel')}</th>
+              <th>SKU</th>
+              <th>{t('admin.prod.colCategory')}</th>
+              <th>{t('admin.prod.colPrice')}</th>
+              <th>{t('admin.prod.colStock')}</th>
+              <th aria-label="Actions" />
             </tr>
           </thead>
           <tbody>
             {products.map((p) => (
               <tr key={p.id}>
-                <td style={tableStyles.td}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                    {p.imageUrl ? (
-                      <img src={mediaUrl(p.imageUrl)} alt="" style={{ width: 40, height: 40, objectFit: 'cover', border: '1px solid var(--line)', borderRadius: 4, flexShrink: 0 }} />
-                    ) : (
-                      <div style={{ width: 40, height: 40, border: '1px solid var(--line)', borderRadius: 4, background: '#fafaf7', flexShrink: 0 }} />
-                    )}
+                <td>
+                  <div className="mk-row" style={{ gap: 12 }}>
+                    {p.imageUrl
+                      ? <img src={mediaUrl(p.imageUrl)} alt="" style={{ width: 40, height: 40, objectFit: 'cover', border: '1px solid var(--line)', borderRadius: 'var(--r-sm)', flexShrink: 0 }} />
+                      : <div style={{ width: 40, height: 40, border: '1px solid var(--line)', borderRadius: 'var(--r-sm)', background: 'var(--surface-sunken)', flexShrink: 0 }} />}
                     <div>
                       <div style={{ fontWeight: 600 }}>{p.model}</div>
-                      <div style={{ color: '#74777e', fontSize: 12.5 }}>{p.desc}</div>
+                      <div className="mk-muted" style={{ fontSize: 12.5 }}>{p.desc}</div>
                     </div>
                   </div>
                 </td>
-                <td style={{ ...tableStyles.td, fontFamily: 'JetBrains Mono', fontSize: 12 }}>{p.sku}</td>
-                <td style={tableStyles.td}>{catName(p.categoryId ?? p.category?.id)}</td>
-                <td style={{ ...tableStyles.td, fontFamily: 'JetBrains Mono', fontSize: 12.5 }}>{p.priceText}</td>
-                <td style={{ ...tableStyles.td, fontFamily: 'JetBrains Mono', fontSize: 12.5 }}>{p.inStock ? p.stockCount : '—'}</td>
-                <td style={{ ...tableStyles.td, textAlign: 'right', whiteSpace: 'nowrap' }}>
-                  <button onClick={() => openEdit(p)} style={linkBtn}>{t('admin.edit')}</button>
-                  <button onClick={() => remove(p)} style={{ ...linkBtn, color: '#b8531a' }}>{t('admin.delete')}</button>
-                </td>
+                <td className="mk-mono" style={{ fontSize: 12 }}>{p.sku}</td>
+                <td>{catName(p.categoryId ?? p.category?.id)}</td>
+                <td className="mk-mono" style={{ fontSize: 12.5 }}>{p.priceText}</td>
+                <td className="mk-mono" style={{ fontSize: 12.5 }}>{p.inStock ? p.stockCount : '—'}</td>
+                <RowActions onEdit={() => openEdit(p)} onDelete={() => remove(p)} />
               </tr>
             ))}
           </tbody>
@@ -179,7 +168,7 @@ export default function AdminProducts() {
             <Labeled label={t('admin.prod.priceMinor')}><NumberInput value={editing.priceMinor} onChange={(v) => set('priceMinor', v)} /></Labeled>
             <Labeled label={t('admin.prod.stockCount')}><NumberInput value={editing.stockCount} onChange={(v) => set('stockCount', v)} /></Labeled>
             <Labeled label={t('admin.prod.inStock')}>
-              <label style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '9px 0', fontSize: 14 }}>
+              <label className="mk-check">
                 <input type="checkbox" checked={!!editing.inStock} onChange={(e) => set('inStock', e.target.checked)} />
                 {t('admin.prod.inStock')}
               </label>
@@ -191,8 +180,3 @@ export default function AdminProducts() {
     </div>
   );
 }
-
-const linkBtn = {
-  background: 'transparent', border: 'none', cursor: 'pointer',
-  fontSize: 13, color: '#1240e5', marginLeft: 14, padding: 0,
-};

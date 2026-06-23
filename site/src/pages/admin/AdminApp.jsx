@@ -3,6 +3,7 @@ import { Routes, Route, NavLink, Link, Navigate } from 'react-router-dom';
 import { useAuth } from '../../lib/AuthContext.jsx';
 import { useLang } from '../../lib/LangContext.jsx';
 import { Logo } from '../../components/Chrome.jsx';
+import Icon from '../../components/ui/Icon.jsx';
 import AdminProducts from './AdminProducts.jsx';
 import AdminCategories from './AdminCategories.jsx';
 import AdminQuotes from './AdminQuotes.jsx';
@@ -10,8 +11,8 @@ import AdminOrders from './AdminOrders.jsx';
 
 function Centered({ children }) {
   return (
-    <div className="mk" style={{ background: 'var(--bg)', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
-      <div style={{ background: '#fff', border: '1px solid var(--line)', padding: 40, maxWidth: 440, textAlign: 'center' }}>
+    <div className="mk" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
+      <div className="mk-card mk-center" style={{ padding: 40, maxWidth: 440, borderRadius: 'var(--r-lg)' }}>
         <Link to="/" style={{ display: 'inline-block', marginBottom: 24 }}><Logo size={13} /></Link>
         {children}
       </div>
@@ -23,15 +24,13 @@ export default function AdminApp() {
   const { user, loading, openSignIn, logout } = useAuth();
   const { lang, setLang, t } = useLang();
 
-  if (loading) {
-    return <Centered><p style={{ color: '#74777e' }}>{t('admin.gate.loading')}</p></Centered>;
-  }
+  if (loading) return <Centered><p className="mk-muted">{t('admin.gate.loading')}</p></Centered>;
 
   if (!user) {
     return (
       <Centered>
         <h2 style={{ fontSize: 24, fontWeight: 600, letterSpacing: '-0.02em', margin: '0 0 10px' }}>{t('admin.gate.signInTitle')}</h2>
-        <p style={{ color: '#3a3d44', fontSize: 14, lineHeight: 1.6, margin: '0 0 24px' }}>{t('admin.gate.signInLead')}</p>
+        <p className="mk-muted" style={{ fontSize: 14, lineHeight: 1.6, margin: '0 0 24px' }}>{t('admin.gate.signInLead')}</p>
         <button className="mk-btn mk-btn-primary" onClick={openSignIn}>{t('admin.gate.signInBtn')}</button>
       </Centered>
     );
@@ -41,49 +40,50 @@ export default function AdminApp() {
     return (
       <Centered>
         <h2 style={{ fontSize: 24, fontWeight: 600, letterSpacing: '-0.02em', margin: '0 0 10px' }}>{t('admin.gate.deniedTitle')}</h2>
-        <p style={{ color: '#3a3d44', fontSize: 14, lineHeight: 1.6, margin: '0 0 24px' }}>{t('admin.gate.deniedLead')}</p>
+        <p className="mk-muted" style={{ fontSize: 14, lineHeight: 1.6, margin: '0 0 24px' }}>{t('admin.gate.deniedLead')}</p>
         <Link to="/"><button className="mk-btn mk-btn-light">{t('admin.nav.storefront')}</button></Link>
       </Centered>
     );
   }
 
-  const navItem = ({ isActive }) => ({
-    display: 'block', padding: '10px 14px', borderRadius: 6, fontSize: 14,
-    fontWeight: isActive ? 600 : 500, marginBottom: 2,
-    color: isActive ? '#fff' : '#3a3d44',
-    background: isActive ? '#14161b' : 'transparent', textDecoration: 'none',
-  });
+  const NAV = [
+    { to: '/admin', end: true, icon: 'layers', label: t('admin.nav.products') },
+    { to: '/admin/categories', icon: 'sliders', label: t('admin.nav.categories') },
+    { to: '/admin/quotes', icon: 'message', label: t('admin.nav.quotes') },
+    { to: '/admin/orders', icon: 'cart', label: t('admin.nav.orders') },
+  ];
 
   return (
-    <div className="mk" style={{ background: 'var(--bg)', minHeight: '100vh', display: 'grid', gridTemplateColumns: '240px 1fr' }}>
-      <aside style={{ borderRight: '1px solid var(--line)', background: '#fff', padding: '24px 18px', display: 'flex', flexDirection: 'column', position: 'sticky', top: 0, height: '100vh' }}>
-        <Link to="/admin" style={{ marginBottom: 8 }}><Logo size={12} /></Link>
-        <div className="mk-eyebrow" style={{ margin: '6px 0 20px' }}>{t('admin.title')}</div>
-        <nav style={{ flex: 1 }}>
-          <NavLink end to="/admin" style={navItem}>{t('admin.nav.products')}</NavLink>
-          <NavLink to="/admin/categories" style={navItem}>{t('admin.nav.categories')}</NavLink>
-          <NavLink to="/admin/quotes" style={navItem}>{t('admin.nav.quotes')}</NavLink>
-          <NavLink to="/admin/orders" style={navItem}>{t('admin.nav.orders')}</NavLink>
+    <div className="mk mk-adm">
+      <aside className="mk-adm-aside">
+        <Link to="/admin"><Logo size={12} /></Link>
+        <div className="mk-eyebrow" style={{ margin: '8px 0 4px' }}>{t('admin.title')}</div>
+        <nav className="mk-adm-nav">
+          {NAV.map((it) => (
+            <NavLink key={it.to} to={it.to} end={it.end} className={({ isActive }) => `mk-adm-navlink ${isActive ? 'is-active' : ''}`}>
+              <Icon name={it.icon} size={17} /> {it.label}
+            </NavLink>
+          ))}
         </nav>
-        <div style={{ borderTop: '1px solid var(--line)', paddingTop: 16, display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <div style={{ display: 'flex', gap: 6 }}>
+        <div className="mk-adm-foot">
+          <div className="mk-row" style={{ gap: 6 }}>
             {['ru', 'uz', 'en'].map((code) => (
-              <button key={code} onClick={() => setLang(code)} style={{
-                background: lang === code ? '#14161b' : 'transparent',
-                color: lang === code ? '#fff' : '#74777e',
-                border: '1px solid ' + (lang === code ? '#14161b' : 'var(--line-2)'),
-                borderRadius: 4, padding: '3px 9px', cursor: 'pointer',
-                fontFamily: 'JetBrains Mono', fontSize: 11, textTransform: 'uppercase',
-              }}>{code}</button>
+              <button key={code} onClick={() => setLang(code)} className="mk-mono"
+                style={{
+                  background: lang === code ? 'var(--ink)' : 'transparent',
+                  color: lang === code ? '#fff' : 'var(--ink-3)',
+                  border: `1px solid ${lang === code ? 'var(--ink)' : 'var(--line-2)'}`,
+                  borderRadius: 4, padding: '3px 9px', cursor: 'pointer', fontSize: 11, textTransform: 'uppercase',
+                }}>{code}</button>
             ))}
           </div>
-          <div style={{ fontSize: 12.5, color: '#74777e' }}>{user.name || user.email}</div>
-          <Link to="/" style={{ fontSize: 13, color: '#1240e5' }}>{t('admin.nav.storefront')}</Link>
-          <a onClick={logout} style={{ fontSize: 13, color: '#b8531a', cursor: 'pointer' }}>{t('admin.signOut')}</a>
+          <div className="mk-row" style={{ gap: 7, fontSize: 12.5, color: 'var(--ink-3)' }}><Icon name="user" size={14} /> {user.name || user.email}</div>
+          <Link to="/" className="mk-row" style={{ fontSize: 13, color: 'var(--accent-ink)', gap: 6 }}><Icon name="arrow-up-right" size={14} /> {t('admin.nav.storefront')}</Link>
+          <button onClick={logout} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 13, color: 'var(--danger)', padding: 0, textAlign: 'left' }}>{t('admin.signOut')}</button>
         </div>
       </aside>
 
-      <main style={{ padding: '36px 40px', overflowX: 'auto' }}>
+      <main className="mk-adm-main">
         <Routes>
           <Route index element={<AdminProducts />} />
           <Route path="categories" element={<AdminCategories />} />
