@@ -1,8 +1,9 @@
 name: Deploy frontend → luva.uz
 
-# Frontend deploys automatically on every push to main that touches site/**.
-# GitHub's runner builds the Vite app, then rsyncs the built dist/ to the VPS
-# over SSH. The server needs no Node/build tooling — nginx serves the files.
+# Runs on the SELF-HOSTED runner installed on the VPS itself, so the deploy
+# is fully local — no SSH, no rsync-over-ssh, no DEPLOY_* secrets. The runner
+# builds the Vite app and copies the built dist/ straight into the nginx web
+# root. Frontend deploys automatically on every push to main touching site/**.
 
 on:
   push:
@@ -19,7 +20,8 @@ concurrency:
 
 jobs:
   build-deploy:
-    runs-on: ubuntu-latest
+    # The `manokip` label pins this to THIS repo's runner on the shared VPS.
+    runs-on: [self-hosted, manokip]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -43,24 +45,9 @@ jobs:
           VITE_API_URL: ''
         run: npm run build
 
-      - name: Configure SSH
-        env:
-          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
-          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
-        run: |
-          install -m 700 -d ~/.ssh
-          printf '%s\n' "$DEPLOY_SSH_KEY" > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts 2>/dev/null
-
-      - name: Deploy dist via rsync
-        env:
-          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
-          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
-        run: |
-          rsync -az --delete \
-            -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=yes" \
-            site/dist/ "${DEPLOY_USER}@${DEPLOY_HOST}:/opt/manokip/site/dist/"
+      - name: Publish to nginx web root
+        # Local copy on the VPS — no network. --delete clears stale old assets.
+        run: rsync -a --delete site/dist/ /opt/manokip/site/dist/
 
       - name: Summary
         run: echo "✅ Frontend deployed to https://luva.uz"

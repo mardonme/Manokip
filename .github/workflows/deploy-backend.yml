@@ -4,9 +4,10 @@ name: Deploy backend (manual)
 # (manual)" → "Run workflow". Rebuilding the API touches the live Postgres
 # (prisma db push runs on container start), so this is never automatic.
 #
-# It syncs server/ to the VPS, then rebuilds & restarts the `api` container.
-# Production secrets (/opt/manokip/.env), uploads, and the DB volume are left
-# untouched.
+# Runs on the SELF-HOSTED runner on the VPS, so every step is local — no SSH,
+# no DEPLOY_* secrets. It syncs server/ into /opt/manokip/server, then rebuilds
+# & restarts the `api` container. Production secrets (/opt/manokip/.env),
+# uploads, and the DB volume are left untouched.
 
 on:
   workflow_dispatch:
@@ -22,50 +23,28 @@ concurrency:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    # The `manokip` label pins this to THIS repo's runner on the shared VPS.
+    runs-on: [self-hosted, manokip]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Configure SSH
-        env:
-          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
-          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
-        run: |
-          install -m 700 -d ~/.ssh
-          printf '%s\n' "$DEPLOY_SSH_KEY" > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts 2>/dev/null
-
       - name: Sync server/ source
-        env:
-          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
-          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
-        # --delete keeps the remote in sync, but excluded paths are protected
-        # from deletion: prod .env, uploads, node_modules, dev DB, logs.
+        # Local rsync on the VPS. --delete keeps the deploy dir in sync, but the
+        # excluded paths are protected from deletion: prod .env, uploads,
+        # node_modules, dev DB, logs.
         run: |
-          rsync -az --delete \
+          rsync -a --delete \
             --exclude node_modules --exclude .env --exclude uploads \
             --exclude 'prisma/dev.db*' --exclude '*.log' \
-            -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=yes" \
-            server/ "${DEPLOY_USER}@${DEPLOY_HOST}:/opt/manokip/server/"
+            server/ /opt/manokip/server/
 
       - name: Rebuild & restart API
-        env:
-          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
-          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
-        run: |
-          ssh -i ~/.ssh/deploy_key "${DEPLOY_USER}@${DEPLOY_HOST}" \
-            "cd /opt/manokip && docker compose up -d --build api"
+        run: cd /opt/manokip && docker compose up -d --build api
 
       - name: Reseed database (optional)
         if: ${{ inputs.reseed }}
-        env:
-          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
-          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
-        run: |
-          ssh -i ~/.ssh/deploy_key "${DEPLOY_USER}@${DEPLOY_HOST}" \
-            "docker exec -w /app/server manokip-api npm run seed"
+        run: docker exec -w /app/server manokip-api npm run seed
 
       - name: Summary
         run: echo "✅ Backend (api) rebuilt and restarted on the VPS"
