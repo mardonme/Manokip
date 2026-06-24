@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../lib/AuthContext.jsx';
 import { useCart } from '../lib/CartContext.jsx';
@@ -153,7 +154,7 @@ export function StoreHeader({ dark = false }) {
         </div>
       </div>
 
-      {menuOpen && (
+      {menuOpen && createPortal(
         <div className="mk-scrim" onClick={() => setMenuOpen(false)}>
           <nav className="mk-drawer" onClick={(e) => e.stopPropagation()} aria-label="Mobile">
             <div className="mk-between" style={{ marginBottom: 16 }}>
@@ -212,7 +213,8 @@ export function StoreHeader({ dark = false }) {
               <Icon name="phone" size={15} style={{ color: 'var(--ink-3)' }} /> +998 93 693-92-20
             </a>
           </nav>
-        </div>
+        </div>,
+        document.body
       )}
     </header>
   );
