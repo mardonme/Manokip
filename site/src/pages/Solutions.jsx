@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { StoreHeader, StoreFooter } from '../components/Chrome.jsx';
+import Seo from '../components/Seo.jsx';
 import { Reveal, Icon, Section, SectionHead } from '../components/ui/index.js';
 import { useLang } from '../lib/LangContext.jsx';
 
@@ -89,6 +90,7 @@ export default function Solutions() {
   return (
     <div className="mk">
       <StoreHeader />
+      <Seo title={t('seo.solutions.title')} description={t('seo.solutions.desc')} />
       <main id="main">
 
         {/* HERO */}

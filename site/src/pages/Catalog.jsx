@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { StoreHeader, StoreFooter } from '../components/Chrome.jsx';
+import Seo from '../components/Seo.jsx';
 import ProductCard from '../components/ProductCard.jsx';
 import { Reveal, Icon, ProductGridSkeleton } from '../components/ui/index.js';
 import { api } from '../lib/api.js';
@@ -83,6 +84,7 @@ export default function Catalog() {
   return (
     <div className="mk">
       <StoreHeader />
+      <Seo title={t('seo.catalog.title')} description={t('seo.catalog.desc')} />
       <main id="main">
         <div className="mk-container" style={{ paddingTop: 36, paddingBottom: 20 }}>
           <nav className="mk-mono" aria-label="Breadcrumb" style={{ fontSize: 11, color: 'var(--ink-3)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 22 }}>

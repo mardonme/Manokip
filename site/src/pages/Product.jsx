@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { StoreHeader, StoreFooter } from '../components/Chrome.jsx';
+import Seo, { SITE_URL } from '../components/Seo.jsx';
 import Gauge from '../components/Gauge.jsx';
 import ProductCard from '../components/ProductCard.jsx';
 import { Reveal, Icon, Skeleton, SectionHead } from '../components/ui/index.js';
@@ -75,6 +76,44 @@ export default function Product() {
   }
 
   const p = product;
+
+  // Absolute image URL for structured data (mediaUrl is relative in same-origin prod).
+  const mImg = p.imageUrl ? mediaUrl(p.imageUrl) : '';
+  const productImg = mImg ? (mImg.startsWith('http') ? mImg : SITE_URL + mImg) : undefined;
+  const productJsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Product',
+        name: p.model,
+        sku: p.sku,
+        description: p.desc || undefined,
+        brand: { '@type': 'Brand', name: 'Manokip' },
+        category: p.category?.name,
+        ...(productImg ? { image: productImg } : {}),
+        offers: {
+          '@type': 'Offer',
+          priceCurrency: 'UZS',
+          availability: p.inStock ? 'https://schema.org/InStock' : 'https://schema.org/PreOrder',
+          url: `${SITE_URL}/product/${p.id}`,
+        },
+        ...(p.reviewsCount > 0 && p.avgRating
+          ? { aggregateRating: { '@type': 'AggregateRating', ratingValue: Number(p.avgRating).toFixed(1), reviewCount: p.reviewsCount } }
+          : {}),
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: t('catalog.crumbHome'), item: `${SITE_URL}/` },
+          { '@type': 'ListItem', position: 2, name: t('catalog.crumb'), item: `${SITE_URL}/catalog` },
+          ...(p.category ? [{ '@type': 'ListItem', position: 3, name: p.category.name, item: `${SITE_URL}/catalog?category=${p.category.slug}` }] : []),
+          { '@type': 'ListItem', position: p.category ? 4 : 3, name: p.model, item: `${SITE_URL}/product/${p.id}` },
+        ],
+      },
+    ],
+  };
+  const seoDesc = `${p.desc ? p.desc + ' · ' : ''}${t('product.spec.range')}: ${p.range}${p.diameter ? ` · Ø${p.diameter} mm` : ''}${p.accuracy ? ` · ${t('product.spec.acc')} ${p.accuracy}` : ''}`;
+
   // Only real, per-product data — no fabricated/placeholder specs.
   const specs = [
     [t('product.spec.range'), p.range],
@@ -94,6 +133,7 @@ export default function Product() {
   return (
     <div className="mk">
       <StoreHeader />
+      <Seo title={p.model} description={seoDesc} type="product" jsonLd={productJsonLd} />
       <main id="main">
         <div className="mk-container mk-mono" style={{ padding: '18px 40px', borderBottom: '1px solid var(--line)' }}>
           <nav aria-label="Breadcrumb" style={{ fontSize: 11, color: 'var(--ink-3)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>

@@ -1,12 +1,65 @@
 import React, { Suspense, lazy } from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { HelmetProvider, Helmet } from 'react-helmet-async';
 import './styles.css';
 
 import { LangProvider } from './lib/LangContext.jsx';
 import { AuthProvider } from './lib/AuthContext.jsx';
 import { CartProvider } from './lib/CartContext.jsx';
 import SignInModal from './components/SignInModal.jsx';
+import { SITE_URL } from './components/Seo.jsx';
+
+// Site-wide structured data (Organization + WebSite). Emitted once, on every
+// page, so search engines can build the brand entity and a sitelinks search box.
+const SITE_JSONLD = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': `${SITE_URL}/#organization`,
+      name: 'Manokip',
+      url: SITE_URL,
+      logo: `${SITE_URL}/logo.svg`,
+      description:
+        'Manufacturer of industrial control and measuring instruments: pressure gauges, transducers, level meters and protection relays.',
+      telephone: '+998936939220',
+      email: 'info@manokip.uz',
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Tashkent',
+        addressCountry: 'UZ',
+      },
+      contactPoint: {
+        '@type': 'ContactPoint',
+        telephone: '+998936939220',
+        contactType: 'sales',
+        areaServed: 'UZ',
+        availableLanguage: ['ru', 'uz', 'en'],
+      },
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${SITE_URL}/#website`,
+      url: SITE_URL,
+      name: 'Manokip',
+      publisher: { '@id': `${SITE_URL}/#organization` },
+      potentialAction: {
+        '@type': 'SearchAction',
+        target: `${SITE_URL}/search?q={search_term_string}`,
+        'query-input': 'required name=search_term_string',
+      },
+    },
+  ],
+};
+
+function SiteJsonLd() {
+  return (
+    <Helmet>
+      <script type="application/ld+json">{JSON.stringify(SITE_JSONLD)}</script>
+    </Helmet>
+  );
+}
 
 // Route-level code splitting — each page ships as its own chunk so the initial
 // load only pays for the route the visitor actually opened. Admin and the chat
@@ -84,18 +137,21 @@ function AnimatedRoutes() {
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <LangProvider>
-      <AuthProvider>
-        <CartProvider>
-          <BrowserRouter>
-            <a href="#main" className="mk-skip">Skip to content</a>
-            <ScrollToTop />
-            <SignInModal />
-            <AnimatedRoutes />
-            <ChatWidgetGate />
-          </BrowserRouter>
-        </CartProvider>
-      </AuthProvider>
-    </LangProvider>
+    <HelmetProvider>
+      <LangProvider>
+        <AuthProvider>
+          <CartProvider>
+            <BrowserRouter>
+              <SiteJsonLd />
+              <a href="#main" className="mk-skip">Skip to content</a>
+              <ScrollToTop />
+              <SignInModal />
+              <AnimatedRoutes />
+              <ChatWidgetGate />
+            </BrowserRouter>
+          </CartProvider>
+        </AuthProvider>
+      </LangProvider>
+    </HelmetProvider>
   </React.StrictMode>,
 );

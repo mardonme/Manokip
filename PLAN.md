@@ -50,17 +50,19 @@ Effort belgilari: **S** ≤1soat · **M** bir necha soat · **L** kun+.
 
 ---
 
-## 🔵 Faza 2 — SEO (B2B katalog uchun ENG muhim)
+## 🔵 Faza 2 — SEO (B2B katalog uchun ENG muhim) — poydevor ✅
 
-> Hozir sayt CSR SPA — Google/Yandex bo'sh HTML ko'radi, mahsulotlar amalda topilmaydi.
+> Poydevor (meta, JSON-LD, sitemap, robots, canonical, html lang) bajarildi va `react-helmet-async`
+> orqali har sahifada ishlaydi. Googlebot JS render qiladi → darrov foyda. To'liq foyda (Yandex,
+> ijtimoiy skraperlar) uchun **2.1 prerender** kerak (arxitektura qarori — pastda).
 
-- [ ] **2.1 (L)** **Prerender/SSG** — `/`, `/catalog`, `/about`, `/service` va har `/product/:id` ni build vaqtida HTML qilish (`vite-plugin-prerender` / `react-snap`, yoki Astro/Next migratsiyasi). SEO #1 blok
-- [ ] **2.2 (M)** Har sahifaga `<title>` + meta description (`react-helmet-async`) — hozir hammasi bir xil · `site/index.html`, sahifalar
-- [ ] **2.3 (S)** `robots.txt` + build vaqtida `sitemap.xml` (barcha mahsulot URL'lari bilan) · `site/public/`
-- [ ] **2.4 (M-L)** Canonical + `hreflang` + tilga bog'liq URL'lar (`/ru/`, `/uz/`, `/en/`) — hozir 3 til bitta URL'da · `site/src/lib/LangContext.jsx`
-- [ ] **2.5 (M)** JSON-LD structured data: `Product` (+ AggregateRating), `Organization`, `BreadcrumbList`
-- [ ] **2.6 (S)** OG image: SVG o'rniga absolute URL'li 1200×630 PNG + `og:url`, twitter tag'lar · `site/index.html:22`
-- [ ] **2.7 (S)** `<html lang>` ni faol tilga qarab dinamik qilish (hozir doim `ru`) · `site/index.html:2`
+- [ ] **2.1 (L)** **Prerender/SSG** — build vaqtida statik HTML (helmet meta'sini «pishirib» qo'yadi). Arxitektura qarori kutilmoqda (puppeteer/react-snap vs vite-react-ssg). SEO #1 blok
+- [x] **2.2 (M)** Har sahifaga `<title>` + meta description (`react-helmet-async`, lokalizatsiya qilingan `seo.*` kalitlar) · `Seo.jsx`, barcha sahifalar
+- [x] **2.3 (S)** `robots.txt` + build vaqtida `sitemap.xml` (API'dan barcha mahsulot URL'lari; `prebuild` hook) · `site/public/robots.txt`, `site/scripts/gen-sitemap.mjs`
+- [~] **2.4 (M-L)** Canonical ✅ va html lang ✅ bajarildi. **`hreflang` + tilga bog'liq URL'lar** (`/ru/` `/uz/` `/en/`) — katta refaktor, arxitektura qarori kutilmoqda (2.1 bilan birga)
+- [x] **2.5 (M)** JSON-LD: `Organization` + `WebSite` (site-wide), `Product` (+ AggregateRating), `BreadcrumbList` · `main.jsx`, `Product.jsx`
+- [x] **2.6 (S)** OG/twitter tag'lar absolute URL'ga; `og:url`, `og:image` 1200×630 · `Seo.jsx`, `index.html` — ⚠️ `site/public/og-cover.jpg` (1200×630) rasm qo'shish kerak
+- [x] **2.7 (S)** `<html lang>` faol tilga qarab dinamik (`Seo.jsx` `htmlAttributes`)
 
 ---
 

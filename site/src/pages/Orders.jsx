@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { StoreHeader, StoreFooter } from '../components/Chrome.jsx';
+import Seo from '../components/Seo.jsx';
 import { Reveal, Icon, Skeleton } from '../components/ui/index.js';
 import { api } from '../lib/api.js';
 import { useAuth } from '../lib/AuthContext.jsx';
@@ -33,6 +34,7 @@ export default function Orders() {
   return (
     <div className="mk">
       <StoreHeader />
+      <Seo title={t('orders.title')} noindex />
       <main id="main">
         <div className="mk-container" style={{ paddingTop: 60, paddingBottom: 60, maxWidth: 1100 }}>
           <Reveal>

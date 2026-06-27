@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { StoreHeader, StoreFooter } from '../components/Chrome.jsx';
+import Seo from '../components/Seo.jsx';
 import { Reveal, Icon } from '../components/ui/index.js';
 import { api } from '../lib/api.js';
 import { useLang } from '../lib/LangContext.jsx';
@@ -32,6 +33,7 @@ export default function Contact() {
   return (
     <div className="mk">
       <StoreHeader />
+      <Seo title={t('seo.contact.title')} description={t('seo.contact.desc')} />
       <main id="main">
         <div className="mk-container" style={{ paddingTop: 72, paddingBottom: 48 }}>
           <div className="mk-2col">

@@ -6,6 +6,22 @@ export const LANGS = ['ru', 'uz', 'en'];
 export const DEFAULT_LANG = 'ru';
 
 const DICT = {
+  // ──────────────── SEO (page titles & meta descriptions) ────────────────
+  'seo.home.title':    { ru: 'Манометры и КИП от производителя', uz: 'Manometr va KIP — ishlab chiqaruvchidan', en: 'Pressure gauges & measuring instruments' },
+  'seo.home.desc':     { ru: 'Manokip — производство манометров, преобразователей давления, уровнемеров и реле защиты для промышленности. ISO 9001, калибровка и поверка, доставка по Узбекистану.', uz: 'Manokip — sanoat uchun manometr, bosim oʻzgartkichi, sath oʻlchagichi va himoya relelarini ishlab chiqarish. ISO 9001, kalibrlash va tekshirish, Oʻzbekiston boʻylab yetkazib berish.', en: 'Manokip manufactures pressure gauges, transducers, level meters and protection relays for industry. ISO 9001, calibration & verification, delivery across Uzbekistan.' },
+  'seo.catalog.title': { ru: 'Каталог приборов', uz: 'Asboblar katalogi', en: 'Instrument catalog' },
+  'seo.catalog.desc':  { ru: 'Каталог манометров, реле давления, уровнемеров и реле защиты. Фильтр по диаметру и классу точности, цены и наличие.', uz: 'Manometr, bosim relesi, sath oʻlchagich va himoya relelari katalogi. Diametr va aniqlik sinfi boʻyicha filtr, narx va mavjudlik.', en: 'Catalog of pressure gauges, pressure switches, level meters and protection relays. Filter by diameter and accuracy class, prices and stock.' },
+  'seo.about.title':   { ru: 'О компании', uz: 'Kompaniya haqida', en: 'About the company' },
+  'seo.about.desc':    { ru: 'Manokip более 5 лет производит контрольно-измерительные приборы: сборка, точная калибровка, склад полуфабрикатов и минимальные сроки поставки.', uz: 'Manokip 5 yildan ortiq nazorat-oʻlchov asboblarini ishlab chiqaradi: yigʻish, aniq kalibrlash, yarim tayyor mahsulot ombori va qisqa yetkazib berish muddatlari.', en: 'Manokip has manufactured control and measuring instruments for over 5 years: assembly, precise calibration, semi-finished stock and minimal lead times.' },
+  'seo.service.title': { ru: 'Сервис, калибровка и поверка', uz: 'Servis, kalibrlash va tekshirish', en: 'Service, calibration & verification' },
+  'seo.service.desc':  { ru: 'Калибровка, поверка и ремонт контрольно-измерительных приборов. Сертификаты, минимальные сроки, выезд и сопровождение документации.', uz: 'Nazorat-oʻlchov asboblarini kalibrlash, tekshirish va taʼmirlash. Sertifikatlar, qisqa muddatlar, hujjatlarni rasmiylashtirish.', en: 'Calibration, verification and repair of control and measuring instruments. Certificates, short turnaround and documentation support.' },
+  'seo.solutions.title': { ru: 'Отраслевые решения', uz: 'Tarmoq yechimlari', en: 'Industry solutions' },
+  'seo.solutions.desc':  { ru: 'Решения для нефтегаза, горнодобычи, химии, энергетики и ЖКХ: подбор приборов под задачу, поставка и сервис.', uz: 'Neft-gaz, togʻ-kon, kimyo, energetika va kommunal soha uchun yechimlar: vazifaga mos asbob tanlash, yetkazib berish va servis.', en: 'Solutions for oil & gas, mining, chemical, power and utilities: instrument selection, supply and service.' },
+  'seo.contact.title': { ru: 'Контакты', uz: 'Kontaktlar', en: 'Contact' },
+  'seo.contact.desc':  { ru: 'Свяжитесь с Manokip: продажи, сервис, адрес и часы работы. Ответим в течение 1 рабочего часа.', uz: 'Manokip bilan bogʻlaning: sotuv, servis, manzil va ish vaqti. 1 ish soati ichida javob beramiz.', en: 'Contact Manokip: sales, service, address and hours. We respond within 1 business hour.' },
+  'seo.documents.title': { ru: 'Сертификаты и документы', uz: 'Sertifikatlar va hujjatlar', en: 'Certificates & documents' },
+  'seo.documents.desc':  { ru: 'Сертификаты соответствия, паспорта приборов и свидетельства о калибровке Manokip.', uz: 'Manokip muvofiqlik sertifikatlari, asbob pasportlari va kalibrlash guvohnomalari.', en: 'Manokip certificates of conformity, instrument passports and calibration records.' },
+
   // ──────────────── Header / nav ────────────────
   'topbar.cities':            { ru: '● ТАШКЕНТ · МОСКВА · АЛМАТЫ', uz: '● TOSHKENT · MOSKVA · ALMATA', en: '● TASHKENT · MOSCOW · ALMATY' },
   'topbar.ships':             { ru: 'ДОСТАВКА В 14 СТРАН',          uz: '14 DAVLATGA YETKAZIB BERAMIZ',  en: 'SHIPS TO 14 COUNTRIES' },

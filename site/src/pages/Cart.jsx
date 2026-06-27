@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { StoreHeader, StoreFooter } from '../components/Chrome.jsx';
+import Seo from '../components/Seo.jsx';
 import { Icon, ProductCardSkeleton } from '../components/ui/index.js';
 import { useCart } from '../lib/CartContext.jsx';
 import { useAuth } from '../lib/AuthContext.jsx';
@@ -32,6 +33,7 @@ export default function Cart() {
   return (
     <div className="mk">
       <StoreHeader />
+      <Seo title={t('nav.cart')} noindex />
       <main id="main" className="mk-container" style={{ paddingTop: 56, paddingBottom: 72 }}>
         <div className="mk-eyebrow">{t('cart.eyebrow')}</div>
         <h1 style={{ fontSize: 'clamp(34px,4.5vw,56px)', fontWeight: 600, letterSpacing: '-0.03em', margin: '12px 0 28px' }}>

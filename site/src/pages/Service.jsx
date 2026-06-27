@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { StoreHeader, StoreFooter } from '../components/Chrome.jsx';
+import Seo from '../components/Seo.jsx';
 import { Reveal, Icon, Section } from '../components/ui/index.js';
 import { api } from '../lib/api.js';
 import { useLang } from '../lib/LangContext.jsx';
@@ -91,6 +92,7 @@ export default function Service() {
   return (
     <div className="mk">
       <StoreHeader />
+      <Seo title={t('seo.service.title')} description={t('seo.service.desc')} />
       <main id="main">
 
         {/* BREADCRUMB */}

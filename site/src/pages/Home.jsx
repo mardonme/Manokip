@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { StoreHeader, StoreFooter } from '../components/Chrome.jsx';
+import Seo from '../components/Seo.jsx';
 import Gauge from '../components/Gauge.jsx';
 import ProductCard from '../components/ProductCard.jsx';
 import { Reveal, Icon, Skeleton, ProductGridSkeleton, Container, Section, SectionHead } from '../components/ui/index.js';
@@ -43,6 +44,7 @@ export default function Home() {
   return (
     <div className="mk">
       <StoreHeader />
+      <Seo title={t('seo.home.title')} description={t('seo.home.desc')} />
       <main id="main">
 
         {/* HERO */}
