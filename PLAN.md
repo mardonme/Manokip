@@ -61,7 +61,7 @@ Effort belgilari: **S** ≤1soat · **M** bir necha soat · **L** kun+.
 - [x] **2.3 (S)** `robots.txt` + build vaqtida `sitemap.xml` (API'dan barcha mahsulot URL'lari; `prebuild` hook) · `site/public/robots.txt`, `site/scripts/gen-sitemap.mjs`
 - [~] **2.4 (M-L)** Canonical ✅ va html lang ✅ bajarildi. **`hreflang` + tilga bog'liq URL'lar** (`/ru/` `/uz/` `/en/`) — katta refaktor, arxitektura qarori kutilmoqda (2.1 bilan birga)
 - [x] **2.5 (M)** JSON-LD: `Organization` + `WebSite` (site-wide), `Product` (+ AggregateRating), `BreadcrumbList` · `main.jsx`, `Product.jsx`
-- [x] **2.6 (S)** OG/twitter tag'lar absolute URL'ga; `og:url`, `og:image` 1200×630 · `Seo.jsx`, `index.html` — ⚠️ `site/public/og-cover.jpg` (1200×630) rasm qo'shish kerak
+- [x] **2.6 (S)** OG/twitter tag'lar absolute URL'ga; `og:url`, `og:image` 1200×630; `site/public/og-cover.jpg` (logo.svg'dan, qorong'i fonda) yaratildi · `Seo.jsx`, `index.html`, `site/public/og-cover.jpg`
 - [x] **2.7 (S)** `<html lang>` faol tilga qarab dinamik (`Seo.jsx` `htmlAttributes`)
 
 ---
