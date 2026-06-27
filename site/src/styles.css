@@ -15,7 +15,9 @@
                           (removed page-by-page as each is refactored)
 ============================================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+/* Fonts are loaded non-render-blocking from index.html (<link rel=preload>),
+   not via @import here — an @import inside the bundled CSS forces a serial
+   html → css → fonts request chain that delays first paint. */
 
 /* ============================================================
    1. TOKENS

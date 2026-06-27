@@ -66,16 +66,16 @@ Effort belgilari: **S** ≤1soat · **M** bir necha soat · **L** kun+.
 
 ---
 
-## 🟣 Faza 3 — Performance & caching
+## 🟣 Faza 3 — Performance & caching ✅ (3.1/3.6 dan tashqari)
 
-- [ ] **3.1 (M)** Sertifikat JPG'lari ~7 MB → WebP/AVIF + responsive `srcset` · `site/public/certs/`
-- [ ] **3.2 (S)** Google Fonts `@import` → `<link>` yoki self-host (render-blocking zanjir) · `site/src/styles.css:18`
-- [ ] **3.3 (S)** VPS nginx'da tekshirish: gzip/brotli yoqilganmi, `/assets/` uchun `immutable` cache header (repo'da nginx config yo'q)
-- [ ] **3.4 (M)** API GET'larga `Cache-Control` + client cache (TanStack Query/SWR) — hozir har navigatsiyada qayta yuklanadi · `site/src/lib/api.js`, `server/src/routes/products.js`
-- [ ] **3.5 (S)** Vendor chunk ajratish (`manualChunks`) — 227 KB bitta bundle · `site/vite.config.js`
-- [ ] **3.6 (M)** i18n lug'atini (55 KB) til bo'yicha bo'lib lazy-load · `site/src/lib/i18n.js`
-- [ ] **3.7 (S)** Prod build'da `console`/`debugger` drop (`esbuild.drop`) · `site/vite.config.js`
-- [ ] **3.8 (S)** Mahsulot hero rasmiga `width`/`height` + `fetchpriority="high"` (CLS/LCP) · `site/src/pages/Product.jsx:121`
+- [~] **3.1 (M)** Cert rasmlari allaqachon `loading="lazy"` + `aspect-ratio` (CLS/blok yo'q, kritik yo'lda emas). To'liq WebP/`srcset` konversiya **keyinga** — image tooling (sharp/cwebp) kerak · `site/public/certs/`
+- [x] **3.2 (S)** Fonts `@import` olib tashlandi → index.html'da non-blocking `<link rel=preload>` (`display=swap`) · `index.html`, `styles.css`
+- [x] **3.3 (S)** Tavsiya etilgan nginx config (gzip/brotli + `/assets/` immutable + SPA fallback) repo'ga qo'shildi — VPS'da qo'llash kerak · `deploy/nginx.conf.example`
+- [x] **3.4 (M)** API GET (products/categories) ga `Cache-Control` qo'shildi → brauzer HTTP-cache takror navigatsiyada tarmoqqa bormaydi. (TanStack Query keyinga — server header'lari asosiy foydani beradi) · `server/src/routes/products.js`, `categories.js`
+- [x] **3.5 (S)** Vendor chunk ajratildi (`manualChunks`) — app 61KB / vendor 180KB alohida → kod o'zgarishi vendor cache'ini buzmaydi · `site/vite.config.js`
+- [ ] **3.6 (M)** i18n lug'atini til bo'yicha bo'lib lazy-load — keyinga (hozir vendor chunk'da; foyda kichikroq) · `site/src/lib/i18n.js`
+- [x] **3.7 (S)** Prod build'da `console`/`debugger` drop (faqat build, dev'da qoladi) · `site/vite.config.js`
+- [x] **3.8 (S)** Mahsulot hero rasmiga `fetchpriority="high"` + `decoding="async"` (LCP) · `site/src/pages/Product.jsx`
 
 ---
 

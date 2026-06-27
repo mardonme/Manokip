@@ -57,6 +57,8 @@ router.get('/', async (req, res, next) => {
       }),
     ]);
 
+    // Short browser cache for product listings; admin edits surface within a minute.
+    res.set('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
     res.json({
       items: items.map((p) => pickProduct(p, lang)),
       page,
@@ -81,6 +83,7 @@ router.get('/:id', async (req, res, next) => {
       where: { productId: id },
       _avg: { rating: true },
     });
+    res.set('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
     res.json(pickProduct({ ...p, avgRating: agg._avg.rating }, lang));
   } catch (e) { next(e); }
 });

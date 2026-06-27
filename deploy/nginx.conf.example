@@ -1,0 +1,72 @@
+# Manokip — tavsiya etilgan nginx sozlamalari (luva.uz)
+# =====================================================
+# Bu NAMUNA. VPS'dagi mavjud server-blokка (odatda /etc/nginx/sites-available/…)
+# tegishli qatorlarni qo'shing/birlashtiring, keyin: `nginx -t && systemctl reload nginx`.
+#
+# Maqsad (PLAN.md Faza 3):
+#   3.2/3.3 — siqish (gzip/brotli) + statik asset'lar uchun uzoq, immutable cache
+#   SPA fallback (chuqur linklar / refresh 404 bermasin)
+
+# ── Siqish ────────────────────────────────────────────────
+gzip on;
+gzip_vary on;
+gzip_comp_level 6;
+gzip_min_length 1024;
+gzip_types
+  text/plain text/css application/javascript application/json
+  image/svg+xml application/xml application/rss+xml font/ttf font/otf;
+
+# Agar brotli moduli o'rnatilgan bo'lsa (ngx_brotli) — JS/CSS uchun gzip'dan zichroq:
+# brotli on;
+# brotli_comp_level 6;
+# brotli_types text/plain text/css application/javascript application/json image/svg+xml application/xml;
+
+server {
+    listen 443 ssl http2;
+    server_name luva.uz www.luva.uz;
+
+    # ... ssl_certificate / ssl_certificate_key (mavjud sozlamangiz) ...
+
+    root /opt/manokip/site/dist;
+    index index.html;
+
+    # ── Vite content-hash'langan asset'lar: 1 yil, immutable ──
+    # Fayl nomlari hash bilan (index-DSOUkV-o.js), shuning uchun abadiy cache xavfsiz.
+    location /assets/ {
+        access_log off;
+        add_header Cache-Control "public, max-age=31536000, immutable";
+        try_files $uri =404;
+    }
+
+    # ── robots.txt / sitemap.xml: qisqa cache ──
+    location = /robots.txt  { add_header Cache-Control "public, max-age=3600"; }
+    location = /sitemap.xml { add_header Cache-Control "public, max-age=3600"; }
+
+    # ── Backend API (Express) ──
+    location /api/ {
+        proxy_pass http://127.0.0.1:4000;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        # API GET'lari o'z Cache-Control'ini yuboradi (products/categories) — uni saqlang:
+        proxy_pass_header Cache-Control;
+    }
+
+    # ── Yuklangan mahsulot rasmlari ──
+    location /uploads/ {
+        proxy_pass http://127.0.0.1:4000;
+        proxy_set_header Host $host;
+        add_header Cache-Control "public, max-age=604800";
+    }
+
+    # ── SPA fallback: noma'lum yo'llar index.html'ga ──
+    # (index.html'ni cache QILMANG — har deploy'da yangilanishi kerak)
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+    location = /index.html {
+        add_header Cache-Control "no-cache";
+    }
+}

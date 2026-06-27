@@ -153,7 +153,7 @@ export default function Product() {
                 </div>
                 <div className="mk-mono" style={{ position: 'absolute', top: 18, right: 18, fontSize: 10.5, color: 'var(--ink-3)', letterSpacing: '0.08em' }}>SKU · {p.sku}</div>
                 {p.imageUrl
-                  ? <img src={mediaUrl(p.imageUrl)} alt={p.model} style={{ maxWidth: '100%', maxHeight: 400, objectFit: 'contain' }} />
+                  ? <img src={mediaUrl(p.imageUrl)} alt={p.model} fetchpriority="high" decoding="async" style={{ maxWidth: '100%', maxHeight: 400, objectFit: 'contain' }} />
                   : <Gauge size={380} value={120} max={400} unit="kgf/cm²" label={p.model} danger={350} animate />}
               </div>
             </div>
