@@ -346,7 +346,7 @@ h1, h2, h3 { letter-spacing: -0.025em; }
 
 /* Footer */
 .mk-footer { background: var(--ink-bg); color: var(--on-ink); padding: 72px 0 28px; }
-.mk-footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; gap: 56px; padding-bottom: 48px; border-bottom: 1px solid var(--ink-line); }
+.mk-footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 56px; padding-bottom: 48px; border-bottom: 1px solid var(--ink-line); }
 .mk-footer-link { display: block; font-size: 13.5px; margin-bottom: 10px; color: var(--on-ink); opacity: 0.82; transition: opacity var(--dur-1) var(--ease-out), transform var(--dur-1) var(--ease-out); }
 .mk-footer-link:hover { opacity: 1; transform: translateX(2px); }
 .mk-footer-bottom { display: flex; justify-content: space-between; align-items: center; padding-top: 28px; font-family: var(--mono); font-size: 10.5px; color: var(--on-ink-dim); letter-spacing: 0.06em; }

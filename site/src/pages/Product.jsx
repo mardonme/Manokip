@@ -75,6 +75,7 @@ export default function Product() {
   }
 
   const p = product;
+  // Only real, per-product data — no fabricated/placeholder specs.
   const specs = [
     [t('product.spec.range'), p.range],
     [t('product.spec.acc'), p.accuracy || '—'],
@@ -82,12 +83,6 @@ export default function Product() {
     [t('product.spec.cat'), p.category?.name || '—'],
     [t('product.spec.sku'), p.sku],
     [t('product.spec.stock'), p.stockCount > 0 ? `${p.stockCount}` : t('product.spec.onRequest')],
-    [t('product.spec.material'), 'AISI 304'],
-    [t('product.spec.wetted'), 'AISI 316L · brass'],
-    [t('product.spec.conn'), 'M20×1.5 · ½" NPT · G½"'],
-    [t('product.spec.temp'), '−40 … +60 °C'],
-    [t('product.spec.ip'), 'IP65'],
-    [t('product.spec.verification'), '24 mo'],
   ];
   const TABS = [
     ['specs', t('product.tab.specs')],
@@ -124,20 +119,14 @@ export default function Product() {
             </div>
 
             <div>
-              <div className="mk-eyebrow">{p.category?.name} · GOST 2405-88</div>
+              <div className="mk-eyebrow">{p.category?.name}</div>
               <h1 style={{ fontSize: 'clamp(34px,4.5vw,56px)', fontWeight: 600, letterSpacing: '-0.03em', margin: '12px 0 8px' }}>{p.model}</h1>
               <p className="mk-muted" style={{ fontSize: 17, marginTop: 0 }}>{p.desc}</p>
 
               <div className="mk-card" style={{ marginTop: 28, padding: '20px 24px' }}>
-                <div className="mk-between" style={{ alignItems: 'baseline' }}>
-                  <div>
-                    <div className="mk-eyebrow">{t('product.price1')}</div>
-                    <div className="mk-num" style={{ fontSize: 36, fontWeight: 600, marginTop: 4 }}>{p.priceText} <span style={{ fontSize: 16, color: 'var(--ink-3)', fontWeight: 400 }}>{p.priceMinor ? 'sum' : ''}</span></div>
-                  </div>
-                  <div style={{ textAlign: 'right' }}>
-                    <div className="mk-eyebrow">{t('product.priceVolume')}</div>
-                    <div style={{ fontSize: 24, fontWeight: 600, color: 'var(--accent-ink)', marginTop: 4 }}>−18%</div>
-                  </div>
+                <div>
+                  <div className="mk-eyebrow">{t('product.price1')}</div>
+                  <div className="mk-num" style={{ fontSize: 36, fontWeight: 600, marginTop: 4 }}>{p.priceText} <span style={{ fontSize: 16, color: 'var(--ink-3)', fontWeight: 400 }}>{p.priceMinor ? 'sum' : ''}</span></div>
                 </div>
               </div>
 

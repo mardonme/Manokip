@@ -6,7 +6,7 @@ import { useLang } from '../lib/LangContext.jsx';
 
 export default function Contact() {
   const { t } = useLang();
-  const [form, setForm] = useState({ name: '', phone: '', email: '', message: '' });
+  const [form, setForm] = useState({ name: '', company: '', phone: '', email: '', message: '' });
   const [status, setStatus] = useState({ kind: 'idle' });
 
   function update(k, v) { setForm((f) => ({ ...f, [k]: v })); }
@@ -16,14 +16,14 @@ export default function Contact() {
     setStatus({ kind: 'sending' });
     try {
       const res = await api.post('/api/quotes', {
-        companyName: form.name,
+        companyName: form.company,
         contactPerson: form.name,
         email: form.email,
         phone: form.phone,
         specs: form.message,
       });
       setStatus({ kind: 'ok', id: res.id });
-      setForm({ name: '', phone: '', email: '', message: '' });
+      setForm({ name: '', company: '', phone: '', email: '', message: '' });
     } catch (e2) {
       setStatus({ kind: 'err', message: e2.message });
     }
@@ -51,6 +51,7 @@ export default function Contact() {
               <div className="mk-eyebrow">{t('contact.form.title')}</div>
               <div className="mk-stack" style={{ marginTop: 20, gap: 16 }}>
                 <Field id="c-name" label={t('contact.form.name')} value={form.name} onChange={(v) => update('name', v)} placeholder={t('contact.form.namePh')} autoComplete="name" required />
+                <Field id="c-company" label={t('contact.form.company')} value={form.company} onChange={(v) => update('company', v)} placeholder={t('contact.form.companyPh')} autoComplete="organization" required />
                 <Field id="c-phone" label={t('contact.form.phone')} value={form.phone} onChange={(v) => update('phone', v)} placeholder={t('contact.form.phonePh')} type="tel" autoComplete="tel" required />
                 <Field id="c-email" label={t('contact.form.email')} value={form.email} onChange={(v) => update('email', v)} placeholder={t('contact.form.emailPh')} type="email" autoComplete="email" required />
                 <label className="mk-field" htmlFor="c-msg">

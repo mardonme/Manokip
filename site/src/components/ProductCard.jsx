@@ -86,7 +86,7 @@ export default function ProductCard({ p, compact = false, index = 0 }) {
           </div>
           <div style={{ textAlign: 'right' }}>
             <div className="mk-mono" style={{ fontSize: 10.5, color: 'var(--ink-4)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Price</div>
-            <div className="mk-mono" style={{ fontSize: 12.5, marginTop: 2 }}>{p.price}<span style={{ color: 'var(--ink-4)' }}> sum</span></div>
+            <div className="mk-mono" style={{ fontSize: 12.5, marginTop: 2 }}>{p.price}{p.priceMinor ? <span style={{ color: 'var(--ink-4)' }}> sum</span> : null}</div>
           </div>
         </div>
       </div>

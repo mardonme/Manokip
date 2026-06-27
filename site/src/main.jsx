@@ -1,6 +1,6 @@
 import React, { Suspense, lazy } from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import './styles.css';
 
 import { LangProvider } from './lib/LangContext.jsx';
@@ -60,7 +60,7 @@ function AnimatedRoutes() {
         <Routes location={location}>
           <Route path="/" element={<Home />} />
           <Route path="/catalog" element={<Catalog />} />
-          <Route path="/product" element={<Product />} />
+          <Route path="/product" element={<Navigate to="/catalog" replace />} />
           <Route path="/product/:id" element={<Product />} />
           <Route path="/solutions" element={<Solutions />} />
           <Route path="/service" element={<Service />} />

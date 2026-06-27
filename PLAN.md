@@ -38,15 +38,15 @@ Effort belgilari: **S** ≤1soat · **M** bir necha soat · **L** kun+.
 
 ---
 
-## 🟠 Faza 1 — "Buzilgandek ko'rinadigan" narsalar & tez g'alabalar
+## 🟠 Faza 1 — "Buzilgandek ko'rinadigan" narsalar & tez g'alabalar ✅ (1.3 dan tashqari)
 
-- [ ] **1.1 (M)** Mahsulot sahifasidagi **soxta texnik specs** — har mahsulotga bir xil "AISI 304 / IP65 / −18% / GOST 2405-88" hardcode. B2B uchun adashtiruvchi. Product field'lardan olish yoki o'chirish · `site/src/pages/Product.jsx:85-90`
-- [ ] **1.2 (S)** Footer'da "Solutions" va "Service" ustunlaridagi 6 ta link bir xil sahifaga ketadi ("Training" hech qayerga) · `site/src/components/Chrome.jsx:228-229`
-- [ ] **1.3 (M)** **93 MB autoplay video** (`aboutbgvideo.mp4`, `preload=auto`) + 3.7 MB GIF — About sahifasi. ~3-5 MB ga siqish + `poster`, GIF → mp4/webm · `site/src/pages/About.jsx:38-47`
-- [ ] **1.4 (S)** Katalog diametr filtri `min==max` yuboradi → faqat aniq moslik, ko'p mahsulot yo'qoladi · `site/src/pages/Catalog.jsx:46-47`
-- [ ] **1.5 (S)** Narx "sum" qo'shimchasi: "on request sum" / "from 380 000 sum" chiqadi · `site/src/components/ProductCard.jsx:89`, `site/src/pages/Product.jsx:135`
-- [ ] **1.6 (S)** Kontakt formada "Company" maydoni yo'q — ism ham companyName ham contactPerson'ga ketadi · `site/src/pages/Contact.jsx:20-21`
-- [ ] **1.7 (S)** `/product` (id'siz) marshruti abadiy skeleton ko'rsatadi → 404 yoki `/catalog`'ga redirect · `site/src/main.jsx:63`
+- [x] **1.1 (M)** Soxta texnik specs olib tashlandi (AISI 304/IP65/GOST 2405-88/−18% — hammasi placeholder edi). Faqat real ma'lumot qoldi (range, aniqlik, diametr, kategoriya, SKU, stok) · `site/src/pages/Product.jsx`
+- [x] **1.2 (S)** Footer real, alohida manzillarga qisqartirildi (takror "Solutions/Service" 6 link → 1 birlashgan ustun; grid 3 ustun) · `site/src/components/Chrome.jsx`, `site/src/styles.css`
+- [ ] **1.3 (M)** ~~93 MB video~~ — **mijoz qarori bo'yicha hozircha o'z holida qoldirildi.** Kelajakda ~3-5 MB ga siqish tezlikni sezilarli yaxshilaydi (ffmpeg kerak) · `site/src/pages/About.jsx`
+- [x] **1.4 (S)** Tekshirildi — **bug emas:** diskret standart diametrlar (50/63/100/160/250) uchun `min==max` aniq moslik to'g'ri xatti-harakat · `site/src/pages/Catalog.jsx`
+- [x] **1.5 (S)** Narx " sum" qo'shimchasi endi faqat raqamli narxda (`priceMinor` bor) ko'rsatiladi · `site/src/components/ProductCard.jsx`
+- [x] **1.6 (S)** Kontakt formaga alohida "Company" maydoni qo'shildi; `companyName`/`contactPerson` to'g'ri map qilindi; i18n (uz/ru/en) · `site/src/pages/Contact.jsx`, `site/src/lib/i18n.js`
+- [x] **1.7 (S)** `/product` (id'siz) → `/catalog` redirect (abadiy skeleton bartaraf) · `site/src/main.jsx`
 
 ---
 

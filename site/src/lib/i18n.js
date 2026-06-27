@@ -200,6 +200,8 @@ const DICT = {
   'contact.form.title':       { ru: 'Сообщение',   uz: 'Xabar',      en: 'Send a message' },
   'contact.form.name':        { ru: 'Имя',         uz: 'Ism',        en: 'Name' },
   'contact.form.namePh':      { ru: 'Иван Иванов', uz: 'Aziz Karimov', en: 'Aziz Karimov' },
+  'contact.form.company':     { ru: 'Компания',    uz: 'Kompaniya',  en: 'Company' },
+  'contact.form.companyPh':   { ru: 'ООО «Компания»', uz: 'MChJ «Kompaniya»', en: 'Company LLC' },
   'contact.form.phone':       { ru: 'Телефон',     uz: 'Telefon',    en: 'Phone' },
   'contact.form.phonePh':     { ru: '+998 __ ___-__-__', uz: '+998 __ ___-__-__', en: '+998 __ ___-__-__' },
   'contact.form.email':       { ru: 'Email',       uz: 'Email',      en: 'Email' },

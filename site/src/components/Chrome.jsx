@@ -223,30 +223,29 @@ export function StoreHeader({ dark = false }) {
 export function StoreFooter() {
   const { t, lang } = useLang();
 
+  // Each footer link points to a real, distinct destination. The former
+  // "Solutions" and "Service" columns (six identical links each) are merged into
+  // one column of genuine pages.
   const LINKS = {
     catalog:  ['/catalog?category=manometers', '/catalog?category=pressure-switches', '/catalog?category=solar-panels', '/catalog?category=level-gauges', '/catalog?category=protection-relays', '/documents'],
-    solutions: ['/solutions', '/solutions', '/solutions', '/solutions', '/solutions', '/solutions'],
-    service:  ['/service', '/service', '/service', '/service', '/service', '/service'],
+    solutions: ['/solutions', '/service', '/contact'],
     company:  ['/about', '/manufacturing', '/documents', '/partners', '/press', '/careers'],
   };
 
   const COLS = {
     en: [
       { key: 'catalog',   t: t('footer.col.catalog'),   i: ['Manometers', 'Pressure switches', 'Solar panels', 'Level gauges', 'Protection relays', 'Documents'] },
-      { key: 'solutions', t: t('footer.col.solutions'), i: ['Oil & gas', 'Mining', 'Chemical', 'HVAC', 'Power generation', 'Railway'] },
-      { key: 'service',   t: t('footer.col.service'),   i: ['Calibration', 'Verification', 'Repair', 'Custom orders', 'Documentation', 'Training'] },
+      { key: 'solutions', t: t('footer.col.solutions'), i: ['Solutions', 'Service & calibration', 'Contact'] },
       { key: 'company',   t: t('footer.col.company'),   i: ['About Manokip', 'Manufacturing', 'Certificates', 'Partners', 'Press', 'Careers'] },
     ],
     ru: [
       { key: 'catalog',   t: t('footer.col.catalog'),   i: ['Манометры', 'Реле давления', 'Солнечные панели', 'Уровнемеры', 'Реле защиты', 'Документы'] },
-      { key: 'solutions', t: t('footer.col.solutions'), i: ['Нефть и газ', 'Горнодобыча', 'Химия', 'Отопление', 'Энергетика', 'Железные дороги'] },
-      { key: 'service',   t: t('footer.col.service'),   i: ['Калибровка', 'Поверка', 'Ремонт', 'Спецзаказы', 'Документация', 'Обучение'] },
+      { key: 'solutions', t: t('footer.col.solutions'), i: ['Решения', 'Сервис и калибровка', 'Связаться'] },
       { key: 'company',   t: t('footer.col.company'),   i: ['О Manokip', 'Производство', 'Сертификаты', 'Партнёры', 'Пресса', 'Карьера'] },
     ],
     uz: [
       { key: 'catalog',   t: t('footer.col.catalog'),   i: ['Manometrlar', 'Bosim relelari', 'Quyosh panellari', 'Sath oʻlchagichlari', 'Himoya relelari', 'Hujjatlar'] },
-      { key: 'solutions', t: t('footer.col.solutions'), i: ['Neft va gaz', 'Togʻ-kon', 'Kimyo', 'Isitish', 'Energetika', 'Temir yoʻl'] },
-      { key: 'service',   t: t('footer.col.service'),   i: ['Kalibrlash', 'Tekshirish', 'Taʼmirlash', 'Maxsus buyurtmalar', 'Hujjatlar', 'Trening'] },
+      { key: 'solutions', t: t('footer.col.solutions'), i: ['Yechimlar', 'Servis va kalibrlash', 'Bogʻlanish'] },
       { key: 'company',   t: t('footer.col.company'),   i: ['Manokip haqida', 'Ishlab chiqarish', 'Sertifikatlar', 'Hamkorlar', 'Matbuot', 'Karyera'] },
     ],
   };
