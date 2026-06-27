@@ -2,7 +2,16 @@ name: Deploy backend (manual)
 
 # Backend is deployed ONLY by hand: open the Actions tab → "Deploy backend
 # (manual)" → "Run workflow". Rebuilding the API touches the live Postgres
-# (prisma db push runs on container start), so this is never automatic.
+# (`prisma db push` runs on container start to sync the schema — NON-destructive:
+# unlike before, it no longer carries --accept-data-loss, so a change that would
+# drop data aborts the deploy instead of silently destroying it), so this is
+# never automatic.
+#
+# OPTIONAL future cutover to migration history (prisma/migrations/ is already
+# committed). Done deliberately, NOT required for normal deploys:
+#   1) baseline the existing DB once:
+#      docker exec -w /app/server manokip-api npx prisma migrate resolve --applied 20260627000000_init
+#   2) then switch package.json "build" to `prisma generate && npm run migrate:deploy`.
 #
 # Runs on the SELF-HOSTED runner on the VPS, so every step is local — no SSH,
 # no DEPLOY_* secrets. It syncs server/ into /opt/manokip/server, then rebuilds

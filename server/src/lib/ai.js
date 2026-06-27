@@ -21,6 +21,23 @@ const LANG_LABEL = { uz: 'Uzbek', ru: 'Russian', en: 'English' };
 // How many products to include in context. Keep modest to bound token cost.
 const MAX_PRODUCTS = 120;
 
+// Soft daily ceiling on outbound Gemini calls — a cheap defence-in-depth cost
+// guard on top of the per-IP rate limit, so a distributed flood can't drive
+// unbounded token spend. In-memory, resets every 24h (and on restart).
+let aiCallsToday = 0;
+let aiWindowEndsAt = 0;
+
+function withinDailyCap() {
+  const now = Date.now();
+  if (now >= aiWindowEndsAt) {
+    aiCallsToday = 0;
+    aiWindowEndsAt = now + 24 * 60 * 60 * 1000;
+  }
+  if (aiCallsToday >= env.AI_DAILY_CAP) return false;
+  aiCallsToday += 1;
+  return true;
+}
+
 /**
  * Build a compact, language-appropriate catalog snapshot for the prompt.
  * One product per line keeps it dense and cheap.
@@ -104,6 +121,12 @@ export async function askAssistant({ message, history, lang: rawLang }) {
     return { reply: fallbackText(lang), needsOperator: true };
   }
 
+  // Daily cost ceiling reached — hand off to an operator instead of spending.
+  if (!withinDailyCap()) {
+    console.warn('[ai] daily Gemini cap reached — serving operator fallback');
+    return { reply: fallbackText(lang), needsOperator: true };
+  }
+
   let catalog;
   try {
     catalog = await buildCatalogContext(lang);
@@ -129,11 +152,17 @@ export async function askAssistant({ message, history, lang: rawLang }) {
     safetySettings: [],
   };
 
+  // Bound every call: an AbortController fires after AI_TIMEOUT_MS so a slow or
+  // hung Gemini response can't hold the Express worker open indefinitely.
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), env.AI_TIMEOUT_MS);
+
   try {
     const resp = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
+      signal: controller.signal,
     });
 
     if (!resp.ok) {
@@ -154,8 +183,14 @@ export async function askAssistant({ message, history, lang: rawLang }) {
     const reply = needsOperator ? raw.slice(OPERATOR_MARKER.length).trim() : raw;
     return { reply: reply || fallbackText(lang), needsOperator };
   } catch (e) {
-    console.error('[ai] Gemini error:', e?.message || e);
+    if (e?.name === 'AbortError') {
+      console.error(`[ai] Gemini timed out after ${env.AI_TIMEOUT_MS}ms`);
+    } else {
+      console.error('[ai] Gemini error:', e?.message || e);
+    }
     return { reply: fallbackText(lang), needsOperator: true };
+  } finally {
+    clearTimeout(timer);
   }
 }
 

@@ -70,9 +70,9 @@ const productCreateSchema = z.object({
   inStock: z.boolean().optional(),
   stockCount: z.number().int().min(0).optional(),
   categoryId: z.number().int().positive(),
-});
+}).strict();
 
-const productUpdateSchema = productCreateSchema.partial();
+const productUpdateSchema = productCreateSchema.partial().strict();
 
 router.post('/products', validate(productCreateSchema), async (req, res, next) => {
   try {
@@ -110,8 +110,8 @@ const categoryCreateSchema = z.object({
   nameRu: z.string().min(1),
   nameUz: z.string().min(1),
   count: z.number().int().min(0).optional(),
-});
-const categoryUpdateSchema = categoryCreateSchema.partial();
+}).strict();
+const categoryUpdateSchema = categoryCreateSchema.partial().strict();
 
 router.post('/categories', validate(categoryCreateSchema), async (req, res, next) => {
   try {
@@ -153,7 +153,7 @@ router.get('/quotes', async (req, res, next) => {
 
 const quoteStatusSchema = z.object({
   status: z.enum(['new', 'contacted', 'closed']),
-});
+}).strict();
 
 router.patch('/quotes/:id', validate(quoteStatusSchema), async (req, res, next) => {
   try {
@@ -179,7 +179,7 @@ router.get('/orders', async (req, res, next) => {
 
 const orderStatusSchema = z.object({
   status: z.enum(['PENDING', 'CONFIRMED', 'FULFILLED', 'CANCELLED']),
-});
+}).strict();
 
 router.patch('/orders/:id', validate(orderStatusSchema), async (req, res, next) => {
   try {
