@@ -170,18 +170,7 @@ export default function Product() {
               {p.variant && <div className="mk-muted" style={{ fontSize: 15, marginBottom: 8 }}>{p.variant}</div>}
               <p className="mk-muted" style={{ fontSize: 17, marginTop: 0 }}>{p.desc}</p>
 
-              {/* Availability replaces the old price block — Manokip quotes per order. */}
-              <div className="mk-card" style={{ marginTop: 28, padding: '20px 24px' }}>
-                <div className="mk-eyebrow">{t(`avail.${p.availability || 'MADE_TO_ORDER'}`)}</div>
-                {p.leadTimeDays != null && (
-                  <div className="mk-num" style={{ fontSize: 30, fontWeight: 600, marginTop: 6 }}>
-                    {p.leadTimeDays} <span style={{ fontSize: 15, color: 'var(--ink-3)', fontWeight: 400 }}>{t('avail.days')}</span>
-                  </div>
-                )}
-                <div className="mk-muted" style={{ fontSize: 13, marginTop: p.leadTimeDays != null ? 8 : 6 }}>{t('avail.note')}</div>
-              </div>
-
-              <div style={{ marginTop: 22 }}>
+              <div style={{ marginTop: 28 }}>
                 <div className="mk-eyebrow" style={{ marginBottom: 10 }}>{t('product.qty')}</div>
                 <div className="mk-row" style={{ gap: 12 }}>
                   <div className="mk-stepper">
@@ -190,11 +179,6 @@ export default function Product() {
                       onChange={(e) => setQty(Math.max(1, parseInt(e.target.value || '1', 10) || 1))} />
                     <button onClick={() => setQty((q) => q + 1)} aria-label="Increase quantity"><Icon name="plus" size={15} /></button>
                   </div>
-                  {p.leadTimeDays != null && (
-                    <span className="mk-muted" style={{ fontSize: 12.5 }}>
-                      {t('avail.leadTime')}: {p.leadTimeDays} {t('avail.days')}
-                    </span>
-                  )}
                 </div>
               </div>
 
