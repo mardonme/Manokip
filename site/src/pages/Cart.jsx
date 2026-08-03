@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { StoreHeader, StoreFooter } from '../components/Chrome.jsx';
+import Seo from '../components/Seo.jsx';
 import { Icon, ProductCardSkeleton } from '../components/ui/index.js';
 import { useCart } from '../lib/CartContext.jsx';
 import { useAuth } from '../lib/AuthContext.jsx';
@@ -32,6 +33,7 @@ export default function Cart() {
   return (
     <div className="mk">
       <StoreHeader />
+      <Seo title={t('nav.cart')} noindex />
       <main id="main" className="mk-container" style={{ paddingTop: 56, paddingBottom: 72 }}>
         <div className="mk-eyebrow">{t('cart.eyebrow')}</div>
         <h1 style={{ fontSize: 'clamp(34px,4.5vw,56px)', fontWeight: 600, letterSpacing: '-0.03em', margin: '12px 0 28px' }}>
@@ -54,8 +56,11 @@ export default function Cart() {
                   <Link to={`/product/${it.productId}`} style={{ color: 'inherit', minWidth: 0 }}>
                     <div className="mk-mono mk-muted" style={{ fontSize: 10.5, letterSpacing: '0.08em' }}>{it.categoryName}</div>
                     <div style={{ fontSize: 16, fontWeight: 600 }}>{it.model}</div>
+                    {it.variant && <div className="mk-muted" style={{ fontSize: 12.5, marginTop: 1 }}>{it.variant}</div>}
                     <div className="mk-muted" style={{ fontSize: 13, marginTop: 2 }}>{it.desc}</div>
-                    <div className="mk-mono mk-muted" style={{ fontSize: 12, marginTop: 6 }}>{it.range} · SKU {it.sku}</div>
+                    <div className="mk-mono mk-muted" style={{ fontSize: 12, marginTop: 6 }}>
+                      SKU {it.sku} · {t(`avail.${it.availability || 'MADE_TO_ORDER'}`)}
+                    </div>
                   </Link>
                   <div className="mk-stepper" style={{ height: 38 }}>
                     <button onClick={() => update(it.productId, Math.max(0, it.qty - 1))} aria-label="Decrease" style={{ height: 36, width: 34 }}><Icon name="minus" size={14} /></button>
@@ -63,7 +68,6 @@ export default function Cart() {
                     <button onClick={() => update(it.productId, it.qty + 1)} aria-label="Increase" style={{ height: 36, width: 34 }}><Icon name="plus" size={14} /></button>
                   </div>
                   <div style={{ textAlign: 'right' }}>
-                    <div className="mk-mono" style={{ fontSize: 13, marginBottom: 6 }}>{it.priceText}</div>
                     <button onClick={() => remove(it.productId)} className="mk-row" style={{ background: 'none', border: 'none', color: 'var(--danger)', fontSize: 12, cursor: 'pointer', gap: 4, marginLeft: 'auto' }}>
                       <Icon name="close" size={12} /> {t('cart.remove')}
                     </button>

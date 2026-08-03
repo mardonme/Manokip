@@ -8,51 +8,101 @@ datasource db {
 }
 
 model User {
-  id           Int       @id @default(autoincrement())
-  email        String    @unique
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
   passwordHash String
   name         String?
   phone        String?
   company      String?
-  role         String    @default("CUSTOMER")
-  createdAt    DateTime  @default(now())
+  role         String   @default("CUSTOMER")
+  createdAt    DateTime @default(now())
   reviews      Review[]
   orders       Order[]
   carts        Cart[]
 }
 
+// Manokip builds to order, so a product is "available" by production policy
+// rather than by a warehouse count.
+enum Availability {
+  MADE_TO_ORDER
+  IN_STOCK
+  ON_REQUEST
+}
+
+// Two levels: a family (Manometers) and its types (Oxygen, Technical…).
+// parentId null = top-level family.
 model Category {
-  id        Int       @id @default(autoincrement())
-  slug      String    @unique
+  id        Int        @id @default(autoincrement())
+  slug      String     @unique
   nameEn    String
   nameRu    String
   nameUz    String
-  count     Int       @default(0)
+  count     Int        @default(0)
+  sortOrder Int        @default(0)
+  parentId  Int?
+  parent    Category?  @relation("CategoryTree", fields: [parentId], references: [id])
+  children  Category[] @relation("CategoryTree")
   products  Product[]
+
+  @@index([parentId])
+}
+
+// Shared dictionary of spec row labels ("Материал корпуса" appears on 27 sheets),
+// translated once and reused by every product that needs it.
+model SpecLabel {
+  id        Int           @id @default(autoincrement())
+  slug      String        @unique
+  labelEn   String
+  labelRu   String
+  labelUz   String
+  sortOrder Int           @default(0)
+  specs     ProductSpec[]
+}
+
+model ProductSpec {
+  id        Int       @id @default(autoincrement())
+  productId Int
+  labelId   Int
+  valueEn   String
+  valueRu   String
+  valueUz   String
+  sortOrder Int       @default(0)
+  product   Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  label     SpecLabel @relation(fields: [labelId], references: [id])
+
+  @@unique([productId, labelId])
+  @@index([productId])
 }
 
 model Product {
-  id          Int        @id @default(autoincrement())
-  sku         String     @unique
-  model       String
-  descEn      String
-  descRu      String
-  descUz      String
-  range       String
-  diameter    Int?
-  priceText   String
-  priceMinor  Int?
-  accuracy    String?
-  imageUrl    String?
-  inStock     Boolean    @default(true)
-  stockCount  Int        @default(0)
-  categoryId  Int
-  category    Category   @relation(fields: [categoryId], references: [id])
-  reviews     Review[]
-  cartItems   CartItem[]
-  orderItems  OrderItem[]
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  id           Int           @id @default(autoincrement())
+  sku          String        @unique
+  model        String
+  // Distinguishes sheets that share model codes (flanged vs axial, with/without
+  // display). Null when the model codes alone identify the product.
+  variantEn    String?
+  variantRu    String?
+  variantUz    String?
+  descEn       String
+  descRu       String
+  descUz       String
+  imageUrl     String?
+  availability Availability  @default(MADE_TO_ORDER)
+  leadTimeDays Int?
+  // Denormalised catalog facets. They also appear as ProductSpec rows for
+  // display; these columns exist so filtering stays a plain indexed query.
+  diameter     Int?
+  accuracy     String?
+  categoryId   Int
+  category     Category      @relation(fields: [categoryId], references: [id])
+  specs        ProductSpec[]
+  reviews      Review[]
+  cartItems    CartItem[]
+  orderItems   OrderItem[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@index([categoryId])
 }
 
 model Review {
@@ -100,14 +150,17 @@ model Order {
 }
 
 model OrderItem {
-  id        Int     @id @default(autoincrement())
-  orderId   Int
-  productId Int
-  qty       Int
-  priceText String
+  id           Int     @id @default(autoincrement())
+  orderId      Int
+  productId    Int
+  qty          Int
+  // Snapshot of what was ordered — the catalog carries no prices, so an order
+  // is a quote request and only the model name is worth freezing.
   productModel String
-  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  product   Product @relation(fields: [productId], references: [id])
+  order        Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product      Product @relation(fields: [productId], references: [id])
+
+  @@index([orderId])
 }
 
 model QuoteRequest {

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StoreHeader, StoreFooter } from '../components/Chrome.jsx';
+import Seo from '../components/Seo.jsx';
 import { Reveal, Icon } from '../components/ui/index.js';
 import { useLang } from '../lib/LangContext.jsx';
 
@@ -97,6 +98,7 @@ export default function Documents() {
   return (
     <div className="mk">
       <StoreHeader />
+      <Seo title={t('seo.documents.title')} description={t('seo.documents.desc')} />
       <main id="main">
 
         <div className="mk-container" style={{ paddingTop: 72, paddingBottom: 48 }}>

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { StoreHeader, StoreFooter } from '../components/Chrome.jsx';
+import Seo from '../components/Seo.jsx';
 import ProductCard from '../components/ProductCard.jsx';
 import { Reveal, Icon, ProductGridSkeleton } from '../components/ui/index.js';
 import { api } from '../lib/api.js';
@@ -48,6 +49,7 @@ export default function Search() {
   return (
     <div className="mk">
       <StoreHeader />
+      <Seo title={t('search.title')} noindex />
       <main id="main">
         <div className="mk-container" style={{ paddingTop: 60, paddingBottom: 24 }}>
           <Reveal>

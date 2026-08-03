@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { StoreHeader, StoreFooter } from '../components/Chrome.jsx';
+import Seo from '../components/Seo.jsx';
 import { Icon } from '../components/ui/index.js';
 import { useLang } from '../lib/LangContext.jsx';
 
@@ -9,6 +10,7 @@ export default function NotFound() {
   return (
     <div className="mk">
       <StoreHeader />
+      <Seo title={t('notfound.title')} noindex />
       <main id="main" className="mk-container mk-center" style={{ padding: '110px 0', minHeight: '50vh' }}>
         <div className="mk-mono" style={{ fontSize: 'clamp(80px,16vw,120px)', fontWeight: 700, color: 'var(--accent)', letterSpacing: '-0.03em', lineHeight: 1 }}>
           {t('notfound.code')}

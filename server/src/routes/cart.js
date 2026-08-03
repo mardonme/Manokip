@@ -64,23 +64,25 @@ async function resolveCart(req, res) {
 }
 
 async function mergeCarts(fromId, toId) {
-  const fromItems = await prisma.cartItem.findMany({ where: { cartId: fromId } });
-  for (const item of fromItems) {
-    const existing = await prisma.cartItem.findUnique({
-      where: { cartId_productId: { cartId: toId, productId: item.productId } },
-    });
-    if (existing) {
-      await prisma.cartItem.update({
-        where: { id: existing.id },
-        data: { qty: existing.qty + item.qty },
+  await prisma.$transaction(async (tx) => {
+    const fromItems = await tx.cartItem.findMany({ where: { cartId: fromId } });
+    for (const item of fromItems) {
+      const existing = await tx.cartItem.findUnique({
+        where: { cartId_productId: { cartId: toId, productId: item.productId } },
       });
-    } else {
-      await prisma.cartItem.create({
-        data: { cartId: toId, productId: item.productId, qty: item.qty },
-      });
+      if (existing) {
+        await tx.cartItem.update({
+          where: { id: existing.id },
+          data: { qty: existing.qty + item.qty },
+        });
+      } else {
+        await tx.cartItem.create({
+          data: { cartId: toId, productId: item.productId, qty: item.qty },
+        });
+      }
     }
-  }
-  await prisma.cart.delete({ where: { id: fromId } });
+    await tx.cart.delete({ where: { id: fromId } });
+  });
 }
 
 async function loadCartView(cartId, lang = 'ru') {
@@ -104,11 +106,12 @@ async function loadCartView(cartId, lang = 'ru') {
       productId: it.productId,
       qty: it.qty,
       model: it.product.model,
+      variant: lang === 'ru' ? it.product.variantRu
+        : lang === 'uz' ? it.product.variantUz : it.product.variantEn,
       desc: pickDesc(it.product),
-      range: it.product.range,
       diameter: it.product.diameter,
-      priceText: it.product.priceText,
-      priceMinor: it.product.priceMinor,
+      availability: it.product.availability,
+      leadTimeDays: it.product.leadTimeDays,
       sku: it.product.sku,
       categoryName: pickCat(it.product.category),
     })),

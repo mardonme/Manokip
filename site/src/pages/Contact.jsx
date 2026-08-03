@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import { StoreHeader, StoreFooter } from '../components/Chrome.jsx';
+import Seo from '../components/Seo.jsx';
 import { Reveal, Icon } from '../components/ui/index.js';
 import { api } from '../lib/api.js';
 import { useLang } from '../lib/LangContext.jsx';
+import { useToast } from '../components/Toast.jsx';
 
 export default function Contact() {
   const { t } = useLang();
-  const [form, setForm] = useState({ name: '', phone: '', email: '', message: '' });
+  const toast = useToast();
+  const [form, setForm] = useState({ name: '', company: '', phone: '', email: '', message: '' });
   const [status, setStatus] = useState({ kind: 'idle' });
 
   function update(k, v) { setForm((f) => ({ ...f, [k]: v })); }
@@ -16,22 +19,25 @@ export default function Contact() {
     setStatus({ kind: 'sending' });
     try {
       const res = await api.post('/api/quotes', {
-        companyName: form.name,
+        companyName: form.company,
         contactPerson: form.name,
         email: form.email,
         phone: form.phone,
         specs: form.message,
       });
       setStatus({ kind: 'ok', id: res.id });
-      setForm({ name: '', phone: '', email: '', message: '' });
+      setForm({ name: '', company: '', phone: '', email: '', message: '' });
+      toast.success(t('contact.form.ok'), `#${res.id}`);
     } catch (e2) {
       setStatus({ kind: 'err', message: e2.message });
+      toast.error(t('contact.form.err'), e2.message);
     }
   }
 
   return (
     <div className="mk">
       <StoreHeader />
+      <Seo title={t('seo.contact.title')} description={t('seo.contact.desc')} />
       <main id="main">
         <div className="mk-container" style={{ paddingTop: 72, paddingBottom: 48 }}>
           <div className="mk-2col">
@@ -40,8 +46,8 @@ export default function Contact() {
               <h1 style={{ fontSize: 'clamp(40px,6vw,72px)', fontWeight: 600, letterSpacing: '-0.035em', lineHeight: 1, margin: '16px 0 0' }}>{t('contact.title')}</h1>
               <p className="mk-muted" style={{ fontSize: 17, marginTop: 22, maxWidth: 480, lineHeight: 1.55 }}>{t('contact.lead')}</p>
               <div style={{ marginTop: 36, display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 24 }}>
-                <ContactBlock icon="mail" eyebrow={t('contact.col.sales')} a="info@manokip.uz" b="+998 93 693-92-20" />
-                <ContactBlock icon="award" eyebrow={t('contact.col.service')} a="service@manokip.uz" b="+998 90 544-61-07" />
+                <ContactBlock icon="mail" eyebrow={t('contact.col.contacts')}
+                  a="manokip@manometr.uz" b="+998 90 544 61 07" c="+998 55 501 61 07" />
                 <ContactBlock icon="pin" eyebrow={t('contact.col.hq')} a={t('contact.hq.district')} b={t('contact.hq.address')} />
                 <ContactBlock icon="clock" eyebrow={t('contact.col.hours')} a={t('contact.hours.days')} b={t('contact.hours.tz')} />
               </div>
@@ -51,6 +57,7 @@ export default function Contact() {
               <div className="mk-eyebrow">{t('contact.form.title')}</div>
               <div className="mk-stack" style={{ marginTop: 20, gap: 16 }}>
                 <Field id="c-name" label={t('contact.form.name')} value={form.name} onChange={(v) => update('name', v)} placeholder={t('contact.form.namePh')} autoComplete="name" required />
+                <Field id="c-company" label={t('contact.form.company')} value={form.company} onChange={(v) => update('company', v)} placeholder={t('contact.form.companyPh')} autoComplete="organization" required />
                 <Field id="c-phone" label={t('contact.form.phone')} value={form.phone} onChange={(v) => update('phone', v)} placeholder={t('contact.form.phonePh')} type="tel" autoComplete="tel" required />
                 <Field id="c-email" label={t('contact.form.email')} value={form.email} onChange={(v) => update('email', v)} placeholder={t('contact.form.emailPh')} type="email" autoComplete="email" required />
                 <label className="mk-field" htmlFor="c-msg">
@@ -88,12 +95,13 @@ export default function Contact() {
   );
 }
 
-function ContactBlock({ icon, eyebrow, a, b }) {
+function ContactBlock({ icon, eyebrow, a, b, c }) {
   return (
     <div>
       <div className="mk-row mk-eyebrow" style={{ marginBottom: 10, gap: 7 }}><Icon name={icon} size={14} /> {eyebrow}</div>
       <div style={{ fontSize: 14.5 }}>{a}</div>
       <div className="mk-mono mk-muted" style={{ fontSize: 13, marginTop: 4 }}>{b}</div>
+      {c && <div className="mk-mono mk-muted" style={{ fontSize: 13, marginTop: 2 }}>{c}</div>}
     </div>
   );
 }

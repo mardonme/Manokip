@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { StoreHeader, StoreFooter } from '../components/Chrome.jsx';
+import Seo from '../components/Seo.jsx';
 import ProductCard from '../components/ProductCard.jsx';
 import { Reveal, Icon, ProductGridSkeleton } from '../components/ui/index.js';
 import { api } from '../lib/api.js';
@@ -61,7 +62,9 @@ export default function Catalog() {
     return () => { cancelled = true; };
   }, [activeCategory, activeDia, activeAcc, activeSort, page]);
 
-  const activeCat = categories.find((c) => c.slug === activeCategory);
+  // The API nests sub-types under their family, so the active slug may be either.
+  const allCats = categories.flatMap((c) => [c, ...(c.children || [])]);
+  const activeCat = allCats.find((c) => c.slug === activeCategory);
   const heading = activeCat ? activeCat.name : t('catalog.all');
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
   const hasFilters = !!(activeCategory || activeDia || activeAcc || activeSort !== 'popular');
@@ -83,6 +86,7 @@ export default function Catalog() {
   return (
     <div className="mk">
       <StoreHeader />
+      <Seo title={t('seo.catalog.title')} description={t('seo.catalog.desc')} />
       <main id="main">
         <div className="mk-container" style={{ paddingTop: 36, paddingBottom: 20 }}>
           <nav className="mk-mono" aria-label="Breadcrumb" style={{ fontSize: 11, color: 'var(--ink-3)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 22 }}>
@@ -95,7 +99,7 @@ export default function Catalog() {
             </div>
             <div className="mk-mono mk-muted" style={{ fontSize: 12, textAlign: 'right' }}>
               <div className="mk-num">{total} {t('catalog.products')}</div>
-              <div style={{ marginTop: 4 }} className="mk-num">{categories.length} {t('catalog.categories')}</div>
+              <div style={{ marginTop: 4 }} className="mk-num">{allCats.length} {t('catalog.categories')}</div>
             </div>
           </div>
         </div>
@@ -122,8 +126,8 @@ export default function Catalog() {
               <span className="mk-label">{t('catalog.sort')}</span>
               <select className="mk-select" value={activeSort} onChange={(e) => setParam('sort', e.target.value === 'popular' ? '' : e.target.value)}>
                 <option value="popular">{t('catalog.sort.popular')}</option>
-                <option value="price_asc">{t('catalog.sort.priceAsc')}</option>
-                <option value="price_desc">{t('catalog.sort.priceDesc')}</option>
+                <option value="model_asc">{t('catalog.sort.modelAsc')}</option>
+                <option value="model_desc">{t('catalog.sort.modelDesc')}</option>
                 <option value="newest">{t('catalog.sort.newest')}</option>
               </select>
             </label>
@@ -143,10 +147,21 @@ export default function Catalog() {
                   <span className="mk-mono" style={{ fontSize: 11, color: 'var(--ink-4)' }}>{categories.reduce((n, c) => n + c.count, 0)}</span>
                 </button>
                 {categories.map((c) => (
-                  <button key={c.slug} onClick={() => setCategory(c.slug)} className={`mk-filterlink ${activeCategory === c.slug ? 'is-active' : ''}`} aria-pressed={activeCategory === c.slug}>
-                    <span>{c.name}</span>
-                    <span className="mk-mono" style={{ fontSize: 11, color: 'var(--ink-4)' }}>{c.count}</span>
-                  </button>
+                  <React.Fragment key={c.slug}>
+                    <button onClick={() => setCategory(c.slug)} className={`mk-filterlink ${activeCategory === c.slug ? 'is-active' : ''}`} aria-pressed={activeCategory === c.slug}>
+                      <span>{c.name}</span>
+                      <span className="mk-mono" style={{ fontSize: 11, color: 'var(--ink-4)' }}>{c.count}</span>
+                    </button>
+                    {/* Sub-types sit under their family; picking the family shows all of them. */}
+                    {(c.children || []).map((k) => (
+                      <button key={k.slug} onClick={() => setCategory(k.slug)}
+                        className={`mk-filterlink mk-filterlink-sub ${activeCategory === k.slug ? 'is-active' : ''}`}
+                        aria-pressed={activeCategory === k.slug}>
+                        <span>{k.name}</span>
+                        <span className="mk-mono" style={{ fontSize: 11, color: 'var(--ink-4)' }}>{k.count}</span>
+                      </button>
+                    ))}
+                  </React.Fragment>
                 ))}
               </div>
             </aside>

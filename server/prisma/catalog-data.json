@@ -1,0 +1,4338 @@
+{
+ "categories": [
+  {
+   "slug": "manometers",
+   "nameRu": "Манометры",
+   "nameUz": "Manometrlar",
+   "nameEn": "Pressure gauges",
+   "parent": null,
+   "sortOrder": 0
+  },
+  {
+   "slug": "pressure-sensors",
+   "nameRu": "Датчики давления MANOBAR",
+   "nameUz": "MANOBAR bosim datchiklari",
+   "nameEn": "MANOBAR pressure transmitters",
+   "parent": null,
+   "sortOrder": 1
+  },
+  {
+   "slug": "level-gauges",
+   "nameRu": "Уровнемеры MANOPL",
+   "nameUz": "MANOPL sath oʻlchagichlari",
+   "nameEn": "MANOPL level gauges",
+   "parent": null,
+   "sortOrder": 2
+  },
+  {
+   "slug": "protection-relays",
+   "nameRu": "Блоки защиты",
+   "nameUz": "Himoya bloklari",
+   "nameEn": "Protection units",
+   "parent": null,
+   "sortOrder": 3
+  },
+  {
+   "slug": "oxygen-manometers",
+   "nameRu": "Кислородные манометры",
+   "nameUz": "Kislorodli manometrlar",
+   "nameEn": "Oxygen pressure gauges",
+   "parent": "manometers",
+   "sortOrder": 0
+  },
+  {
+   "slug": "technical-manometers",
+   "nameRu": "Технические манометры",
+   "nameUz": "Texnik manometrlar",
+   "nameEn": "General-purpose pressure gauges",
+   "parent": "manometers",
+   "sortOrder": 1
+  },
+  {
+   "slug": "vibration-resistant-manometers",
+   "nameRu": "Виброустойчивые манометры",
+   "nameUz": "Vibrobardosh manometrlar",
+   "nameEn": "Vibration-resistant pressure gauges",
+   "parent": "manometers",
+   "sortOrder": 2
+  },
+  {
+   "slug": "corrosion-resistant-manometers",
+   "nameRu": "Коррозионностойкие манометры",
+   "nameUz": "Korroziyabardosh manometrlar",
+   "nameEn": "Corrosion-resistant pressure gauges",
+   "parent": "manometers",
+   "sortOrder": 3
+  },
+  {
+   "slug": "ammonia-manometers",
+   "nameRu": "Аммиачные манометры",
+   "nameUz": "Ammiakli manometrlar",
+   "nameEn": "Ammonia pressure gauges",
+   "parent": "manometers",
+   "sortOrder": 4
+  },
+  {
+   "slug": "electrocontact-manometers",
+   "nameRu": "Электроконтактные манометры",
+   "nameUz": "Elektrokontaktli manometrlar",
+   "nameEn": "Electrical-contact pressure gauges",
+   "parent": "manometers",
+   "sortOrder": 5
+  },
+  {
+   "slug": "digital-manometers",
+   "nameRu": "Цифровые манометры",
+   "nameUz": "Raqamli manometrlar",
+   "nameEn": "Digital pressure gauges",
+   "parent": "manometers",
+   "sortOrder": 6
+  }
+ ],
+ "specLabels": [
+  {
+   "slug": "nominal-case-diameter",
+   "labelRu": "Номинальный диаметр корпуса",
+   "labelUz": "Korpusning nominal diametri",
+   "labelEn": "Nominal case diameter",
+   "sortOrder": 0
+  },
+  {
+   "slug": "accuracy-class",
+   "labelRu": "Класс точности",
+   "labelUz": "Aniqlik sinfi",
+   "labelEn": "Accuracy class",
+   "sortOrder": 1
+  },
+  {
+   "slug": "ingress-protection",
+   "labelRu": "Степень пылевлагозащиты",
+   "labelUz": "Chang va namlikdan himoya darajasi",
+   "labelEn": "Ingress protection rating",
+   "sortOrder": 2
+  },
+  {
+   "slug": "fitting-thread",
+   "labelRu": "Резьба присоединительного штуцера",
+   "labelUz": "Ulanish shtutseri rezbasi",
+   "labelEn": "Connection fitting thread",
+   "sortOrder": 3
+  },
+  {
+   "slug": "wrench-size",
+   "labelRu": "Размер квадрата под ключ, мм",
+   "labelUz": "Kalit uchun kvadrat oʻlchami, mm",
+   "labelEn": "Wrench flat size, mm",
+   "sortOrder": 4
+  },
+  {
+   "slug": "fitting-position",
+   "labelRu": "Расположение штуцера",
+   "labelUz": "Shtutser joylashuvi",
+   "labelEn": "Fitting position",
+   "sortOrder": 5
+  },
+  {
+   "slug": "climatic-rating",
+   "labelRu": "Устойчивость к климатическим воздействиям",
+   "labelUz": "Iqlim taʼsirlariga bardoshlik",
+   "labelEn": "Climatic resistance",
+   "sortOrder": 6
+  },
+  {
+   "slug": "process-temp-range",
+   "labelRu": "Диапазон температур измеряемой среды, С",
+   "labelUz": "Oʻlchanadigan muhit harorati diapazoni, °C",
+   "labelEn": "Process medium temperature range, °C",
+   "sortOrder": 7
+  },
+  {
+   "slug": "ambient-temp-range",
+   "labelRu": "Диапазон температуры окружающей среды, С",
+   "labelUz": "Atrof-muhit harorati diapazoni, °C",
+   "labelEn": "Ambient temperature range, °C",
+   "sortOrder": 8
+  },
+  {
+   "slug": "service-life",
+   "labelRu": "Средний срок службы",
+   "labelUz": "Oʻrtacha xizmat muddati",
+   "labelEn": "Average service life",
+   "sortOrder": 9
+  },
+  {
+   "slug": "case-material",
+   "labelRu": "Материал корпуса",
+   "labelUz": "Korpus materiali",
+   "labelEn": "Case material",
+   "sortOrder": 10
+  },
+  {
+   "slug": "window",
+   "labelRu": "Стекло",
+   "labelUz": "Oyna",
+   "labelEn": "Window",
+   "sortOrder": 11
+  },
+  {
+   "slug": "bourdon-tube",
+   "labelRu": "Трубчатая пружина",
+   "labelUz": "Naysimon prujina",
+   "labelEn": "Bourdon tube",
+   "sortOrder": 12
+  },
+  {
+   "slug": "fitting-movement",
+   "labelRu": "Штуцер, трибко-секторный механизм",
+   "labelUz": "Shtutser va tribko-sektor mexanizmi",
+   "labelEn": "Fitting and gear movement",
+   "sortOrder": 13
+  },
+  {
+   "slug": "dial",
+   "labelRu": "Циферблат",
+   "labelUz": "Siferblat",
+   "labelEn": "Dial",
+   "sortOrder": 14
+  },
+  {
+   "slug": "measuring-ranges",
+   "labelRu": "Рабочие диапазоны измерений",
+   "labelUz": "Ishchi oʻlchov diapazonlari",
+   "labelEn": "Measuring ranges",
+   "sortOrder": 15
+  },
+  {
+   "slug": "damping-fluid",
+   "labelRu": "Демпфирующая жидкость",
+   "labelUz": "Dempferlovchi suyuqlik",
+   "labelEn": "Damping fluid",
+   "sortOrder": 16
+  },
+  {
+   "slug": "connection-type",
+   "labelRu": "Присоединение",
+   "labelUz": "Ulanish turi",
+   "labelEn": "Connection type",
+   "sortOrder": 17
+  },
+  {
+   "slug": "flange-material",
+   "labelRu": "Материал фланца",
+   "labelUz": "Flanets materiali",
+   "labelEn": "Flange material",
+   "sortOrder": 18
+  },
+  {
+   "slug": "contact-type",
+   "labelRu": "Тип контактов",
+   "labelUz": "Kontaktlar turi",
+   "labelEn": "Contact type",
+   "sortOrder": 19
+  },
+  {
+   "slug": "max-switching-voltage",
+   "labelRu": "Максимальное напряжение коммутируемого тока",
+   "labelUz": "Kommutatsiyalanadigan tokning maksimal kuchlanishi",
+   "labelEn": "Maximum switching voltage",
+   "sortOrder": 20
+  },
+  {
+   "slug": "max-current",
+   "labelRu": "Сила тока, не более",
+   "labelUz": "Tok kuchi, koʻpi bilan",
+   "labelEn": "Maximum current",
+   "sortOrder": 21
+  },
+  {
+   "slug": "filling",
+   "labelRu": "Наполнение",
+   "labelUz": "Toʻldirgich",
+   "labelEn": "Filling",
+   "sortOrder": 22
+  },
+  {
+   "slug": "diaphragm-material",
+   "labelRu": "Материал мембраны",
+   "labelUz": "Membrana materiali",
+   "labelEn": "Diaphragm material",
+   "sortOrder": 23
+  },
+  {
+   "slug": "fitting-material",
+   "labelRu": "Материал штуцера",
+   "labelUz": "Shtutser materiali",
+   "labelEn": "Fitting material",
+   "sortOrder": 24
+  },
+  {
+   "slug": "display-type",
+   "labelRu": "Тип отображения",
+   "labelUz": "Koʻrsatish turi",
+   "labelEn": "Display type",
+   "sortOrder": 25
+  },
+  {
+   "slug": "power-type",
+   "labelRu": "Тип питания",
+   "labelUz": "Taʼminot turi",
+   "labelEn": "Power supply type",
+   "sortOrder": 26
+  },
+  {
+   "slug": "measuring-limit",
+   "labelRu": "Предел измерения",
+   "labelUz": "Oʻlchov chegarasi",
+   "labelEn": "Measuring limit",
+   "sortOrder": 27
+  },
+  {
+   "slug": "output-signal",
+   "labelRu": "Выходной сигнал",
+   "labelUz": "Chiquvchi signal",
+   "labelEn": "Output signal",
+   "sortOrder": 28
+  },
+  {
+   "slug": "error",
+   "labelRu": "Погрешность",
+   "labelUz": "Xatolik",
+   "labelEn": "Accuracy error",
+   "sortOrder": 29
+  },
+  {
+   "slug": "process-thread",
+   "labelRu": "Резьба присоединения к процессу",
+   "labelUz": "Jarayonga ulanish rezbasi",
+   "labelEn": "Process connection thread",
+   "sortOrder": 30
+  },
+  {
+   "slug": "supply-voltage",
+   "labelRu": "Напряжение питания",
+   "labelUz": "Taʼminot kuchlanishi",
+   "labelEn": "Supply voltage",
+   "sortOrder": 31
+  },
+  {
+   "slug": "ambient-temp-limits",
+   "labelRu": "Пределы температуры окружающей среды",
+   "labelUz": "Atrof-muhit harorati chegaralari",
+   "labelEn": "Ambient temperature limits",
+   "sortOrder": 32
+  },
+  {
+   "slug": "process-temp",
+   "labelRu": "Температура измеряемой среды",
+   "labelUz": "Oʻlchanadigan muhit harorati",
+   "labelEn": "Process medium temperature",
+   "sortOrder": 33
+  },
+  {
+   "slug": "protection-rating",
+   "labelRu": "Степень защиты",
+   "labelUz": "Himoya darajasi",
+   "labelEn": "Protection rating",
+   "sortOrder": 34
+  },
+  {
+   "slug": "explosion-protection",
+   "labelRu": "Взрывозащита",
+   "labelUz": "Portlashdan himoya",
+   "labelEn": "Explosion protection",
+   "sortOrder": 35
+  },
+  {
+   "slug": "display-present",
+   "labelRu": "Наличие дисплея",
+   "labelUz": "Displey mavjudligi",
+   "labelEn": "Display",
+   "sortOrder": 36
+  },
+  {
+   "slug": "measured-object",
+   "labelRu": "Объект измерения",
+   "labelUz": "Oʻlchov obyekti",
+   "labelEn": "Measured medium",
+   "sortOrder": 37
+  },
+  {
+   "slug": "mechanical-connection",
+   "labelRu": "Механическое присоединение наружная",
+   "labelUz": "Mexanik ulanish (tashqi)",
+   "labelEn": "Mechanical connection (external)",
+   "sortOrder": 38
+  },
+  {
+   "slug": "humidity-range",
+   "labelRu": "Влажность шкалы",
+   "labelUz": "Namlik diapazoni",
+   "labelEn": "Humidity range",
+   "sortOrder": 39
+  },
+  {
+   "slug": "filter-adjustment",
+   "labelRu": "Регулировка фильтрации",
+   "labelUz": "Filtrlashni sozlash",
+   "labelEn": "Filter adjustment",
+   "sortOrder": 40
+  },
+  {
+   "slug": "battery-voltage",
+   "labelRu": "Напряжение батареи",
+   "labelUz": "Batareya kuchlanishi",
+   "labelEn": "Battery voltage",
+   "sortOrder": 41
+  },
+  {
+   "slug": "battery-capacity",
+   "labelRu": "Емкость батареи",
+   "labelUz": "Batareya sigʻimi",
+   "labelEn": "Battery capacity",
+   "sortOrder": 42
+  },
+  {
+   "slug": "radio-frequency",
+   "labelRu": "Частота радиоканала",
+   "labelUz": "Radiokanal chastotasi",
+   "labelEn": "Radio channel frequency",
+   "sortOrder": 43
+  },
+  {
+   "slug": "gateway-range",
+   "labelRu": "Расстояние передачи на шлюз",
+   "labelUz": "Shlyuzgacha uzatish masofasi",
+   "labelEn": "Transmission range to gateway",
+   "sortOrder": 44
+  },
+  {
+   "slug": "packet-interval",
+   "labelRu": "Частота отправки пакетов",
+   "labelUz": "Paketlarni yuborish chastotasi",
+   "labelEn": "Packet transmission interval",
+   "sortOrder": 45
+  },
+  {
+   "slug": "battery-form-factor",
+   "labelRu": "Форм Фактор батареи",
+   "labelUz": "Batareya form-faktori",
+   "labelEn": "Battery form factor",
+   "sortOrder": 46
+  },
+  {
+   "slug": "probe-length",
+   "labelRu": "Длина зонда",
+   "labelUz": "Zond uzunligi",
+   "labelEn": "Probe length",
+   "sortOrder": 47
+  },
+  {
+   "slug": "probe-material",
+   "labelRu": "Материал зонда",
+   "labelUz": "Zond materiali",
+   "labelEn": "Probe material",
+   "sortOrder": 48
+  },
+  {
+   "slug": "process-pressure",
+   "labelRu": "Давление рабочей среды",
+   "labelUz": "Ishchi muhit bosimi",
+   "labelEn": "Process pressure",
+   "sortOrder": 49
+  },
+  {
+   "slug": "measuring-range",
+   "labelRu": "Диапазон измерения",
+   "labelUz": "Oʻlchov diapazoni",
+   "labelEn": "Measuring range",
+   "sortOrder": 50
+  },
+  {
+   "slug": "power-consumption",
+   "labelRu": "Потребляемая мощность",
+   "labelUz": "Isteʼmol quvvati",
+   "labelEn": "Power consumption",
+   "sortOrder": 51
+  },
+  {
+   "slug": "nominal-supply-3ph",
+   "labelRu": "Номинальное напряжение питания, трехфазное, В",
+   "labelUz": "Nominal taʼminot kuchlanishi, uch fazali, V",
+   "labelEn": "Nominal supply voltage, three-phase, V",
+   "sortOrder": 52
+  },
+  {
+   "slug": "mains-frequency",
+   "labelRu": "Частота сети, Гц",
+   "labelUz": "Tarmoq chastotasi, Gs",
+   "labelEn": "Mains frequency, Hz",
+   "sortOrder": 53
+  },
+  {
+   "slug": "nominal-current-range",
+   "labelRu": "Диапазон номинальных токов, А",
+   "labelUz": "Nominal toklar diapazoni, A",
+   "labelEn": "Nominal current range, A",
+   "sortOrder": 54
+  },
+  {
+   "slug": "voltage-hysteresis",
+   "labelRu": "Гистерезис по напряжению (фазное/линейное), В",
+   "labelUz": "Kuchlanish boʻyicha gisterezis (fazali/chiziqli), V",
+   "labelEn": "Voltage hysteresis (phase/line), V",
+   "sortOrder": 55
+  },
+  {
+   "slug": "current-threshold-accuracy",
+   "labelRu": "Точность определения порога срабатывания по току",
+   "labelUz": "Tok boʻyicha ishga tushish chegarasini aniqlash aniqligi",
+   "labelEn": "Current trip threshold accuracy",
+   "sortOrder": 56
+  },
+  {
+   "slug": "voltage-threshold-accuracy",
+   "labelRu": "Точность определения порогов по напряжению, В, не хуже",
+   "labelUz": "Kuchlanish chegaralarini aniqlash aniqligi, V, kamida",
+   "labelEn": "Voltage threshold accuracy, V, min.",
+   "sortOrder": 57
+  },
+  {
+   "slug": "phase-imbalance-accuracy",
+   "labelRu": "Точность определения перекоса фаз по напряжению",
+   "labelUz": "Fazalar nomutanosibligini aniqlash aniqligi",
+   "labelEn": "Phase imbalance detection accuracy",
+   "sortOrder": 58
+  },
+  {
+   "slug": "power-consumption-load",
+   "labelRu": "Потребляемая мощность (под нагрузкой), ВА, не более",
+   "labelUz": "Isteʼmol quvvati (yuk ostida), VA, koʻpi bilan",
+   "labelEn": "Power consumption (under load), VA, max.",
+   "sortOrder": 59
+  },
+  {
+   "slug": "climatic-version",
+   "labelRu": "Климатическое исполнение",
+   "labelUz": "Iqlimiy ijro",
+   "labelEn": "Climatic version",
+   "sortOrder": 60
+  },
+  {
+   "slug": "operating-temp-range",
+   "labelRu": "Диапазон рабочих температур, С",
+   "labelUz": "Ishchi harorat diapazoni, °C",
+   "labelEn": "Operating temperature range, °C",
+   "sortOrder": 61
+  },
+  {
+   "slug": "storage-temp",
+   "labelRu": "Температура хранения, С",
+   "labelUz": "Saqlash harorati, °C",
+   "labelEn": "Storage temperature, °C",
+   "sortOrder": 62
+  },
+  {
+   "slug": "phase-current-rms",
+   "labelRu": "Действующие значения фазных токов, A",
+   "labelUz": "Faza toklarining amaldagi qiymatlari, A",
+   "labelEn": "RMS phase currents, A",
+   "sortOrder": 63
+  },
+  {
+   "slug": "line-voltage-rms",
+   "labelRu": "Действующие значения линейных напряжений, В",
+   "labelUz": "Chiziqli kuchlanishlarning amaldagi qiymatlari, V",
+   "labelEn": "RMS line voltages, V",
+   "sortOrder": 64
+  },
+  {
+   "slug": "reclose-delay",
+   "labelRu": "Время до окончания выдержки АПВ, сек",
+   "labelUz": "AQD kechikishi tugashigacha vaqt, sek",
+   "labelEn": "Time to end of auto-reclose delay, s",
+   "sortOrder": 65
+  },
+  {
+   "slug": "cos-phi",
+   "labelRu": "Значение cos(f)",
+   "labelUz": "cos(φ) qiymati",
+   "labelEn": "cos(φ) value",
+   "sortOrder": 66
+  }
+ ],
+ "products": [
+  {
+   "sku": "MNK-OXY-50",
+   "model": "ВП2-Ум, МВП2-Ум, МП2-Ум",
+   "categorySlug": "oxygen-manometers",
+   "variantRu": null,
+   "variantUz": null,
+   "variantEn": null,
+   "descRu": "Вакуумметры, мановакуумметры, манометры кислородные ВП2-Ум, МВП2-Ум, МП2-Ум предназначены для измерения избыточного давления неагрессивных к медным сплавам газов, в том числе кислорода, ацетилена, пропан-бутана, метана.",
+   "descUz": "Vakuummetr, mano-vakuummetr va kislorod manometrlari ВП2-Ум, МВП2-Ум, МП2-Ум mis qotishmalariga nisbatan agressiv boʻlmagan gazlar, jumladan kislorod, atsetilen, propan-butan va metan ortiqcha bosimini oʻlchash uchun moʻljallangan.",
+   "descEn": "The ВП2-Ум, МВП2-Ум and МП2-Ум oxygen vacuum, compound and pressure gauges measure the gauge pressure of gases that are non-aggressive to copper alloys, including oxygen, acetylene, propane-butane and methane.",
+   "diameter": 50,
+   "accuracy": "2,5 (базовый)",
+   "availability": "MADE_TO_ORDER",
+   "leadTimeDays": 14,
+   "sourcePage": 3,
+   "specs": [
+    {
+     "labelSlug": "nominal-case-diameter",
+     "valueRu": "50 мм",
+     "valueUz": "50 mm",
+     "valueEn": "50 mm",
+     "sortOrder": 0
+    },
+    {
+     "labelSlug": "accuracy-class",
+     "valueRu": "2,5 (базовый)",
+     "valueUz": "2,5 (asosiy)",
+     "valueEn": "2.5 (standard)",
+     "sortOrder": 1
+    },
+    {
+     "labelSlug": "ingress-protection",
+     "valueRu": "Ip40",
+     "valueUz": "IP40",
+     "valueEn": "IP40",
+     "sortOrder": 2
+    },
+    {
+     "labelSlug": "fitting-thread",
+     "valueRu": "М12x1,5 (базовая)",
+     "valueUz": "М12x1,5 (asosiy)",
+     "valueEn": "M12×1.5 (standard)",
+     "sortOrder": 3
+    },
+    {
+     "labelSlug": "wrench-size",
+     "valueRu": "14 мм",
+     "valueUz": "14 mm",
+     "valueEn": "14 mm",
+     "sortOrder": 4
+    },
+    {
+     "labelSlug": "fitting-position",
+     "valueRu": "радиальное",
+     "valueUz": "radial",
+     "valueEn": "radial",
+     "sortOrder": 5
+    },
+    {
+     "labelSlug": "climatic-rating",
+     "valueRu": "исполнение У2 по ГОСТ 15150-69",
+     "valueUz": "GOST 15150-69 boʻyicha U2 ijro",
+     "valueEn": "type U2 per GOST 15150-69",
+     "sortOrder": 6
+    },
+    {
+     "labelSlug": "process-temp-range",
+     "valueRu": "от -50 до +90 оС",
+     "valueUz": "-50 dan +90 °C gacha",
+     "valueEn": "-50 to +90 °C",
+     "sortOrder": 7
+    },
+    {
+     "labelSlug": "ambient-temp-range",
+     "valueRu": "от -60 до +60 оС",
+     "valueUz": "-60 dan +60 °C gacha",
+     "valueEn": "-60 to +60 °C",
+     "sortOrder": 8
+    },
+    {
+     "labelSlug": "service-life",
+     "valueRu": "5 лет",
+     "valueUz": "5 yil",
+     "valueEn": "5 years",
+     "sortOrder": 9
+    },
+    {
+     "labelSlug": "case-material",
+     "valueRu": "сталь, О2 (кислород) окрашенная в синий цвет",
+     "valueUz": "koʻk rangga boʻyalgan poʻlat, O₂ (kislorod)",
+     "valueEn": "steel, O₂ (oxygen), painted blue",
+     "sortOrder": 10
+    },
+    {
+     "labelSlug": "window",
+     "valueRu": "органическое",
+     "valueUz": "organik shisha",
+     "valueEn": "organic glass",
+     "sortOrder": 11
+    },
+    {
+     "labelSlug": "bourdon-tube",
+     "valueRu": "медный сплав",
+     "valueUz": "mis qotishmasi",
+     "valueEn": "copper alloy",
+     "sortOrder": 12
+    },
+    {
+     "labelSlug": "fitting-movement",
+     "valueRu": "медный сплав",
+     "valueUz": "mis qotishmasi",
+     "valueEn": "copper alloy",
+     "sortOrder": 13
+    },
+    {
+     "labelSlug": "dial",
+     "valueRu": "алюминиевый сплав, окрашенный в белый цвет",
+     "valueUz": "oq rangga boʻyalgan alyuminiy qotishmasi",
+     "valueEn": "aluminium alloy, painted white",
+     "sortOrder": 14
+    },
+    {
+     "labelSlug": "measuring-ranges",
+     "valueRu": "от 0 до 600 кгс/см2 (остальные пределы по заказу)",
+     "valueUz": "0 dan 600 kgk/sm² gacha (qolgan chegaralar buyurtma boʻyicha)",
+     "valueEn": "0 to 600 kgf/cm² (other ranges to order)",
+     "sortOrder": 15
+    }
+   ]
+  },
+  {
+   "sku": "MNK-TECH-63",
+   "model": "ВП2-Ум, МВП2-Ум, МП2-Ум",
+   "categorySlug": "technical-manometers",
+   "variantRu": null,
+   "variantUz": null,
+   "variantEn": null,
+   "descRu": "Вакуумметры, мановакуумметры, манометры общетехнические ВП2-Ум, МВП2-Ум, МП2-Ум предназначены для измерения избыточного и/или вакуумметрического давления неагрессивных по отношению к медным сплавам сред (жидкостей, пара, газов).",
+   "descUz": "Umumtexnik vakuummetr, mano-vakuummetr va manometrlar ВП2-Ум, МВП2-Ум, МП2-Ум mis qotishmalariga nisbatan agressiv boʻlmagan muhitlarning (suyuqlik, bugʻ, gaz) ortiqcha va/yoki vakuum bosimini oʻlchash uchun moʻljallangan.",
+   "descEn": "The ВП2-Ум, МВП2-Ум and МП2-Ум general-purpose vacuum, compound and pressure gauges measure gauge and/or vacuum pressure of media (liquids, steam, gases) that are non-aggressive to copper alloys.",
+   "diameter": 63,
+   "accuracy": "1,5 (базовый), 1 (по заказу)",
+   "availability": "MADE_TO_ORDER",
+   "leadTimeDays": 14,
+   "sourcePage": 4,
+   "specs": [
+    {
+     "labelSlug": "nominal-case-diameter",
+     "valueRu": "63 мм",
+     "valueUz": "63 mm",
+     "valueEn": "63 mm",
+     "sortOrder": 0
+    },
+    {
+     "labelSlug": "accuracy-class",
+     "valueRu": "1,5 (базовый), 1 (по заказу)",
+     "valueUz": "1,5 (asosiy), 1 (buyurtma boʻyicha)",
+     "valueEn": "1.5 (standard), 1 (to order)",
+     "sortOrder": 1
+    },
+    {
+     "labelSlug": "ingress-protection",
+     "valueRu": "Ip40",
+     "valueUz": "IP40",
+     "valueEn": "IP40",
+     "sortOrder": 2
+    },
+    {
+     "labelSlug": "fitting-thread",
+     "valueRu": "М12x1,5 (базовая)",
+     "valueUz": "М12x1,5 (asosiy)",
+     "valueEn": "M12×1.5 (standard)",
+     "sortOrder": 3
+    },
+    {
+     "labelSlug": "wrench-size",
+     "valueRu": "14 мм",
+     "valueUz": "14 mm",
+     "valueEn": "14 mm",
+     "sortOrder": 4
+    },
+    {
+     "labelSlug": "fitting-position",
+     "valueRu": "радиальное",
+     "valueUz": "radial",
+     "valueEn": "radial",
+     "sortOrder": 5
+    },
+    {
+     "labelSlug": "climatic-rating",
+     "valueRu": "исполнение У2 по ГОСТ 15150-69",
+     "valueUz": "GOST 15150-69 boʻyicha U2 ijro",
+     "valueEn": "type U2 per GOST 15150-69",
+     "sortOrder": 6
+    },
+    {
+     "labelSlug": "process-temp-range",
+     "valueRu": "от -50 до +90 оС",
+     "valueUz": "-50 dan +90 °C gacha",
+     "valueEn": "-50 to +90 °C",
+     "sortOrder": 7
+    },
+    {
+     "labelSlug": "ambient-temp-range",
+     "valueRu": "от -60 до +60 оС",
+     "valueUz": "-60 dan +60 °C gacha",
+     "valueEn": "-60 to +60 °C",
+     "sortOrder": 8
+    },
+    {
+     "labelSlug": "service-life",
+     "valueRu": "5 лет",
+     "valueUz": "5 yil",
+     "valueEn": "5 years",
+     "sortOrder": 9
+    },
+    {
+     "labelSlug": "case-material",
+     "valueRu": "сталь, окрашенная в черный цвет",
+     "valueUz": "qora rangga boʻyalgan poʻlat",
+     "valueEn": "steel, painted black",
+     "sortOrder": 10
+    },
+    {
+     "labelSlug": "window",
+     "valueRu": "техническое",
+     "valueUz": "texnik",
+     "valueEn": "technical",
+     "sortOrder": 11
+    },
+    {
+     "labelSlug": "bourdon-tube",
+     "valueRu": "медный сплав",
+     "valueUz": "mis qotishmasi",
+     "valueEn": "copper alloy",
+     "sortOrder": 12
+    },
+    {
+     "labelSlug": "fitting-movement",
+     "valueRu": "медный сплав",
+     "valueUz": "mis qotishmasi",
+     "valueEn": "copper alloy",
+     "sortOrder": 13
+    },
+    {
+     "labelSlug": "dial",
+     "valueRu": "алюминиевый сплав, окрашенный в белый цвет",
+     "valueUz": "oq rangga boʻyalgan alyuminiy qotishmasi",
+     "valueEn": "aluminium alloy, painted white",
+     "sortOrder": 14
+    },
+    {
+     "labelSlug": "measuring-ranges",
+     "valueRu": "от 0 до 600 кгс/см2 (остальные пределы по заказу)",
+     "valueUz": "0 dan 600 kgk/sm² gacha (qolgan chegaralar buyurtma boʻyicha)",
+     "valueEn": "0 to 600 kgf/cm² (other ranges to order)",
+     "sortOrder": 15
+    }
+   ]
+  },
+  {
+   "sku": "MNK-TECH-100",
+   "model": "ВП3-Ум, МВП3-Ум, МП3-Ум",
+   "categorySlug": "technical-manometers",
+   "variantRu": null,
+   "variantUz": null,
+   "variantEn": null,
+   "descRu": "Вакуумметры, мановакуумметры, манометры общетехнические ВП3-Ум, МВП3-Ум, МП3-Ум предназначены для измерения избыточного и/или вакуумметрического давления неагрессивных по отношению к медным сплавам сред (жидкостей, пара, газов).",
+   "descUz": "Umumtexnik vakuummetr, mano-vakuummetr va manometrlar ВП3-Ум, МВП3-Ум, МП3-Ум mis qotishmalariga nisbatan agressiv boʻlmagan muhitlarning (suyuqlik, bugʻ, gaz) ortiqcha va/yoki vakuum bosimini oʻlchash uchun moʻljallangan.",
+   "descEn": "The ВП3-Ум, МВП3-Ум, МП3-Ум general-purpose vacuum, compound and pressure gauges measure gauge and/or vacuum pressure of media (liquids, steam, gases) that are non-aggressive to copper alloys.",
+   "diameter": 100,
+   "accuracy": "1,5 (базовый), 1 (по заказу)",
+   "availability": "MADE_TO_ORDER",
+   "leadTimeDays": 14,
+   "sourcePage": 5,
+   "specs": [
+    {
+     "labelSlug": "nominal-case-diameter",
+     "valueRu": "100 мм",
+     "valueUz": "100 mm",
+     "valueEn": "100 mm",
+     "sortOrder": 0
+    },
+    {
+     "labelSlug": "accuracy-class",
+     "valueRu": "1,5 (базовый), 1 (по заказу)",
+     "valueUz": "1,5 (asosiy), 1 (buyurtma boʻyicha)",
+     "valueEn": "1.5 (standard), 1 (to order)",
+     "sortOrder": 1
+    },
+    {
+     "labelSlug": "ingress-protection",
+     "valueRu": "Ip40",
+     "valueUz": "IP40",
+     "valueEn": "IP40",
+     "sortOrder": 2
+    },
+    {
+     "labelSlug": "fitting-thread",
+     "valueRu": "М20x1,5 (базовая)",
+     "valueUz": "М20x1,5 (asosiy)",
+     "valueEn": "M20×1.5 (standard)",
+     "sortOrder": 3
+    },
+    {
+     "labelSlug": "wrench-size",
+     "valueRu": "17 мм",
+     "valueUz": "17 mm",
+     "valueEn": "17 mm",
+     "sortOrder": 4
+    },
+    {
+     "labelSlug": "fitting-position",
+     "valueRu": "радиальное",
+     "valueUz": "radial",
+     "valueEn": "radial",
+     "sortOrder": 5
+    },
+    {
+     "labelSlug": "climatic-rating",
+     "valueRu": "исполнение У2 по ГОСТ 15150-69",
+     "valueUz": "GOST 15150-69 boʻyicha U2 ijro",
+     "valueEn": "type U2 per GOST 15150-69",
+     "sortOrder": 6
+    },
+    {
+     "labelSlug": "process-temp-range",
+     "valueRu": "от -50 до +90 оС",
+     "valueUz": "-50 dan +90 °C gacha",
+     "valueEn": "-50 to +90 °C",
+     "sortOrder": 7
+    },
+    {
+     "labelSlug": "ambient-temp-range",
+     "valueRu": "от -60 до +60 оС",
+     "valueUz": "-60 dan +60 °C gacha",
+     "valueEn": "-60 to +60 °C",
+     "sortOrder": 8
+    },
+    {
+     "labelSlug": "service-life",
+     "valueRu": "5 лет",
+     "valueUz": "5 yil",
+     "valueEn": "5 years",
+     "sortOrder": 9
+    },
+    {
+     "labelSlug": "case-material",
+     "valueRu": "сталь, окрашенная в черный цвет",
+     "valueUz": "qora rangga boʻyalgan poʻlat",
+     "valueEn": "steel, painted black",
+     "sortOrder": 10
+    },
+    {
+     "labelSlug": "window",
+     "valueRu": "техническое",
+     "valueUz": "texnik",
+     "valueEn": "technical",
+     "sortOrder": 11
+    },
+    {
+     "labelSlug": "bourdon-tube",
+     "valueRu": "медный сплав",
+     "valueUz": "mis qotishmasi",
+     "valueEn": "copper alloy",
+     "sortOrder": 12
+    },
+    {
+     "labelSlug": "fitting-movement",
+     "valueRu": "медный сплав",
+     "valueUz": "mis qotishmasi",
+     "valueEn": "copper alloy",
+     "sortOrder": 13
+    },
+    {
+     "labelSlug": "dial",
+     "valueRu": "алюминиевый сплав, окрашенный в белый цвет",
+     "valueUz": "oq rangga boʻyalgan alyuminiy qotishmasi",
+     "valueEn": "aluminium alloy, painted white",
+     "sortOrder": 14
+    },
+    {
+     "labelSlug": "measuring-ranges",
+     "valueRu": "от 0 до 1000 кгс/см2 (остальные пределы по заказу)",
+     "valueUz": "0 dan 1000 kgk/sm² gacha (qolgan chegaralar buyurtma boʻyicha)",
+     "valueEn": "0 to 1000 kgf/cm² (other ranges to order)",
+     "sortOrder": 15
+    }
+   ]
+  },
+  {
+   "sku": "MNK-TECH-150",
+   "model": "ВП4-Ум, МВП4-Ум, МП4-Ум",
+   "categorySlug": "technical-manometers",
+   "variantRu": null,
+   "variantUz": null,
+   "variantEn": null,
+   "descRu": "Вакуумметры, мановакуумметры, манометры общетехнические ВП4-Ум, МВП4-Ум, МП4-Ум предназначены для измерения избыточного и/или вакуумметрического давления неагрессивных по отношению к медным сплавам сред (жидкостей, пара, газов).",
+   "descUz": "Umumtexnik vakuummetr, mano-vakuummetr va manometrlar ВП4-Ум, МВП4-Ум, МП4-Ум mis qotishmalariga nisbatan agressiv boʻlmagan muhitlarning (suyuqlik, bugʻ, gaz) ortiqcha va/yoki vakuum bosimini oʻlchash uchun moʻljallangan.",
+   "descEn": "The ВП4-Ум, МВП4-Ум, МП4-Ум general-purpose vacuum, compound and pressure gauges measure gauge and/or vacuum pressure of media (liquids, steam, gases) that are non-aggressive to copper alloys.",
+   "diameter": 150,
+   "accuracy": "1,5 (базовый), 1 (по заказу)",
+   "availability": "MADE_TO_ORDER",
+   "leadTimeDays": 14,
+   "sourcePage": 6,
+   "specs": [
+    {
+     "labelSlug": "nominal-case-diameter",
+     "valueRu": "150 мм",
+     "valueUz": "150 mm",
+     "valueEn": "150 mm",
+     "sortOrder": 0
+    },
+    {
+     "labelSlug": "accuracy-class",
+     "valueRu": "1,5 (базовый), 1 (по заказу)",
+     "valueUz": "1,5 (asosiy), 1 (buyurtma boʻyicha)",
+     "valueEn": "1.5 (standard), 1 (to order)",
+     "sortOrder": 1
+    },
+    {
+     "labelSlug": "ingress-protection",
+     "valueRu": "Ip40",
+     "valueUz": "IP40",
+     "valueEn": "IP40",
+     "sortOrder": 2
+    },
+    {
+     "labelSlug": "fitting-thread",
+     "valueRu": "М20x1,5 (базовая)",
+     "valueUz": "М20x1,5 (asosiy)",
+     "valueEn": "M20×1.5 (standard)",
+     "sortOrder": 3
+    },
+    {
+     "labelSlug": "wrench-size",
+     "valueRu": "17 мм",
+     "valueUz": "17 mm",
+     "valueEn": "17 mm",
+     "sortOrder": 4
+    },
+    {
+     "labelSlug": "fitting-position",
+     "valueRu": "радиальное",
+     "valueUz": "radial",
+     "valueEn": "radial",
+     "sortOrder": 5
+    },
+    {
+     "labelSlug": "climatic-rating",
+     "valueRu": "исполнение У2 по ГОСТ 15150-69",
+     "valueUz": "GOST 15150-69 boʻyicha U2 ijro",
+     "valueEn": "type U2 per GOST 15150-69",
+     "sortOrder": 6
+    },
+    {
+     "labelSlug": "process-temp-range",
+     "valueRu": "от -50 до +90 оС",
+     "valueUz": "-50 dan +90 °C gacha",
+     "valueEn": "-50 to +90 °C",
+     "sortOrder": 7
+    },
+    {
+     "labelSlug": "ambient-temp-range",
+     "valueRu": "от -60 до +60 оС",
+     "valueUz": "-60 dan +60 °C gacha",
+     "valueEn": "-60 to +60 °C",
+     "sortOrder": 8
+    },
+    {
+     "labelSlug": "service-life",
+     "valueRu": "5 лет",
+     "valueUz": "5 yil",
+     "valueEn": "5 years",
+     "sortOrder": 9
+    },
+    {
+     "labelSlug": "case-material",
+     "valueRu": "сталь, окрашенная в черный цвет",
+     "valueUz": "qora rangga boʻyalgan poʻlat",
+     "valueEn": "steel, painted black",
+     "sortOrder": 10
+    },
+    {
+     "labelSlug": "window",
+     "valueRu": "техническое",
+     "valueUz": "texnik",
+     "valueEn": "technical",
+     "sortOrder": 11
+    },
+    {
+     "labelSlug": "bourdon-tube",
+     "valueRu": "медный сплав",
+     "valueUz": "mis qotishmasi",
+     "valueEn": "copper alloy",
+     "sortOrder": 12
+    },
+    {
+     "labelSlug": "fitting-movement",
+     "valueRu": "медный сплав",
+     "valueUz": "mis qotishmasi",
+     "valueEn": "copper alloy",
+     "sortOrder": 13
+    },
+    {
+     "labelSlug": "dial",
+     "valueRu": "алюминиевый сплав, окрашенный в белый цвет",
+     "valueUz": "oq rangga boʻyalgan alyuminiy qotishmasi",
+     "valueEn": "aluminium alloy, painted white",
+     "sortOrder": 14
+    },
+    {
+     "labelSlug": "measuring-ranges",
+     "valueRu": "от 0 до 1000 кгс/см2 (остальные пределы по заказу)",
+     "valueUz": "0 dan 1000 kgk/sm² gacha (qolgan chegaralar buyurtma boʻyicha)",
+     "valueEn": "0 to 1000 kgf/cm² (other ranges to order)",
+     "sortOrder": 15
+    }
+   ]
+  },
+  {
+   "sku": "MNK-VIB-63",
+   "model": "ВП2-Ум, МВП2-Ум, МП2-Ум",
+   "categorySlug": "vibration-resistant-manometers",
+   "variantRu": null,
+   "variantUz": null,
+   "variantEn": null,
+   "descRu": "Вакуумметры, мановакуумметры, манометры виброустойчивые ВП2-Ум, МВП2-Ум, МП2-Ум предназначены для измерения избыточного и/или вакуумметрического давления неагрессивных по отношению к медным сплавам сред (жидкостей, пара, газов) в условиях повышенных вибраций и пульсаций.",
+   "descUz": "Vibrobardosh vakuummetr, mano-vakuummetr va manometrlar mis qotishmalariga nisbatan agressiv boʻlmagan muhitlarning (suyuqlik, bugʻ, gaz) ortiqcha va/yoki vakuum bosimini kuchaygan tebranish va pulsatsiya sharoitida oʻlchash uchun moʻljallangan.",
+   "descEn": "The vibration-resistant vacuum, compound and pressure gauges measure gauge and/or vacuum pressure of media (liquids, steam, gases) non-aggressive to copper alloys under elevated vibration and pulsation.",
+   "diameter": 63,
+   "accuracy": "2,5 (базовый)",
+   "availability": "MADE_TO_ORDER",
+   "leadTimeDays": 14,
+   "sourcePage": 7,
+   "specs": [
+    {
+     "labelSlug": "nominal-case-diameter",
+     "valueRu": "63 мм",
+     "valueUz": "63 mm",
+     "valueEn": "63 mm",
+     "sortOrder": 0
+    },
+    {
+     "labelSlug": "accuracy-class",
+     "valueRu": "2,5 (базовый)",
+     "valueUz": "2,5 (asosiy)",
+     "valueEn": "2.5 (standard)",
+     "sortOrder": 1
+    },
+    {
+     "labelSlug": "ingress-protection",
+     "valueRu": "Ip54",
+     "valueUz": "IP54",
+     "valueEn": "IP54",
+     "sortOrder": 2
+    },
+    {
+     "labelSlug": "fitting-thread",
+     "valueRu": "М12x1,5 (базовая)",
+     "valueUz": "М12x1,5 (asosiy)",
+     "valueEn": "M12×1.5 (standard)",
+     "sortOrder": 3
+    },
+    {
+     "labelSlug": "wrench-size",
+     "valueRu": "14 мм",
+     "valueUz": "14 mm",
+     "valueEn": "14 mm",
+     "sortOrder": 4
+    },
+    {
+     "labelSlug": "fitting-position",
+     "valueRu": "радиальное",
+     "valueUz": "radial",
+     "valueEn": "radial",
+     "sortOrder": 5
+    },
+    {
+     "labelSlug": "climatic-rating",
+     "valueRu": "исполнение У2 по ГОСТ 15150-69",
+     "valueUz": "GOST 15150-69 boʻyicha U2 ijro",
+     "valueEn": "type U2 per GOST 15150-69",
+     "sortOrder": 6
+    },
+    {
+     "labelSlug": "process-temp-range",
+     "valueRu": "от -50 до +90 оС",
+     "valueUz": "-50 dan +90 °C gacha",
+     "valueEn": "-50 to +90 °C",
+     "sortOrder": 7
+    },
+    {
+     "labelSlug": "ambient-temp-range",
+     "valueRu": "от -60 до +60 оС",
+     "valueUz": "-60 dan +60 °C gacha",
+     "valueEn": "-60 to +60 °C",
+     "sortOrder": 8
+    },
+    {
+     "labelSlug": "service-life",
+     "valueRu": "5 лет",
+     "valueUz": "5 yil",
+     "valueEn": "5 years",
+     "sortOrder": 9
+    },
+    {
+     "labelSlug": "case-material",
+     "valueRu": "нержавеющая сталь",
+     "valueUz": "zanglamas poʻlat",
+     "valueEn": "stainless steel",
+     "sortOrder": 10
+    },
+    {
+     "labelSlug": "window",
+     "valueRu": "техническое",
+     "valueUz": "texnik",
+     "valueEn": "technical",
+     "sortOrder": 11
+    },
+    {
+     "labelSlug": "bourdon-tube",
+     "valueRu": "медный сплав",
+     "valueUz": "mis qotishmasi",
+     "valueEn": "copper alloy",
+     "sortOrder": 12
+    },
+    {
+     "labelSlug": "fitting-movement",
+     "valueRu": "медный сплав",
+     "valueUz": "mis qotishmasi",
+     "valueEn": "copper alloy",
+     "sortOrder": 13
+    },
+    {
+     "labelSlug": "dial",
+     "valueRu": "алюминиевый сплав, окрашенный в белый цвет",
+     "valueUz": "oq rangga boʻyalgan alyuminiy qotishmasi",
+     "valueEn": "aluminium alloy, painted white",
+     "sortOrder": 14
+    },
+    {
+     "labelSlug": "damping-fluid",
+     "valueRu": "глицерин",
+     "valueUz": "glitserin",
+     "valueEn": "glycerine",
+     "sortOrder": 15
+    },
+    {
+     "labelSlug": "measuring-ranges",
+     "valueRu": "от 0 до 600 кгс/см2 (остальные пределы по заказу)",
+     "valueUz": "0 dan 600 kgk/sm² gacha (qolgan chegaralar buyurtma boʻyicha)",
+     "valueEn": "0 to 600 kgf/cm² (other ranges to order)",
+     "sortOrder": 16
+    }
+   ]
+  },
+  {
+   "sku": "MNK-VIB-100",
+   "model": "ВП3-Ум, МВП3-Ум, МП3-Ум",
+   "categorySlug": "vibration-resistant-manometers",
+   "variantRu": null,
+   "variantUz": null,
+   "variantEn": null,
+   "descRu": "Вакуумметры, мановакуумметры, манометры виброустойчивые ВП3-Ум, МВП3-Ум, МП3-Ум предназначены для измерения избыточного и/или вакуумметрического давления неагрессивных по отношению к медным сплавам сред (жидкостей, пара, газов) в условиях повышенных вибраций и пульсаций.",
+   "descUz": "Vibrobardosh vakuummetr, mano-vakuummetr va manometrlar mis qotishmalariga nisbatan agressiv boʻlmagan muhitlarning (suyuqlik, bugʻ, gaz) ortiqcha va/yoki vakuum bosimini kuchaygan tebranish va pulsatsiya sharoitida oʻlchash uchun moʻljallangan.",
+   "descEn": "The vibration-resistant vacuum, compound and pressure gauges measure gauge and/or vacuum pressure of media (liquids, steam, gases) non-aggressive to copper alloys under elevated vibration and pulsation.",
+   "diameter": 100,
+   "accuracy": "1 (базовый)",
+   "availability": "MADE_TO_ORDER",
+   "leadTimeDays": 14,
+   "sourcePage": 8,
+   "specs": [
+    {
+     "labelSlug": "nominal-case-diameter",
+     "valueRu": "100 мм",
+     "valueUz": "100 mm",
+     "valueEn": "100 mm",
+     "sortOrder": 0
+    },
+    {
+     "labelSlug": "accuracy-class",
+     "valueRu": "1 (базовый)",
+     "valueUz": "1 (asosiy)",
+     "valueEn": "1 (standard)",
+     "sortOrder": 1
+    },
+    {
+     "labelSlug": "ingress-protection",
+     "valueRu": "Ip65",
+     "valueUz": "IP65",
+     "valueEn": "IP65",
+     "sortOrder": 2
+    },
+    {
+     "labelSlug": "fitting-thread",
+     "valueRu": "М20x1,5 (базовая)",
+     "valueUz": "М20x1,5 (asosiy)",
+     "valueEn": "M20×1.5 (standard)",
+     "sortOrder": 3
+    },
+    {
+     "labelSlug": "wrench-size",
+     "valueRu": "17 мм",
+     "valueUz": "17 mm",
+     "valueEn": "17 mm",
+     "sortOrder": 4
+    },
+    {
+     "labelSlug": "fitting-position",
+     "valueRu": "радиальное",
+     "valueUz": "radial",
+     "valueEn": "radial",
+     "sortOrder": 5
+    },
+    {
+     "labelSlug": "climatic-rating",
+     "valueRu": "исполнение У2 по ГОСТ 15150-69",
+     "valueUz": "GOST 15150-69 boʻyicha U2 ijro",
+     "valueEn": "type U2 per GOST 15150-69",
+     "sortOrder": 6
+    },
+    {
+     "labelSlug": "process-temp-range",
+     "valueRu": "от -50 до +90 оС",
+     "valueUz": "-50 dan +90 °C gacha",
+     "valueEn": "-50 to +90 °C",
+     "sortOrder": 7
+    },
+    {
+     "labelSlug": "ambient-temp-range",
+     "valueRu": "от -60 до +60 оС",
+     "valueUz": "-60 dan +60 °C gacha",
+     "valueEn": "-60 to +60 °C",
+     "sortOrder": 8
+    },
+    {
+     "labelSlug": "service-life",
+     "valueRu": "5 лет",
+     "valueUz": "5 yil",
+     "valueEn": "5 years",
+     "sortOrder": 9
+    },
+    {
+     "labelSlug": "case-material",
+     "valueRu": "нержавеющая сталь",
+     "valueUz": "zanglamas poʻlat",
+     "valueEn": "stainless steel",
+     "sortOrder": 10
+    },
+    {
+     "labelSlug": "window",
+     "valueRu": "техническое",
+     "valueUz": "texnik",
+     "valueEn": "technical",
+     "sortOrder": 11
+    },
+    {
+     "labelSlug": "bourdon-tube",
+     "valueRu": "медный сплав",
+     "valueUz": "mis qotishmasi",
+     "valueEn": "copper alloy",
+     "sortOrder": 12
+    },
+    {
+     "labelSlug": "fitting-movement",
+     "valueRu": "медный сплав",
+     "valueUz": "mis qotishmasi",
+     "valueEn": "copper alloy",
+     "sortOrder": 13
+    },
+    {
+     "labelSlug": "dial",
+     "valueRu": "алюминиевый сплав, окрашенный в белый цвет",
+     "valueUz": "oq rangga boʻyalgan alyuminiy qotishmasi",
+     "valueEn": "aluminium alloy, painted white",
+     "sortOrder": 14
+    },
+    {
+     "labelSlug": "damping-fluid",
+     "valueRu": "глицерин",
+     "valueUz": "glitserin",
+     "valueEn": "glycerine",
+     "sortOrder": 15
+    },
+    {
+     "labelSlug": "measuring-ranges",
+     "valueRu": "от 0 до 1000 кгс/см2 (остальные пределы по заказу)",
+     "valueUz": "0 dan 1000 kgk/sm² gacha (qolgan chegaralar buyurtma boʻyicha)",
+     "valueEn": "0 to 1000 kgf/cm² (other ranges to order)",
+     "sortOrder": 16
+    }
+   ]
+  },
+  {
+   "sku": "MNK-VIB-150",
+   "model": "ВП4-Ум, МВП4-Ум, МП4-Ум",
+   "categorySlug": "vibration-resistant-manometers",
+   "variantRu": null,
+   "variantUz": null,
+   "variantEn": null,
+   "descRu": "Вакуумметры, мановакуумметры, манометры виброустойчивые ВП4-Ум, МВП4-Ум, МП4-Ум предназначены для измерения избыточного и/или вакуумметрического давления неагрессивных по отношению к медным сплавам сред (жидкостей, пара, газов) в условиях повышенных вибраций и пульсаций.",
+   "descUz": "Vibrobardosh vakuummetr, mano-vakuummetr va manometrlar mis qotishmalariga nisbatan agressiv boʻlmagan muhitlarning (suyuqlik, bugʻ, gaz) ortiqcha va/yoki vakuum bosimini kuchaygan tebranish va pulsatsiya sharoitida oʻlchash uchun moʻljallangan.",
+   "descEn": "The vibration-resistant vacuum, compound and pressure gauges measure gauge and/or vacuum pressure of media (liquids, steam, gases) non-aggressive to copper alloys under elevated vibration and pulsation.",
+   "diameter": 150,
+   "accuracy": "1 (базовый)",
+   "availability": "MADE_TO_ORDER",
+   "leadTimeDays": 14,
+   "sourcePage": 9,
+   "specs": [
+    {
+     "labelSlug": "nominal-case-diameter",
+     "valueRu": "150 мм",
+     "valueUz": "150 mm",
+     "valueEn": "150 mm",
+     "sortOrder": 0
+    },
+    {
+     "labelSlug": "accuracy-class",
+     "valueRu": "1 (базовый)",
+     "valueUz": "1 (asosiy)",
+     "valueEn": "1 (standard)",
+     "sortOrder": 1
+    },
+    {
+     "labelSlug": "ingress-protection",
+     "valueRu": "Ip65",
+     "valueUz": "IP65",
+     "valueEn": "IP65",
+     "sortOrder": 2
+    },
+    {
+     "labelSlug": "fitting-thread",
+     "valueRu": "М20x1,5 (базовая)",
+     "valueUz": "М20x1,5 (asosiy)",
+     "valueEn": "M20×1.5 (standard)",
+     "sortOrder": 3
+    },
+    {
+     "labelSlug": "wrench-size",
+     "valueRu": "17 мм",
+     "valueUz": "17 mm",
+     "valueEn": "17 mm",
+     "sortOrder": 4
+    },
+    {
+     "labelSlug": "fitting-position",
+     "valueRu": "радиальное",
+     "valueUz": "radial",
+     "valueEn": "radial",
+     "sortOrder": 5
+    },
+    {
+     "labelSlug": "climatic-rating",
+     "valueRu": "исполнение У2 по ГОСТ 15150-69",
+     "valueUz": "GOST 15150-69 boʻyicha U2 ijro",
+     "valueEn": "type U2 per GOST 15150-69",
+     "sortOrder": 6
+    },
+    {
+     "labelSlug": "process-temp-range",
+     "valueRu": "от -50 до +90 оС",
+     "valueUz": "-50 dan +90 °C gacha",
+     "valueEn": "-50 to +90 °C",
+     "sortOrder": 7
+    },
+    {
+     "labelSlug": "ambient-temp-range",
+     "valueRu": "от -60 до +60 оС",
+     "valueUz": "-60 dan +60 °C gacha",
+     "valueEn": "-60 to +60 °C",
+     "sortOrder": 8
+    },
+    {
+     "labelSlug": "service-life",
+     "valueRu": "5 лет",
+     "valueUz": "5 yil",
+     "valueEn": "5 years",
+     "sortOrder": 9
+    },
+    {
+     "labelSlug": "case-material",
+     "valueRu": "нержавеющая сталь",
+     "valueUz": "zanglamas poʻlat",
+     "valueEn": "stainless steel",
+     "sortOrder": 10
+    },
+    {
+     "labelSlug": "window",
+     "valueRu": "техническое",
+     "valueUz": "texnik",
+     "valueEn": "technical",
+     "sortOrder": 11
+    },
+    {
+     "labelSlug": "bourdon-tube",
+     "valueRu": "медный сплав",
+     "valueUz": "mis qotishmasi",
+     "valueEn": "copper alloy",
+     "sortOrder": 12
+    },
+    {
+     "labelSlug": "fitting-movement",
+     "valueRu": "медный сплав",
+     "valueUz": "mis qotishmasi",
+     "valueEn": "copper alloy",
+     "sortOrder": 13
+    },
+    {
+     "labelSlug": "dial",
+     "valueRu": "алюминиевый сплав, окрашенный в белый цвет",
+     "valueUz": "oq rangga boʻyalgan alyuminiy qotishmasi",
+     "valueEn": "aluminium alloy, painted white",
+     "sortOrder": 14
+    },
+    {
+     "labelSlug": "damping-fluid",
+     "valueRu": "глицерин",
+     "valueUz": "glitserin",
+     "valueEn": "glycerine",
+     "sortOrder": 15
+    },
+    {
+     "labelSlug": "measuring-ranges",
+     "valueRu": "от 0 до 1000 кгс/см2 (остальные пределы по заказу)",
+     "valueUz": "0 dan 1000 kgk/sm² gacha (qolgan chegaralar buyurtma boʻyicha)",
+     "valueEn": "0 to 1000 kgf/cm² (other ranges to order)",
+     "sortOrder": 16
+    }
+   ]
+  },
+  {
+   "sku": "MNK-CORR-63",
+   "model": "ВП2-Ум-КС, МВП2-Ум-Кс, МП2-Ум-КС",
+   "categorySlug": "corrosion-resistant-manometers",
+   "variantRu": null,
+   "variantUz": null,
+   "variantEn": null,
+   "descRu": "Вакуумметры, мановакуумметры, манометры коррозионностойкие  ВП2-Ум-Кс, МВП2-Ум-Кс, МП2-Ум-Кс предназначены для измерения избыточного и/или вакуумметрического давления агрессивных некристаллизующихся сред, не вступающих в активное взаимодействие с нержавеющей сталью.",
+   "descUz": "Korroziyabardosh vakuummetr, mano-vakuummetr va manometrlar zanglamas poʻlat bilan faol taʼsirlashmaydigan, kristallanmaydigan agressiv muhitlarning ortiqcha va/yoki vakuum bosimini oʻlchash uchun moʻljallangan.",
+   "descEn": "The corrosion-resistant vacuum, compound and pressure gauges measure gauge and/or vacuum pressure of aggressive non-crystallising media that do not react actively with stainless steel.",
+   "diameter": 63,
+   "accuracy": "2.5 (базовый)",
+   "availability": "MADE_TO_ORDER",
+   "leadTimeDays": 14,
+   "sourcePage": 10,
+   "specs": [
+    {
+     "labelSlug": "nominal-case-diameter",
+     "valueRu": "63 мм",
+     "valueUz": "63 mm",
+     "valueEn": "63 mm",
+     "sortOrder": 0
+    },
+    {
+     "labelSlug": "accuracy-class",
+     "valueRu": "2.5 (базовый)",
+     "valueUz": "2,5 (asosiy)",
+     "valueEn": "2.5 (standard)",
+     "sortOrder": 1
+    },
+    {
+     "labelSlug": "ingress-protection",
+     "valueRu": "Ip65",
+     "valueUz": "IP65",
+     "valueEn": "IP65",
+     "sortOrder": 2
+    },
+    {
+     "labelSlug": "fitting-thread",
+     "valueRu": "М20x1,5 (базовая)",
+     "valueUz": "М20x1,5 (asosiy)",
+     "valueEn": "M20×1.5 (standard)",
+     "sortOrder": 3
+    },
+    {
+     "labelSlug": "wrench-size",
+     "valueRu": "22 мм",
+     "valueUz": "22 mm",
+     "valueEn": "22 mm",
+     "sortOrder": 4
+    },
+    {
+     "labelSlug": "fitting-position",
+     "valueRu": "радиальное",
+     "valueUz": "radial",
+     "valueEn": "radial",
+     "sortOrder": 5
+    },
+    {
+     "labelSlug": "climatic-rating",
+     "valueRu": "исполнение У2 по ГОСТ 15150-69",
+     "valueUz": "GOST 15150-69 boʻyicha U2 ijro",
+     "valueEn": "type U2 per GOST 15150-69",
+     "sortOrder": 6
+    },
+    {
+     "labelSlug": "process-temp-range",
+     "valueRu": "от -50 до +150 оС",
+     "valueUz": "-50 dan +150 °C gacha",
+     "valueEn": "-50 to +150 °C",
+     "sortOrder": 7
+    },
+    {
+     "labelSlug": "ambient-temp-range",
+     "valueRu": "от -60 до +60 оС",
+     "valueUz": "-60 dan +60 °C gacha",
+     "valueEn": "-60 to +60 °C",
+     "sortOrder": 8
+    },
+    {
+     "labelSlug": "service-life",
+     "valueRu": "5 лет",
+     "valueUz": "5 yil",
+     "valueEn": "5 years",
+     "sortOrder": 9
+    },
+    {
+     "labelSlug": "case-material",
+     "valueRu": "нержавеющая сталь",
+     "valueUz": "zanglamas poʻlat",
+     "valueEn": "stainless steel",
+     "sortOrder": 10
+    },
+    {
+     "labelSlug": "window",
+     "valueRu": "техническое",
+     "valueUz": "texnik",
+     "valueEn": "technical",
+     "sortOrder": 11
+    },
+    {
+     "labelSlug": "bourdon-tube",
+     "valueRu": "нержавеющая сталь",
+     "valueUz": "zanglamas poʻlat",
+     "valueEn": "stainless steel",
+     "sortOrder": 12
+    },
+    {
+     "labelSlug": "fitting-movement",
+     "valueRu": "нержавеющая сталь",
+     "valueUz": "zanglamas poʻlat",
+     "valueEn": "stainless steel",
+     "sortOrder": 13
+    },
+    {
+     "labelSlug": "dial",
+     "valueRu": "алюминиевый сплав, окрашенный в белый цвет",
+     "valueUz": "oq rangga boʻyalgan alyuminiy qotishmasi",
+     "valueEn": "aluminium alloy, painted white",
+     "sortOrder": 14
+    },
+    {
+     "labelSlug": "damping-fluid",
+     "valueRu": "глицерин",
+     "valueUz": "glitserin",
+     "valueEn": "glycerine",
+     "sortOrder": 15
+    },
+    {
+     "labelSlug": "measuring-ranges",
+     "valueRu": "от 0 до 1000 кгс/см2 (остальные пределы по заказу)",
+     "valueUz": "0 dan 1000 kgk/sm² gacha (qolgan chegaralar buyurtma boʻyicha)",
+     "valueEn": "0 to 1000 kgf/cm² (other ranges to order)",
+     "sortOrder": 16
+    }
+   ]
+  },
+  {
+   "sku": "MNK-CORR-100",
+   "model": "ВП3-Ум-КС, МВП3-Ум-Кс, МП3-Ум-КС",
+   "categorySlug": "corrosion-resistant-manometers",
+   "variantRu": null,
+   "variantUz": null,
+   "variantEn": null,
+   "descRu": "Вакуумметры, мановакуумметры, манометры коррозионностойкие  ВП3-Ум-Кс, МВП3-Ум-Кс, МП3-Ум-Кс предназначены для измерения избыточного и/или вакуумметрического давления агрессивных некристаллизующихся сред, не вступающих в активное взаимодействие с нержавеющей сталью.",
+   "descUz": "Korroziyabardosh vakuummetr, mano-vakuummetr va manometrlar zanglamas poʻlat bilan faol taʼsirlashmaydigan, kristallanmaydigan agressiv muhitlarning ortiqcha va/yoki vakuum bosimini oʻlchash uchun moʻljallangan.",
+   "descEn": "The corrosion-resistant vacuum, compound and pressure gauges measure gauge and/or vacuum pressure of aggressive non-crystallising media that do not react actively with stainless steel.",
+   "diameter": 100,
+   "accuracy": "1 (базовый)",
+   "availability": "MADE_TO_ORDER",
+   "leadTimeDays": 14,
+   "sourcePage": 11,
+   "specs": [
+    {
+     "labelSlug": "nominal-case-diameter",
+     "valueRu": "100 мм",
+     "valueUz": "100 mm",
+     "valueEn": "100 mm",
+     "sortOrder": 0
+    },
+    {
+     "labelSlug": "accuracy-class",
+     "valueRu": "1 (базовый)",
+     "valueUz": "1 (asosiy)",
+     "valueEn": "1 (standard)",
+     "sortOrder": 1
+    },
+    {
+     "labelSlug": "ingress-protection",
+     "valueRu": "Ip65",
+     "valueUz": "IP65",
+     "valueEn": "IP65",
+     "sortOrder": 2
+    },
+    {
+     "labelSlug": "fitting-thread",
+     "valueRu": "М20x1,5 (базовая)",
+     "valueUz": "М20x1,5 (asosiy)",
+     "valueEn": "M20×1.5 (standard)",
+     "sortOrder": 3
+    },
+    {
+     "labelSlug": "wrench-size",
+     "valueRu": "22 мм",
+     "valueUz": "22 mm",
+     "valueEn": "22 mm",
+     "sortOrder": 4
+    },
+    {
+     "labelSlug": "fitting-position",
+     "valueRu": "радиальное",
+     "valueUz": "radial",
+     "valueEn": "radial",
+     "sortOrder": 5
+    },
+    {
+     "labelSlug": "climatic-rating",
+     "valueRu": "исполнение У2 по ГОСТ 15150-69",
+     "valueUz": "GOST 15150-69 boʻyicha U2 ijro",
+     "valueEn": "type U2 per GOST 15150-69",
+     "sortOrder": 6
+    },
+    {
+     "labelSlug": "process-temp-range",
+     "valueRu": "от -50 до +150 оС",
+     "valueUz": "-50 dan +150 °C gacha",
+     "valueEn": "-50 to +150 °C",
+     "sortOrder": 7
+    },
+    {
+     "labelSlug": "ambient-temp-range",
+     "valueRu": "от -60 до +60 оС",
+     "valueUz": "-60 dan +60 °C gacha",
+     "valueEn": "-60 to +60 °C",
+     "sortOrder": 8
+    },
+    {
+     "labelSlug": "service-life",
+     "valueRu": "5 лет",
+     "valueUz": "5 yil",
+     "valueEn": "5 years",
+     "sortOrder": 9
+    },
+    {
+     "labelSlug": "case-material",
+     "valueRu": "нержавеющая сталь",
+     "valueUz": "zanglamas poʻlat",
+     "valueEn": "stainless steel",
+     "sortOrder": 10
+    },
+    {
+     "labelSlug": "window",
+     "valueRu": "техническое",
+     "valueUz": "texnik",
+     "valueEn": "technical",
+     "sortOrder": 11
+    },
+    {
+     "labelSlug": "bourdon-tube",
+     "valueRu": "нержавеющая сталь",
+     "valueUz": "zanglamas poʻlat",
+     "valueEn": "stainless steel",
+     "sortOrder": 12
+    },
+    {
+     "labelSlug": "fitting-movement",
+     "valueRu": "нержавеющая сталь",
+     "valueUz": "zanglamas poʻlat",
+     "valueEn": "stainless steel",
+     "sortOrder": 13
+    },
+    {
+     "labelSlug": "dial",
+     "valueRu": "алюминиевый сплав, окрашенный в белый цвет",
+     "valueUz": "oq rangga boʻyalgan alyuminiy qotishmasi",
+     "valueEn": "aluminium alloy, painted white",
+     "sortOrder": 14
+    },
+    {
+     "labelSlug": "damping-fluid",
+     "valueRu": "глицерин",
+     "valueUz": "glitserin",
+     "valueEn": "glycerine",
+     "sortOrder": 15
+    },
+    {
+     "labelSlug": "measuring-ranges",
+     "valueRu": "от 0 до 1000 кгс/см2 (остальные пределы по заказу)",
+     "valueUz": "0 dan 1000 kgk/sm² gacha (qolgan chegaralar buyurtma boʻyicha)",
+     "valueEn": "0 to 1000 kgf/cm² (other ranges to order)",
+     "sortOrder": 16
+    }
+   ]
+  },
+  {
+   "sku": "MNK-CORR-100-FL",
+   "model": "ВП3-Ум-КС, МВП3-Ум-Кс, МП3-Ум-КС",
+   "categorySlug": "corrosion-resistant-manometers",
+   "variantRu": "фланцевое присоединение",
+   "variantUz": "flanetsli ulanish",
+   "variantEn": "flanged connection",
+   "descRu": "Вакуумметры, мановакуумметры, манометры коррозионностойкие  ВП3-Ум-Кс, МВП3-Ум-Кс, МП3-Ум-Кс предназначены для измерения избыточного и/или вакуумметрического давления агрессивных некристаллизующихся сред, не вступающих в активное взаимодействие",
+   "descUz": "Korroziyabardosh vakuummetr, mano-vakuummetr va manometrlar zanglamas poʻlat bilan faol taʼsirlashmaydigan, kristallanmaydigan agressiv muhitlarning ortiqcha va/yoki vakuum bosimini oʻlchash uchun moʻljallangan.",
+   "descEn": "The corrosion-resistant vacuum, compound and pressure gauges measure gauge and/or vacuum pressure of aggressive non-crystallising media that do not react actively with stainless steel.",
+   "diameter": 100,
+   "accuracy": "1 (базовый)",
+   "availability": "MADE_TO_ORDER",
+   "leadTimeDays": 14,
+   "sourcePage": 12,
+   "specs": [
+    {
+     "labelSlug": "nominal-case-diameter",
+     "valueRu": "100 мм",
+     "valueUz": "100 mm",
+     "valueEn": "100 mm",
+     "sortOrder": 0
+    },
+    {
+     "labelSlug": "accuracy-class",
+     "valueRu": "1 (базовый)",
+     "valueUz": "1 (asosiy)",
+     "valueEn": "1 (standard)",
+     "sortOrder": 1
+    },
+    {
+     "labelSlug": "ingress-protection",
+     "valueRu": "Ip65",
+     "valueUz": "IP65",
+     "valueEn": "IP65",
+     "sortOrder": 2
+    },
+    {
+     "labelSlug": "damping-fluid",
+     "valueRu": "глицерин",
+     "valueUz": "glitserin",
+     "valueEn": "glycerine",
+     "sortOrder": 3
+    },
+    {
+     "labelSlug": "wrench-size",
+     "valueRu": "22 мм",
+     "valueUz": "22 mm",
+     "valueEn": "22 mm",
+     "sortOrder": 4
+    },
+    {
+     "labelSlug": "connection-type",
+     "valueRu": "фланцевое",
+     "valueUz": "flanetsli",
+     "valueEn": "flanged",
+     "sortOrder": 5
+    },
+    {
+     "labelSlug": "climatic-rating",
+     "valueRu": "исполнение У2 по ГОСТ 15150-69",
+     "valueUz": "GOST 15150-69 boʻyicha U2 ijro",
+     "valueEn": "type U2 per GOST 15150-69",
+     "sortOrder": 6
+    },
+    {
+     "labelSlug": "process-temp-range",
+     "valueRu": "от -50 до +150 оС",
+     "valueUz": "-50 dan +150 °C gacha",
+     "valueEn": "-50 to +150 °C",
+     "sortOrder": 7
+    },
+    {
+     "labelSlug": "ambient-temp-range",
+     "valueRu": "от -60 до +60 оС",
+     "valueUz": "-60 dan +60 °C gacha",
+     "valueEn": "-60 to +60 °C",
+     "sortOrder": 8
+    },
+    {
+     "labelSlug": "service-life",
+     "valueRu": "5 лет",
+     "valueUz": "5 yil",
+     "valueEn": "5 years",
+     "sortOrder": 9
+    },
+    {
+     "labelSlug": "case-material",
+     "valueRu": "нержавеющая сталь",
+     "valueUz": "zanglamas poʻlat",
+     "valueEn": "stainless steel",
+     "sortOrder": 10
+    },
+    {
+     "labelSlug": "window",
+     "valueRu": "техническое",
+     "valueUz": "texnik",
+     "valueEn": "technical",
+     "sortOrder": 11
+    },
+    {
+     "labelSlug": "bourdon-tube",
+     "valueRu": "нержавеющая сталь",
+     "valueUz": "zanglamas poʻlat",
+     "valueEn": "stainless steel",
+     "sortOrder": 12
+    },
+    {
+     "labelSlug": "flange-material",
+     "valueRu": "нержавеющая сталь",
+     "valueUz": "zanglamas poʻlat",
+     "valueEn": "stainless steel",
+     "sortOrder": 13
+    },
+    {
+     "labelSlug": "dial",
+     "valueRu": "алюминиевый сплав, окрашенный в белый цвет",
+     "valueUz": "oq rangga boʻyalgan alyuminiy qotishmasi",
+     "valueEn": "aluminium alloy, painted white",
+     "sortOrder": 14
+    },
+    {
+     "labelSlug": "measuring-ranges",
+     "valueRu": "от 0 до 1000 кгс/см2 (остальные пределы по заказу)",
+     "valueUz": "0 dan 1000 kgk/sm² gacha (qolgan chegaralar buyurtma boʻyicha)",
+     "valueEn": "0 to 1000 kgf/cm² (other ranges to order)",
+     "sortOrder": 15
+    }
+   ]
+  },
+  {
+   "sku": "MNK-CORR-100-AX",
+   "model": "ВП3-Ум-КС, МВП3-Ум-Кс, МП3-Ум-КС",
+   "categorySlug": "corrosion-resistant-manometers",
+   "variantRu": "осевое присоединение",
+   "variantUz": "oʻqli ulanish",
+   "variantEn": "axial connection",
+   "descRu": "Вакуумметры, мановакуумметры, манометры коррозионностойкие  ВП3-Ум-Кс, МВП3-Ум-Кс, МП3-Ум-Кс предназначены для измерения избыточного и/или вакуумметрического давления агрессивных некристаллизующихся сред, не вступающих в активное взаимодействие",
+   "descUz": "Korroziyabardosh vakuummetr, mano-vakuummetr va manometrlar zanglamas poʻlat bilan faol taʼsirlashmaydigan, kristallanmaydigan agressiv muhitlarning ortiqcha va/yoki vakuum bosimini oʻlchash uchun moʻljallangan.",
+   "descEn": "The corrosion-resistant vacuum, compound and pressure gauges measure gauge and/or vacuum pressure of aggressive non-crystallising media that do not react actively with stainless steel.",
+   "diameter": 100,
+   "accuracy": "1,5 (базовый)",
+   "availability": "MADE_TO_ORDER",
+   "leadTimeDays": 14,
+   "sourcePage": 13,
+   "specs": [
+    {
+     "labelSlug": "nominal-case-diameter",
+     "valueRu": "100 мм",
+     "valueUz": "100 mm",
+     "valueEn": "100 mm",
+     "sortOrder": 0
+    },
+    {
+     "labelSlug": "accuracy-class",
+     "valueRu": "1,5 (базовый)",
+     "valueUz": "1,5 (asosiy)",
+     "valueEn": "1.5 (standard)",
+     "sortOrder": 1
+    },
+    {
+     "labelSlug": "ingress-protection",
+     "valueRu": "Ip65",
+     "valueUz": "IP65",
+     "valueEn": "IP65",
+     "sortOrder": 2
+    },
+    {
+     "labelSlug": "fitting-thread",
+     "valueRu": "М20x1,5 (базовая)",
+     "valueUz": "М20x1,5 (asosiy)",
+     "valueEn": "M20×1.5 (standard)",
+     "sortOrder": 3
+    },
+    {
+     "labelSlug": "wrench-size",
+     "valueRu": "22 мм",
+     "valueUz": "22 mm",
+     "valueEn": "22 mm",
+     "sortOrder": 4
+    },
+    {
+     "labelSlug": "fitting-position",
+     "valueRu": "осевое",
+     "valueUz": "oʻqli",
+     "valueEn": "axial",
+     "sortOrder": 5
+    },
+    {
+     "labelSlug": "climatic-rating",
+     "valueRu": "исполнение У2 по ГОСТ 15150-69",
+     "valueUz": "GOST 15150-69 boʻyicha U2 ijro",
+     "valueEn": "type U2 per GOST 15150-69",
+     "sortOrder": 6
+    },
+    {
+     "labelSlug": "process-temp-range",
+     "valueRu": "от -50 до +150 оС",
+     "valueUz": "-50 dan +150 °C gacha",
+     "valueEn": "-50 to +150 °C",
+     "sortOrder": 7
+    },
+    {
+     "labelSlug": "ambient-temp-range",
+     "valueRu": "от -60 до +60 оС",
+     "valueUz": "-60 dan +60 °C gacha",
+     "valueEn": "-60 to +60 °C",
+     "sortOrder": 8
+    },
+    {
+     "labelSlug": "service-life",
+     "valueRu": "5 лет",
+     "valueUz": "5 yil",
+     "valueEn": "5 years",
+     "sortOrder": 9
+    },
+    {
+     "labelSlug": "case-material",
+     "valueRu": "нержавеющая сталь",
+     "valueUz": "zanglamas poʻlat",
+     "valueEn": "stainless steel",
+     "sortOrder": 10
+    },
+    {
+     "labelSlug": "window",
+     "valueRu": "техническое",
+     "valueUz": "texnik",
+     "valueEn": "technical",
+     "sortOrder": 11
+    },
+    {
+     "labelSlug": "bourdon-tube",
+     "valueRu": "нержавеющая сталь",
+     "valueUz": "zanglamas poʻlat",
+     "valueEn": "stainless steel",
+     "sortOrder": 12
+    },
+    {
+     "labelSlug": "fitting-movement",
+     "valueRu": "нержавеющая сталь",
+     "valueUz": "zanglamas poʻlat",
+     "valueEn": "stainless steel",
+     "sortOrder": 13
+    },
+    {
+     "labelSlug": "dial",
+     "valueRu": "алюминиевый сплав, окрашенный в белый цвет",
+     "valueUz": "oq rangga boʻyalgan alyuminiy qotishmasi",
+     "valueEn": "aluminium alloy, painted white",
+     "sortOrder": 14
+    },
+    {
+     "labelSlug": "damping-fluid",
+     "valueRu": "глицерин",
+     "valueUz": "glitserin",
+     "valueEn": "glycerine",
+     "sortOrder": 15
+    },
+    {
+     "labelSlug": "measuring-ranges",
+     "valueRu": "от 0 до 1000 кгс/см2 (остальные пределы по заказу)",
+     "valueUz": "0 dan 1000 kgk/sm² gacha (qolgan chegaralar buyurtma boʻyicha)",
+     "valueEn": "0 to 1000 kgf/cm² (other ranges to order)",
+     "sortOrder": 16
+    }
+   ]
+  },
+  {
+   "sku": "MNK-CORR-150",
+   "model": "ВП4-Ум-КС, МВП4-Ум-Кс, МП4-Ум-КС",
+   "categorySlug": "corrosion-resistant-manometers",
+   "variantRu": null,
+   "variantUz": null,
+   "variantEn": null,
+   "descRu": "Вакуумметры, мановакуумметры, манометры коррозионностойкие  ВП4-Ум-Кс, МВП4-Ум-Кс, МП4-Ум-Кс предназначены для измерения избыточного и/или вакуумметрического давления агрессивных некристаллизующихся сред, не вступающих в активное взаимодействие с нержавеющей сталью.",
+   "descUz": "Korroziyabardosh vakuummetr, mano-vakuummetr va manometrlar zanglamas poʻlat bilan faol taʼsirlashmaydigan, kristallanmaydigan agressiv muhitlarning ortiqcha va/yoki vakuum bosimini oʻlchash uchun moʻljallangan.",
+   "descEn": "The corrosion-resistant vacuum, compound and pressure gauges measure gauge and/or vacuum pressure of aggressive non-crystallising media that do not react actively with stainless steel.",
+   "diameter": 150,
+   "accuracy": "1 (базовый)",
+   "availability": "MADE_TO_ORDER",
+   "leadTimeDays": 14,
+   "sourcePage": 14,
+   "specs": [
+    {
+     "labelSlug": "nominal-case-diameter",
+     "valueRu": "150 мм",
+     "valueUz": "150 mm",
+     "valueEn": "150 mm",
+     "sortOrder": 0
+    },
+    {
+     "labelSlug": "accuracy-class",
+     "valueRu": "1 (базовый)",
+     "valueUz": "1 (asosiy)",
+     "valueEn": "1 (standard)",
+     "sortOrder": 1
+    },
+    {
+     "labelSlug": "ingress-protection",
+     "valueRu": "Ip65",
+     "valueUz": "IP65",
+     "valueEn": "IP65",
+     "sortOrder": 2
+    },
+    {
+     "labelSlug": "fitting-thread",
+     "valueRu": "М20x1,5 (базовая)",
+     "valueUz": "М20x1,5 (asosiy)",
+     "valueEn": "M20×1.5 (standard)",
+     "sortOrder": 3
+    },
+    {
+     "labelSlug": "wrench-size",
+     "valueRu": "22 мм",
+     "valueUz": "22 mm",
+     "valueEn": "22 mm",
+     "sortOrder": 4
+    },
+    {
+     "labelSlug": "fitting-position",
+     "valueRu": "радиальное",
+     "valueUz": "radial",
+     "valueEn": "radial",
+     "sortOrder": 5
+    },
+    {
+     "labelSlug": "climatic-rating",
+     "valueRu": "исполнение У2 по ГОСТ 15150-69",
+     "valueUz": "GOST 15150-69 boʻyicha U2 ijro",
+     "valueEn": "type U2 per GOST 15150-69",
+     "sortOrder": 6
+    },
+    {
+     "labelSlug": "process-temp-range",
+     "valueRu": "от -50 до +150 оС",
+     "valueUz": "-50 dan +150 °C gacha",
+     "valueEn": "-50 to +150 °C",
+     "sortOrder": 7
+    },
+    {
+     "labelSlug": "ambient-temp-range",
+     "valueRu": "от -60 до +60 оС",
+     "valueUz": "-60 dan +60 °C gacha",
+     "valueEn": "-60 to +60 °C",
+     "sortOrder": 8
+    },
+    {
+     "labelSlug": "service-life",
+     "valueRu": "5 лет",
+     "valueUz": "5 yil",
+     "valueEn": "5 years",
+     "sortOrder": 9
+    },
+    {
+     "labelSlug": "case-material",
+     "valueRu": "нержавеющая сталь",
+     "valueUz": "zanglamas poʻlat",
+     "valueEn": "stainless steel",
+     "sortOrder": 10
+    },
+    {
+     "labelSlug": "window",
+     "valueRu": "техническое",
+     "valueUz": "texnik",
+     "valueEn": "technical",
+     "sortOrder": 11
+    },
+    {
+     "labelSlug": "bourdon-tube",
+     "valueRu": "нержавеющая сталь",
+     "valueUz": "zanglamas poʻlat",
+     "valueEn": "stainless steel",
+     "sortOrder": 12
+    },
+    {
+     "labelSlug": "fitting-movement",
+     "valueRu": "нержавеющая сталь",
+     "valueUz": "zanglamas poʻlat",
+     "valueEn": "stainless steel",
+     "sortOrder": 13
+    },
+    {
+     "labelSlug": "dial",
+     "valueRu": "алюминиевый сплав, окрашенный в белый цвет",
+     "valueUz": "oq rangga boʻyalgan alyuminiy qotishmasi",
+     "valueEn": "aluminium alloy, painted white",
+     "sortOrder": 14
+    },
+    {
+     "labelSlug": "damping-fluid",
+     "valueRu": "глицерин",
+     "valueUz": "glitserin",
+     "valueEn": "glycerine",
+     "sortOrder": 15
+    },
+    {
+     "labelSlug": "measuring-ranges",
+     "valueRu": "от 0 до 1000 кгс/см2 (остальные пределы по заказу)",
+     "valueUz": "0 dan 1000 kgk/sm² gacha (qolgan chegaralar buyurtma boʻyicha)",
+     "valueEn": "0 to 1000 kgf/cm² (other ranges to order)",
+     "sortOrder": 16
+    }
+   ]
+  },
+  {
+   "sku": "MNK-AMM-100",
+   "model": "ВП3A-Ум-Кс, МВП3A-Ум-Кс, МП3A-Ум-Кс",
+   "categorySlug": "ammonia-manometers",
+   "variantRu": null,
+   "variantUz": null,
+   "variantEn": null,
+   "descRu": "Вакуумметры, мановакуумметры, манометры аммиачные ВП3A-Ум-Кс, МВП3A-Ум-Кс, МП3A-Ум-Кс предназначены для измерения избыточного и/или вакуумметрического давления аммиаксодержащих сред, жидких и газообразных.",
+   "descUz": "Ammiakli vakuummetr, mano-vakuummetr va manometrlar tarkibida ammiak boʻlgan suyuq va gazsimon muhitlarning ortiqcha va/yoki vakuum bosimini oʻlchash uchun moʻljallangan.",
+   "descEn": "The ammonia vacuum, compound and pressure gauges measure gauge and/or vacuum pressure of liquid and gaseous ammonia-bearing media.",
+   "diameter": 100,
+   "accuracy": "1,5 (базовый), 1 (по заказу)",
+   "availability": "MADE_TO_ORDER",
+   "leadTimeDays": 14,
+   "sourcePage": 15,
+   "specs": [
+    {
+     "labelSlug": "nominal-case-diameter",
+     "valueRu": "100 мм",
+     "valueUz": "100 mm",
+     "valueEn": "100 mm",
+     "sortOrder": 0
+    },
+    {
+     "labelSlug": "accuracy-class",
+     "valueRu": "1,5 (базовый), 1 (по заказу)",
+     "valueUz": "1,5 (asosiy), 1 (buyurtma boʻyicha)",
+     "valueEn": "1.5 (standard), 1 (to order)",
+     "sortOrder": 1
+    },
+    {
+     "labelSlug": "ingress-protection",
+     "valueRu": "Ip40",
+     "valueUz": "IP40",
+     "valueEn": "IP40",
+     "sortOrder": 2
+    },
+    {
+     "labelSlug": "fitting-thread",
+     "valueRu": "М20x1,5 (базовая)",
+     "valueUz": "М20x1,5 (asosiy)",
+     "valueEn": "M20×1.5 (standard)",
+     "sortOrder": 3
+    },
+    {
+     "labelSlug": "wrench-size",
+     "valueRu": "22 мм",
+     "valueUz": "22 mm",
+     "valueEn": "22 mm",
+     "sortOrder": 4
+    },
+    {
+     "labelSlug": "fitting-position",
+     "valueRu": "радиальное",
+     "valueUz": "radial",
+     "valueEn": "radial",
+     "sortOrder": 5
+    },
+    {
+     "labelSlug": "climatic-rating",
+     "valueRu": "исполнение У2 по ГОСТ 15150-69",
+     "valueUz": "GOST 15150-69 boʻyicha U2 ijro",
+     "valueEn": "type U2 per GOST 15150-69",
+     "sortOrder": 6
+    },
+    {
+     "labelSlug": "process-temp-range",
+     "valueRu": "от -50 до +150 оС",
+     "valueUz": "-50 dan +150 °C gacha",
+     "valueEn": "-50 to +150 °C",
+     "sortOrder": 7
+    },
+    {
+     "labelSlug": "ambient-temp-range",
+     "valueRu": "от -60 до +60 оС",
+     "valueUz": "-60 dan +60 °C gacha",
+     "valueEn": "-60 to +60 °C",
+     "sortOrder": 8
+    },
+    {
+     "labelSlug": "service-life",
+     "valueRu": "5 лет",
+     "valueUz": "5 yil",
+     "valueEn": "5 years",
+     "sortOrder": 9
+    },
+    {
+     "labelSlug": "case-material",
+     "valueRu": "сталь, окрашенная в черный цвет",
+     "valueUz": "qora rangga boʻyalgan poʻlat",
+     "valueEn": "steel, painted black",
+     "sortOrder": 10
+    },
+    {
+     "labelSlug": "window",
+     "valueRu": "техническое",
+     "valueUz": "texnik",
+     "valueEn": "technical",
+     "sortOrder": 11
+    },
+    {
+     "labelSlug": "bourdon-tube",
+     "valueRu": "нержавеющая сталь",
+     "valueUz": "zanglamas poʻlat",
+     "valueEn": "stainless steel",
+     "sortOrder": 12
+    },
+    {
+     "labelSlug": "fitting-movement",
+     "valueRu": "нержавеющая сталь",
+     "valueUz": "zanglamas poʻlat",
+     "valueEn": "stainless steel",
+     "sortOrder": 13
+    },
+    {
+     "labelSlug": "dial",
+     "valueRu": "алюминиевый сплав, окрашенный в белый цвет",
+     "valueUz": "oq rangga boʻyalgan alyuminiy qotishmasi",
+     "valueEn": "aluminium alloy, painted white",
+     "sortOrder": 14
+    },
+    {
+     "labelSlug": "measuring-ranges",
+     "valueRu": "от 0 до 1000 кгс/см2 (остальные пределы по заказу)",
+     "valueUz": "0 dan 1000 kgk/sm² gacha (qolgan chegaralar buyurtma boʻyicha)",
+     "valueEn": "0 to 1000 kgf/cm² (other ranges to order)",
+     "sortOrder": 15
+    }
+   ]
+  },
+  {
+   "sku": "MNK-AMM-150",
+   "model": "ВП4A-Ум-Кс, МВП4A-Ум-Кс, МП4A-Ум-Кс",
+   "categorySlug": "ammonia-manometers",
+   "variantRu": null,
+   "variantUz": null,
+   "variantEn": null,
+   "descRu": "Вакуумметры, мановакуумметры, манометры аммиачные ВП4A-Ум-Кс, МВП4A-Ум-Кс, МП4A-Ум-Кс предназначены для измерения избыточного и/или вакуумметрического давления аммиаксодержащих сред, жидких и газообразных.",
+   "descUz": "Ammiakli vakuummetr, mano-vakuummetr va manometrlar tarkibida ammiak boʻlgan suyuq va gazsimon muhitlarning ortiqcha va/yoki vakuum bosimini oʻlchash uchun moʻljallangan.",
+   "descEn": "The ammonia vacuum, compound and pressure gauges measure gauge and/or vacuum pressure of liquid and gaseous ammonia-bearing media.",
+   "diameter": 150,
+   "accuracy": "1,5 (базовый), 1 (по заказу)",
+   "availability": "MADE_TO_ORDER",
+   "leadTimeDays": 14,
+   "sourcePage": 16,
+   "specs": [
+    {
+     "labelSlug": "nominal-case-diameter",
+     "valueRu": "150 мм",
+     "valueUz": "150 mm",
+     "valueEn": "150 mm",
+     "sortOrder": 0
+    },
+    {
+     "labelSlug": "accuracy-class",
+     "valueRu": "1,5 (базовый), 1 (по заказу)",
+     "valueUz": "1,5 (asosiy), 1 (buyurtma boʻyicha)",
+     "valueEn": "1.5 (standard), 1 (to order)",
+     "sortOrder": 1
+    },
+    {
+     "labelSlug": "ingress-protection",
+     "valueRu": "Ip40",
+     "valueUz": "IP40",
+     "valueEn": "IP40",
+     "sortOrder": 2
+    },
+    {
+     "labelSlug": "fitting-thread",
+     "valueRu": "М20x1,5 (базовая)",
+     "valueUz": "М20x1,5 (asosiy)",
+     "valueEn": "M20×1.5 (standard)",
+     "sortOrder": 3
+    },
+    {
+     "labelSlug": "wrench-size",
+     "valueRu": "17 мм",
+     "valueUz": "17 mm",
+     "valueEn": "17 mm",
+     "sortOrder": 4
+    },
+    {
+     "labelSlug": "fitting-position",
+     "valueRu": "радиальное",
+     "valueUz": "radial",
+     "valueEn": "radial",
+     "sortOrder": 5
+    },
+    {
+     "labelSlug": "climatic-rating",
+     "valueRu": "исполнение У2 по ГОСТ 15150-69",
+     "valueUz": "GOST 15150-69 boʻyicha U2 ijro",
+     "valueEn": "type U2 per GOST 15150-69",
+     "sortOrder": 6
+    },
+    {
+     "labelSlug": "process-temp-range",
+     "valueRu": "от -50 до +150 оС",
+     "valueUz": "-50 dan +150 °C gacha",
+     "valueEn": "-50 to +150 °C",
+     "sortOrder": 7
+    },
+    {
+     "labelSlug": "ambient-temp-range",
+     "valueRu": "от -60 до +60 оС",
+     "valueUz": "-60 dan +60 °C gacha",
+     "valueEn": "-60 to +60 °C",
+     "sortOrder": 8
+    },
+    {
+     "labelSlug": "service-life",
+     "valueRu": "5 лет",
+     "valueUz": "5 yil",
+     "valueEn": "5 years",
+     "sortOrder": 9
+    },
+    {
+     "labelSlug": "case-material",
+     "valueRu": "сталь, окрашенная в черный цвет",
+     "valueUz": "qora rangga boʻyalgan poʻlat",
+     "valueEn": "steel, painted black",
+     "sortOrder": 10
+    },
+    {
+     "labelSlug": "window",
+     "valueRu": "техническое",
+     "valueUz": "texnik",
+     "valueEn": "technical",
+     "sortOrder": 11
+    },
+    {
+     "labelSlug": "bourdon-tube",
+     "valueRu": "нержавеющая сталь",
+     "valueUz": "zanglamas poʻlat",
+     "valueEn": "stainless steel",
+     "sortOrder": 12
+    },
+    {
+     "labelSlug": "fitting-movement",
+     "valueRu": "нержавеющая сталь",
+     "valueUz": "zanglamas poʻlat",
+     "valueEn": "stainless steel",
+     "sortOrder": 13
+    },
+    {
+     "labelSlug": "dial",
+     "valueRu": "алюминиевый сплав, окрашенный в белый цвет",
+     "valueUz": "oq rangga boʻyalgan alyuminiy qotishmasi",
+     "valueEn": "aluminium alloy, painted white",
+     "sortOrder": 14
+    },
+    {
+     "labelSlug": "measuring-ranges",
+     "valueRu": "от 0 до 1000 кгс/см2 (остальные пределы по заказу)",
+     "valueUz": "0 dan 1000 kgk/sm² gacha (qolgan chegaralar buyurtma boʻyicha)",
+     "valueEn": "0 to 1000 kgf/cm² (other ranges to order)",
+     "sortOrder": 15
+    }
+   ]
+  },
+  {
+   "sku": "MNK-EC-100",
+   "model": "ДВ2010М, ДА2010М, ДМ2010М",
+   "categorySlug": "electrocontact-manometers",
+   "variantRu": null,
+   "variantUz": null,
+   "variantEn": null,
+   "descRu": "Вакуумметры, мановакуумметры, манометры электроконтактные ДВ2010М, ДА2010М, ДМ2010М предназначены для измерения избыточного и/или вакуумметрического давления некристаллизующихся, неагрессивных по отношению к медным сплавам сред. Посредством сигнализирующего устройства прямого действия могут управлять внешними электрическими цепями путем их замыкания и размыкания при достижении заданного предела давления.",
+   "descUz": "Elektrokontaktli vakuummetr, mano-vakuummetr va manometrlar mis qotishmalariga nisbatan agressiv boʻlmagan, kristallanmaydigan muhitlarning ortiqcha va/yoki vakuum bosimini oʻlchash uchun moʻljallangan. Toʻgʻridan-toʻgʻri taʼsir qiluvchi signal berish qurilmasi orqali berilgan bosim chegarasiga yetganda tashqi elektr zanjirlarini ulash va uzish yoʻli bilan boshqarishi mumkin.",
+   "descEn": "The electrical-contact vacuum, compound and pressure gauges measure gauge and/or vacuum pressure of non-crystallising media that are non-aggressive to copper alloys. Through a direct-acting signalling unit they can control external electrical circuits by closing and opening them when a preset pressure limit is reached.",
+   "diameter": 100,
+   "accuracy": "1,5 (базовый), 1 (по заказу)",
+   "availability": "MADE_TO_ORDER",
+   "leadTimeDays": 14,
+   "sourcePage": 17,
+   "specs": [
+    {
+     "labelSlug": "nominal-case-diameter",
+     "valueRu": "100 мм",
+     "valueUz": "100 mm",
+     "valueEn": "100 mm",
+     "sortOrder": 0
+    },
+    {
+     "labelSlug": "accuracy-class",
+     "valueRu": "1,5 (базовый), 1 (по заказу)",
+     "valueUz": "1,5 (asosiy), 1 (buyurtma boʻyicha)",
+     "valueEn": "1.5 (standard), 1 (to order)",
+     "sortOrder": 1
+    },
+    {
+     "labelSlug": "ingress-protection",
+     "valueRu": "Ip40",
+     "valueUz": "IP40",
+     "valueEn": "IP40",
+     "sortOrder": 2
+    },
+    {
+     "labelSlug": "fitting-thread",
+     "valueRu": "М20x1,5 (базовая)",
+     "valueUz": "М20x1,5 (asosiy)",
+     "valueEn": "M20×1.5 (standard)",
+     "sortOrder": 3
+    },
+    {
+     "labelSlug": "wrench-size",
+     "valueRu": "17 мм",
+     "valueUz": "17 mm",
+     "valueEn": "17 mm",
+     "sortOrder": 4
+    },
+    {
+     "labelSlug": "fitting-position",
+     "valueRu": "радиальное",
+     "valueUz": "radial",
+     "valueEn": "radial",
+     "sortOrder": 5
+    },
+    {
+     "labelSlug": "climatic-rating",
+     "valueRu": "исполнение У2 по ГОСТ 15150-69",
+     "valueUz": "GOST 15150-69 boʻyicha U2 ijro",
+     "valueEn": "type U2 per GOST 15150-69",
+     "sortOrder": 6
+    },
+    {
+     "labelSlug": "process-temp-range",
+     "valueRu": "от -50 до +90 оС",
+     "valueUz": "-50 dan +90 °C gacha",
+     "valueEn": "-50 to +90 °C",
+     "sortOrder": 7
+    },
+    {
+     "labelSlug": "ambient-temp-range",
+     "valueRu": "от -60 до +60 оС",
+     "valueUz": "-60 dan +60 °C gacha",
+     "valueEn": "-60 to +60 °C",
+     "sortOrder": 8
+    },
+    {
+     "labelSlug": "service-life",
+     "valueRu": "5 лет",
+     "valueUz": "5 yil",
+     "valueEn": "5 years",
+     "sortOrder": 9
+    },
+    {
+     "labelSlug": "case-material",
+     "valueRu": "сталь, окрашенная в черный цвет",
+     "valueUz": "qora rangga boʻyalgan poʻlat",
+     "valueEn": "steel, painted black",
+     "sortOrder": 10
+    },
+    {
+     "labelSlug": "window",
+     "valueRu": "органическое",
+     "valueUz": "organik shisha",
+     "valueEn": "organic glass",
+     "sortOrder": 11
+    },
+    {
+     "labelSlug": "bourdon-tube",
+     "valueRu": "медный сплав",
+     "valueUz": "mis qotishmasi",
+     "valueEn": "copper alloy",
+     "sortOrder": 12
+    },
+    {
+     "labelSlug": "fitting-movement",
+     "valueRu": "медный сплав",
+     "valueUz": "mis qotishmasi",
+     "valueEn": "copper alloy",
+     "sortOrder": 13
+    },
+    {
+     "labelSlug": "dial",
+     "valueRu": "алюминиевый сплав, окрашенный в белый цвет",
+     "valueUz": "oq rangga boʻyalgan alyuminiy qotishmasi",
+     "valueEn": "aluminium alloy, painted white",
+     "sortOrder": 14
+    },
+    {
+     "labelSlug": "contact-type",
+     "valueRu": "с магнитным поджатием (базовый)",
+     "valueUz": "magnit bosimli (asosiy)",
+     "valueEn": "magnetically assisted (standard)",
+     "sortOrder": 15
+    },
+    {
+     "labelSlug": "max-switching-voltage",
+     "valueRu": "220В постоянного тока",
+     "valueUz": "220 V oʻzgarmas tok",
+     "valueEn": "220 V DC",
+     "sortOrder": 16
+    },
+    {
+     "labelSlug": "measuring-ranges",
+     "valueRu": "от 0 до 1000 кгс/см2 (остальные пределы по заказу)",
+     "valueUz": "0 dan 1000 kgk/sm² gacha (qolgan chegaralar buyurtma boʻyicha)",
+     "valueEn": "0 to 1000 kgf/cm² (other ranges to order)",
+     "sortOrder": 17
+    },
+    {
+     "labelSlug": "max-current",
+     "valueRu": "1А для контактов с магнитным поджатием; 0,5А для скользящих контактов",
+     "valueUz": "magnit bosimli kontaktlar uchun 1 A; sirpanuvchi kontaktlar uchun 0,5 A",
+     "valueEn": "1 A for magnetically assisted contacts; 0.5 A for sliding contacts",
+     "sortOrder": 18
+    }
+   ]
+  },
+  {
+   "sku": "MNK-EC-150",
+   "model": "ДВ2005М, ДА2005М, ДМ2005М",
+   "categorySlug": "electrocontact-manometers",
+   "variantRu": null,
+   "variantUz": null,
+   "variantEn": null,
+   "descRu": "Вакуумметры, мановакуумметры, манометры электроконтактные ДВ2005М, ДА2005М, ДМ2005М предназначены для измерения избыточного и/или вакуумметрического давления некристаллизующихся, неагрессивных по отношению к медным сплавам сред. Посредством сигнализирующего устройства прямого действия могут управлять внешними электрическими цепями путем их замыкания и размыкания при достижении заданного предела давления.",
+   "descUz": "Elektrokontaktli vakuummetr, mano-vakuummetr va manometrlar mis qotishmalariga nisbatan agressiv boʻlmagan, kristallanmaydigan muhitlarning ortiqcha va/yoki vakuum bosimini oʻlchash uchun moʻljallangan. Toʻgʻridan-toʻgʻri taʼsir qiluvchi signal berish qurilmasi orqali berilgan bosim chegarasiga yetganda tashqi elektr zanjirlarini ulash va uzish yoʻli bilan boshqarishi mumkin.",
+   "descEn": "The electrical-contact vacuum, compound and pressure gauges measure gauge and/or vacuum pressure of non-crystallising media that are non-aggressive to copper alloys. Through a direct-acting signalling unit they can control external electrical circuits by closing and opening them when a preset pressure limit is reached.",
+   "diameter": 150,
+   "accuracy": "1,5 (базовый), 1 (по заказу)",
+   "availability": "MADE_TO_ORDER",
+   "leadTimeDays": 14,
+   "sourcePage": 18,
+   "specs": [
+    {
+     "labelSlug": "nominal-case-diameter",
+     "valueRu": "150 мм",
+     "valueUz": "150 mm",
+     "valueEn": "150 mm",
+     "sortOrder": 0
+    },
+    {
+     "labelSlug": "accuracy-class",
+     "valueRu": "1,5 (базовый), 1 (по заказу)",
+     "valueUz": "1,5 (asosiy), 1 (buyurtma boʻyicha)",
+     "valueEn": "1.5 (standard), 1 (to order)",
+     "sortOrder": 1
+    },
+    {
+     "labelSlug": "ingress-protection",
+     "valueRu": "Ip40",
+     "valueUz": "IP40",
+     "valueEn": "IP40",
+     "sortOrder": 2
+    },
+    {
+     "labelSlug": "fitting-thread",
+     "valueRu": "М20x1,5 (базовая)",
+     "valueUz": "М20x1,5 (asosiy)",
+     "valueEn": "M20×1.5 (standard)",
+     "sortOrder": 3
+    },
+    {
+     "labelSlug": "wrench-size",
+     "valueRu": "17 мм",
+     "valueUz": "17 mm",
+     "valueEn": "17 mm",
+     "sortOrder": 4
+    },
+    {
+     "labelSlug": "fitting-position",
+     "valueRu": "радиальное",
+     "valueUz": "radial",
+     "valueEn": "radial",
+     "sortOrder": 5
+    },
+    {
+     "labelSlug": "climatic-rating",
+     "valueRu": "исполнение У2 по ГОСТ 15150-69",
+     "valueUz": "GOST 15150-69 boʻyicha U2 ijro",
+     "valueEn": "type U2 per GOST 15150-69",
+     "sortOrder": 6
+    },
+    {
+     "labelSlug": "process-temp-range",
+     "valueRu": "от -50 до +90 оС",
+     "valueUz": "-50 dan +90 °C gacha",
+     "valueEn": "-50 to +90 °C",
+     "sortOrder": 7
+    },
+    {
+     "labelSlug": "ambient-temp-range",
+     "valueRu": "от -60 до +60 оС",
+     "valueUz": "-60 dan +60 °C gacha",
+     "valueEn": "-60 to +60 °C",
+     "sortOrder": 8
+    },
+    {
+     "labelSlug": "service-life",
+     "valueRu": "5 лет",
+     "valueUz": "5 yil",
+     "valueEn": "5 years",
+     "sortOrder": 9
+    },
+    {
+     "labelSlug": "case-material",
+     "valueRu": "сталь, окрашенная в черный цвет",
+     "valueUz": "qora rangga boʻyalgan poʻlat",
+     "valueEn": "steel, painted black",
+     "sortOrder": 10
+    },
+    {
+     "labelSlug": "window",
+     "valueRu": "органическое",
+     "valueUz": "organik shisha",
+     "valueEn": "organic glass",
+     "sortOrder": 11
+    },
+    {
+     "labelSlug": "bourdon-tube",
+     "valueRu": "медный сплав",
+     "valueUz": "mis qotishmasi",
+     "valueEn": "copper alloy",
+     "sortOrder": 12
+    },
+    {
+     "labelSlug": "fitting-movement",
+     "valueRu": "медный сплав",
+     "valueUz": "mis qotishmasi",
+     "valueEn": "copper alloy",
+     "sortOrder": 13
+    },
+    {
+     "labelSlug": "dial",
+     "valueRu": "алюминиевый сплав, окрашенный в белый цвет",
+     "valueUz": "oq rangga boʻyalgan alyuminiy qotishmasi",
+     "valueEn": "aluminium alloy, painted white",
+     "sortOrder": 14
+    },
+    {
+     "labelSlug": "contact-type",
+     "valueRu": "с магнитным поджатием (базовый)",
+     "valueUz": "magnit bosimli (asosiy)",
+     "valueEn": "magnetically assisted (standard)",
+     "sortOrder": 15
+    },
+    {
+     "labelSlug": "max-switching-voltage",
+     "valueRu": "220В постоянного тока",
+     "valueUz": "220 V oʻzgarmas tok",
+     "valueEn": "220 V DC",
+     "sortOrder": 16
+    },
+    {
+     "labelSlug": "measuring-ranges",
+     "valueRu": "от 0 до 1000 кгс/см2 (остальные пределы по заказу)",
+     "valueUz": "0 dan 1000 kgk/sm² gacha (qolgan chegaralar buyurtma boʻyicha)",
+     "valueEn": "0 to 1000 kgf/cm² (other ranges to order)",
+     "sortOrder": 17
+    },
+    {
+     "labelSlug": "max-current",
+     "valueRu": "1А для контактов с магнитным поджатием; 0,5А для скользящих контактов",
+     "valueUz": "magnit bosimli kontaktlar uchun 1 A; sirpanuvchi kontaktlar uchun 0,5 A",
+     "valueEn": "1 A for magnetically assisted contacts; 0.5 A for sliding contacts",
+     "sortOrder": 18
+    }
+   ]
+  },
+  {
+   "sku": "MNK-EC-100-SS",
+   "model": "ДВ2010М, ДА2010М, ДМ2010М",
+   "categorySlug": "electrocontact-manometers",
+   "variantRu": "корпус из нержавеющей стали",
+   "variantUz": "zanglamas poʻlat korpus",
+   "variantEn": "stainless-steel case",
+   "descRu": "Вакуумметры, мановакуумметры, манометры электроконтактные ДВ2010М, ДА2010М, ДМ2010М предназначены для измерения избыточного и/или вакуумметрического давления некристаллизующихся, неагрессивных по отношению к медным сплавам сред. Посредством сигнализирующего устройства прямого действия могут управлять внешними электрическими цепями путем их замыкания и размыкания при достижении заданного предела давления.",
+   "descUz": "Elektrokontaktli vakuummetr, mano-vakuummetr va manometrlar mis qotishmalariga nisbatan agressiv boʻlmagan, kristallanmaydigan muhitlarning ortiqcha va/yoki vakuum bosimini oʻlchash uchun moʻljallangan. Toʻgʻridan-toʻgʻri taʼsir qiluvchi signal berish qurilmasi orqali berilgan bosim chegarasiga yetganda tashqi elektr zanjirlarini ulash va uzish yoʻli bilan boshqarishi mumkin.",
+   "descEn": "The electrical-contact vacuum, compound and pressure gauges measure gauge and/or vacuum pressure of non-crystallising media that are non-aggressive to copper alloys. Through a direct-acting signalling unit they can control external electrical circuits by closing and opening them when a preset pressure limit is reached.",
+   "diameter": 100,
+   "accuracy": "1,5 (базовый), 1 (по заказу)",
+   "availability": "MADE_TO_ORDER",
+   "leadTimeDays": 14,
+   "sourcePage": 19,
+   "specs": [
+    {
+     "labelSlug": "nominal-case-diameter",
+     "valueRu": "100 мм",
+     "valueUz": "100 mm",
+     "valueEn": "100 mm",
+     "sortOrder": 0
+    },
+    {
+     "labelSlug": "accuracy-class",
+     "valueRu": "1,5 (базовый), 1 (по заказу)",
+     "valueUz": "1,5 (asosiy), 1 (buyurtma boʻyicha)",
+     "valueEn": "1.5 (standard), 1 (to order)",
+     "sortOrder": 1
+    },
+    {
+     "labelSlug": "ingress-protection",
+     "valueRu": "Ip54",
+     "valueUz": "IP54",
+     "valueEn": "IP54",
+     "sortOrder": 2
+    },
+    {
+     "labelSlug": "fitting-thread",
+     "valueRu": "М20x1,5 (базовая)",
+     "valueUz": "М20x1,5 (asosiy)",
+     "valueEn": "M20×1.5 (standard)",
+     "sortOrder": 3
+    },
+    {
+     "labelSlug": "wrench-size",
+     "valueRu": "17 мм",
+     "valueUz": "17 mm",
+     "valueEn": "17 mm",
+     "sortOrder": 4
+    },
+    {
+     "labelSlug": "fitting-position",
+     "valueRu": "радиальное",
+     "valueUz": "radial",
+     "valueEn": "radial",
+     "sortOrder": 5
+    },
+    {
+     "labelSlug": "climatic-rating",
+     "valueRu": "исполнение У2 по ГОСТ 15150-69",
+     "valueUz": "GOST 15150-69 boʻyicha U2 ijro",
+     "valueEn": "type U2 per GOST 15150-69",
+     "sortOrder": 6
+    },
+    {
+     "labelSlug": "process-temp-range",
+     "valueRu": "от -50 до +90 оС",
+     "valueUz": "-50 dan +90 °C gacha",
+     "valueEn": "-50 to +90 °C",
+     "sortOrder": 7
+    },
+    {
+     "labelSlug": "ambient-temp-range",
+     "valueRu": "от -60 до +60 оС",
+     "valueUz": "-60 dan +60 °C gacha",
+     "valueEn": "-60 to +60 °C",
+     "sortOrder": 8
+    },
+    {
+     "labelSlug": "service-life",
+     "valueRu": "5 лет",
+     "valueUz": "5 yil",
+     "valueEn": "5 years",
+     "sortOrder": 9
+    },
+    {
+     "labelSlug": "case-material",
+     "valueRu": "нержавеющая сталь",
+     "valueUz": "zanglamas poʻlat",
+     "valueEn": "stainless steel",
+     "sortOrder": 10
+    },
+    {
+     "labelSlug": "window",
+     "valueRu": "органическое",
+     "valueUz": "organik shisha",
+     "valueEn": "organic glass",
+     "sortOrder": 11
+    },
+    {
+     "labelSlug": "bourdon-tube",
+     "valueRu": "медный сплав",
+     "valueUz": "mis qotishmasi",
+     "valueEn": "copper alloy",
+     "sortOrder": 12
+    },
+    {
+     "labelSlug": "fitting-movement",
+     "valueRu": "медный сплав",
+     "valueUz": "mis qotishmasi",
+     "valueEn": "copper alloy",
+     "sortOrder": 13
+    },
+    {
+     "labelSlug": "dial",
+     "valueRu": "алюминиевый сплав, окрашенный в белый цвет",
+     "valueUz": "oq rangga boʻyalgan alyuminiy qotishmasi",
+     "valueEn": "aluminium alloy, painted white",
+     "sortOrder": 14
+    },
+    {
+     "labelSlug": "contact-type",
+     "valueRu": "с магнитным поджатием (базовый)",
+     "valueUz": "magnit bosimli (asosiy)",
+     "valueEn": "magnetically assisted (standard)",
+     "sortOrder": 15
+    },
+    {
+     "labelSlug": "max-switching-voltage",
+     "valueRu": "220В постоянного тока",
+     "valueUz": "220 V oʻzgarmas tok",
+     "valueEn": "220 V DC",
+     "sortOrder": 16
+    },
+    {
+     "labelSlug": "measuring-ranges",
+     "valueRu": "от 0 до 1000 кгс/см2 (остальные пределы по заказу)",
+     "valueUz": "0 dan 1000 kgk/sm² gacha (qolgan chegaralar buyurtma boʻyicha)",
+     "valueEn": "0 to 1000 kgf/cm² (other ranges to order)",
+     "sortOrder": 17
+    },
+    {
+     "labelSlug": "max-current",
+     "valueRu": "1А для контактов с магнитным поджатием; 0,5А для скользящих контактов",
+     "valueUz": "magnit bosimli kontaktlar uchun 1 A; sirpanuvchi kontaktlar uchun 0,5 A",
+     "valueEn": "1 A for magnetically assisted contacts; 0.5 A for sliding contacts",
+     "sortOrder": 18
+    }
+   ]
+  },
+  {
+   "sku": "MNK-EC-100-KS",
+   "model": "ДВ2010М-КС, ДА2010М-КС, ДМ2010М-КС",
+   "categorySlug": "electrocontact-manometers",
+   "variantRu": null,
+   "variantUz": null,
+   "variantEn": null,
+   "descRu": "Вакуумметры, мановакуумметры, манометры электроконтактные ДВ2010М-КС, ДА2010М-КС, ДМ2010М-КС предназначены для измерения избыточного и/или вакуумметрического давления агрессивных некристаллизующихся сред, не вступающих в активное взаимодействие с нержавеющей сталью. Посредством сигнализирующего устройства прямого действия могут управлять внешними электрическими цепями путем их замыкания и размыкания при достижении заданного предела давления.",
+   "descUz": "Elektrokontaktli vakuummetr, mano-vakuummetr va manometrlar ДВ2010М-КС, ДА2010М-КС, ДМ2010М-КС zanglamas poʻlat bilan faol taʼsirlashmaydigan, kristallanmaydigan agressiv muhitlarning ortiqcha va/yoki vakuum bosimini oʻlchash uchun moʻljallangan. Toʻgʻridan-toʻgʻri taʼsir qiluvchi signal berish qurilmasi orqali berilgan bosim chegarasiga yetganda tashqi elektr zanjirlarini boshqarishi mumkin.",
+   "descEn": "The ДВ2010М-КС, ДА2010М-КС and ДМ2010М-КС electrical-contact gauges measure gauge and/or vacuum pressure of aggressive non-crystallising media that do not react actively with stainless steel. Through a direct-acting signalling unit they can control external electrical circuits when a preset pressure limit is reached.",
+   "diameter": 100,
+   "accuracy": "1,5 (базовый), 1 (по заказу)",
+   "availability": "MADE_TO_ORDER",
+   "leadTimeDays": 14,
+   "sourcePage": 20,
+   "specs": [
+    {
+     "labelSlug": "nominal-case-diameter",
+     "valueRu": "100 мм",
+     "valueUz": "100 mm",
+     "valueEn": "100 mm",
+     "sortOrder": 0
+    },
+    {
+     "labelSlug": "accuracy-class",
+     "valueRu": "1,5 (базовый), 1 (по заказу)",
+     "valueUz": "1,5 (asosiy), 1 (buyurtma boʻyicha)",
+     "valueEn": "1.5 (standard), 1 (to order)",
+     "sortOrder": 1
+    },
+    {
+     "labelSlug": "ingress-protection",
+     "valueRu": "Ip65",
+     "valueUz": "IP65",
+     "valueEn": "IP65",
+     "sortOrder": 2
+    },
+    {
+     "labelSlug": "fitting-thread",
+     "valueRu": "М20x1,5 (базовая)",
+     "valueUz": "М20x1,5 (asosiy)",
+     "valueEn": "M20×1.5 (standard)",
+     "sortOrder": 3
+    },
+    {
+     "labelSlug": "wrench-size",
+     "valueRu": "22 мм",
+     "valueUz": "22 mm",
+     "valueEn": "22 mm",
+     "sortOrder": 4
+    },
+    {
+     "labelSlug": "fitting-position",
+     "valueRu": "радиальное",
+     "valueUz": "radial",
+     "valueEn": "radial",
+     "sortOrder": 5
+    },
+    {
+     "labelSlug": "climatic-rating",
+     "valueRu": "исполнение У2 по ГОСТ 15150-69",
+     "valueUz": "GOST 15150-69 boʻyicha U2 ijro",
+     "valueEn": "type U2 per GOST 15150-69",
+     "sortOrder": 6
+    },
+    {
+     "labelSlug": "process-temp-range",
+     "valueRu": "от -50 до +150 оС",
+     "valueUz": "-50 dan +150 °C gacha",
+     "valueEn": "-50 to +150 °C",
+     "sortOrder": 7
+    },
+    {
+     "labelSlug": "ambient-temp-range",
+     "valueRu": "от -60 до +60 оС",
+     "valueUz": "-60 dan +60 °C gacha",
+     "valueEn": "-60 to +60 °C",
+     "sortOrder": 8
+    },
+    {
+     "labelSlug": "service-life",
+     "valueRu": "5 лет",
+     "valueUz": "5 yil",
+     "valueEn": "5 years",
+     "sortOrder": 9
+    },
+    {
+     "labelSlug": "case-material",
+     "valueRu": "нержавеющая сталь",
+     "valueUz": "zanglamas poʻlat",
+     "valueEn": "stainless steel",
+     "sortOrder": 10
+    },
+    {
+     "labelSlug": "window",
+     "valueRu": "техническое",
+     "valueUz": "texnik",
+     "valueEn": "technical",
+     "sortOrder": 11
+    },
+    {
+     "labelSlug": "bourdon-tube",
+     "valueRu": "нержавеющая сталь",
+     "valueUz": "zanglamas poʻlat",
+     "valueEn": "stainless steel",
+     "sortOrder": 12
+    },
+    {
+     "labelSlug": "fitting-movement",
+     "valueRu": "нержавеющая сталь",
+     "valueUz": "zanglamas poʻlat",
+     "valueEn": "stainless steel",
+     "sortOrder": 13
+    },
+    {
+     "labelSlug": "filling",
+     "valueRu": "глицерин",
+     "valueUz": "glitserin",
+     "valueEn": "glycerine",
+     "sortOrder": 14
+    },
+    {
+     "labelSlug": "contact-type",
+     "valueRu": "с магнитным поджатием (базовый)",
+     "valueUz": "magnit bosimli (asosiy)",
+     "valueEn": "magnetically assisted (standard)",
+     "sortOrder": 15
+    },
+    {
+     "labelSlug": "max-switching-voltage",
+     "valueRu": "220В постоянного тока",
+     "valueUz": "220 V oʻzgarmas tok",
+     "valueEn": "220 V DC",
+     "sortOrder": 16
+    },
+    {
+     "labelSlug": "measuring-ranges",
+     "valueRu": "от 0 до 1000 кгс/см2 (остальные пределы по заказу)",
+     "valueUz": "0 dan 1000 kgk/sm² gacha (qolgan chegaralar buyurtma boʻyicha)",
+     "valueEn": "0 to 1000 kgf/cm² (other ranges to order)",
+     "sortOrder": 17
+    },
+    {
+     "labelSlug": "max-current",
+     "valueRu": "1А для контактов с магнитным поджатием; 0,5А для скользящих контактов",
+     "valueUz": "magnit bosimli kontaktlar uchun 1 A; sirpanuvchi kontaktlar uchun 0,5 A",
+     "valueEn": "1 A for magnetically assisted contacts; 0.5 A for sliding contacts",
+     "sortOrder": 18
+    }
+   ]
+  },
+  {
+   "sku": "MNK-TECH-VTI-150",
+   "model": "ВТИ-Ум, МВТИ-Ум, МТИ-Ум",
+   "categorySlug": "technical-manometers",
+   "variantRu": null,
+   "variantUz": null,
+   "variantEn": null,
+   "descRu": "Вакуумметры, мановакуумметры, манометры точных измерений ВТИ-Ум, МВТИ-Ум, МТИ-Ум предназначены для измерений с повышенной точностью избиточного и/или вакуумметрического давления неагрессивных по отношению к медным сплавам сред (жидкостей, пара, газов).",
+   "descUz": "Aniq oʻlchov vakuummetr, mano-vakuummetr va manometrlari ВТИ-Ум, МВТИ-Ум, МТИ-Ум mis qotishmalariga nisbatan agressiv boʻlmagan muhitlarning (suyuqlik, bugʻ, gaz) ortiqcha va/yoki vakuum bosimini yuqori aniqlikda oʻlchash uchun moʻljallangan.",
+   "descEn": "The ВТИ-Ум, МВТИ-Ум and МТИ-Ум precision vacuum, compound and pressure gauges measure gauge and/or vacuum pressure of media (liquids, steam, gases) non-aggressive to copper alloys with increased accuracy.",
+   "diameter": 150,
+   "accuracy": "0,4 или 0,6",
+   "availability": "MADE_TO_ORDER",
+   "leadTimeDays": 14,
+   "sourcePage": 21,
+   "specs": [
+    {
+     "labelSlug": "nominal-case-diameter",
+     "valueRu": "150 мм",
+     "valueUz": "150 mm",
+     "valueEn": "150 mm",
+     "sortOrder": 0
+    },
+    {
+     "labelSlug": "accuracy-class",
+     "valueRu": "0,4 или 0,6",
+     "valueUz": "0,4 yoki 0,6",
+     "valueEn": "0.4 or 0.6",
+     "sortOrder": 1
+    },
+    {
+     "labelSlug": "ingress-protection",
+     "valueRu": "Ip40",
+     "valueUz": "IP40",
+     "valueEn": "IP40",
+     "sortOrder": 2
+    },
+    {
+     "labelSlug": "fitting-thread",
+     "valueRu": "М20x1,5 (базовая)",
+     "valueUz": "М20x1,5 (asosiy)",
+     "valueEn": "M20×1.5 (standard)",
+     "sortOrder": 3
+    },
+    {
+     "labelSlug": "wrench-size",
+     "valueRu": "27 мм",
+     "valueUz": "27 mm",
+     "valueEn": "27 mm",
+     "sortOrder": 4
+    },
+    {
+     "labelSlug": "fitting-position",
+     "valueRu": "радиальное",
+     "valueUz": "radial",
+     "valueEn": "radial",
+     "sortOrder": 5
+    },
+    {
+     "labelSlug": "climatic-rating",
+     "valueRu": "исполнение У2 по ГОСТ 15150-69",
+     "valueUz": "GOST 15150-69 boʻyicha U2 ijro",
+     "valueEn": "type U2 per GOST 15150-69",
+     "sortOrder": 6
+    },
+    {
+     "labelSlug": "process-temp-range",
+     "valueRu": "от -50 до +90 оС",
+     "valueUz": "-50 dan +90 °C gacha",
+     "valueEn": "-50 to +90 °C",
+     "sortOrder": 7
+    },
+    {
+     "labelSlug": "ambient-temp-range",
+     "valueRu": "от -60 до +60 оС",
+     "valueUz": "-60 dan +60 °C gacha",
+     "valueEn": "-60 to +60 °C",
+     "sortOrder": 8
+    },
+    {
+     "labelSlug": "service-life",
+     "valueRu": "5 лет",
+     "valueUz": "5 yil",
+     "valueEn": "5 years",
+     "sortOrder": 9
+    },
+    {
+     "labelSlug": "case-material",
+     "valueRu": "сталь, окрашенная в черный цвет",
+     "valueUz": "qora rangga boʻyalgan poʻlat",
+     "valueEn": "steel, painted black",
+     "sortOrder": 10
+    },
+    {
+     "labelSlug": "window",
+     "valueRu": "техническое",
+     "valueUz": "texnik",
+     "valueEn": "technical",
+     "sortOrder": 11
+    },
+    {
+     "labelSlug": "bourdon-tube",
+     "valueRu": "медный сплав",
+     "valueUz": "mis qotishmasi",
+     "valueEn": "copper alloy",
+     "sortOrder": 12
+    },
+    {
+     "labelSlug": "fitting-movement",
+     "valueRu": "медный сплав",
+     "valueUz": "mis qotishmasi",
+     "valueEn": "copper alloy",
+     "sortOrder": 13
+    },
+    {
+     "labelSlug": "dial",
+     "valueRu": "алюминиевый сплав, окрашенный в белый цвет",
+     "valueUz": "oq rangga boʻyalgan alyuminiy qotishmasi",
+     "valueEn": "aluminium alloy, painted white",
+     "sortOrder": 14
+    },
+    {
+     "labelSlug": "measuring-ranges",
+     "valueRu": "от 0 до 1000 кгс/см2 (остальные пределы по заказу)",
+     "valueUz": "0 dan 1000 kgk/sm² gacha (qolgan chegaralar buyurtma boʻyicha)",
+     "valueEn": "0 to 1000 kgf/cm² (other ranges to order)",
+     "sortOrder": 15
+    }
+   ]
+  },
+  {
+   "sku": "MNK-DIG-100",
+   "model": "ДМ5001",
+   "categorySlug": "digital-manometers",
+   "variantRu": null,
+   "variantUz": null,
+   "variantEn": null,
+   "descRu": "Цифровой манометр ДМ5001 - предназначены для измерения избыточного и/или вакуумметрического давления агрессивных некристаллизующихся сред, не вступающих в активное взаимодействие с нержавеющей сталью. Он подходит для измерения давления на месте или высокоточного измерения в лабораторных условиях.",
+   "descUz": "Raqamli manometr ДМ5001 zanglamas poʻlat bilan faol taʼsirlashmaydigan, kristallanmaydigan agressiv muhitlarning ortiqcha va/yoki vakuum bosimini oʻlchash uchun moʻljallangan. U bosimni joyida yoki laboratoriya sharoitida yuqori aniqlikda oʻlchashga mos keladi.",
+   "descEn": "The ДМ5001 digital pressure gauge measures gauge and/or vacuum pressure of aggressive non-crystallising media that do not react actively with stainless steel. It suits both on-site pressure measurement and high-accuracy laboratory measurement.",
+   "diameter": 100,
+   "accuracy": "0,5",
+   "availability": "MADE_TO_ORDER",
+   "leadTimeDays": 14,
+   "sourcePage": 22,
+   "specs": [
+    {
+     "labelSlug": "nominal-case-diameter",
+     "valueRu": "100 мм",
+     "valueUz": "100 mm",
+     "valueEn": "100 mm",
+     "sortOrder": 0
+    },
+    {
+     "labelSlug": "accuracy-class",
+     "valueRu": "0,5",
+     "valueUz": "0,5",
+     "valueEn": "0.5",
+     "sortOrder": 1
+    },
+    {
+     "labelSlug": "ingress-protection",
+     "valueRu": "Ip65",
+     "valueUz": "IP65",
+     "valueEn": "IP65",
+     "sortOrder": 2
+    },
+    {
+     "labelSlug": "fitting-thread",
+     "valueRu": "М20x1,5 (базовая)",
+     "valueUz": "М20x1,5 (asosiy)",
+     "valueEn": "M20×1.5 (standard)",
+     "sortOrder": 3
+    },
+    {
+     "labelSlug": "wrench-size",
+     "valueRu": "27 мм",
+     "valueUz": "27 mm",
+     "valueEn": "27 mm",
+     "sortOrder": 4
+    },
+    {
+     "labelSlug": "fitting-position",
+     "valueRu": "радиальное",
+     "valueUz": "radial",
+     "valueEn": "radial",
+     "sortOrder": 5
+    },
+    {
+     "labelSlug": "climatic-rating",
+     "valueRu": "исполнение У2 по ГОСТ 15150-69",
+     "valueUz": "GOST 15150-69 boʻyicha U2 ijro",
+     "valueEn": "type U2 per GOST 15150-69",
+     "sortOrder": 6
+    },
+    {
+     "labelSlug": "process-temp-range",
+     "valueRu": "от -50 до +150 оС",
+     "valueUz": "-50 dan +150 °C gacha",
+     "valueEn": "-50 to +150 °C",
+     "sortOrder": 7
+    },
+    {
+     "labelSlug": "ambient-temp-range",
+     "valueRu": "от -60 до +60 оС",
+     "valueUz": "-60 dan +60 °C gacha",
+     "valueEn": "-60 to +60 °C",
+     "sortOrder": 8
+    },
+    {
+     "labelSlug": "service-life",
+     "valueRu": "5 лет",
+     "valueUz": "5 yil",
+     "valueEn": "5 years",
+     "sortOrder": 9
+    },
+    {
+     "labelSlug": "case-material",
+     "valueRu": "нержавеющая сталь",
+     "valueUz": "zanglamas poʻlat",
+     "valueEn": "stainless steel",
+     "sortOrder": 10
+    },
+    {
+     "labelSlug": "window",
+     "valueRu": "техническое",
+     "valueUz": "texnik",
+     "valueEn": "technical",
+     "sortOrder": 11
+    },
+    {
+     "labelSlug": "diaphragm-material",
+     "valueRu": "нержавеющая сталь",
+     "valueUz": "zanglamas poʻlat",
+     "valueEn": "stainless steel",
+     "sortOrder": 12
+    },
+    {
+     "labelSlug": "fitting-material",
+     "valueRu": "нержавеющая сталь",
+     "valueUz": "zanglamas poʻlat",
+     "valueEn": "stainless steel",
+     "sortOrder": 13
+    },
+    {
+     "labelSlug": "display-type",
+     "valueRu": "Цифровой с дисплеем",
+     "valueUz": "displeyli raqamli",
+     "valueEn": "digital with display",
+     "sortOrder": 14
+    },
+    {
+     "labelSlug": "power-type",
+     "valueRu": "Аккумулятор 3.6 V",
+     "valueUz": "3,6 V akkumulyator",
+     "valueEn": "3.6 V battery",
+     "sortOrder": 15
+    },
+    {
+     "labelSlug": "measuring-ranges",
+     "valueRu": "от 0 до 1000 кгс/см2 (остальные пределы по заказу)",
+     "valueUz": "0 dan 1000 kgk/sm² gacha (qolgan chegaralar buyurtma boʻyicha)",
+     "valueEn": "0 to 1000 kgf/cm² (other ranges to order)",
+     "sortOrder": 16
+    }
+   ]
+  },
+  {
+   "sku": "MNK-PG",
+   "model": "MANOBAR PG",
+   "categorySlug": "pressure-sensors",
+   "variantRu": null,
+   "variantUz": null,
+   "variantEn": null,
+   "descRu": "Датчики избыточного давления MANOBAR PG - предназначены для измерения и  непрерывного преобразования избыточного давлений в унифицированный выходной сигнал в пределах 4…20 мА.",
+   "descUz": "MANOBAR PG ortiqcha bosim datchiklari ortiqcha bosimni oʻlchash va uni 4…20 mA oraligʻidagi unifikatsiyalangan chiquvchi signalga uzluksiz oʻzgartirish uchun moʻljallangan.",
+   "descEn": "MANOBAR PG gauge-pressure transmitters measure gauge pressure and continuously convert it into a unified 4-20 mA output signal.",
+   "diameter": null,
+   "accuracy": null,
+   "availability": "MADE_TO_ORDER",
+   "leadTimeDays": 14,
+   "sourcePage": 23,
+   "specs": [
+    {
+     "labelSlug": "measuring-limit",
+     "valueRu": "по заказу",
+     "valueUz": "buyurtma boʻyicha",
+     "valueEn": "to order",
+     "sortOrder": 0
+    },
+    {
+     "labelSlug": "output-signal",
+     "valueRu": "4-20 мА",
+     "valueUz": "4-20 mA",
+     "valueEn": "4-20 mA",
+     "sortOrder": 1
+    },
+    {
+     "labelSlug": "error",
+     "valueRu": "± 0.075%",
+     "valueUz": "± 0,075%",
+     "valueEn": "± 0.075%",
+     "sortOrder": 2
+    },
+    {
+     "labelSlug": "process-thread",
+     "valueRu": "М20x1,5",
+     "valueUz": "М20x1,5",
+     "valueEn": "M20×1.5",
+     "sortOrder": 3
+    },
+    {
+     "labelSlug": "supply-voltage",
+     "valueRu": "24 VDC",
+     "valueUz": "24 V DC",
+     "valueEn": "24 V DC",
+     "sortOrder": 4
+    },
+    {
+     "labelSlug": "ambient-temp-limits",
+     "valueRu": "от (-40) до 85°C",
+     "valueUz": "-40 dan 85 °C gacha",
+     "valueEn": "-40 to 85 °C",
+     "sortOrder": 5
+    },
+    {
+     "labelSlug": "process-temp",
+     "valueRu": "от (-40) до 120°C",
+     "valueUz": "-40 dan 120 °C gacha",
+     "valueEn": "-40 to 120 °C",
+     "sortOrder": 6
+    },
+    {
+     "labelSlug": "diaphragm-material",
+     "valueRu": "Сталь 316L",
+     "valueUz": "316L poʻlat",
+     "valueEn": "316L steel",
+     "sortOrder": 7
+    },
+    {
+     "labelSlug": "protection-rating",
+     "valueRu": "Ip65",
+     "valueUz": "IP65",
+     "valueEn": "IP65",
+     "sortOrder": 8
+    },
+    {
+     "labelSlug": "explosion-protection",
+     "valueRu": "Ex ai II Ct4",
+     "valueUz": "Ex ai II Ct4",
+     "valueEn": "Ex ai II Ct4",
+     "sortOrder": 9
+    },
+    {
+     "labelSlug": "display-present",
+     "valueRu": "без дисплея",
+     "valueUz": "displeysiz",
+     "valueEn": "without display",
+     "sortOrder": 10
+    },
+    {
+     "labelSlug": "case-material",
+     "valueRu": "Сталь 316L",
+     "valueUz": "316L poʻlat",
+     "valueEn": "316L steel",
+     "sortOrder": 11
+    },
+    {
+     "labelSlug": "measured-object",
+     "valueRu": "жидкость, газ, поток",
+     "valueUz": "suyuqlik, gaz, oqim",
+     "valueEn": "liquid, gas, flow",
+     "sortOrder": 12
+    }
+   ]
+  },
+  {
+   "sku": "MNK-PG-HART",
+   "model": "MANOBAR PG",
+   "categorySlug": "pressure-sensors",
+   "variantRu": "с дисплеем и HART",
+   "variantUz": "displey va HART bilan",
+   "variantEn": "with display and HART",
+   "descRu": "Датчики избыточного давления MANOBAR PG - предназначены для измерения и  непрерывного преобразования избыточного давлений в унифицированный выходной сигнал в пределах 4…20 мА.",
+   "descUz": "MANOBAR PG ortiqcha bosim datchiklari ortiqcha bosimni oʻlchash va uni 4…20 mA oraligʻidagi unifikatsiyalangan chiquvchi signalga uzluksiz oʻzgartirish uchun moʻljallangan.",
+   "descEn": "MANOBAR PG gauge-pressure transmitters measure gauge pressure and continuously convert it into a unified 4-20 mA output signal.",
+   "diameter": null,
+   "accuracy": null,
+   "availability": "MADE_TO_ORDER",
+   "leadTimeDays": 14,
+   "sourcePage": 24,
+   "specs": [
+    {
+     "labelSlug": "measuring-limit",
+     "valueRu": "по заказу",
+     "valueUz": "buyurtma boʻyicha",
+     "valueEn": "to order",
+     "sortOrder": 0
+    },
+    {
+     "labelSlug": "output-signal",
+     "valueRu": "4-20 мА + HART",
+     "valueUz": "4-20 mA + HART",
+     "valueEn": "4-20 mA + HART",
+     "sortOrder": 1
+    },
+    {
+     "labelSlug": "error",
+     "valueRu": "± 0.075%",
+     "valueUz": "± 0,075%",
+     "valueEn": "± 0.075%",
+     "sortOrder": 2
+    },
+    {
+     "labelSlug": "process-thread",
+     "valueRu": "М20x1,5",
+     "valueUz": "М20x1,5",
+     "valueEn": "M20×1.5",
+     "sortOrder": 3
+    },
+    {
+     "labelSlug": "mechanical-connection",
+     "valueRu": "М20x1,5",
+     "valueUz": "М20x1,5",
+     "valueEn": "M20×1.5",
+     "sortOrder": 4
+    },
+    {
+     "labelSlug": "supply-voltage",
+     "valueRu": "24 VDC",
+     "valueUz": "24 V DC",
+     "valueEn": "24 V DC",
+     "sortOrder": 5
+    },
+    {
+     "labelSlug": "ambient-temp-limits",
+     "valueRu": "от (-40) до 85°C",
+     "valueUz": "-40 dan 85 °C gacha",
+     "valueEn": "-40 to 85 °C",
+     "sortOrder": 6
+    },
+    {
+     "labelSlug": "process-temp",
+     "valueRu": "от (-40) до 120°C",
+     "valueUz": "-40 dan 120 °C gacha",
+     "valueEn": "-40 to 120 °C",
+     "sortOrder": 7
+    },
+    {
+     "labelSlug": "diaphragm-material",
+     "valueRu": "Сталь 316L",
+     "valueUz": "316L poʻlat",
+     "valueEn": "316L steel",
+     "sortOrder": 8
+    },
+    {
+     "labelSlug": "protection-rating",
+     "valueRu": "Ip68",
+     "valueUz": "IP68",
+     "valueEn": "IP68",
+     "sortOrder": 9
+    },
+    {
+     "labelSlug": "explosion-protection",
+     "valueRu": "Ex ai II Ct4",
+     "valueUz": "Ex ai II Ct4",
+     "valueEn": "Ex ai II Ct4",
+     "sortOrder": 10
+    },
+    {
+     "labelSlug": "display-present",
+     "valueRu": "С дисплеем",
+     "valueUz": "displey bilan",
+     "valueEn": "with display",
+     "sortOrder": 11
+    },
+    {
+     "labelSlug": "case-material",
+     "valueRu": "алюминиевый",
+     "valueUz": "alyuminiy",
+     "valueEn": "aluminium",
+     "sortOrder": 12
+    },
+    {
+     "labelSlug": "measured-object",
+     "valueRu": "жидкость, газ, поток",
+     "valueUz": "suyuqlik, gaz, oqim",
+     "valueEn": "liquid, gas, flow",
+     "sortOrder": 13
+    },
+    {
+     "labelSlug": "humidity-range",
+     "valueRu": "5% ~ 100% RH",
+     "valueUz": "5% ~ 100% RH",
+     "valueEn": "5% ~ 100% RH",
+     "sortOrder": 14
+    },
+    {
+     "labelSlug": "filter-adjustment",
+     "valueRu": "Постоянное время 0 ~ 15 секунд",
+     "valueUz": "doimiy vaqt 0 ~ 15 sekund",
+     "valueEn": "time constant 0 ~ 15 seconds",
+     "sortOrder": 15
+    }
+   ]
+  },
+  {
+   "sku": "MNK-PD",
+   "model": "MANOBAR PD",
+   "categorySlug": "pressure-sensors",
+   "variantRu": null,
+   "variantUz": null,
+   "variantEn": null,
+   "descRu": "Датчики дифференциального давления MANOBAR PD - предназначены для измерения и непрерывного преобразования разности давлений в унифицированный выходной сигнал в пределах 4…20 мА.",
+   "descUz": "MANOBAR PD differensial bosim datchiklari bosimlar farqini oʻlchash va uni 4…20 mA oraligʻidagi unifikatsiyalangan chiquvchi signalga uzluksiz oʻzgartirish uchun moʻljallangan.",
+   "descEn": "MANOBAR PD differential-pressure transmitters measure pressure difference and continuously convert it into a unified 4-20 mA output signal.",
+   "diameter": null,
+   "accuracy": null,
+   "availability": "MADE_TO_ORDER",
+   "leadTimeDays": 14,
+   "sourcePage": 25,
+   "specs": [
+    {
+     "labelSlug": "measuring-limit",
+     "valueRu": "по заказу",
+     "valueUz": "buyurtma boʻyicha",
+     "valueEn": "to order",
+     "sortOrder": 0
+    },
+    {
+     "labelSlug": "output-signal",
+     "valueRu": "4-20 мА + HART",
+     "valueUz": "4-20 mA + HART",
+     "valueEn": "4-20 mA + HART",
+     "sortOrder": 1
+    },
+    {
+     "labelSlug": "error",
+     "valueRu": "± 0.075%",
+     "valueUz": "± 0,075%",
+     "valueEn": "± 0.075%",
+     "sortOrder": 2
+    },
+    {
+     "labelSlug": "process-thread",
+     "valueRu": "М20x1,5",
+     "valueUz": "М20x1,5",
+     "valueEn": "M20×1.5",
+     "sortOrder": 3
+    },
+    {
+     "labelSlug": "mechanical-connection",
+     "valueRu": "1/4\" NPT внутренняя",
+     "valueUz": "1/4\" NPT ichki",
+     "valueEn": "1/4\" NPT female",
+     "sortOrder": 4
+    },
+    {
+     "labelSlug": "supply-voltage",
+     "valueRu": "24 VDC",
+     "valueUz": "24 V DC",
+     "valueEn": "24 V DC",
+     "sortOrder": 5
+    },
+    {
+     "labelSlug": "ambient-temp-limits",
+     "valueRu": "от (-40) до 85°C",
+     "valueUz": "-40 dan 85 °C gacha",
+     "valueEn": "-40 to 85 °C",
+     "sortOrder": 6
+    },
+    {
+     "labelSlug": "process-temp",
+     "valueRu": "от (-40) до 120°C",
+     "valueUz": "-40 dan 120 °C gacha",
+     "valueEn": "-40 to 120 °C",
+     "sortOrder": 7
+    },
+    {
+     "labelSlug": "diaphragm-material",
+     "valueRu": "Сталь 316L",
+     "valueUz": "316L poʻlat",
+     "valueEn": "316L steel",
+     "sortOrder": 8
+    },
+    {
+     "labelSlug": "protection-rating",
+     "valueRu": "Ip68",
+     "valueUz": "IP68",
+     "valueEn": "IP68",
+     "sortOrder": 9
+    },
+    {
+     "labelSlug": "explosion-protection",
+     "valueRu": "Ex ai II Ct4",
+     "valueUz": "Ex ai II Ct4",
+     "valueEn": "Ex ai II Ct4",
+     "sortOrder": 10
+    },
+    {
+     "labelSlug": "display-present",
+     "valueRu": "С дисплеем",
+     "valueUz": "displey bilan",
+     "valueEn": "with display",
+     "sortOrder": 11
+    },
+    {
+     "labelSlug": "case-material",
+     "valueRu": "алюминиевый",
+     "valueUz": "alyuminiy",
+     "valueEn": "aluminium",
+     "sortOrder": 12
+    },
+    {
+     "labelSlug": "measured-object",
+     "valueRu": "жидкость, газ, поток",
+     "valueUz": "suyuqlik, gaz, oqim",
+     "valueEn": "liquid, gas, flow",
+     "sortOrder": 13
+    },
+    {
+     "labelSlug": "humidity-range",
+     "valueRu": "5% ~ 100% RH",
+     "valueUz": "5% ~ 100% RH",
+     "valueEn": "5% ~ 100% RH",
+     "sortOrder": 14
+    },
+    {
+     "labelSlug": "filter-adjustment",
+     "valueRu": "Постоянное время 0 ~ 15 секунд",
+     "valueUz": "doimiy vaqt 0 ~ 15 sekund",
+     "valueEn": "time constant 0 ~ 15 seconds",
+     "sortOrder": 15
+    }
+   ]
+  },
+  {
+   "sku": "MNK-PGR",
+   "model": "MANOBAR PGR",
+   "categorySlug": "pressure-sensors",
+   "variantRu": null,
+   "variantUz": null,
+   "variantEn": null,
+   "descRu": "Дистанционные датчики избыточного давления MANOBAR PGR - предназначены для измерения и непрерывного преобразования избыточного давлений в беспроводной выходной сигнал LoRaWan.",
+   "descUz": "MANOBAR PGR masofaviy ortiqcha bosim datchiklari ortiqcha bosimni oʻlchash va uni LoRaWAN simsiz chiquvchi signaliga uzluksiz oʻzgartirish uchun moʻljallangan.",
+   "descEn": "MANOBAR PGR remote gauge-pressure transmitters measure gauge pressure and continuously convert it into a wireless LoRaWAN output signal.",
+   "diameter": null,
+   "accuracy": null,
+   "availability": "MADE_TO_ORDER",
+   "leadTimeDays": 14,
+   "sourcePage": 26,
+   "specs": [
+    {
+     "labelSlug": "measuring-limit",
+     "valueRu": "по заказу",
+     "valueUz": "buyurtma boʻyicha",
+     "valueEn": "to order",
+     "sortOrder": 0
+    },
+    {
+     "labelSlug": "output-signal",
+     "valueRu": "LoRaWan",
+     "valueUz": "LoRaWAN",
+     "valueEn": "LoRaWAN",
+     "sortOrder": 1
+    },
+    {
+     "labelSlug": "error",
+     "valueRu": "± 0,1%",
+     "valueUz": "± 0,1%",
+     "valueEn": "± 0.1%",
+     "sortOrder": 2
+    },
+    {
+     "labelSlug": "mechanical-connection",
+     "valueRu": "М20x1,5",
+     "valueUz": "М20x1,5",
+     "valueEn": "M20×1.5",
+     "sortOrder": 3
+    },
+    {
+     "labelSlug": "battery-voltage",
+     "valueRu": "3,6 вольт",
+     "valueUz": "3,6 volt",
+     "valueEn": "3.6 volts",
+     "sortOrder": 4
+    },
+    {
+     "labelSlug": "battery-capacity",
+     "valueRu": "19 А/ч",
+     "valueUz": "19 A/soat",
+     "valueEn": "19 Ah",
+     "sortOrder": 5
+    },
+    {
+     "labelSlug": "radio-frequency",
+     "valueRu": "863 - 870 МГц",
+     "valueUz": "863 - 870 MGs",
+     "valueEn": "863 - 870 MHz",
+     "sortOrder": 6
+    },
+    {
+     "labelSlug": "gateway-range",
+     "valueRu": "до 7 000 м. на открытой местности",
+     "valueUz": "ochiq joyda 7 000 m gacha",
+     "valueEn": "up to 7,000 m in open terrain",
+     "sortOrder": 7
+    },
+    {
+     "labelSlug": "ambient-temp-limits",
+     "valueRu": "от (-40) до 85°C",
+     "valueUz": "-40 dan 85 °C gacha",
+     "valueEn": "-40 to 85 °C",
+     "sortOrder": 8
+    },
+    {
+     "labelSlug": "process-temp",
+     "valueRu": "от (-40) до 120°C",
+     "valueUz": "-40 dan 120 °C gacha",
+     "valueEn": "-40 to 120 °C",
+     "sortOrder": 9
+    },
+    {
+     "labelSlug": "diaphragm-material",
+     "valueRu": "Сталь 316L",
+     "valueUz": "316L poʻlat",
+     "valueEn": "316L steel",
+     "sortOrder": 10
+    },
+    {
+     "labelSlug": "protection-rating",
+     "valueRu": "Ip68",
+     "valueUz": "IP68",
+     "valueEn": "IP68",
+     "sortOrder": 11
+    },
+    {
+     "labelSlug": "explosion-protection",
+     "valueRu": "Ex ai II Ct4",
+     "valueUz": "Ex ai II Ct4",
+     "valueEn": "Ex ai II Ct4",
+     "sortOrder": 12
+    },
+    {
+     "labelSlug": "display-present",
+     "valueRu": "С дисплеем",
+     "valueUz": "displey bilan",
+     "valueEn": "with display",
+     "sortOrder": 13
+    },
+    {
+     "labelSlug": "case-material",
+     "valueRu": "алюминиевый",
+     "valueUz": "alyuminiy",
+     "valueEn": "aluminium",
+     "sortOrder": 14
+    },
+    {
+     "labelSlug": "measured-object",
+     "valueRu": "жидкость, газ, поток",
+     "valueUz": "suyuqlik, gaz, oqim",
+     "valueEn": "liquid, gas, flow",
+     "sortOrder": 15
+    },
+    {
+     "labelSlug": "packet-interval",
+     "valueRu": "0,2 сек каждые 300 сек..",
+     "valueUz": "har 300 sekundda 0,2 sekund",
+     "valueEn": "0.2 s every 300 s",
+     "sortOrder": 16
+    },
+    {
+     "labelSlug": "battery-form-factor",
+     "valueRu": "D",
+     "valueUz": "D",
+     "valueEn": "D",
+     "sortOrder": 17
+    }
+   ]
+  },
+  {
+   "sku": "MNK-PDR",
+   "model": "MANOBAR PDR",
+   "categorySlug": "pressure-sensors",
+   "variantRu": null,
+   "variantUz": null,
+   "variantEn": null,
+   "descRu": "Дистанционные датчики дифференциального давления MANOBAR PDR - предназначены для измерения и непрерывного преобразования разности давлений в беспроводной выходной сигнал LoRaWan.",
+   "descUz": "MANOBAR PDR masofaviy differensial bosim datchiklari bosimlar farqini oʻlchash va uni LoRaWAN simsiz chiquvchi signaliga uzluksiz oʻzgartirish uchun moʻljallangan.",
+   "descEn": "MANOBAR PDR remote differential-pressure transmitters measure pressure difference and continuously convert it into a wireless LoRaWAN output signal.",
+   "diameter": null,
+   "accuracy": null,
+   "availability": "MADE_TO_ORDER",
+   "leadTimeDays": 14,
+   "sourcePage": 27,
+   "specs": [
+    {
+     "labelSlug": "measuring-limit",
+     "valueRu": "по заказу",
+     "valueUz": "buyurtma boʻyicha",
+     "valueEn": "to order",
+     "sortOrder": 0
+    },
+    {
+     "labelSlug": "output-signal",
+     "valueRu": "LoRaWan",
+     "valueUz": "LoRaWAN",
+     "valueEn": "LoRaWAN",
+     "sortOrder": 1
+    },
+    {
+     "labelSlug": "error",
+     "valueRu": "± 0,1%",
+     "valueUz": "± 0,1%",
+     "valueEn": "± 0.1%",
+     "sortOrder": 2
+    },
+    {
+     "labelSlug": "mechanical-connection",
+     "valueRu": "1/4\" NPT внутренняя",
+     "valueUz": "1/4\" NPT ichki",
+     "valueEn": "1/4\" NPT female",
+     "sortOrder": 3
+    },
+    {
+     "labelSlug": "battery-voltage",
+     "valueRu": "3,6 вольт",
+     "valueUz": "3,6 volt",
+     "valueEn": "3.6 volts",
+     "sortOrder": 4
+    },
+    {
+     "labelSlug": "battery-capacity",
+     "valueRu": "19 А/ч",
+     "valueUz": "19 A/soat",
+     "valueEn": "19 Ah",
+     "sortOrder": 5
+    },
+    {
+     "labelSlug": "radio-frequency",
+     "valueRu": "863 - 870 МГц",
+     "valueUz": "863 - 870 MGs",
+     "valueEn": "863 - 870 MHz",
+     "sortOrder": 6
+    },
+    {
+     "labelSlug": "gateway-range",
+     "valueRu": "до 7 000 м. на открытой местности",
+     "valueUz": "ochiq joyda 7 000 m gacha",
+     "valueEn": "up to 7,000 m in open terrain",
+     "sortOrder": 7
+    },
+    {
+     "labelSlug": "ambient-temp-limits",
+     "valueRu": "от (-40) до 85°C",
+     "valueUz": "-40 dan 85 °C gacha",
+     "valueEn": "-40 to 85 °C",
+     "sortOrder": 8
+    },
+    {
+     "labelSlug": "process-temp",
+     "valueRu": "от (-40) до 120°C",
+     "valueUz": "-40 dan 120 °C gacha",
+     "valueEn": "-40 to 120 °C",
+     "sortOrder": 9
+    },
+    {
+     "labelSlug": "diaphragm-material",
+     "valueRu": "Сталь 316L",
+     "valueUz": "316L poʻlat",
+     "valueEn": "316L steel",
+     "sortOrder": 10
+    },
+    {
+     "labelSlug": "protection-rating",
+     "valueRu": "Ip68",
+     "valueUz": "IP68",
+     "valueEn": "IP68",
+     "sortOrder": 11
+    },
+    {
+     "labelSlug": "explosion-protection",
+     "valueRu": "Ex ai II Ct4",
+     "valueUz": "Ex ai II Ct4",
+     "valueEn": "Ex ai II Ct4",
+     "sortOrder": 12
+    },
+    {
+     "labelSlug": "display-present",
+     "valueRu": "С дисплеем",
+     "valueUz": "displey bilan",
+     "valueEn": "with display",
+     "sortOrder": 13
+    },
+    {
+     "labelSlug": "case-material",
+     "valueRu": "алюминиевый",
+     "valueUz": "alyuminiy",
+     "valueEn": "aluminium",
+     "sortOrder": 14
+    },
+    {
+     "labelSlug": "measured-object",
+     "valueRu": "жидкость, газ, поток",
+     "valueUz": "suyuqlik, gaz, oqim",
+     "valueEn": "liquid, gas, flow",
+     "sortOrder": 15
+    },
+    {
+     "labelSlug": "packet-interval",
+     "valueRu": "0,2 сек каждые 300 сек..",
+     "valueUz": "har 300 sekundda 0,2 sekund",
+     "valueEn": "0.2 s every 300 s",
+     "sortOrder": 16
+    },
+    {
+     "labelSlug": "battery-form-factor",
+     "valueRu": "D",
+     "valueUz": "D",
+     "valueEn": "D",
+     "sortOrder": 17
+    }
+   ]
+  },
+  {
+   "sku": "MNK-MP",
+   "model": "MANOPL MP",
+   "categorySlug": "level-gauges",
+   "variantRu": null,
+   "variantUz": null,
+   "variantEn": null,
+   "descRu": "Уровнемер микроимпульсный MANOPL MP - предназначен для измерения уровня жидкости в емкости или резервуаре. Работает на принципе генерации микроволновых импульсов, распространяющиеся вдоль зонда.",
+   "descUz": "MANOPL MP mikroimpulsli sath oʻlchagichi idish yoki rezervuardagi suyuqlik sathini oʻlchash uchun moʻljallangan. U zond boʻylab tarqaladigan mikrotoʻlqinli impulslarni hosil qilish prinsipida ishlaydi.",
+   "descEn": "The MANOPL MP guided micro-impulse level gauge measures liquid level in a vessel or tank. It works by generating microwave pulses that travel along a probe.",
+   "diameter": null,
+   "accuracy": null,
+   "availability": "MADE_TO_ORDER",
+   "leadTimeDays": 14,
+   "sourcePage": 28,
+   "specs": [
+    {
+     "labelSlug": "probe-length",
+     "valueRu": "по заказу",
+     "valueUz": "buyurtma boʻyicha",
+     "valueEn": "to order",
+     "sortOrder": 0
+    },
+    {
+     "labelSlug": "output-signal",
+     "valueRu": "4-20 мА + HART",
+     "valueUz": "4-20 mA + HART",
+     "valueEn": "4-20 mA + HART",
+     "sortOrder": 1
+    },
+    {
+     "labelSlug": "error",
+     "valueRu": "± 3%",
+     "valueUz": "± 3%",
+     "valueEn": "± 3%",
+     "sortOrder": 2
+    },
+    {
+     "labelSlug": "process-thread",
+     "valueRu": "фланцевый",
+     "valueUz": "flanetsli",
+     "valueEn": "flanged",
+     "sortOrder": 3
+    },
+    {
+     "labelSlug": "mechanical-connection",
+     "valueRu": "М20x1,5",
+     "valueUz": "М20x1,5",
+     "valueEn": "M20×1.5",
+     "sortOrder": 4
+    },
+    {
+     "labelSlug": "supply-voltage",
+     "valueRu": "24 VDC",
+     "valueUz": "24 V DC",
+     "valueEn": "24 V DC",
+     "sortOrder": 5
+    },
+    {
+     "labelSlug": "ambient-temp-limits",
+     "valueRu": "от (-40) до 85°C",
+     "valueUz": "-40 dan 85 °C gacha",
+     "valueEn": "-40 to 85 °C",
+     "sortOrder": 6
+    },
+    {
+     "labelSlug": "process-temp",
+     "valueRu": "от (-40) до 120°C",
+     "valueUz": "-40 dan 120 °C gacha",
+     "valueEn": "-40 to 120 °C",
+     "sortOrder": 7
+    },
+    {
+     "labelSlug": "probe-material",
+     "valueRu": "Сталь 316L",
+     "valueUz": "316L poʻlat",
+     "valueEn": "316L steel",
+     "sortOrder": 8
+    },
+    {
+     "labelSlug": "protection-rating",
+     "valueRu": "Ip65",
+     "valueUz": "IP65",
+     "valueEn": "IP65",
+     "sortOrder": 9
+    },
+    {
+     "labelSlug": "explosion-protection",
+     "valueRu": "Ex ai II Ct4",
+     "valueUz": "Ex ai II Ct4",
+     "valueEn": "Ex ai II Ct4",
+     "sortOrder": 10
+    },
+    {
+     "labelSlug": "display-present",
+     "valueRu": "С дисплеем",
+     "valueUz": "displey bilan",
+     "valueEn": "with display",
+     "sortOrder": 11
+    },
+    {
+     "labelSlug": "case-material",
+     "valueRu": "алюминиевый",
+     "valueUz": "alyuminiy",
+     "valueEn": "aluminium",
+     "sortOrder": 12
+    },
+    {
+     "labelSlug": "measured-object",
+     "valueRu": "жидкость",
+     "valueUz": "suyuqlik",
+     "valueEn": "liquid",
+     "sortOrder": 13
+    },
+    {
+     "labelSlug": "process-pressure",
+     "valueRu": "1 МПа (по заказу)",
+     "valueUz": "1 MPa (buyurtma boʻyicha)",
+     "valueEn": "1 MPa (to order)",
+     "sortOrder": 14
+    }
+   ]
+  },
+  {
+   "sku": "MNK-RD",
+   "model": "MANOPL RD",
+   "categorySlug": "level-gauges",
+   "variantRu": null,
+   "variantUz": null,
+   "variantEn": null,
+   "descRu": "Уровнемер радарный MANOPL RD - предназначен для бесконтактного измерения уровня жидких сред, в том числе агрессивных и растворителей, даже при высоких давлениях и экстремальных температурах.",
+   "descUz": "MANOPL RD radar sath oʻlchagichi suyuq muhitlar, jumladan agressiv muhitlar va erituvchilar sathini yuqori bosim va ekstremal haroratlarda ham kontaktsiz oʻlchash uchun moʻljallangan.",
+   "descEn": "The MANOPL RD radar level gauge measures the level of liquid media — including aggressive media and solvents — without contact, even at high pressures and extreme temperatures.",
+   "diameter": null,
+   "accuracy": null,
+   "availability": "MADE_TO_ORDER",
+   "leadTimeDays": 14,
+   "sourcePage": 29,
+   "specs": [
+    {
+     "labelSlug": "measuring-range",
+     "valueRu": "0,5-30 метров",
+     "valueUz": "0,5-30 metr",
+     "valueEn": "0.5-30 metres",
+     "sortOrder": 0
+    },
+    {
+     "labelSlug": "output-signal",
+     "valueRu": "4-20 мА + HART",
+     "valueUz": "4-20 mA + HART",
+     "valueEn": "4-20 mA + HART",
+     "sortOrder": 1
+    },
+    {
+     "labelSlug": "error",
+     "valueRu": "± 1 см",
+     "valueUz": "± 1 sm",
+     "valueEn": "± 1 cm",
+     "sortOrder": 2
+    },
+    {
+     "labelSlug": "process-thread",
+     "valueRu": "фланцевый",
+     "valueUz": "flanetsli",
+     "valueEn": "flanged",
+     "sortOrder": 3
+    },
+    {
+     "labelSlug": "mechanical-connection",
+     "valueRu": "М20x1,5",
+     "valueUz": "М20x1,5",
+     "valueEn": "M20×1.5",
+     "sortOrder": 4
+    },
+    {
+     "labelSlug": "supply-voltage",
+     "valueRu": "24 VDC",
+     "valueUz": "24 V DC",
+     "valueEn": "24 V DC",
+     "sortOrder": 5
+    },
+    {
+     "labelSlug": "ambient-temp-limits",
+     "valueRu": "от (-40) до 85°C",
+     "valueUz": "-40 dan 85 °C gacha",
+     "valueEn": "-40 to 85 °C",
+     "sortOrder": 6
+    },
+    {
+     "labelSlug": "process-temp",
+     "valueRu": "от (-40) до 150°C",
+     "valueUz": "-40 dan 150 °C gacha",
+     "valueEn": "-40 to 150 °C",
+     "sortOrder": 7
+    },
+    {
+     "labelSlug": "probe-material",
+     "valueRu": "Сталь 316L",
+     "valueUz": "316L poʻlat",
+     "valueEn": "316L steel",
+     "sortOrder": 8
+    },
+    {
+     "labelSlug": "protection-rating",
+     "valueRu": "Ip65",
+     "valueUz": "IP65",
+     "valueEn": "IP65",
+     "sortOrder": 9
+    },
+    {
+     "labelSlug": "explosion-protection",
+     "valueRu": "Ex d II Ct4",
+     "valueUz": "Ex d II Ct4",
+     "valueEn": "Ex d II Ct4",
+     "sortOrder": 10
+    },
+    {
+     "labelSlug": "display-present",
+     "valueRu": "С дисплеем",
+     "valueUz": "displey bilan",
+     "valueEn": "with display",
+     "sortOrder": 11
+    },
+    {
+     "labelSlug": "case-material",
+     "valueRu": "алюминиевый",
+     "valueUz": "alyuminiy",
+     "valueEn": "aluminium",
+     "sortOrder": 12
+    },
+    {
+     "labelSlug": "measured-object",
+     "valueRu": "жидкость",
+     "valueUz": "suyuqlik",
+     "valueEn": "liquid",
+     "sortOrder": 13
+    },
+    {
+     "labelSlug": "process-pressure",
+     "valueRu": "1,6 МПа (по заказу)",
+     "valueUz": "1,6 MPa (buyurtma boʻyicha)",
+     "valueEn": "1.6 MPa (to order)",
+     "sortOrder": 14
+    },
+    {
+     "labelSlug": "power-consumption",
+     "valueRu": "не более 5  В·А",
+     "valueUz": "koʻpi bilan 5 V·A",
+     "valueEn": "max. 5 V·A",
+     "sortOrder": 15
+    }
+   ]
+  },
+  {
+   "sku": "MNK-UBZ-61",
+   "model": "УБЗ 61",
+   "categorySlug": "protection-relays",
+   "variantRu": null,
+   "variantUz": null,
+   "variantEn": null,
+   "descRu": "Универсальный блок защиты УБЗ 61 - предназначен для непрерывного контроля и защиты трехфазных асинхронных электродвигателей с короткозамкнутымротором от перегрузки, асимметрии нагрузки и обрыва фазы.",
+   "descUz": "Universal himoya bloki УБЗ 61 qisqa tutashgan rotorli uch fazali asinxron elektrodvigatellarni ortiqcha yuklanish, yuk assimetriyasi va faza uzilishidan uzluksiz nazorat qilish va himoyalash uchun moʻljallangan.",
+   "descEn": "The УБЗ 61 universal protection unit provides continuous monitoring and protection of three-phase squirrel-cage induction motors against overload, load imbalance and phase loss.",
+   "diameter": null,
+   "accuracy": null,
+   "availability": "MADE_TO_ORDER",
+   "leadTimeDays": 14,
+   "sourcePage": 30,
+   "specs": [
+    {
+     "labelSlug": "nominal-supply-3ph",
+     "valueRu": "380",
+     "valueUz": "380",
+     "valueEn": "380",
+     "sortOrder": 0
+    },
+    {
+     "labelSlug": "mains-frequency",
+     "valueRu": "50",
+     "valueUz": "50",
+     "valueEn": "50",
+     "sortOrder": 1
+    },
+    {
+     "labelSlug": "nominal-current-range",
+     "valueRu": "1-100",
+     "valueUz": "1-100",
+     "valueEn": "1-100",
+     "sortOrder": 2
+    },
+    {
+     "labelSlug": "voltage-hysteresis",
+     "valueRu": "10/17",
+     "valueUz": "10/17",
+     "valueEn": "10/17",
+     "sortOrder": 3
+    },
+    {
+     "labelSlug": "current-threshold-accuracy",
+     "valueRu": "2",
+     "valueUz": "2",
+     "valueEn": "2",
+     "sortOrder": 4
+    },
+    {
+     "labelSlug": "voltage-threshold-accuracy",
+     "valueRu": "2",
+     "valueUz": "2",
+     "valueEn": "2",
+     "sortOrder": 5
+    },
+    {
+     "labelSlug": "phase-imbalance-accuracy",
+     "valueRu": "3",
+     "valueUz": "3",
+     "valueEn": "3",
+     "sortOrder": 6
+    },
+    {
+     "labelSlug": "power-consumption-load",
+     "valueRu": "3",
+     "valueUz": "3",
+     "valueEn": "3",
+     "sortOrder": 7
+    },
+    {
+     "labelSlug": "climatic-version",
+     "valueRu": "У3.1",
+     "valueUz": "U3.1",
+     "valueEn": "U3.1",
+     "sortOrder": 8
+    },
+    {
+     "labelSlug": "operating-temp-range",
+     "valueRu": "от -35 до +65",
+     "valueUz": "-35 dan +65 gacha",
+     "valueEn": "-35 to +65",
+     "sortOrder": 9
+    },
+    {
+     "labelSlug": "storage-temp",
+     "valueRu": "от -40 до +70",
+     "valueUz": "-40 dan +70 gacha",
+     "valueEn": "-40 to +70",
+     "sortOrder": 10
+    },
+    {
+     "labelSlug": "phase-current-rms",
+     "valueRu": "0,5-100",
+     "valueUz": "0,5-100",
+     "valueEn": "0.5-100",
+     "sortOrder": 11
+    },
+    {
+     "labelSlug": "line-voltage-rms",
+     "valueRu": "110 - 450",
+     "valueUz": "110 - 450",
+     "valueEn": "110 - 450",
+     "sortOrder": 12
+    },
+    {
+     "labelSlug": "reclose-delay",
+     "valueRu": "1 - 900",
+     "valueUz": "1 - 900",
+     "valueEn": "1 - 900",
+     "sortOrder": 13
+    },
+    {
+     "labelSlug": "cos-phi",
+     "valueRu": "0 - 1.0",
+     "valueUz": "0 - 1,0",
+     "valueEn": "0 - 1.0",
+     "sortOrder": 14
+    }
+   ]
+  }
+ ]
+}

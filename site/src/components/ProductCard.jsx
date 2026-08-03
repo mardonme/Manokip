@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { mediaUrl } from '../lib/api.js';
+import { useLang } from '../lib/LangContext.jsx';
 import Icon from './ui/Icon.jsx';
 
 export function ProductArt({ model, kind = 'gauge', size = 200 }) {
@@ -47,6 +48,7 @@ export function ProductArt({ model, kind = 'gauge', size = 200 }) {
 }
 
 export default function ProductCard({ p, compact = false, index = 0 }) {
+  const { t } = useLang();
   const slug = p.category?.slug || p.cat || '';
   const kind = slug === 'manometers' || slug.includes('manometer') ? 'gauge' : 'box';
   const catLabel = p.category?.name || p.cat || '';
@@ -75,19 +77,17 @@ export default function ProductCard({ p, compact = false, index = 0 }) {
           <div style={{ minWidth: 0 }}>
             <div className="mk-mono mk-muted" style={{ fontSize: 11, letterSpacing: '0.06em', textTransform: 'uppercase' }}>{catLabel}</div>
             <div style={{ fontSize: 15, fontWeight: 600, marginTop: 2 }}>{p.model}</div>
+            {p.variant && <div className="mk-muted" style={{ fontSize: 12.5, marginTop: 1 }}>{p.variant}</div>}
             <div className="mk-muted" style={{ fontSize: 13, marginTop: 1 }}>{p.desc}</div>
           </div>
           {p.dia && <span className="mk-tag">Ø {p.dia}</span>}
         </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginTop: 'auto', paddingTop: 12, borderTop: '1px solid var(--line-soft)' }}>
-          <div>
-            <div className="mk-mono" style={{ fontSize: 10.5, color: 'var(--ink-4)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Range</div>
-            <div className="mk-mono" style={{ fontSize: 12.5, marginTop: 2 }}>{p.range}</div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: 10, marginTop: 'auto', paddingTop: 12, borderTop: '1px solid var(--line-soft)' }}>
+          <div className="mk-mono" style={{ fontSize: 11.5, color: 'var(--ink-3)' }}>
+            <span className="mk-dot" style={{ marginRight: 6 }} />
+            {t(`avail.${p.availability || 'MADE_TO_ORDER'}`)}
           </div>
-          <div style={{ textAlign: 'right' }}>
-            <div className="mk-mono" style={{ fontSize: 10.5, color: 'var(--ink-4)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Price</div>
-            <div className="mk-mono" style={{ fontSize: 12.5, marginTop: 2 }}>{p.price}<span style={{ color: 'var(--ink-4)' }}> sum</span></div>
-          </div>
+          <div className="mk-mono" style={{ fontSize: 11, color: 'var(--ink-4)', whiteSpace: 'nowrap' }}>{p.sku}</div>
         </div>
       </div>
     </Link>

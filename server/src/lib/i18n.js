@@ -5,41 +5,62 @@ export function normalizeLang(raw) {
   return LANGS.includes(v) ? v : 'ru';
 }
 
+const byLang = (lang, ru, uz, en) => (lang === 'ru' ? ru : lang === 'uz' ? uz : en);
+
 export function pickCategory(c, lang) {
-  const name = lang === 'ru' ? c.nameRu : lang === 'uz' ? c.nameUz : c.nameEn;
   return {
     id: c.id,
     slug: c.slug,
-    name,
+    name: byLang(lang, c.nameRu, c.nameUz, c.nameEn),
     nameEn: c.nameEn,
     nameRu: c.nameRu,
     nameUz: c.nameUz,
     count: c.count,
+    sortOrder: c.sortOrder,
+    parentId: c.parentId ?? null,
+    children: Array.isArray(c.children) ? c.children.map((k) => pickCategory(k, lang)) : undefined,
+  };
+}
+
+export function pickSpec(s, lang) {
+  return {
+    id: s.id,
+    labelId: s.labelId,
+    slug: s.label?.slug,
+    label: s.label ? byLang(lang, s.label.labelRu, s.label.labelUz, s.label.labelEn) : undefined,
+    labelEn: s.label?.labelEn,
+    labelRu: s.label?.labelRu,
+    labelUz: s.label?.labelUz,
+    value: byLang(lang, s.valueRu, s.valueUz, s.valueEn),
+    valueEn: s.valueEn,
+    valueRu: s.valueRu,
+    valueUz: s.valueUz,
+    sortOrder: s.sortOrder,
   };
 }
 
 export function pickProduct(p, lang) {
-  const desc = lang === 'ru' ? p.descRu : lang === 'uz' ? p.descUz : p.descEn;
   return {
     id: p.id,
     sku: p.sku,
     model: p.model,
-    desc,
+    variant: byLang(lang, p.variantRu, p.variantUz, p.variantEn) || null,
+    variantEn: p.variantEn,
+    variantRu: p.variantRu,
+    variantUz: p.variantUz,
+    desc: byLang(lang, p.descRu, p.descUz, p.descEn),
     descEn: p.descEn,
     descRu: p.descRu,
     descUz: p.descUz,
-    range: p.range,
     diameter: p.diameter,
     dia: p.diameter,
-    price: p.priceText,
-    priceText: p.priceText,
-    priceMinor: p.priceMinor,
     accuracy: p.accuracy,
     acc: p.accuracy,
     imageUrl: p.imageUrl,
-    inStock: p.inStock,
-    stockCount: p.stockCount,
-    cat: p.category ? (lang === 'ru' ? p.category.nameRu : lang === 'uz' ? p.category.nameUz : p.category.nameEn) : undefined,
+    availability: p.availability,
+    leadTimeDays: p.leadTimeDays,
+    specs: Array.isArray(p.specs) ? p.specs.map((s) => pickSpec(s, lang)) : undefined,
+    cat: p.category ? byLang(lang, p.category.nameRu, p.category.nameUz, p.category.nameEn) : undefined,
     category: p.category ? pickCategory(p.category, lang) : undefined,
     categoryId: p.categoryId,
     reviewsCount: typeof p._count?.reviews === 'number' ? p._count.reviews : undefined,

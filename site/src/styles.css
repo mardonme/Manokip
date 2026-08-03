@@ -15,12 +15,16 @@
                           (removed page-by-page as each is refactored)
 ============================================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+/* Fonts are loaded non-render-blocking from index.html (<link rel=preload>),
+   not via @import here — an @import inside the bundled CSS forces a serial
+   html → css → fonts request chain that delays first paint. */
 
 /* ============================================================
    1. TOKENS
 ============================================================ */
 :root {
+  color-scheme: light;
+
   /* Surfaces — warm engineering paper */
   --bg: #f5f3ee;
   --bg-2: #ebe8e1;
@@ -31,7 +35,7 @@
   --ink: #14161b;          /* primary text            ~15:1 */
   --ink-2: #34373e;        /* strong secondary        ~9:1  */
   --ink-3: #5d616a;        /* secondary / body muted  ~4.7:1 (AA) */
-  --ink-4: #8a8d94;        /* decorative micro-labels only */
+  --ink-4: #6e727c;        /* decorative micro-labels (AA compliant) */
 
   /* Lines */
   --line: #e5e1d8;
@@ -346,7 +350,7 @@ h1, h2, h3 { letter-spacing: -0.025em; }
 
 /* Footer */
 .mk-footer { background: var(--ink-bg); color: var(--on-ink); padding: 72px 0 28px; }
-.mk-footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; gap: 56px; padding-bottom: 48px; border-bottom: 1px solid var(--ink-line); }
+.mk-footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 56px; padding-bottom: 48px; border-bottom: 1px solid var(--ink-line); }
 .mk-footer-link { display: block; font-size: 13.5px; margin-bottom: 10px; color: var(--on-ink); opacity: 0.82; transition: opacity var(--dur-1) var(--ease-out), transform var(--dur-1) var(--ease-out); }
 .mk-footer-link:hover { opacity: 1; transform: translateX(2px); }
 .mk-footer-bottom { display: flex; justify-content: space-between; align-items: center; padding-top: 28px; font-family: var(--mono); font-size: 10.5px; color: var(--on-ink-dim); letter-spacing: 0.06em; }
@@ -427,6 +431,34 @@ h1, h2, h3 { letter-spacing: -0.025em; }
 .mk-filterlink:hover { background: var(--bg-2); }
 .mk-filterlink.is-active { background: var(--ink); color: #fff; }
 .mk-filterlink { border: none; background: transparent; text-align: left; width: 100%; font: inherit; }
+/* Sub-type row under a family — indented, with a hairline spine. */
+.mk-filterlink-sub { padding-left: 24px; font-size: 12.5px; color: var(--ink-3); position: relative; }
+.mk-filterlink-sub::before {
+  content: ''; position: absolute; left: 12px; top: 0; bottom: 0;
+  border-left: 1px solid var(--line);
+}
+.mk-filterlink-sub.is-active { color: #fff; }
+.mk-filterlink-sub.is-active::before { border-color: transparent; }
+
+/* Home: instrument-type chip linking into a catalog sub-category. */
+.mk-typechip {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 11px 16px; border: 1px solid var(--line); border-radius: var(--r-sm);
+  background: var(--surface); color: var(--ink-2); font-size: 13.5px;
+  transition: border-color var(--dur-1) var(--ease-out), color var(--dur-1) var(--ease-out);
+}
+.mk-typechip:hover { border-color: var(--ink); color: var(--ink); }
+
+/* Admin: one editable specification row (label picker + 3 value fields + remove). */
+.mk-spec-row {
+  display: grid;
+  grid-template-columns: minmax(160px, 1.4fr) repeat(3, minmax(110px, 1fr)) auto;
+  gap: 10px; align-items: end;
+  padding: 10px 0; border-bottom: 1px solid var(--line-soft);
+}
+@media (max-width: 900px) {
+  .mk-spec-row { grid-template-columns: 1fr 1fr; }
+}
 .mk-filterlink.is-active .mk-mono { color: rgba(255,255,255,0.6) !important; }
 .mk-catalog-main { padding: 36px 0 48px 40px; min-width: 0; }
 .mk-pagebtn {
@@ -774,3 +806,71 @@ h1, h2, h3 { letter-spacing: -0.025em; }
     flex-direction: column !important; gap: 8px !important;
   }
 }
+
+/* ============================================================
+   7. TOAST NOTIFICATIONS & ACCESSIBILITY TOUCH TARGETS
+============================================================ */
+.mk-toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: var(--z-toast, 120);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 380px;
+  width: calc(100vw - 32px);
+  pointer-events: none;
+}
+
+.mk-toast {
+  pointer-events: auto;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: var(--r-md, 10px);
+  background: var(--surface, #ffffff);
+  border: 1px solid var(--line-2, #d6d2c8);
+  box-shadow: var(--shadow-2);
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--ink, #14161b);
+  animation: mk-toast-in 0.25s var(--ease-out);
+}
+
+.mk-toast-success { border-left: 4px solid #10b981; }
+.mk-toast-error { border-left: 4px solid #ef4444; }
+.mk-toast-info { border-left: 4px solid var(--accent, #0052cc); }
+
+.mk-toast-body { flex: 1; min-width: 0; }
+.mk-toast-title { font-weight: 600; margin-bottom: 2px; }
+.mk-toast-message { color: var(--ink-3); font-size: 12px; }
+.mk-toast-close {
+  background: none; border: none; padding: 2px; cursor: pointer; color: var(--ink-3);
+  display: inline-flex; align-items: center; justify-content: center; border-radius: 4px;
+}
+.mk-toast-close:hover { background: var(--bg-2); color: var(--ink); }
+
+@keyframes mk-toast-in {
+  from { opacity: 0; transform: translateY(12px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Accessible Touch Targets (min 44px for interactive elements on touch screens).
+   Checkboxes/radios are excluded — they size from their own box, and stretching
+   them to 44px distorts the control. .mk-toast-close is a compact icon inside a
+   floating card and would blow out the toast layout. */
+@media (max-width: 768px) {
+  button:not(.mk-toast-close),
+  .mk-btn, .mk-btn-sm, .mk-iconbtn, a.mk-btn,
+  select,
+  input:not([type="checkbox"]):not([type="radio"]) {
+    min-height: 44px;
+  }
+  .mk-iconbtn {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+

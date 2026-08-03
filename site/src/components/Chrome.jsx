@@ -72,8 +72,6 @@ export function StoreHeader({ dark = false }) {
 
   const NAV = [
     { label: t('nav.catalog'),   to: '/catalog' },
-    { label: t('nav.solutions'), to: '/solutions' },
-    { label: t('nav.service'),   to: '/service' },
     { label: t('nav.documents'), to: '/documents' },
     { label: t('nav.about'),     to: '/about' },
     { label: t('nav.contact'),   to: '/contact' },
@@ -88,7 +86,7 @@ export function StoreHeader({ dark = false }) {
             {/* <span>{t('topbar.ships')}</span> */}
           </div>
           <div className="mk-topbar-meta">
-            <a href="tel:+998936939220">+998 93 693-92-20</a>
+            <a href="tel:+998905446107">+998 90 544 61 07</a>
             <div className="mk-langswitch" role="group" aria-label="Language">
               {['ru', 'uz', 'en'].map((code, i) => (
                 <React.Fragment key={code}>
@@ -209,8 +207,8 @@ export function StoreHeader({ dark = false }) {
                   }}>{code}</button>
               ))}
             </div>
-            <a href="tel:+998936939220" className="mk-row" style={{ marginTop: 16, fontSize: 14, gap: 8 }}>
-              <Icon name="phone" size={15} style={{ color: 'var(--ink-3)' }} /> +998 93 693-92-20
+            <a href="tel:+998905446107" className="mk-row" style={{ marginTop: 16, fontSize: 14, gap: 8 }}>
+              <Icon name="phone" size={15} style={{ color: 'var(--ink-3)' }} /> +998 90 544 61 07
             </a>
           </nav>
         </div>,
@@ -223,31 +221,27 @@ export function StoreHeader({ dark = false }) {
 export function StoreFooter() {
   const { t, lang } = useLang();
 
+  // Each footer link points to a real, distinct destination. The former
+  // "Solutions" and "Service" columns (six identical links each) were merged into
+  // one column of genuine pages; both those pages have since been removed, so
+  // Contact now lives at the end of the company column.
   const LINKS = {
     catalog:  ['/catalog?category=manometers', '/catalog?category=pressure-switches', '/catalog?category=solar-panels', '/catalog?category=level-gauges', '/catalog?category=protection-relays', '/documents'],
-    solutions: ['/solutions', '/solutions', '/solutions', '/solutions', '/solutions', '/solutions'],
-    service:  ['/service', '/service', '/service', '/service', '/service', '/service'],
-    company:  ['/about', '/manufacturing', '/documents', '/partners', '/press', '/careers'],
+    company:  ['/about', '/manufacturing', '/documents', '/partners', '/press', '/careers', '/contact'],
   };
 
   const COLS = {
     en: [
       { key: 'catalog',   t: t('footer.col.catalog'),   i: ['Manometers', 'Pressure switches', 'Solar panels', 'Level gauges', 'Protection relays', 'Documents'] },
-      { key: 'solutions', t: t('footer.col.solutions'), i: ['Oil & gas', 'Mining', 'Chemical', 'HVAC', 'Power generation', 'Railway'] },
-      { key: 'service',   t: t('footer.col.service'),   i: ['Calibration', 'Verification', 'Repair', 'Custom orders', 'Documentation', 'Training'] },
-      { key: 'company',   t: t('footer.col.company'),   i: ['About Manokip', 'Manufacturing', 'Certificates', 'Partners', 'Press', 'Careers'] },
+      { key: 'company',   t: t('footer.col.company'),   i: ['About Manokip', 'Manufacturing', 'Certificates', 'Partners', 'Press', 'Careers', 'Contact'] },
     ],
     ru: [
       { key: 'catalog',   t: t('footer.col.catalog'),   i: ['Манометры', 'Реле давления', 'Солнечные панели', 'Уровнемеры', 'Реле защиты', 'Документы'] },
-      { key: 'solutions', t: t('footer.col.solutions'), i: ['Нефть и газ', 'Горнодобыча', 'Химия', 'Отопление', 'Энергетика', 'Железные дороги'] },
-      { key: 'service',   t: t('footer.col.service'),   i: ['Калибровка', 'Поверка', 'Ремонт', 'Спецзаказы', 'Документация', 'Обучение'] },
-      { key: 'company',   t: t('footer.col.company'),   i: ['О Manokip', 'Производство', 'Сертификаты', 'Партнёры', 'Пресса', 'Карьера'] },
+      { key: 'company',   t: t('footer.col.company'),   i: ['О Manokip', 'Производство', 'Сертификаты', 'Партнёры', 'Пресса', 'Карьера', 'Связаться'] },
     ],
     uz: [
       { key: 'catalog',   t: t('footer.col.catalog'),   i: ['Manometrlar', 'Bosim relelari', 'Quyosh panellari', 'Sath oʻlchagichlari', 'Himoya relelari', 'Hujjatlar'] },
-      { key: 'solutions', t: t('footer.col.solutions'), i: ['Neft va gaz', 'Togʻ-kon', 'Kimyo', 'Isitish', 'Energetika', 'Temir yoʻl'] },
-      { key: 'service',   t: t('footer.col.service'),   i: ['Kalibrlash', 'Tekshirish', 'Taʼmirlash', 'Maxsus buyurtmalar', 'Hujjatlar', 'Trening'] },
-      { key: 'company',   t: t('footer.col.company'),   i: ['Manokip haqida', 'Ishlab chiqarish', 'Sertifikatlar', 'Hamkorlar', 'Matbuot', 'Karyera'] },
+      { key: 'company',   t: t('footer.col.company'),   i: ['Manokip haqida', 'Ishlab chiqarish', 'Sertifikatlar', 'Hamkorlar', 'Matbuot', 'Karyera', 'Bogʻlanish'] },
     ],
   };
   const cols = COLS[lang] || COLS.en;

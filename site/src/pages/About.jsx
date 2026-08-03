@@ -1,5 +1,6 @@
 import React from 'react';
 import { StoreHeader, StoreFooter } from '../components/Chrome.jsx';
+import Seo from '../components/Seo.jsx';
 import { Reveal, Icon, Section } from '../components/ui/index.js';
 import { useLang } from '../lib/LangContext.jsx';
 
@@ -24,13 +25,14 @@ const HIGHLIGHTS = [
 ];
 
 export default function About() {
-  const { lang } = useLang();
+  const { lang, t } = useLang();
   const title = COPY.storyTitle[lang] || COPY.storyTitle.en;
   const story = COPY.story[lang] || COPY.story.en;
 
   return (
     <div className="mk">
       <StoreHeader />
+      <Seo title={t('seo.about.title')} description={t('seo.about.desc')} />
       <main id="main">
 
         {/* Full-screen autoplay background video */}

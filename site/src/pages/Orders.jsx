@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { StoreHeader, StoreFooter } from '../components/Chrome.jsx';
+import Seo from '../components/Seo.jsx';
 import { Reveal, Icon, Skeleton } from '../components/ui/index.js';
 import { api } from '../lib/api.js';
 import { useAuth } from '../lib/AuthContext.jsx';
@@ -33,6 +34,7 @@ export default function Orders() {
   return (
     <div className="mk">
       <StoreHeader />
+      <Seo title={t('orders.title')} noindex />
       <main id="main">
         <div className="mk-container" style={{ paddingTop: 60, paddingBottom: 60, maxWidth: 1100 }}>
           <Reveal>
@@ -98,9 +100,8 @@ export default function Orders() {
                       </div>
                       <div style={{ marginTop: 16, borderTop: '1px solid var(--line-soft)', paddingTop: 12, display: 'flex', flexDirection: 'column', gap: 8 }}>
                         {o.items.map((it) => (
-                          <div key={it.id} className="mk-between" style={{ fontSize: 14, color: 'var(--ink-2)', gap: 12 }}>
-                            <span><span className="mk-mono mk-num">{it.qty}</span> × {it.productModel}</span>
-                            <span className="mk-mono mk-num mk-muted">{it.priceText}</span>
+                          <div key={it.id} style={{ fontSize: 14, color: 'var(--ink-2)' }}>
+                            <span className="mk-mono mk-num">{it.qty}</span> × {it.productModel}
                           </div>
                         ))}
                       </div>

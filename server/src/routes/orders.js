@@ -47,7 +47,6 @@ router.post('/', requireUser, validate(checkoutSchema), async (req, res, next) =
           create: cart.items.map((it) => ({
             productId: it.productId,
             qty: it.qty,
-            priceText: it.product.priceText,
             productModel: it.product.model,
           })),
         },

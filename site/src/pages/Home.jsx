@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { StoreHeader, StoreFooter } from '../components/Chrome.jsx';
+import Seo from '../components/Seo.jsx';
 import Gauge from '../components/Gauge.jsx';
 import ProductCard from '../components/ProductCard.jsx';
 import { Reveal, Icon, Skeleton, ProductGridSkeleton, Container, Section, SectionHead } from '../components/ui/index.js';
@@ -33,6 +34,9 @@ export default function Home() {
     return () => { cancelled = true; };
   }, []);
 
+  // Sub-categories of the manometer family, surfaced as their own home section.
+  const manometerTypes = (categories || []).find((c) => c.slug === 'manometers')?.children || [];
+
   const stats = [
     ['7+', t('home.stat.years')],
     ['1 200+', t('home.stat.clients')],
@@ -43,6 +47,7 @@ export default function Home() {
   return (
     <div className="mk">
       <StoreHeader />
+      <Seo title={t('seo.home.title')} description={t('seo.home.desc')} />
       <main id="main">
 
         {/* HERO */}
@@ -103,9 +108,9 @@ export default function Home() {
             eyebrow={t('home.cat.eyebrow')} title={t('home.cat.title')}
             action={<Link to="/catalog" className="mk-ulink mk-row" style={{ gap: 6, fontSize: 14 }}>{t('home.cat.seeAll')} ({totalProducts || 90}) <Icon name="arrow-right" size={15} /></Link>}
           />
-          <div className="mk-grid-hair mk-cards-5">
+          <div className="mk-grid-hair mk-cards-4">
             {categories === null
-              ? Array.from({ length: 5 }).map((_, i) => (
+              ? Array.from({ length: 4 }).map((_, i) => (
                   <div key={i} style={{ padding: '32px 28px', minHeight: 200, display: 'flex', flexDirection: 'column', gap: 18 }}>
                     <Skeleton w="30%" h={10} /><Skeleton w="70%" h={18} style={{ marginTop: 'auto' }} /><Skeleton w="40%" h={12} />
                   </div>
@@ -129,6 +134,25 @@ export default function Home() {
           </div>
         </Section>
 
+        {/* MANOMETER TYPES — the sub-categories of the largest family, linked
+            straight from the home page so buyers skip a hop through the catalog. */}
+        {manometerTypes.length > 0 && (
+          <Section as="section" size="sm" style={{ paddingTop: 0 }}>
+            <SectionHead
+              eyebrow={t('home.types.eyebrow')} title={t('home.types.title')}
+              action={<Link to="/catalog?category=manometers" className="mk-ulink mk-row" style={{ gap: 6, fontSize: 14 }}>{t('home.types.all')} <Icon name="arrow-right" size={15} /></Link>}
+            />
+            <div className="mk-row mk-wrap" style={{ gap: 8 }}>
+              {manometerTypes.map((k) => (
+                <Link key={k.slug} to={`/catalog?category=${k.slug}`} className="mk-typechip">
+                  {k.name}
+                  <span className="mk-mono" style={{ color: 'var(--ink-4)', fontSize: 11 }}>{k.count}</span>
+                </Link>
+              ))}
+            </div>
+          </Section>
+        )}
+
         {/* FEATURED */}
         <Section as="section" size="sm" style={{ paddingTop: 0 }}>
           <SectionHead eyebrow={t('home.feat.eyebrow')} title={t('home.feat.title')} />
@@ -139,46 +163,10 @@ export default function Home() {
           </div>
         </Section>
 
-        {/* SOLUTIONS BAND */}
-        <Section as="section" tone="ink">
-          <div className="mk-split">
-            <Reveal variant="left">
-              <div className="mk-eyebrow" style={{ color: 'var(--on-ink-dim)' }}>{t('home.sol.eyebrow')}</div>
-              <h2 style={{ fontSize: 'clamp(30px,4vw,48px)', fontWeight: 600, margin: '10px 0 20px' }}>{t('home.sol.title')}</h2>
-              <p style={{ fontSize: 16, color: 'var(--on-ink-dim)', lineHeight: 1.6, maxWidth: 420 }}>{t('home.sol.lead')}</p>
-              <Link to="/solutions"><button className="mk-btn" style={{ marginTop: 26, background: 'transparent', color: 'var(--on-ink)', borderColor: 'var(--ink-line)' }}>{t('home.sol.allBtn')} <Icon name="arrow-right" size={16} className="mk-arrow" /></button></Link>
-            </Reveal>
-            <div className="mk-grid-hair mk-cards-2" style={{ background: 'var(--ink-line)' }}>
-              {[
-                ['oil', { ru: 'Нефть и газ', uz: 'Neft va gaz', en: 'Oil & Gas' }, 'gauge'],
-                ['mining', { ru: 'Горнодобыча', uz: 'Togʻ-kon', en: 'Mining' }, 'layers'],
-                ['chem', { ru: 'Химия', uz: 'Kimyo', en: 'Chemical' }, 'shield'],
-                ['power', { ru: 'Энергетика и ОВК', uz: 'Energetika va isitish', en: 'Power & HVAC' }, 'zap'],
-              ].map(([key, names, icon], i) => (
-                <Reveal key={key} index={i} style={{ background: 'var(--ink-bg)', padding: '30px 26px', display: 'flex', flexDirection: 'column', gap: 24 }}>
-                  <Icon name={icon} size={22} style={{ color: 'var(--on-ink-dim)' }} />
-                  <div style={{ fontSize: 21, fontWeight: 600, letterSpacing: '-0.015em' }}>{names[lang] || names.en}</div>
-                </Reveal>
-              ))}
-            </div>
-          </div>
-        </Section>
-
-        {/* SERVICE / CTA */}
+        {/* BULK / CTA — single full-width card since the service card was removed. */}
         <Section as="section">
-          <div className="mk-grid-hair mk-cards-2">
-            <Reveal style={{ background: 'var(--surface)', padding: '44px 40px' }}>
-              <div className="mk-eyebrow">{t('home.svc.eyebrow')}</div>
-              <h3 style={{ fontSize: 'clamp(26px,3vw,36px)', fontWeight: 600, margin: '12px 0 14px' }}>{t('home.svc.title')}</h3>
-              <p className="mk-muted" style={{ fontSize: 15, lineHeight: 1.55, maxWidth: 460 }}>{t('home.svc.lead')}</p>
-              <div className="mk-row mk-wrap" style={{ gap: 28, marginTop: 28, paddingTop: 26, borderTop: '1px solid var(--line-soft)' }}>
-                {[['48h', t('home.svc.turnaround')], ['±0.05%', t('home.svc.uncertainty')], ['14k+', t('home.svc.perYear')]].map(([n, l]) => (
-                  <div key={l}><div style={{ fontSize: 24, fontWeight: 600 }} className="mk-num">{n}</div><div className="mk-stat-l">{l}</div></div>
-                ))}
-              </div>
-              <Link to="/service"><button className="mk-btn mk-btn-light" style={{ marginTop: 26 }}>{t('home.svc.learn')} <Icon name="arrow-right" size={15} className="mk-arrow" /></button></Link>
-            </Reveal>
-            <Reveal index={1} style={{ background: 'var(--surface)', padding: '44px 40px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 24 }}>
+          <div className="mk-grid-hair">
+            <Reveal style={{ background: 'var(--surface)', padding: '44px 40px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 24 }}>
               <div>
                 <div className="mk-eyebrow">{t('home.bulk.eyebrow')}</div>
                 <h3 style={{ fontSize: 'clamp(26px,3vw,36px)', fontWeight: 600, margin: '12px 0 14px' }}>{t('home.bulk.title')}</h3>
@@ -191,6 +179,23 @@ export default function Home() {
               </div>
               <Link to="/contact" style={{ alignSelf: 'flex-start' }}><button className="mk-btn mk-btn-primary">{t('home.bulk.cta')} <Icon name="arrow-right" size={16} className="mk-arrow" /></button></Link>
             </Reveal>
+          </div>
+        </Section>
+
+        {/* CERTIFICATES — procurement buyers look for proof before they enquire. */}
+        <Section as="section" size="sm" style={{ paddingTop: 0 }}>
+          <div className="mk-card" style={{ padding: '40px 40px 36px' }}>
+            <div className="mk-eyebrow">{t('home.certs.eyebrow')}</div>
+            <h3 style={{ fontSize: 'clamp(24px,2.6vw,32px)', fontWeight: 600, margin: '12px 0 12px', letterSpacing: '-0.02em' }}>{t('home.certs.title')}</h3>
+            <p className="mk-muted" style={{ fontSize: 15, lineHeight: 1.55, maxWidth: 620, margin: 0 }}>{t('home.certs.lead')}</p>
+            <div className="mk-row mk-wrap" style={{ gap: 8, marginTop: 22 }}>
+              {['ISO 9001', "O'zStandart", 'GOST R', 'EAC'].map((s) => (
+                <span key={s} className="mk-tag">{s}</span>
+              ))}
+            </div>
+            <Link to="/documents" className="mk-ulink mk-row" style={{ display: 'inline-flex', gap: 6, fontSize: 14, marginTop: 22 }}>
+              {t('home.certs.cta')} <Icon name="arrow-right" size={15} className="mk-arrow" />
+            </Link>
           </div>
         </Section>
 
