@@ -41,8 +41,14 @@ jobs:
         working-directory: site
         # Production is same-origin (nginx proxies /api & /uploads), so the
         # API base is intentionally empty.
+        #
+        # The prebuild sitemap step reads the product list from the API. Point it
+        # at the API container directly instead of back out through luva.uz —
+        # the runner sits on the same box, so this avoids a hairpin round trip
+        # and a stale sitemap if TLS or DNS hiccups.
         env:
           VITE_API_URL: ''
+          SITEMAP_API_BASE: http://127.0.0.1:4000
         run: npm run build
 
       - name: Publish to nginx web root

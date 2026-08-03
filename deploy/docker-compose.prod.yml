@@ -1,0 +1,43 @@
+# Mirror of the file live on the VPS at /opt/manokip/docker-compose.yml.
+# Kept here so the production topology is reviewable and rebuildable from
+# git. Deploys do NOT copy this file — deploy-backend.yml only syncs
+# server/ — so edit the VPS copy and update this one in the same change.
+# Secrets come from /opt/manokip/.env, which is never committed.
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: manokip-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: manokip
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: manokip
+    volumes:
+      - manokip-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U manokip -d manokip"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: manokip-api
+    container_name: manokip-api
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file: .env
+    command: sh -c "npx prisma migrate deploy && node src/index.js"
+    ports:
+      - "127.0.0.1:4000:4000"
+    volumes:
+      - manokip-uploads:/app/server/uploads
+
+volumes:
+  manokip-db-data:
+  manokip-uploads:
