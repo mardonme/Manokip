@@ -201,7 +201,7 @@ export default function Product() {
               <div className="mk-row mk-wrap mk-muted" style={{ marginTop: 24, gap: 18, fontSize: 12.5 }}>
                 <span className="mk-row" style={{ gap: 6 }}><Icon name="shield" size={15} />{t('product.warranty')}</span>
                 <span className="mk-row" style={{ gap: 6 }}><Icon name="award" size={15} />{t('product.calIncluded')}</span>
-                <span className="mk-row" style={{ gap: 6 }}><Icon name="truck" size={15} />{t('product.freeShip')}</span>
+                <span className="mk-row" style={{ gap: 6 }}><Icon name="truck" size={15} />{t('product.delivery')}</span>
               </div>
             </div>
           </div>
