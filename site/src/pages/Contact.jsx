@@ -46,8 +46,8 @@ export default function Contact() {
               <h1 style={{ fontSize: 'clamp(40px,6vw,72px)', fontWeight: 600, letterSpacing: '-0.035em', lineHeight: 1, margin: '16px 0 0' }}>{t('contact.title')}</h1>
               <p className="mk-muted" style={{ fontSize: 17, marginTop: 22, maxWidth: 480, lineHeight: 1.55 }}>{t('contact.lead')}</p>
               <div style={{ marginTop: 36, display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 24 }}>
-                <ContactBlock icon="mail" eyebrow={t('contact.col.sales')} a="info@manokip.uz" b="+998 93 693-92-20" />
-                <ContactBlock icon="award" eyebrow={t('contact.col.service')} a="service@manokip.uz" b="+998 90 544-61-07" />
+                <ContactBlock icon="mail" eyebrow={t('contact.col.contacts')}
+                  a="manokip@manometr.uz" b="+998 90 544 61 07" c="+998 55 501 61 07" />
                 <ContactBlock icon="pin" eyebrow={t('contact.col.hq')} a={t('contact.hq.district')} b={t('contact.hq.address')} />
                 <ContactBlock icon="clock" eyebrow={t('contact.col.hours')} a={t('contact.hours.days')} b={t('contact.hours.tz')} />
               </div>
@@ -95,12 +95,13 @@ export default function Contact() {
   );
 }
 
-function ContactBlock({ icon, eyebrow, a, b }) {
+function ContactBlock({ icon, eyebrow, a, b, c }) {
   return (
     <div>
       <div className="mk-row mk-eyebrow" style={{ marginBottom: 10, gap: 7 }}><Icon name={icon} size={14} /> {eyebrow}</div>
       <div style={{ fontSize: 14.5 }}>{a}</div>
       <div className="mk-mono mk-muted" style={{ fontSize: 13, marginTop: 4 }}>{b}</div>
+      {c && <div className="mk-mono mk-muted" style={{ fontSize: 13, marginTop: 2 }}>{c}</div>}
     </div>
   );
 }

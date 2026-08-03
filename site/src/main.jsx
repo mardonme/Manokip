@@ -24,8 +24,8 @@ const SITE_JSONLD = {
       logo: `${SITE_URL}/logo.svg`,
       description:
         'Manufacturer of industrial control and measuring instruments: pressure gauges, transducers, level meters and protection relays.',
-      telephone: '+998936939220',
-      email: 'info@manokip.uz',
+      telephone: '+998905446107',
+      email: 'manokip@manometr.uz',
       address: {
         '@type': 'PostalAddress',
         addressLocality: 'Tashkent',
@@ -33,7 +33,7 @@ const SITE_JSONLD = {
       },
       contactPoint: {
         '@type': 'ContactPoint',
-        telephone: '+998936939220',
+        telephone: '+998905446107',
         contactType: 'sales',
         areaServed: 'UZ',
         availableLanguage: ['ru', 'uz', 'en'],

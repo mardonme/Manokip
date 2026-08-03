@@ -86,7 +86,7 @@ export function StoreHeader({ dark = false }) {
             {/* <span>{t('topbar.ships')}</span> */}
           </div>
           <div className="mk-topbar-meta">
-            <a href="tel:+998936939220">+998 93 693-92-20</a>
+            <a href="tel:+998905446107">+998 90 544 61 07</a>
             <div className="mk-langswitch" role="group" aria-label="Language">
               {['ru', 'uz', 'en'].map((code, i) => (
                 <React.Fragment key={code}>
@@ -207,8 +207,8 @@ export function StoreHeader({ dark = false }) {
                   }}>{code}</button>
               ))}
             </div>
-            <a href="tel:+998936939220" className="mk-row" style={{ marginTop: 16, fontSize: 14, gap: 8 }}>
-              <Icon name="phone" size={15} style={{ color: 'var(--ink-3)' }} /> +998 93 693-92-20
+            <a href="tel:+998905446107" className="mk-row" style={{ marginTop: 16, fontSize: 14, gap: 8 }}>
+              <Icon name="phone" size={15} style={{ color: 'var(--ink-3)' }} /> +998 90 544 61 07
             </a>
           </nav>
         </div>,
