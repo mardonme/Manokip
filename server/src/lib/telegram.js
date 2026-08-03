@@ -121,9 +121,7 @@ export async function notifyOrder(order, user) {
   if (items.length) {
     lines.push('', '<b>Mahsulotlar:</b>');
     for (const it of items) {
-      lines.push(
-        `• ${escapeHtml(it.productModel)} × ${it.qty} — ${escapeHtml(it.priceText)}`,
-      );
+      lines.push(`• ${escapeHtml(it.productModel)} × ${it.qty}`);
     }
   }
   return sendAdminMessage(lines.join('\n'));
@@ -134,7 +132,7 @@ export async function notifyOrder(order, user) {
  * paste into ADMIN_CHAT_ID. Lightweight; runs only when a token is present.
  * Never throws — on any error it backs off and retries.
  */
-export function startTelegramPolling() {
+function _startTelegramPolling() {
   if (!API_BASE) {
     console.warn('[telegram] BOT_TOKEN not set — bot polling disabled');
     return;
@@ -197,4 +195,24 @@ export function startTelegramPolling() {
 
   loop();
   console.log('[telegram] bot polling started (send /start to the bot to get your chat id)');
+
+  return function stop() {
+    stopped = true;
+  };
 }
+
+let stopPollerFn = null;
+
+export function startTelegramPolling() {
+  if (stopPollerFn) return;
+  stopPollerFn = _startTelegramPolling();
+}
+
+export function stopTelegramPolling() {
+  if (stopPollerFn) {
+    stopPollerFn();
+    stopPollerFn = null;
+    console.log('[telegram] bot polling stopped');
+  }
+}
+

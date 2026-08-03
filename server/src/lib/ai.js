@@ -58,14 +58,16 @@ async function buildCatalogContext(lang) {
 
   return products
     .map((p) => {
+      const variant = lang === 'ru' ? p.variantRu : lang === 'uz' ? p.variantUz : p.variantEn;
       const parts = [
         `${p.model} [${p.sku}]`,
+        variant,
         pickCat(p.category),
-        p.range && `range ${p.range}`,
         p.diameter && `Ø${p.diameter}mm`,
         p.accuracy && `class ${p.accuracy}`,
-        `price ${p.priceText}`,
-        p.inStock ? 'in stock' : 'out of stock',
+        p.availability === 'IN_STOCK' ? 'in stock'
+          : p.availability === 'ON_REQUEST' ? 'on request'
+            : `made to order${p.leadTimeDays ? `, ~${p.leadTimeDays} days` : ''}`,
       ].filter(Boolean);
       const desc = pickDesc(p);
       return `- ${parts.join(' · ')}${desc ? ` — ${desc}` : ''}`;

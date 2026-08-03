@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { useLang } from '../../lib/LangContext.jsx';
 import { api, mediaUrl } from '../../lib/api.js';
+import { useFocusTrap } from '../../lib/useFocusTrap.js';
 import Icon from '../../components/ui/Icon.jsx';
 import { Skeleton } from '../../components/ui/Skeleton.jsx';
 
@@ -17,16 +18,16 @@ export function PageHead({ title, action }) {
 }
 
 export function AdminModal({ title, onClose, children, footer }) {
+  const containerRef = useFocusTrap(true, onClose);
+
   useEffect(() => {
-    const onKey = (e) => { if (e.key === 'Escape') onClose(); };
-    window.addEventListener('keydown', onKey);
     document.body.style.overflow = 'hidden';
-    return () => { window.removeEventListener('keydown', onKey); document.body.style.overflow = ''; };
-  }, [onClose]);
+    return () => { document.body.style.overflow = ''; };
+  }, []);
 
   return (
     <div className="mk mk-modal-scrim mk-modal-scrim-top" onClick={onClose}>
-      <div className="mk-modal mk-modal-lg" role="dialog" aria-modal="true" aria-label={title} onClick={(e) => e.stopPropagation()} style={{ padding: 0 }}>
+      <div ref={containerRef} className="mk-modal mk-modal-lg" role="dialog" aria-modal="true" aria-label={title} onClick={(e) => e.stopPropagation()} style={{ padding: 0 }}>
         <div className="mk-between" style={{ padding: '18px 24px', borderBottom: '1px solid var(--line)' }}>
           <h2 style={{ fontSize: 20, fontWeight: 600, letterSpacing: '-0.02em', margin: 0 }}>{title}</h2>
           <button onClick={onClose} className="mk-iconbtn" aria-label="Close"><Icon name="close" size={18} /></button>

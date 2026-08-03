@@ -17,8 +17,6 @@ const API_BASE = (process.env.SITEMAP_API_BASE || SITE_URL).replace(/\/$/, '');
 const STATIC = [
   { loc: '/', changefreq: 'weekly', priority: '1.0' },
   { loc: '/catalog', changefreq: 'weekly', priority: '0.9' },
-  { loc: '/solutions', changefreq: 'monthly', priority: '0.7' },
-  { loc: '/service', changefreq: 'monthly', priority: '0.7' },
   { loc: '/about', changefreq: 'monthly', priority: '0.6' },
   { loc: '/documents', changefreq: 'monthly', priority: '0.6' },
   { loc: '/contact', changefreq: 'yearly', priority: '0.5' },

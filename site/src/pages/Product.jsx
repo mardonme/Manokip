@@ -9,12 +9,14 @@ import { api, mediaUrl } from '../lib/api.js';
 import { useCart } from '../lib/CartContext.jsx';
 import { useAuth } from '../lib/AuthContext.jsx';
 import { useLang } from '../lib/LangContext.jsx';
+import { useToast } from '../components/Toast.jsx';
 
 export default function Product() {
   const { id } = useParams();
   const { add } = useCart();
   const { user, openSignIn } = useAuth();
   const { t } = useLang();
+  const toast = useToast();
 
   const [product, setProduct] = useState(null);
   const [related, setRelated] = useState([]);
@@ -48,9 +50,12 @@ export default function Product() {
     setFeedback(null);
     try {
       await add(product.id, qty);
-      setFeedback({ kind: 'ok', text: `${qty} × ${product.model} — ${t('product.addedToCart')}` });
+      const msg = `${qty} × ${product.model} — ${t('product.addedToCart')}`;
+      setFeedback({ kind: 'ok', text: msg });
+      toast.success(t('product.addedToCart'), `${qty} × ${product.model}`);
     } catch (e) {
       setFeedback({ kind: 'err', text: e.message });
+      toast.error(t('cart.error'), e.message);
     } finally {
       setAdding(false);
     }
@@ -91,10 +96,12 @@ export default function Product() {
         brand: { '@type': 'Brand', name: 'Manokip' },
         category: p.category?.name,
         ...(productImg ? { image: productImg } : {}),
+        // The catalogue quotes on request, so no price is advertised.
         offers: {
           '@type': 'Offer',
-          priceCurrency: 'UZS',
-          availability: p.inStock ? 'https://schema.org/InStock' : 'https://schema.org/PreOrder',
+          availability: p.availability === 'IN_STOCK'
+            ? 'https://schema.org/InStock'
+            : 'https://schema.org/MadeToOrder',
           url: `${SITE_URL}/product/${p.id}`,
         },
         ...(p.reviewsCount > 0 && p.avgRating
@@ -112,16 +119,14 @@ export default function Product() {
       },
     ],
   };
-  const seoDesc = `${p.desc ? p.desc + ' · ' : ''}${t('product.spec.range')}: ${p.range}${p.diameter ? ` · Ø${p.diameter} mm` : ''}${p.accuracy ? ` · ${t('product.spec.acc')} ${p.accuracy}` : ''}`;
+  const seoDesc = `${p.desc ? p.desc + ' · ' : ''}${p.diameter ? `Ø${p.diameter} mm · ` : ''}${p.accuracy ? `${t('product.spec.acc')} ${p.accuracy} · ` : ''}${t(`avail.${p.availability || 'MADE_TO_ORDER'}`)}`;
 
-  // Only real, per-product data — no fabricated/placeholder specs.
+  // Spec rows come from the product sheet via the admin panel, already
+  // translated; SKU and category are appended as catalogue context.
   const specs = [
-    [t('product.spec.range'), p.range],
-    [t('product.spec.acc'), p.accuracy || '—'],
-    [t('product.spec.dia'), p.diameter ? `Ø ${p.diameter} mm` : '—'],
+    ...(p.specs || []).map((s) => [s.label, s.value]),
     [t('product.spec.cat'), p.category?.name || '—'],
     [t('product.spec.sku'), p.sku],
-    [t('product.spec.stock'), p.stockCount > 0 ? `${p.stockCount}` : t('product.spec.onRequest')],
   ];
   const TABS = [
     ['specs', t('product.tab.specs')],
@@ -148,8 +153,9 @@ export default function Product() {
             <div className="mk-product-media">
               <div className="mk-card" style={{ padding: 56, position: 'relative', minHeight: 500, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <div style={{ position: 'absolute', top: 16, left: 16, display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                  <span className={`mk-tag ${p.inStock ? 'mk-tag-ok' : ''}`}><span className="mk-dot" />{p.inStock ? `${t('product.inStock')} · ${p.stockCount}` : t('product.onOrder')}</span>
-                  <span className="mk-tag">{t('product.shipDays')}</span>
+                  <span className={`mk-tag ${p.availability === 'IN_STOCK' ? 'mk-tag-ok' : ''}`}>
+                    <span className="mk-dot" />{t(`avail.${p.availability || 'MADE_TO_ORDER'}`)}
+                  </span>
                 </div>
                 <div className="mk-mono" style={{ position: 'absolute', top: 18, right: 18, fontSize: 10.5, color: 'var(--ink-3)', letterSpacing: '0.08em' }}>SKU · {p.sku}</div>
                 {p.imageUrl
@@ -161,13 +167,18 @@ export default function Product() {
             <div>
               <div className="mk-eyebrow">{p.category?.name}</div>
               <h1 style={{ fontSize: 'clamp(34px,4.5vw,56px)', fontWeight: 600, letterSpacing: '-0.03em', margin: '12px 0 8px' }}>{p.model}</h1>
+              {p.variant && <div className="mk-muted" style={{ fontSize: 15, marginBottom: 8 }}>{p.variant}</div>}
               <p className="mk-muted" style={{ fontSize: 17, marginTop: 0 }}>{p.desc}</p>
 
+              {/* Availability replaces the old price block — Manokip quotes per order. */}
               <div className="mk-card" style={{ marginTop: 28, padding: '20px 24px' }}>
-                <div>
-                  <div className="mk-eyebrow">{t('product.price1')}</div>
-                  <div className="mk-num" style={{ fontSize: 36, fontWeight: 600, marginTop: 4 }}>{p.priceText} <span style={{ fontSize: 16, color: 'var(--ink-3)', fontWeight: 400 }}>{p.priceMinor ? 'sum' : ''}</span></div>
-                </div>
+                <div className="mk-eyebrow">{t(`avail.${p.availability || 'MADE_TO_ORDER'}`)}</div>
+                {p.leadTimeDays != null && (
+                  <div className="mk-num" style={{ fontSize: 30, fontWeight: 600, marginTop: 6 }}>
+                    {p.leadTimeDays} <span style={{ fontSize: 15, color: 'var(--ink-3)', fontWeight: 400 }}>{t('avail.days')}</span>
+                  </div>
+                )}
+                <div className="mk-muted" style={{ fontSize: 13, marginTop: p.leadTimeDays != null ? 8 : 6 }}>{t('avail.note')}</div>
               </div>
 
               <div style={{ marginTop: 22 }}>
@@ -179,7 +190,11 @@ export default function Product() {
                       onChange={(e) => setQty(Math.max(1, parseInt(e.target.value || '1', 10) || 1))} />
                     <button onClick={() => setQty((q) => q + 1)} aria-label="Increase quantity"><Icon name="plus" size={15} /></button>
                   </div>
-                  <span className="mk-muted" style={{ fontSize: 12.5 }}>{p.stockCount} {t('product.inStockN')}</span>
+                  {p.leadTimeDays != null && (
+                    <span className="mk-muted" style={{ fontSize: 12.5 }}>
+                      {t('avail.leadTime')}: {p.leadTimeDays} {t('avail.days')}
+                    </span>
+                  )}
                 </div>
               </div>
 
@@ -217,8 +232,8 @@ export default function Product() {
 
           {tab === 'specs' && (
             <div className="mk-specs mk-grid-hair" style={{ marginTop: 28 }}>
-              {specs.map(([k, v]) => (
-                <div key={k} className="mk-between" style={{ padding: '15px 22px' }}>
+              {specs.map(([k, v], i) => (
+                <div key={`${k}-${i}`} className="mk-between" style={{ padding: '15px 22px', gap: 20 }}>
                   <span className="mk-muted" style={{ fontSize: 13.5 }}>{k}</span>
                   <span className="mk-mono" style={{ fontSize: 13, textAlign: 'right' }}>{v}</span>
                 </div>
@@ -247,7 +262,7 @@ export default function Product() {
                   <div key={l}><div className="mk-num" style={{ fontSize: 22, fontWeight: 600 }}>{n}</div><div className="mk-stat-l">{l}</div></div>
                 ))}
               </div>
-              <Link to="/service" className="mk-ulink mk-row" style={{ display: 'inline-flex', marginTop: 24, fontSize: 13.5, gap: 6 }}>{t('product.cal.book')} <Icon name="arrow-right" size={15} /></Link>
+              <Link to="/contact" className="mk-ulink mk-row" style={{ display: 'inline-flex', marginTop: 24, fontSize: 13.5, gap: 6 }}>{t('product.cal.book')} <Icon name="arrow-right" size={15} /></Link>
             </div>
           )}
         </div>

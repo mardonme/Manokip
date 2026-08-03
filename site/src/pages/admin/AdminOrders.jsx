@@ -57,7 +57,6 @@ export default function AdminOrders() {
                   {o.items.map((it) => (
                     <div key={it.id} style={{ fontSize: 13, color: 'var(--ink-2)' }}>
                       <span className="mk-mono mk-muted">{it.qty}×</span> {it.productModel}
-                      <span style={{ color: 'var(--ink-4)' }}> · {it.priceText}</span>
                     </div>
                   ))}
                   {o.notes && (

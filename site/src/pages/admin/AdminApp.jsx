@@ -6,6 +6,7 @@ import { Logo } from '../../components/Chrome.jsx';
 import Icon from '../../components/ui/Icon.jsx';
 import AdminProducts from './AdminProducts.jsx';
 import AdminCategories from './AdminCategories.jsx';
+import AdminSpecLabels from './AdminSpecLabels.jsx';
 import AdminQuotes from './AdminQuotes.jsx';
 import AdminOrders from './AdminOrders.jsx';
 
@@ -49,6 +50,7 @@ export default function AdminApp() {
   const NAV = [
     { to: '/admin', end: true, icon: 'layers', label: t('admin.nav.products') },
     { to: '/admin/categories', icon: 'sliders', label: t('admin.nav.categories') },
+    { to: '/admin/spec-labels', icon: 'file', label: t('admin.labels.title') },
     { to: '/admin/quotes', icon: 'message', label: t('admin.nav.quotes') },
     { to: '/admin/orders', icon: 'cart', label: t('admin.nav.orders') },
   ];
@@ -87,6 +89,7 @@ export default function AdminApp() {
         <Routes>
           <Route index element={<AdminProducts />} />
           <Route path="categories" element={<AdminCategories />} />
+          <Route path="spec-labels" element={<AdminSpecLabels />} />
           <Route path="quotes" element={<AdminQuotes />} />
           <Route path="orders" element={<AdminOrders />} />
           <Route path="*" element={<Navigate to="/admin" replace />} />

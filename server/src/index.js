@@ -6,8 +6,9 @@ import cookieParser from 'cookie-parser';
 import rateLimit from 'express-rate-limit';
 
 import { env } from './env.js';
+import { prisma } from './prisma.js';
 import { notFound, errorHandler } from './middleware/error.js';
-import { startTelegramPolling } from './lib/telegram.js';
+import { startTelegramPolling, stopTelegramPolling } from './lib/telegram.js';
 
 import authRoutes from './routes/auth.js';
 import productsRoutes from './routes/products.js';
@@ -47,7 +48,14 @@ app.use('/uploads', express.static(UPLOAD_DIR, {
   setHeaders: (res) => res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin'),
 }));
 
-app.get('/api/health', (req, res) => res.json({ ok: true, time: new Date().toISOString() }));
+app.get('/api/health', async (req, res) => {
+  try {
+    await prisma.$queryRaw`SELECT 1`;
+    res.json({ ok: true, db: true, time: new Date().toISOString() });
+  } catch (e) {
+    res.status(503).json({ ok: false, db: false, error: e?.message || 'DB Unavailable' });
+  }
+});
 
 app.use('/api/auth', authLimiter, authRoutes);
 app.use('/api/products', productsRoutes);
@@ -62,9 +70,27 @@ app.use('/api/admin', adminRoutes);
 app.use(notFound);
 app.use(errorHandler);
 
-app.listen(env.PORT, () => {
+const server = app.listen(env.PORT, () => {
   console.log(`[manokip-server] listening on http://localhost:${env.PORT}`);
-  // Lightweight long-poll so an admin can DM the bot /start to obtain the
-  // chat id needed for ADMIN_CHAT_ID. No-op when BOT_TOKEN is unset.
   startTelegramPolling();
 });
+
+// Graceful Shutdown
+const shutdown = async (signal) => {
+  console.log(`[manokip-server] Received ${signal}. Shutting down gracefully...`);
+  stopTelegramPolling();
+  server.close(async () => {
+    console.log('[manokip-server] HTTP server closed.');
+    await prisma.$disconnect();
+    console.log('[manokip-server] Prisma disconnected. Process exit.');
+    process.exit(0);
+  });
+  setTimeout(() => {
+    console.error('[manokip-server] Forced exit due to shutdown timeout.');
+    process.exit(1);
+  }, 10000);
+};
+
+process.on('SIGTERM', () => shutdown('SIGTERM'));
+process.on('SIGINT', () => shutdown('SIGINT'));
+

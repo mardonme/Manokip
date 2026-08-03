@@ -11,37 +11,43 @@ router.get('/', async (req, res, next) => {
     const limit = Math.min(60, Math.max(1, parseInt(req.query.limit ?? '24', 10) || 24));
     const skip = (page - 1) * limit;
 
-    const where = {};
+    // Conditions go into AND so the category and search clauses, which both use
+    // OR internally, can't overwrite each other.
+    const and = [];
     if (req.query.category) {
-      where.category = { slug: String(req.query.category) };
+      const slug = String(req.query.category);
+      // A family slug must also match products filed under its sub-categories.
+      and.push({ OR: [{ category: { slug } }, { category: { parent: { slug } } }] });
     }
     if (req.query.accuracy) {
-      where.accuracy = String(req.query.accuracy);
+      and.push({ accuracy: String(req.query.accuracy) });
     }
     const minDia = req.query.minDia ? parseInt(req.query.minDia, 10) : null;
     const maxDia = req.query.maxDia ? parseInt(req.query.maxDia, 10) : null;
     if (minDia || maxDia) {
-      where.diameter = {};
-      if (minDia) where.diameter.gte = minDia;
-      if (maxDia) where.diameter.lte = maxDia;
+      const diameter = {};
+      if (minDia) diameter.gte = minDia;
+      if (maxDia) diameter.lte = maxDia;
+      and.push({ diameter });
     }
     if (req.query.q) {
-      const q = String(req.query.q);
-      const ci = { contains: q, mode: 'insensitive' };
-      where.OR = [
-        { model: ci },
-        { descEn: ci },
-        { descRu: ci },
-        { descUz: ci },
-        { sku: ci },
-      ];
+      const ci = { contains: String(req.query.q), mode: 'insensitive' };
+      and.push({
+        OR: [
+          { model: ci }, { sku: ci },
+          { descEn: ci }, { descRu: ci }, { descUz: ci },
+          { variantEn: ci }, { variantRu: ci }, { variantUz: ci },
+        ],
+      });
     }
+    const where = and.length ? { AND: and } : {};
 
-    // Sort: popular (default), price low→high, price high→low, newest.
+    // The catalogue carries no prices, so sorting is by listing order, model
+    // name or recency.
     const SORTS = {
       popular: { id: 'asc' },
-      price_asc: [{ priceMinor: 'asc' }, { id: 'asc' }],
-      price_desc: [{ priceMinor: 'desc' }, { id: 'asc' }],
+      model_asc: [{ model: 'asc' }, { id: 'asc' }],
+      model_desc: [{ model: 'desc' }, { id: 'asc' }],
       newest: { createdAt: 'desc' },
     };
     const orderBy = SORTS[String(req.query.sort)] || SORTS.popular;
@@ -76,7 +82,13 @@ router.get('/:id', async (req, res, next) => {
     if (!Number.isFinite(id)) return res.status(400).json({ error: 'Bad id' });
     const p = await prisma.product.findUnique({
       where: { id },
-      include: { category: true, _count: { select: { reviews: true } } },
+      include: {
+        // Specs are only loaded here, not in the listing — 28 products carry
+        // ~470 spec rows between them and the grid never shows them.
+        specs: { include: { label: true }, orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }] },
+        category: { include: { parent: true } },
+        _count: { select: { reviews: true } },
+      },
     });
     if (!p) return res.status(404).json({ error: 'Product not found' });
     const agg = await prisma.review.aggregate({

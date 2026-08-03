@@ -72,8 +72,6 @@ export function StoreHeader({ dark = false }) {
 
   const NAV = [
     { label: t('nav.catalog'),   to: '/catalog' },
-    { label: t('nav.solutions'), to: '/solutions' },
-    { label: t('nav.service'),   to: '/service' },
     { label: t('nav.documents'), to: '/documents' },
     { label: t('nav.about'),     to: '/about' },
     { label: t('nav.contact'),   to: '/contact' },
@@ -224,29 +222,26 @@ export function StoreFooter() {
   const { t, lang } = useLang();
 
   // Each footer link points to a real, distinct destination. The former
-  // "Solutions" and "Service" columns (six identical links each) are merged into
-  // one column of genuine pages.
+  // "Solutions" and "Service" columns (six identical links each) were merged into
+  // one column of genuine pages; both those pages have since been removed, so
+  // Contact now lives at the end of the company column.
   const LINKS = {
     catalog:  ['/catalog?category=manometers', '/catalog?category=pressure-switches', '/catalog?category=solar-panels', '/catalog?category=level-gauges', '/catalog?category=protection-relays', '/documents'],
-    solutions: ['/solutions', '/service', '/contact'],
-    company:  ['/about', '/manufacturing', '/documents', '/partners', '/press', '/careers'],
+    company:  ['/about', '/manufacturing', '/documents', '/partners', '/press', '/careers', '/contact'],
   };
 
   const COLS = {
     en: [
       { key: 'catalog',   t: t('footer.col.catalog'),   i: ['Manometers', 'Pressure switches', 'Solar panels', 'Level gauges', 'Protection relays', 'Documents'] },
-      { key: 'solutions', t: t('footer.col.solutions'), i: ['Solutions', 'Service & calibration', 'Contact'] },
-      { key: 'company',   t: t('footer.col.company'),   i: ['About Manokip', 'Manufacturing', 'Certificates', 'Partners', 'Press', 'Careers'] },
+      { key: 'company',   t: t('footer.col.company'),   i: ['About Manokip', 'Manufacturing', 'Certificates', 'Partners', 'Press', 'Careers', 'Contact'] },
     ],
     ru: [
       { key: 'catalog',   t: t('footer.col.catalog'),   i: ['Манометры', 'Реле давления', 'Солнечные панели', 'Уровнемеры', 'Реле защиты', 'Документы'] },
-      { key: 'solutions', t: t('footer.col.solutions'), i: ['Решения', 'Сервис и калибровка', 'Связаться'] },
-      { key: 'company',   t: t('footer.col.company'),   i: ['О Manokip', 'Производство', 'Сертификаты', 'Партнёры', 'Пресса', 'Карьера'] },
+      { key: 'company',   t: t('footer.col.company'),   i: ['О Manokip', 'Производство', 'Сертификаты', 'Партнёры', 'Пресса', 'Карьера', 'Связаться'] },
     ],
     uz: [
       { key: 'catalog',   t: t('footer.col.catalog'),   i: ['Manometrlar', 'Bosim relelari', 'Quyosh panellari', 'Sath oʻlchagichlari', 'Himoya relelari', 'Hujjatlar'] },
-      { key: 'solutions', t: t('footer.col.solutions'), i: ['Yechimlar', 'Servis va kalibrlash', 'Bogʻlanish'] },
-      { key: 'company',   t: t('footer.col.company'),   i: ['Manokip haqida', 'Ishlab chiqarish', 'Sertifikatlar', 'Hamkorlar', 'Matbuot', 'Karyera'] },
+      { key: 'company',   t: t('footer.col.company'),   i: ['Manokip haqida', 'Ishlab chiqarish', 'Sertifikatlar', 'Hamkorlar', 'Matbuot', 'Karyera', 'Bogʻlanish'] },
     ],
   };
   const cols = COLS[lang] || COLS.en;

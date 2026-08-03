@@ -7,6 +7,7 @@ import './styles.css';
 import { LangProvider } from './lib/LangContext.jsx';
 import { AuthProvider } from './lib/AuthContext.jsx';
 import { CartProvider } from './lib/CartContext.jsx';
+import { ToastProvider } from './components/Toast.jsx';
 import SignInModal from './components/SignInModal.jsx';
 import { SITE_URL } from './components/Seo.jsx';
 
@@ -67,8 +68,6 @@ function SiteJsonLd() {
 const Home = lazy(() => import('./pages/Home.jsx'));
 const Catalog = lazy(() => import('./pages/Catalog.jsx'));
 const Product = lazy(() => import('./pages/Product.jsx'));
-const Solutions = lazy(() => import('./pages/Solutions.jsx'));
-const Service = lazy(() => import('./pages/Service.jsx'));
 const About = lazy(() => import('./pages/About.jsx'));
 const Contact = lazy(() => import('./pages/Contact.jsx'));
 const Documents = lazy(() => import('./pages/Documents.jsx'));
@@ -115,8 +114,10 @@ function AnimatedRoutes() {
           <Route path="/catalog" element={<Catalog />} />
           <Route path="/product" element={<Navigate to="/catalog" replace />} />
           <Route path="/product/:id" element={<Product />} />
-          <Route path="/solutions" element={<Solutions />} />
-          <Route path="/service" element={<Service />} />
+          {/* Solutions and Service pages were removed; both URLs are indexed,
+              so redirect to the nearest equivalent instead of 404-ing. */}
+          <Route path="/solutions" element={<Navigate to="/catalog" replace />} />
+          <Route path="/service" element={<Navigate to="/contact" replace />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/documents" element={<Documents />} />
@@ -140,16 +141,18 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <HelmetProvider>
       <LangProvider>
         <AuthProvider>
-          <CartProvider>
-            <BrowserRouter>
-              <SiteJsonLd />
-              <a href="#main" className="mk-skip">Skip to content</a>
-              <ScrollToTop />
-              <SignInModal />
-              <AnimatedRoutes />
-              <ChatWidgetGate />
-            </BrowserRouter>
-          </CartProvider>
+          <ToastProvider>
+            <CartProvider>
+              <BrowserRouter>
+                <SiteJsonLd />
+                <a href="#main" className="mk-skip">Skip to content</a>
+                <ScrollToTop />
+                <SignInModal />
+                <AnimatedRoutes />
+                <ChatWidgetGate />
+              </BrowserRouter>
+            </CartProvider>
+          </ToastProvider>
         </AuthProvider>
       </LangProvider>
     </HelmetProvider>

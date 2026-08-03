@@ -4,9 +4,11 @@ import Seo from '../components/Seo.jsx';
 import { Reveal, Icon } from '../components/ui/index.js';
 import { api } from '../lib/api.js';
 import { useLang } from '../lib/LangContext.jsx';
+import { useToast } from '../components/Toast.jsx';
 
 export default function Contact() {
   const { t } = useLang();
+  const toast = useToast();
   const [form, setForm] = useState({ name: '', company: '', phone: '', email: '', message: '' });
   const [status, setStatus] = useState({ kind: 'idle' });
 
@@ -25,8 +27,10 @@ export default function Contact() {
       });
       setStatus({ kind: 'ok', id: res.id });
       setForm({ name: '', company: '', phone: '', email: '', message: '' });
+      toast.success(t('contact.form.ok'), `#${res.id}`);
     } catch (e2) {
       setStatus({ kind: 'err', message: e2.message });
+      toast.error(t('contact.form.err'), e2.message);
     }
   }
 

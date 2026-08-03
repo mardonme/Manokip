@@ -100,9 +100,8 @@ export default function Orders() {
                       </div>
                       <div style={{ marginTop: 16, borderTop: '1px solid var(--line-soft)', paddingTop: 12, display: 'flex', flexDirection: 'column', gap: 8 }}>
                         {o.items.map((it) => (
-                          <div key={it.id} className="mk-between" style={{ fontSize: 14, color: 'var(--ink-2)', gap: 12 }}>
-                            <span><span className="mk-mono mk-num">{it.qty}</span> × {it.productModel}</span>
-                            <span className="mk-mono mk-num mk-muted">{it.priceText}</span>
+                          <div key={it.id} style={{ fontSize: 14, color: 'var(--ink-2)' }}>
+                            <span className="mk-mono mk-num">{it.qty}</span> × {it.productModel}
                           </div>
                         ))}
                       </div>

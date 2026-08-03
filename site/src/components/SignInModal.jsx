@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../lib/AuthContext.jsx';
 import { useLang } from '../lib/LangContext.jsx';
+import { useFocusTrap } from '../lib/useFocusTrap.js';
 import Icon from './ui/Icon.jsx';
 
 export default function SignInModal() {
@@ -12,15 +13,14 @@ export default function SignInModal() {
   const [busy, setBusy] = useState(false);
   const firstRef = useRef(null);
 
-  // Escape to close + lock scroll + focus the first field when opened.
+  const containerRef = useFocusTrap(signInOpen, closeSignIn);
+
+  // Lock scroll when open.
   useEffect(() => {
     if (!signInOpen) return;
-    const onKey = (e) => { if (e.key === 'Escape') closeSignIn(); };
-    window.addEventListener('keydown', onKey);
     document.body.style.overflow = 'hidden';
-    const tmr = setTimeout(() => firstRef.current?.focus(), 30);
-    return () => { window.removeEventListener('keydown', onKey); document.body.style.overflow = ''; clearTimeout(tmr); };
-  }, [signInOpen, closeSignIn]);
+    return () => { document.body.style.overflow = ''; };
+  }, [signInOpen]);
 
   if (!signInOpen) return null;
 
@@ -49,7 +49,7 @@ export default function SignInModal() {
 
   return (
     <div className="mk mk-modal-scrim" onClick={closeSignIn}>
-      <div className="mk-modal" role="dialog" aria-modal="true" aria-labelledby="auth-title" onClick={(e) => e.stopPropagation()}>
+      <div ref={containerRef} className="mk-modal" role="dialog" aria-modal="true" aria-labelledby="auth-title" onClick={(e) => e.stopPropagation()}>
         <div className="mk-between" style={{ alignItems: 'flex-start', marginBottom: 16 }}>
           <div className="mk-seg" role="tablist">
             <button className={mode === 'signin' ? 'is-active' : ''} aria-selected={mode === 'signin'} onClick={() => setMode('signin')}>{t('auth.signin.btn')}</button>
