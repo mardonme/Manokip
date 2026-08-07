@@ -97,11 +97,6 @@ export default function Home() {
             </Reveal>
           </div>
 
-          <div className="mk-trustrow" style={{ marginTop: 56, paddingTop: 26, borderTop: '1px solid var(--line)' }}>
-            <b>{t('home.trustedBy')}</b>
-            <span>NGMK</span><span>JPETROL</span><span>UZBEKNEFTEGAZ</span><span>TTZ</span><span>ENT-EN</span>
-            <b>{t('home.more')}</b>
-          </div>
         </Section>
 
         {/* CATEGORIES */}

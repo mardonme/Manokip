@@ -419,8 +419,6 @@ h1, h2, h3 { letter-spacing: -0.025em; }
 .mk-stat-n { font-size: 28px; font-weight: 600; letter-spacing: -0.02em; }
 .mk-stat-l { font-size: 12.5px; color: var(--ink-3); margin-top: 4px; }
 .mk-split { display: grid; grid-template-columns: 1fr 1.35fr; gap: 64px; align-items: start; }
-.mk-trustrow { display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap; font-family: var(--mono); font-size: 11px; color: var(--ink-4); letter-spacing: 0.08em; }
-.mk-trustrow b { color: var(--ink-3); font-weight: 500; }
 .mk-filtertile { transition: background var(--dur-2) var(--ease-out); }
 .mk-filtertile:hover { background: var(--surface-sunken); }
 

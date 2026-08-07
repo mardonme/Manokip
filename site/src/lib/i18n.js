@@ -62,8 +62,6 @@ const DICT = {
   'home.stat.families':       { ru: 'товарные группы', uz: 'mahsulot guruhi', en: 'product families' },
   'home.stat.bestClass':      { ru: 'лучший класс точности', uz: 'eng yuqori aniqlik sinfi', en: 'best accuracy class' },
   'home.stat.iso':            { ru: 'сертифицированное производство', uz: 'sertifikatlangan ishlab chiqarish', en: 'certified facility' },
-  'home.trustedBy':           { ru: 'НАМ ДОВЕРЯЮТ', uz: 'BIZGA ISHONISHADI', en: 'TRUSTED BY' },
-  'home.more':                { ru: '+1 200 КЛИЕНТОВ', uz: '+1 200 MIJOZ', en: '+1 200 MORE' },
   'home.cat.eyebrow':         { ru: '01 — Каталог', uz: '01 — Katalog', en: '01 — Catalog' },
   'home.cat.title':           { ru: 'Четыре товарные группы.', uz: 'Toʻrtta mahsulot guruhi.', en: 'Four product families.' },
   'home.cat.seeAll':          { ru: 'Посмотреть все товары →', uz: 'Barcha mahsulotlarni koʻrish →', en: 'See all products →' },
