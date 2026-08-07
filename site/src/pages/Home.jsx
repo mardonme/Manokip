@@ -37,11 +37,13 @@ export default function Home() {
   // Sub-categories of the manometer family, surfaced as their own home section.
   const manometerTypes = (categories || []).find((c) => c.slug === 'manometers')?.children || [];
 
+  // Every figure here is either read from the live catalog or backed by a
+  // certificate on the Documents page — nothing is asserted that we can't show.
   const stats = [
-    ['7+', t('home.stat.years')],
-    ['1 200+', t('home.stat.clients')],
+    [totalProducts ? String(totalProducts) : '—', t('home.stat.models')],
+    [(categories || []).length ? String(categories.length) : '—', t('home.stat.families')],
+    ['0,4', t('home.stat.bestClass')],
     ['ISO 9001', t('home.stat.iso')],
-    ['±0.5%', t('home.stat.class')],
   ];
 
   return (
@@ -82,7 +84,7 @@ export default function Home() {
             <Reveal variant="scale" index={2} className="mk-hero-figure">
               <div className="mk-dotgrid" style={{ position: 'absolute', inset: '-20px', opacity: 0.5 }} />
               <div style={{ position: 'relative' }}>
-                <Gauge size={400} value={6.4} max={10} unit="MPa" label="MANOKIP PG · 0.5%" danger={8.5} animate />
+                <Gauge size={400} value={6.4} max={10} unit="MPa" label="MANOKIP · MANOBAR PG" danger={8.5} animate />
                 <div className="mk-mono mk-hide-mobile" style={{ position: 'absolute', top: 24, right: -48, fontSize: 10.5, color: 'var(--ink-3)' }}>
                   <div style={{ width: 56, height: 1, background: 'var(--ink-4)', marginBottom: 4 }} />
                   STAINLESS Ø100mm
@@ -106,7 +108,7 @@ export default function Home() {
         <Section as="section" size="sm" style={{ paddingTop: 0 }}>
           <SectionHead
             eyebrow={t('home.cat.eyebrow')} title={t('home.cat.title')}
-            action={<Link to="/catalog" className="mk-ulink mk-row" style={{ gap: 6, fontSize: 14 }}>{t('home.cat.seeAll')} ({totalProducts || 90}) <Icon name="arrow-right" size={15} /></Link>}
+            action={<Link to="/catalog" className="mk-ulink mk-row" style={{ gap: 6, fontSize: 14 }}>{t('home.cat.seeAll')}{totalProducts ? ` (${totalProducts})` : ''} <Icon name="arrow-right" size={15} /></Link>}
           />
           <div className="mk-grid-hair mk-cards-4">
             {categories === null
