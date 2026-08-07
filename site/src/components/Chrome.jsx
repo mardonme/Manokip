@@ -81,10 +81,7 @@ export function StoreHeader({ dark = false }) {
     <header className="mk-header">
       <div className="mk-topbar">
         <div className="mk-container mk-topbar-inner">
-          <div className="mk-topbar-info">
-            {/* <span>{t('topbar.cities')}</span> */}
-            {/* <span>{t('topbar.ships')}</span> */}
-          </div>
+          <div className="mk-topbar-info" />
           <div className="mk-topbar-meta">
             <a href="tel:+998905446107">+998 90 544 61 07</a>
             <div className="mk-langswitch" role="group" aria-label="Language">
@@ -226,21 +223,21 @@ export function StoreFooter() {
   // one column of genuine pages; both those pages have since been removed, so
   // Contact now lives at the end of the company column.
   const LINKS = {
-    catalog:  ['/catalog?category=manometers', '/catalog?category=pressure-switches', '/catalog?category=solar-panels', '/catalog?category=level-gauges', '/catalog?category=protection-relays', '/documents'],
+    catalog:  ['/catalog?category=manometers', '/catalog?category=pressure-sensors', '/catalog?category=level-gauges', '/catalog?category=protection-relays', '/documents'],
     company:  ['/about', '/manufacturing', '/documents', '/partners', '/press', '/careers', '/contact'],
   };
 
   const COLS = {
     en: [
-      { key: 'catalog',   t: t('footer.col.catalog'),   i: ['Manometers', 'Pressure switches', 'Solar panels', 'Level gauges', 'Protection relays', 'Documents'] },
+      { key: 'catalog',   t: t('footer.col.catalog'),   i: ['Pressure gauges', 'MANOBAR transmitters', 'MANOPL level gauges', 'Protection units', 'Documents'] },
       { key: 'company',   t: t('footer.col.company'),   i: ['About Manokip', 'Manufacturing', 'Certificates', 'Partners', 'Press', 'Careers', 'Contact'] },
     ],
     ru: [
-      { key: 'catalog',   t: t('footer.col.catalog'),   i: ['Манометры', 'Реле давления', 'Солнечные панели', 'Уровнемеры', 'Реле защиты', 'Документы'] },
+      { key: 'catalog',   t: t('footer.col.catalog'),   i: ['Манометры', 'Датчики MANOBAR', 'Уровнемеры MANOPL', 'Блоки защиты', 'Документы'] },
       { key: 'company',   t: t('footer.col.company'),   i: ['О Manokip', 'Производство', 'Сертификаты', 'Партнёры', 'Пресса', 'Карьера', 'Связаться'] },
     ],
     uz: [
-      { key: 'catalog',   t: t('footer.col.catalog'),   i: ['Manometrlar', 'Bosim relelari', 'Quyosh panellari', 'Sath oʻlchagichlari', 'Himoya relelari', 'Hujjatlar'] },
+      { key: 'catalog',   t: t('footer.col.catalog'),   i: ['Manometrlar', 'MANOBAR datchiklari', 'MANOPL sath oʻlchagichlari', 'Himoya bloklari', 'Hujjatlar'] },
       { key: 'company',   t: t('footer.col.company'),   i: ['Manokip haqida', 'Ishlab chiqarish', 'Sertifikatlar', 'Hamkorlar', 'Matbuot', 'Karyera', 'Bogʻlanish'] },
     ],
   };

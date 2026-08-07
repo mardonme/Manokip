@@ -8,19 +8,17 @@ export const DEFAULT_LANG = 'ru';
 const DICT = {
   // ──────────────── SEO (page titles & meta descriptions) ────────────────
   'seo.home.title':    { ru: 'Манометры и КИП от производителя', uz: 'Manometr va KIP — ishlab chiqaruvchidan', en: 'Pressure gauges & measuring instruments' },
-  'seo.home.desc':     { ru: 'Manokip — производство манометров, преобразователей давления, уровнемеров и реле защиты для промышленности. ISO 9001, калибровка и поверка, доставка по Узбекистану.', uz: 'Manokip — sanoat uchun manometr, bosim oʻzgartkichi, sath oʻlchagichi va himoya relelarini ishlab chiqarish. ISO 9001, kalibrlash va tekshirish, Oʻzbekiston boʻylab yetkazib berish.', en: 'Manokip manufactures pressure gauges, transducers, level meters and protection relays for industry. ISO 9001, calibration & verification, delivery across Uzbekistan.' },
+  'seo.home.desc':     { ru: 'Manokip — производство манометров, датчиков давления, уровнемеров и блоков защиты для промышленности. ISO 9001, калибровка и поверка, доставка по Узбекистану.', uz: 'Manokip — sanoat uchun manometr, bosim datchigi, sath oʻlchagichi va himoya bloklarini ishlab chiqarish. ISO 9001, kalibrlash va tekshirish, Oʻzbekiston boʻylab yetkazib berish.', en: 'Manokip manufactures pressure gauges, pressure transmitters, level gauges and protection units for industry. ISO 9001, calibration & verification, delivery across Uzbekistan.' },
   'seo.catalog.title': { ru: 'Каталог приборов', uz: 'Asboblar katalogi', en: 'Instrument catalog' },
   'seo.catalog.desc':  { ru: 'Каталог манометров, датчиков давления, уровнемеров и блоков защиты. Фильтр по диаметру и классу точности, полные технические характеристики.', uz: 'Manometr, bosim datchigi, sath oʻlchagich va himoya bloklari katalogi. Diametr va aniqlik sinfi boʻyicha filtr, toʻliq texnik xarakteristikalar.', en: 'Catalog of pressure gauges, pressure transmitters, level gauges and protection units. Filter by diameter and accuracy class, full technical specifications.' },
   'seo.about.title':   { ru: 'О компании', uz: 'Kompaniya haqida', en: 'About the company' },
-  'seo.about.desc':    { ru: 'Manokip более 5 лет производит контрольно-измерительные приборы: сборка, точная калибровка, склад полуфабрикатов и минимальные сроки поставки.', uz: 'Manokip 5 yildan ortiq nazorat-oʻlchov asboblarini ishlab chiqaradi: yigʻish, aniq kalibrlash, yarim tayyor mahsulot ombori va qisqa yetkazib berish muddatlari.', en: 'Manokip has manufactured control and measuring instruments for over 5 years: assembly, precise calibration, semi-finished stock and minimal lead times.' },
+  'seo.about.desc':    { ru: 'Manokip с 2018 года производит контрольно-измерительные приборы: сборка, точная калибровка, склад полуфабрикатов и минимальные сроки поставки.', uz: 'Manokip 2018-yildan beri nazorat-oʻlchov asboblarini ishlab chiqaradi: yigʻish, aniq kalibrlash, yarim tayyor mahsulot ombori va qisqa yetkazib berish muddatlari.', en: 'Manokip has manufactured control and measuring instruments since 2018: assembly, precise calibration, semi-finished stock and minimal lead times.' },
   'seo.contact.title': { ru: 'Контакты', uz: 'Kontaktlar', en: 'Contact' },
   'seo.contact.desc':  { ru: 'Свяжитесь с Manokip: продажи, сервис, адрес и часы работы. Ответим в течение 1 рабочего часа.', uz: 'Manokip bilan bogʻlaning: sotuv, servis, manzil va ish vaqti. 1 ish soati ichida javob beramiz.', en: 'Contact Manokip: sales, service, address and hours. We respond within 1 business hour.' },
   'seo.documents.title': { ru: 'Сертификаты и документы', uz: 'Sertifikatlar va hujjatlar', en: 'Certificates & documents' },
   'seo.documents.desc':  { ru: 'Сертификаты соответствия, паспорта приборов и свидетельства о калибровке Manokip.', uz: 'Manokip muvofiqlik sertifikatlari, asbob pasportlari va kalibrlash guvohnomalari.', en: 'Manokip certificates of conformity, instrument passports and calibration records.' },
 
   // ──────────────── Header / nav ────────────────
-  'topbar.cities':            { ru: '● ТАШКЕНТ · МОСКВА · АЛМАТЫ', uz: '● TOSHKENT · MOSKVA · ALMATA', en: '● TASHKENT · MOSCOW · ALMATY' },
-  'topbar.ships':             { ru: 'ДОСТАВКА В 14 СТРАН',          uz: '14 DAVLATGA YETKAZIB BERAMIZ',  en: 'SHIPS TO 14 COUNTRIES' },
   'nav.catalog':              { ru: 'Каталог',     uz: 'Katalog',    en: 'Catalog' },
   'nav.documents':            { ru: 'Документы',   uz: 'Hujjatlar',  en: 'Documents' },
   'nav.about':                { ru: 'О компании',  uz: 'Biz haqimizda', en: 'About' },
@@ -33,9 +31,9 @@ const DICT = {
 
   // ──────────────── Footer ────────────────
   'footer.tagline':           {
-    ru: 'Производство и поставка контрольно-измерительных приборов. Разработано в Ташкенте, проверено в 14 отраслях — от нефти и газа до горнодобычи и систем отопления.',
-    uz: 'Nazorat-oʻlchov asboblari ishlab chiqarish va yetkazib berish. Toshkentda yaratilgan, neft-gazdan tortib togʻ-kon va isitish tizimlarigacha 14 sohada sinovdan oʻtgan.',
-    en: 'Production and supply of control & measuring instruments. Engineered in Tashkent, trusted across 14 industries from oil & gas to mining and HVAC.',
+    ru: 'Производство и поставка контрольно-измерительных приборов. Разработано, произведено и поверено на нашем заводе в Бектемирском районе Ташкента.',
+    uz: 'Nazorat-oʻlchov asboblari ishlab chiqarish va yetkazib berish. Toshkent Bektemir tumanidagi zavodimizda loyihalanadi, ishlab chiqariladi va tekshiriladi.',
+    en: 'Production and supply of control & measuring instruments. Designed, manufactured and verified at our facility in Bektemir district, Tashkent.',
   },
   'footer.col.catalog':       { ru: 'Каталог',     uz: 'Katalog',    en: 'Catalog' },
   'footer.col.company':       { ru: 'Компания',    uz: 'Kompaniya',  en: 'Company' },
@@ -52,9 +50,9 @@ const DICT = {
   'home.hero.title.a':        { ru: 'Точные приборы,', uz: 'Aniq asboblar,', en: 'Precision instruments,' },
   'home.hero.title.b':        { ru: 'спокойная инженерия.', uz: 'sokin muhandislik.', en: 'quietly engineered.' },
   'home.hero.lead':           {
-    ru: 'Manokip проектирует и производит манометры, реле давления, солнечные панели, уровнемеры и реле защиты для промышленности. Калибровка — в Ташкенте. Доверие — в 14 отраслях.',
-    uz: 'Manokip sanoat uchun manometrlar, bosim relelari, quyosh panellari, sath oʻlchagichlari va himoya relelarini ishlab chiqaradi. Kalibrlash — Toshkentda. 14 sohada ishonchli.',
-    en: 'Manokip designs and manufactures manometers, pressure switches, solar panels, level gauges and protection relays for industry. Calibrated in Tashkent. Trusted across 14 sectors.',
+    ru: 'Manokip проектирует и производит манометры, датчики давления MANOBAR, уровнемеры MANOPL и блоки защиты для промышленности. Производство и метрологическая поверка — в Ташкенте.',
+    uz: 'Manokip sanoat uchun manometrlar, MANOBAR bosim datchiklari, MANOPL sath oʻlchagichlari va himoya bloklarini ishlab chiqaradi. Ishlab chiqarish va metrologik tekshiruv — Toshkentda.',
+    en: 'Manokip designs and manufactures pressure gauges, MANOBAR pressure transmitters, MANOPL level gauges and protection units for industry. Manufacturing and metrological verification in Tashkent.',
   },
   'home.cta.browse':          { ru: 'Открыть каталог →', uz: 'Katalogni ochish →', en: 'Browse catalog →' },
   'home.cta.quote':           { ru: 'Запросить КП',  uz: 'Soʻrov yuborish', en: 'Request a quote' },
