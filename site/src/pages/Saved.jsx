@@ -25,9 +25,12 @@ export default function Saved() {
       try {
         const data = await api.get('/api/products', { ids: idsKey, limit: 60 });
         if (cancelled) return;
-        // The listing returns catalog order; show most recently saved first.
+        // Keep only what was asked for (an older API ignores ?ids and returns
+        // the whole listing), then show most recently saved first.
         const order = new Map(idsKey.split(',').map((id, i) => [Number(id), i]));
-        setItems((data.items || []).slice().sort((a, b) => order.get(a.id) - order.get(b.id)));
+        setItems((data.items || [])
+          .filter((p) => order.has(p.id))
+          .sort((a, b) => order.get(a.id) - order.get(b.id)));
       } catch (e) {
         console.error('Saved list load failed:', e);
         if (!cancelled) setItems([]);
