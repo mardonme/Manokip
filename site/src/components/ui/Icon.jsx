@@ -34,6 +34,8 @@ const PATHS = {
   send: <path d="M21 3 3 11l7 2.5L13 21l8-18Z" />,
   message: <path d="M21 12a8 8 0 0 1-11.5 7.2L3 21l1.8-6.5A8 8 0 1 1 21 12Z" />,
   user: <><circle cx="12" cy="8" r="4" /><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6" /></>,
+  heart: <path d="M12 20.3 5.3 13.6a4.5 4.5 0 0 1 6.4-6.4l.3.3.3-.3a4.5 4.5 0 0 1 6.4 6.4Z" />,
+  share: <><circle cx="18" cy="5" r="2.5" /><circle cx="6" cy="12" r="2.5" /><circle cx="18" cy="19" r="2.5" /><path d="m8.3 10.9 7.4-4.3" /><path d="m8.3 13.1 7.4 4.3" /></>,
   'sliders': <><path d="M4 8h10" /><path d="M18 8h2" /><circle cx="16" cy="8" r="2" /><path d="M4 16h2" /><path d="M10 16h10" /><circle cx="8" cy="16" r="2" /></>,
 };
 

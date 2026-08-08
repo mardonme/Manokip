@@ -22,6 +22,15 @@ router.get('/', async (req, res, next) => {
     if (req.query.accuracy) {
       and.push({ accuracy: String(req.query.accuracy) });
     }
+    // Explicit id list — used by the saved-products page (guest lists live in
+    // localStorage, so the client asks for exactly those products).
+    if (req.query.ids) {
+      const ids = String(req.query.ids).split(',')
+        .map((s) => parseInt(s, 10))
+        .filter((n) => Number.isFinite(n) && n > 0)
+        .slice(0, 60);
+      and.push({ id: { in: ids } });
+    }
     const minDia = req.query.minDia ? parseInt(req.query.minDia, 10) : null;
     const maxDia = req.query.maxDia ? parseInt(req.query.maxDia, 10) : null;
     if (minDia || maxDia) {

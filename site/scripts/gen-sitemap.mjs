@@ -12,8 +12,8 @@ import path from 'node:path';
 const SITE_URL = (process.env.SITE_URL || 'https://luva.uz').replace(/\/$/, '');
 const API_BASE = (process.env.SITEMAP_API_BASE || SITE_URL).replace(/\/$/, '');
 
-// Public, indexable routes. /cart, /orders, /search, /admin are intentionally
-// excluded (noindex / private).
+// Public, indexable routes. /cart, /orders, /saved, /search, /admin are
+// intentionally excluded (noindex / private).
 const STATIC = [
   { loc: '/', changefreq: 'weekly', priority: '1.0' },
   { loc: '/catalog', changefreq: 'weekly', priority: '0.9' },

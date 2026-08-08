@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../lib/AuthContext.jsx';
 import { useCart } from '../lib/CartContext.jsx';
+import { useSaved } from '../lib/SavedContext.jsx';
 import { useLang } from '../lib/LangContext.jsx';
 import Icon from './ui/Icon.jsx';
 
@@ -35,6 +36,7 @@ export function Logo({ dark = false, size = 13 }) {
 export function StoreHeader({ dark = false }) {
   const { user, logout, openSignIn } = useAuth();
   const { cart } = useCart();
+  const { count: savedCount } = useSaved();
   const { lang, setLang, t } = useLang();
   const [menuOpen, setMenuOpen] = useState(false);
   const [search, setSearch] = useState('');
@@ -122,6 +124,11 @@ export function StoreHeader({ dark = false }) {
             <span className="mk-kbd" aria-hidden="true">⌘K</span>
           </form>
 
+          <Link to="/saved" className="mk-iconbtn" aria-label={`${t('nav.saved')} (${savedCount})`}>
+            <Icon name="heart" size={19} />
+            {savedCount > 0 && <span className="mk-cart-count mk-num">{savedCount}</span>}
+          </Link>
+
           <Link to="/cart" className="mk-iconbtn" aria-label={`${t('nav.cart')} (${cart.count || 0})`}>
             <Icon name="cart" size={19} />
             {cart.count > 0 && <span className="mk-cart-count mk-num">{cart.count}</span>}
@@ -172,6 +179,10 @@ export function StoreHeader({ dark = false }) {
                 {it.label}
               </NavLink>
             ))}
+            <NavLink to="/saved" className="mk-drawer-link">
+              <span>{t('nav.saved')}</span>
+              <span className="mk-mono mk-muted">{savedCount}</span>
+            </NavLink>
             <NavLink to="/cart" className="mk-drawer-link">
               <span>{t('nav.cart')}</span>
               <span className="mk-mono mk-muted">{cart.count || 0}</span>

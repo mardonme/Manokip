@@ -7,6 +7,7 @@ import ProductCard from '../components/ProductCard.jsx';
 import { Reveal, Icon, Skeleton, SectionHead } from '../components/ui/index.js';
 import { api, mediaUrl } from '../lib/api.js';
 import { useCart } from '../lib/CartContext.jsx';
+import { useSaved } from '../lib/SavedContext.jsx';
 import { useAuth } from '../lib/AuthContext.jsx';
 import { useLang } from '../lib/LangContext.jsx';
 import { useToast } from '../components/Toast.jsx';
@@ -14,6 +15,7 @@ import { useToast } from '../components/Toast.jsx';
 export default function Product() {
   const { id } = useParams();
   const { add } = useCart();
+  const { isSaved, toggle } = useSaved();
   const { user, openSignIn } = useAuth();
   const { t } = useLang();
   const toast = useToast();
@@ -58,6 +60,30 @@ export default function Product() {
       toast.error(t('cart.error'), e.message);
     } finally {
       setAdding(false);
+    }
+  }
+
+  // Web Share where the platform has it (mobile), clipboard elsewhere.
+  async function share() {
+    const url = window.location.href;
+    if (navigator.share) {
+      try { await navigator.share({ title: `${product.model} — Manokip`, url }); return; }
+      catch (e) { if (e.name === 'AbortError') return; }
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+      toast.success(t('product.linkCopied'));
+    } catch {
+      toast.error(t('product.shareFailed'), url);
+    }
+  }
+
+  async function toggleSave() {
+    try {
+      const nowSaved = await toggle(product.id);
+      toast.success(nowSaved ? t('product.savedAdded') : t('product.savedRemoved'));
+    } catch (e) {
+      toast.error(t('saved.error'), e.message);
     }
   }
 
@@ -187,6 +213,16 @@ export default function Product() {
                   {adding ? <><span className="mk-spinner" /> {t('product.adding')}</> : <>{t('product.addToOrder')} <Icon name="cart" size={16} /></>}
                 </button>
                 <Link to="/contact" style={{ flex: 1 }}><button className="mk-btn mk-btn-light mk-btn-lg" style={{ width: '100%' }}>{t('nav.requestQuote')}</button></Link>
+              </div>
+
+              <div className="mk-row" style={{ gap: 8, marginTop: 10 }}>
+                <button className="mk-btn mk-btn-light" onClick={toggleSave} aria-pressed={isSaved(p.id)} style={{ flex: 1 }}>
+                  <Icon name="heart" size={16} style={isSaved(p.id) ? { fill: 'currentColor' } : undefined} />
+                  {isSaved(p.id) ? t('product.saved') : t('product.save')}
+                </button>
+                <button className="mk-btn mk-btn-light" onClick={share} style={{ flex: 1 }}>
+                  <Icon name="share" size={16} /> {t('product.share')}
+                </button>
               </div>
 
               <div aria-live="polite" style={{ minHeight: feedback ? 'auto' : 0 }}>

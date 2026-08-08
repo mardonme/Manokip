@@ -19,6 +19,7 @@ model User {
   reviews      Review[]
   orders       Order[]
   carts        Cart[]
+  savedItems   SavedItem[]
 }
 
 // Manokip builds to order, so a product is "available" by production policy
@@ -99,10 +100,25 @@ model Product {
   reviews      Review[]
   cartItems    CartItem[]
   orderItems   OrderItem[]
+  savedItems   SavedItem[]
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
 
   @@index([categoryId])
+}
+
+// A user's saved-products list. Guests keep theirs in localStorage on the
+// client and merge it in via POST /api/saved/merge right after sign-in.
+model SavedItem {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  productId Int
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
+  @@index([userId])
 }
 
 model Review {

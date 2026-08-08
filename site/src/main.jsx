@@ -7,6 +7,7 @@ import './styles.css';
 import { LangProvider } from './lib/LangContext.jsx';
 import { AuthProvider } from './lib/AuthContext.jsx';
 import { CartProvider } from './lib/CartContext.jsx';
+import { SavedProvider } from './lib/SavedContext.jsx';
 import { ToastProvider } from './components/Toast.jsx';
 import SignInModal from './components/SignInModal.jsx';
 import { SITE_URL } from './components/Seo.jsx';
@@ -73,6 +74,7 @@ const Contact = lazy(() => import('./pages/Contact.jsx'));
 const Documents = lazy(() => import('./pages/Documents.jsx'));
 const Cart = lazy(() => import('./pages/Cart.jsx'));
 const Orders = lazy(() => import('./pages/Orders.jsx'));
+const Saved = lazy(() => import('./pages/Saved.jsx'));
 const Search = lazy(() => import('./pages/Search.jsx'));
 const NotFound = lazy(() => import('./pages/NotFound.jsx'));
 const InfoPage = lazy(() => import('./pages/InfoPage.jsx'));
@@ -123,6 +125,7 @@ function AnimatedRoutes() {
           <Route path="/documents" element={<Documents />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/orders" element={<Orders />} />
+          <Route path="/saved" element={<Saved />} />
           <Route path="/search" element={<Search />} />
           <Route path="/manufacturing" element={<InfoPage page="manufacturing" />} />
           <Route path="/careers" element={<InfoPage page="careers" />} />
@@ -143,6 +146,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <AuthProvider>
           <ToastProvider>
             <CartProvider>
+              <SavedProvider>
               <BrowserRouter>
                 <SiteJsonLd />
                 <a href="#main" className="mk-skip">Skip to content</a>
@@ -151,6 +155,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                 <AnimatedRoutes />
                 <ChatWidgetGate />
               </BrowserRouter>
+              </SavedProvider>
             </CartProvider>
           </ToastProvider>
         </AuthProvider>
