@@ -1,12 +1,31 @@
 import 'dotenv/config';
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
-import { readFileSync } from 'node:fs';
+import { readFileSync, mkdirSync, copyFileSync, existsSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const prisma = new PrismaClient();
 const HERE = path.dirname(fileURLToPath(import.meta.url));
+
+// Product photos extracted from the printed sheets live in prisma/catalog-images/
+// (named <SKU>.png). They are copied into the uploads dir under catalog/ so the
+// existing /uploads static route (and the prod nginx /uploads proxy) serves them
+// without extra config. Admin-uploaded replacements never collide: those get
+// random hex names directly in uploads/.
+const IMAGES_DIR = path.join(HERE, 'catalog-images');
+const UPLOAD_CATALOG_DIR = path.resolve(HERE, '..', 'uploads', 'catalog');
+
+function installImage(file) {
+  if (!file) return null;
+  const src = path.join(IMAGES_DIR, file);
+  if (!existsSync(src)) {
+    console.warn(`[seed] missing catalog image: ${file}`);
+    return null;
+  }
+  copyFileSync(src, path.join(UPLOAD_CATALOG_DIR, file));
+  return `/uploads/catalog/${file}`;
+}
 
 // The catalogue is generated from the printed product sheets (mahsulotlar_katalogi.pdf).
 // Editing it here is fine; the admin panel is the day-to-day way to change products.
@@ -16,6 +35,7 @@ function loadCatalog() {
 
 async function main() {
   const { categories, specLabels, products } = loadCatalog();
+  mkdirSync(UPLOAD_CATALOG_DIR, { recursive: true });
 
   // Wipe catalogue tables so removed sheets don't linger. Carts and orders
   // reference products, so they go first.
@@ -75,6 +95,7 @@ async function main() {
         descEn: p.descEn, descRu: p.descRu, descUz: p.descUz,
         diameter: p.diameter, accuracy: p.accuracy,
         availability: p.availability, leadTimeDays: p.leadTimeDays,
+        imageUrl: installImage(p.image),
         categoryId,
         specs: {
           create: p.specs.map((s) => ({

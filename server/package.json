@@ -13,7 +13,8 @@
     "prisma:migrate": "prisma migrate dev",
     "prisma:reset": "prisma migrate reset --force",
     "prisma:studio": "prisma studio",
-    "seed": "node prisma/seed.js"
+    "seed": "node prisma/seed.js",
+    "apply-images": "node scripts/apply-catalog-images.js"
   },
   "prisma": {
     "seed": "node prisma/seed.js"
