@@ -50,6 +50,12 @@ jobs:
       - name: Rebuild & restart API
         run: cd /opt/manokip && docker compose up -d --build api
 
+      - name: Apply catalog images
+        # Idempotent and non-destructive: copies prisma/catalog-images/ into the
+        # uploads volume and fills imageUrl only where it is still empty —
+        # images picked through the admin panel are never overwritten.
+        run: docker exec -w /app/server manokip-api npm run apply-images
+
       - name: Reseed database (optional)
         if: ${{ inputs.reseed }}
         run: docker exec -w /app/server manokip-api npm run seed
