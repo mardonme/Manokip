@@ -38,12 +38,13 @@ export default function About() {
         {/* Full-screen autoplay background video */}
         <section style={{ width: '100%', height: '100vh', background: 'var(--ink-bg)', overflow: 'hidden' }}>
           <video
-            src="/about/aboutbgvideo.mp4"
+            src="/about/aboutbg.mp4"
+            poster="/about/aboutbg-poster.jpg"
             autoPlay
             muted
             loop
             playsInline
-            preload="auto"
+            preload="metadata"
             aria-label={title}
             style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
           />
