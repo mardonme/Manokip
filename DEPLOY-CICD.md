@@ -1,6 +1,6 @@
 # GitHub orqali deploy (CI/CD)
 
-Bu loyiha GitHub Actions orqali serverga (VPS `176.57.184.199` / **luva.uz**) deploy qilinadi.
+Bu loyiha GitHub Actions orqali serverga (VPS `176.57.184.199` / **manokip.com.uz**) deploy qilinadi.
 
 - **Frontend** — `main` ga `site/**` ichida har push qilinganda **avtomatik** deploy bo'ladi
   (GitHub bulutida build → server `/opt/manokip/site/dist/` ga rsync). Server tayyorlash shart emas.
@@ -57,14 +57,14 @@ git commit -m "ci: GitHub Actions deploy (frontend auto, backend manual)"
 git push
 ```
 
-Shundan keyin: `site/**` ga har push → frontend avtomatik `luva.uz` ga chiqadi.
+Shundan keyin: `site/**` ga har push → frontend avtomatik `manokip.com.uz` ga chiqadi.
 Birinchi marta qo'lda sinab ko'rish: Actions tab → *Deploy frontend* → *Run workflow*.
 
 ---
 
 ## Kundalik ish
 
-- **Frontend o'zgarishi:** kod yozasiz → `git push` → ~1 daqiqada `luva.uz` yangilanadi.
+- **Frontend o'zgarishi:** kod yozasiz → `git push` → ~1 daqiqada `manokip.com.uz` yangilanadi.
 - **Backend o'zgarishi:** Actions → *Deploy backend (manual)* → *Run workflow*
   (kerak bo'lsa *reseed* belgilashingiz mumkin — DB seed ma'lumotini qayta yozadi).
 

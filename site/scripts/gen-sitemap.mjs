@@ -9,7 +9,7 @@ import { writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
-const SITE_URL = (process.env.SITE_URL || 'https://luva.uz').replace(/\/$/, '');
+const SITE_URL = (process.env.SITE_URL || 'https://manokip.com.uz').replace(/\/$/, '');
 const API_BASE = (process.env.SITEMAP_API_BASE || SITE_URL).replace(/\/$/, '');
 
 // Public, indexable routes. /cart, /orders, /saved, /search, /admin are

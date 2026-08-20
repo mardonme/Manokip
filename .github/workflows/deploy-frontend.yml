@@ -1,4 +1,4 @@
-name: Deploy frontend → luva.uz
+name: Deploy frontend → manokip.com.uz
 
 # Runs on the SELF-HOSTED runner installed on the VPS itself, so the deploy
 # is fully local — no SSH, no rsync-over-ssh, no DEPLOY_* secrets. The runner
@@ -43,7 +43,7 @@ jobs:
         # API base is intentionally empty.
         #
         # The prebuild sitemap step reads the product list from the API. Point it
-        # at the API container directly instead of back out through luva.uz —
+        # at the API container directly instead of back out through manokip.com.uz —
         # the runner sits on the same box, so this avoids a hairpin round trip
         # and a stale sitemap if TLS or DNS hiccups.
         env:
@@ -56,4 +56,4 @@ jobs:
         run: rsync -a --delete site/dist/ /opt/manokip/site/dist/
 
       - name: Summary
-        run: echo "✅ Frontend deployed to https://luva.uz"
+        run: echo "✅ Frontend deployed to https://manokip.com.uz"

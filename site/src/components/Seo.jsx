@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom';
 import { useLang } from '../lib/LangContext.jsx';
 
 // Canonical site origin (production). Used to build absolute canonical/OG URLs.
-export const SITE_URL = 'https://luva.uz';
+export const SITE_URL = 'https://manokip.com.uz';
 // 1200×630 social share image — drop a real cover at site/public/og-cover.jpg.
 const OG_IMAGE = `${SITE_URL}/og-cover.jpg`;
 

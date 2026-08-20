@@ -4,4 +4,4 @@ Disallow: /admin
 Disallow: /cart
 Disallow: /orders
 
-Sitemap: https://luva.uz/sitemap.xml
+Sitemap: https://manokip.com.uz/sitemap.xml

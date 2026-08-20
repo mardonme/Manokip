@@ -1,4 +1,4 @@
-# Manokip — tavsiya etilgan nginx sozlamalari (luva.uz)
+# Manokip — tavsiya etilgan nginx sozlamalari (manokip.com.uz)
 # =====================================================
 # Bu NAMUNA. VPS'dagi mavjud server-blokка (odatda /etc/nginx/sites-available/…)
 # tegishli qatorlarni qo'shing/birlashtiring, keyin: `nginx -t && systemctl reload nginx`.
@@ -23,7 +23,7 @@ gzip_types
 
 server {
     listen 443 ssl http2;
-    server_name luva.uz www.luva.uz;
+    server_name manokip.com.uz www.manokip.com.uz;
 
     # ... ssl_certificate / ssl_certificate_key (mavjud sozlamangiz) ...
 
