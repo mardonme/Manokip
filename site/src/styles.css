@@ -511,7 +511,10 @@ h1, h2, h3 { letter-spacing: -0.025em; }
 
 /* Modal */
 @keyframes mk-modal-in { from { opacity: 0; transform: translateY(12px) scale(0.98); } to { opacity: 1; transform: none; } }
-.mk-modal-scrim { position: fixed; inset: 0; background: rgba(20,22,27,0.55); z-index: var(--z-modal); display: flex; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(3px); animation: mk-fade var(--dur-2) var(--ease-out); }
+.mk-modal-scrim { position: fixed; inset: 0; background: rgba(20,22,27,0.55); z-index: var(--z-modal); display: flex; align-items: flex-start; justify-content: center; padding: 20px; overflow-y: auto; backdrop-filter: blur(3px); animation: mk-fade var(--dur-2) var(--ease-out); }
+/* `margin: auto` centres the dialog while a taller-than-the-screen one still
+   scrolls; `align-items: center` would put its top out of reach instead. */
+.mk-modal-scrim > * { margin: auto; }
 .mk-modal { background: var(--surface); width: 440px; max-width: 100%; border: 1px solid var(--line); border-radius: var(--r-lg); padding: 32px; box-shadow: var(--shadow-pop); animation: mk-modal-in var(--dur-3) var(--ease-out); }
 .mk-seg { display: inline-flex; background: var(--bg-2); border-radius: var(--r-pill); padding: 3px; gap: 2px; }
 .mk-seg button { border: none; background: none; cursor: pointer; padding: 7px 16px; border-radius: var(--r-pill); font-size: 13px; font-weight: 500; color: var(--ink-3); transition: background var(--dur-1) var(--ease-out), color var(--dur-1) var(--ease-out); }
@@ -550,6 +553,7 @@ h1, h2, h3 { letter-spacing: -0.025em; }
 
 /* Admin modal: reuse storefront modal, but top-aligned, scrollable, wider */
 .mk-modal-scrim-top { align-items: flex-start; padding: 48px 20px; overflow-y: auto; }
+.mk-modal-scrim-top > * { margin: 0 auto; }
 .mk-modal-lg { width: 580px; }
 
 @media (max-width: 860px) {

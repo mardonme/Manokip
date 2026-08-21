@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import { api } from '../lib/api.js';
 import { useLang } from '../lib/LangContext.jsx';
@@ -53,7 +54,9 @@ export function ContactFields({ contact, set, errors = {}, idPrefix = 'ord' }) {
         <button
           type="button" onClick={() => setExtrasOpen(true)}
           className="mk-ulink"
-          style={{ background: 'none', border: 0, padding: 0, font: 'inherit', fontSize: 13, cursor: 'pointer', alignSelf: 'flex-start', color: 'var(--ink-3)' }}
+          // Rangni bermaymiz: .mk-ulink dagi ko'k (--accent-ink) qoladi,
+          // kulrang --ink-3 da bu tugma havolaga o'xshamay ko'zga tashlanmasdi.
+          style={{ background: 'none', border: 0, padding: 0, font: 'inherit', fontSize: 13.5, fontWeight: 500, cursor: 'pointer', alignSelf: 'flex-start' }}
         >
           + {t('order.addExtras')}
         </button>
@@ -120,7 +123,10 @@ export default function OrderModal({ open, onClose, items, summary }) {
     }
   }
 
-  return (
+  // Rendered into <body>: an ancestor with a transform/animation (.mk-page runs
+  // one on every route change) would otherwise become the containing block for
+  // `position: fixed` and drop the dialog far down the page.
+  return createPortal(
     <div className="mk mk-modal-scrim" onClick={onClose}>
       <div
         ref={containerRef} className="mk-modal" role="dialog" aria-modal="true"
@@ -176,7 +182,8 @@ export default function OrderModal({ open, onClose, items, summary }) {
           </>
         )}
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
 

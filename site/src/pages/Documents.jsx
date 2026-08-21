@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { StoreHeader, StoreFooter } from '../components/Chrome.jsx';
 import Seo from '../components/Seo.jsx';
 import { Reveal, Icon } from '../components/ui/index.js';
@@ -170,7 +171,7 @@ export default function Documents() {
 
       </main>
 
-      {open != null && (
+      {open != null && createPortal(
         <div
           className="mk mk-modal-scrim"
           onClick={() => setOpen(null)}
@@ -199,7 +200,9 @@ export default function Documents() {
               <Icon name="close" size={22} />
             </button>
           </div>
-        </div>
+        </div>,
+        // Same reason as the order dialog: keep it out of the animated page.
+        document.body,
       )}
 
       <StoreFooter />
