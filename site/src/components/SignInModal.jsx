@@ -3,6 +3,7 @@ import { useAuth } from '../lib/AuthContext.jsx';
 import { useLang } from '../lib/LangContext.jsx';
 import { useFocusTrap } from '../lib/useFocusTrap.js';
 import Icon from './ui/Icon.jsx';
+import PhoneField from './ui/PhoneField.jsx';
 
 export default function SignInModal() {
   const { t } = useLang();
@@ -68,7 +69,7 @@ export default function SignInModal() {
             <>
               <Field id="a-name" label={t('auth.field.name')} value={form.name} onChange={(v) => update('name', v)} autoComplete="name" />
               <Field id="a-company" label={t('auth.field.company')} value={form.company} onChange={(v) => update('company', v)} autoComplete="organization" />
-              <Field id="a-phone" label={t('auth.field.phone')} value={form.phone} onChange={(v) => update('phone', v)} placeholder="+998 __ ___-__-__" type="tel" autoComplete="tel" />
+              <PhoneField id="a-phone" label={t('auth.field.phone')} value={form.phone} onChange={(v) => update('phone', v)} />
             </>
           )}
           <Field ref={mode === 'signin' ? firstRef : undefined} id="a-email" label={t('auth.field.email')} type="email" value={form.email} onChange={(v) => update('email', v)} placeholder="you@company.uz" autoComplete="email" required />

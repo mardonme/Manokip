@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useLang } from '../lib/LangContext.jsx';
 import { sendChatMessage } from '../lib/api.js';
 import { readContact, saveContact } from '../lib/order.js';
+import { formatPhone } from '../lib/phone.js';
 
 const BLUE = '#1240e5';
 const DARK = '#14161b';
@@ -183,7 +184,8 @@ export default function ChatWidget() {
                 />
                 <input
                   value={contact.phone}
-                  onChange={(e) => setContact((c) => ({ ...c, phone: e.target.value }))}
+                  onChange={(e) => setContact((c) => ({ ...c, phone: formatPhone(e.target.value) }))}
+                  type="tel"
                   placeholder={t('chat.phone')}
                   inputMode="tel"
                   style={fieldStyle}

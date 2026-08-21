@@ -7,6 +7,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { useAuth } from './AuthContext.jsx';
+import { isPhoneComplete } from './phone.js';
 
 const CONTACT_KEY = 'mk_contact';
 const ORDERS_KEY = 'mk_recent_orders';
@@ -41,13 +42,12 @@ export function saveContact(contact) {
   });
 }
 
-/** Digits are what matters — a phone stays valid however it is punctuated. */
-export function digitCount(value) {
-  return (String(value || '').match(/\d/g) || []).length;
-}
-
+/**
+ * A phone we can actually ring back: a complete Uzbek number (9 national
+ * digits) or a plausible international one. See lib/phone.js for the rules.
+ */
 export function isPhoneValid(value) {
-  return digitCount(value) >= 7;
+  return isPhoneComplete(value);
 }
 
 export function isNameValid(value) {

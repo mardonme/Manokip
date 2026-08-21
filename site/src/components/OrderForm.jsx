@@ -8,6 +8,7 @@ import {
   rememberOrder, saveContact, useOrderContact,
 } from '../lib/order.js';
 import Icon from './ui/Icon.jsx';
+import PhoneField from './ui/PhoneField.jsx';
 
 /**
  * The two fields an order actually needs — plus company/email folded away
@@ -27,12 +28,12 @@ export function ContactFields({ contact, set, errors = {}, idPrefix = 'ord' }) {
         value={contact.name} onChange={(v) => set('name', v)}
         placeholder={t('order.field.namePh')} autoComplete="name" error={errors.name}
       />
-      <Field
-        id={`${idPrefix}-phone`} label={t('order.field.phone')} required type="tel"
+      {/* Formats to +998 90 123 45 67 while typing, so the number is readable
+          before it is sent and sales never gets a half-typed one. */}
+      <PhoneField
+        id={`${idPrefix}-phone`} label={t('order.field.phone')} required
         value={contact.phone} onChange={(v) => set('phone', v)}
-        // An empty phone box gets the country code for free — one less thing to type.
-        onFocus={() => { if (!contact.phone) set('phone', '+998 '); }}
-        placeholder={t('order.field.phonePh')} autoComplete="tel" inputMode="tel" error={errors.phone}
+        placeholder={t('order.field.phonePh')} error={errors.phone}
       />
 
       {extrasOpen ? (
@@ -205,7 +206,7 @@ export function OrderPlaced({ order, phone, onClose, children }) {
   );
 }
 
-function Field({ id, label, value, onChange, onFocus, type = 'text', placeholder, required, autoComplete, inputMode, error }) {
+function Field({ id, label, value, onChange, type = 'text', placeholder, required, autoComplete, inputMode, error }) {
   return (
     <label className="mk-field" htmlFor={id}>
       <span className="mk-label">
@@ -213,7 +214,7 @@ function Field({ id, label, value, onChange, onFocus, type = 'text', placeholder
       </span>
       <input
         id={id} className="mk-input" type={type} value={value}
-        onChange={(e) => onChange(e.target.value)} onFocus={onFocus}
+        onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder} autoComplete={autoComplete} inputMode={inputMode}
         aria-invalid={error ? 'true' : undefined}
         aria-describedby={error ? `${id}-err` : undefined}

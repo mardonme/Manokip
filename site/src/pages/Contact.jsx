@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { StoreHeader, StoreFooter } from '../components/Chrome.jsx';
 import Seo from '../components/Seo.jsx';
-import { Reveal, Icon } from '../components/ui/index.js';
+import { Reveal, Icon, PhoneField } from '../components/ui/index.js';
 import { api } from '../lib/api.js';
 import { useLang } from '../lib/LangContext.jsx';
 import { useToast } from '../components/Toast.jsx';
@@ -98,7 +98,7 @@ export default function Contact() {
 
               <div className="mk-stack" style={{ marginTop: 20, gap: 16 }}>
                 <Field id="c-name" label={t('contact.form.name')} value={contact.name} onChange={(v) => set('name', v)} placeholder={t('contact.form.namePh')} autoComplete="name" required error={errors.name} />
-                <Field id="c-phone" label={t('contact.form.phone')} value={contact.phone} onChange={(v) => set('phone', v)} onFocus={() => { if (!contact.phone) set('phone', '+998 '); }} placeholder={t('contact.form.phonePh')} type="tel" autoComplete="tel" inputMode="tel" required error={errors.phone} />
+                <PhoneField id="c-phone" label={t('contact.form.phone')} value={contact.phone} onChange={(v) => set('phone', v)} placeholder={t('contact.form.phonePh')} required error={errors.phone} />
                 <Field id="c-company" label={`${t('contact.form.company')} · ${t('order.optional')}`} value={contact.company} onChange={(v) => set('company', v)} placeholder={t('contact.form.companyPh')} autoComplete="organization" />
                 <Field id="c-email" label={`${t('contact.form.email')} · ${t('order.optional')}`} value={contact.email} onChange={(v) => set('email', v)} placeholder={t('contact.form.emailPh')} type="email" autoComplete="email" />
                 <label className="mk-field" htmlFor="c-message">
@@ -148,13 +148,13 @@ function ContactBlock({ icon, eyebrow, a, b, c }) {
   );
 }
 
-function Field({ id, label, value, onChange, onFocus, type = 'text', placeholder, required, autoComplete, inputMode, error }) {
+function Field({ id, label, value, onChange, type = 'text', placeholder, required, autoComplete, inputMode, error }) {
   return (
     <label className="mk-field" htmlFor={id}>
       <span className="mk-label">{label}{required && <span style={{ color: 'var(--danger)' }}> *</span>}</span>
       <input
         id={id} className="mk-input" type={type} value={value}
-        onChange={(e) => onChange(e.target.value)} onFocus={onFocus}
+        onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder} autoComplete={autoComplete} inputMode={inputMode}
         aria-invalid={error ? 'true' : undefined} aria-describedby={error ? `${id}-err` : undefined}
       />
