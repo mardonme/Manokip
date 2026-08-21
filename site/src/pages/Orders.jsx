@@ -6,6 +6,7 @@ import { Reveal, Icon, Skeleton } from '../components/ui/index.js';
 import { api } from '../lib/api.js';
 import { useAuth } from '../lib/AuthContext.jsx';
 import { useLang } from '../lib/LangContext.jsx';
+import { readRecentOrders } from '../lib/order.js';
 
 const OK_STATUSES = ['completed', 'complete', 'delivered', 'shipped', 'paid', 'done'];
 
@@ -14,6 +15,9 @@ export default function Orders() {
   const { user, loading: authLoading, openSignIn } = useAuth();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  // Guests never had an account to attach an order to, so the requests they
+  // sent from this browser are read back from local storage.
+  const [localOrders] = useState(readRecentOrders);
 
   useEffect(() => {
     if (!user) { setLoading(false); return; }
@@ -30,6 +34,8 @@ export default function Orders() {
     })();
     return () => { cancelled = true; };
   }, [user]);
+
+  const list = user ? orders : localOrders;
 
   return (
     <div className="mk">
@@ -63,13 +69,7 @@ export default function Orders() {
                   </div>
                 ))}
               </div>
-            ) : !user ? (
-              <Reveal className="mk-card mk-center" style={{ padding: '48px 32px' }}>
-                <Icon name="user" size={28} style={{ color: 'var(--ink-4)', margin: '0 auto 14px' }} />
-                <p className="mk-muted" style={{ marginBottom: 16 }}>{t('orders.signIn')}</p>
-                <button className="mk-btn mk-btn-primary" onClick={openSignIn}>{t('orders.signInBtn')}</button>
-              </Reveal>
-            ) : orders.length === 0 ? (
+            ) : list.length === 0 ? (
               <Reveal className="mk-card mk-center" style={{ padding: '48px 32px' }}>
                 <Icon name="cart" size={28} style={{ color: 'var(--ink-4)', margin: '0 auto 14px' }} />
                 <p className="mk-muted" style={{ marginBottom: 16 }}>{t('orders.empty')}</p>
@@ -78,10 +78,29 @@ export default function Orders() {
                     {t('cart.browse').replace(/\s*→\s*$/, '')} <Icon name="arrow-right" size={16} className="mk-arrow" />
                   </button>
                 </Link>
+                {!user && (
+                  <div className="mk-muted" style={{ marginTop: 18, fontSize: 13 }}>
+                    {t('orders.guest.signInHint')}{' '}
+                    <button onClick={openSignIn} className="mk-ulink" style={{ background: 'none', border: 0, cursor: 'pointer', padding: 0, font: 'inherit' }}>
+                      {t('orders.signInBtn')}
+                    </button>
+                  </div>
+                )}
               </Reveal>
             ) : (
               <div className="mk-stack" style={{ gap: 12 }}>
-                {orders.map((o, idx) => {
+                {!user && (
+                  <div className="mk-card mk-row" style={{ padding: 16, gap: 10, fontSize: 13, color: 'var(--ink-2)' }}>
+                    <Icon name="user" size={16} style={{ color: 'var(--ink-3)', flexShrink: 0 }} />
+                    <span>
+                      {t('orders.guest.note')}{' '}
+                      <button onClick={openSignIn} className="mk-ulink" style={{ background: 'none', border: 0, cursor: 'pointer', padding: 0, font: 'inherit' }}>
+                        {t('orders.signInBtn')}
+                      </button>
+                    </span>
+                  </div>
+                )}
+                {list.map((o, idx) => {
                   const isOk = OK_STATUSES.includes(String(o.status || '').toLowerCase());
                   return (
                     <Reveal key={o.id} index={idx} className="mk-card" style={{ padding: 24 }}>
@@ -99,8 +118,8 @@ export default function Orders() {
                         </span>
                       </div>
                       <div style={{ marginTop: 16, borderTop: '1px solid var(--line-soft)', paddingTop: 12, display: 'flex', flexDirection: 'column', gap: 8 }}>
-                        {o.items.map((it) => (
-                          <div key={it.id} style={{ fontSize: 14, color: 'var(--ink-2)' }}>
+                        {o.items.map((it, i) => (
+                          <div key={it.id ?? i} style={{ fontSize: 14, color: 'var(--ink-2)' }}>
                             <span className="mk-mono mk-num">{it.qty}</span> × {it.productModel}
                           </div>
                         ))}

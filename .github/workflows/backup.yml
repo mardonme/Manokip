@@ -1,0 +1,41 @@
+name: Kunlik zaxira nusxa
+
+# Deploy bo'lmasa ham baza va rasmlar har kuni zaxiralanadi: har kuni
+# 02:00 (Toshkent) da VPS'dagi self-hosted runner `deploy/backup.sh` ni
+# ishga tushiradi. Oxirgi 30 ta nusxa /opt/manokip/backups/ da saqlanadi.
+#
+# Eslatma: GitHub 60 kun davomida hech qanday harakat bo'lmagan repozitoriyada
+# rejali (schedule) workflow'larni to'xtatib qo'yadi — Actions tab'da ogohlantirish
+# chiqsa, "Enable workflow" ni bosing.
+
+on:
+  schedule:
+    - cron: '0 21 * * *'   # 21:00 UTC = 02:00 Toshkent
+  workflow_dispatch: {}
+
+concurrency:
+  group: manokip-backup
+  cancel-in-progress: false
+
+jobs:
+  backup:
+    runs-on: [self-hosted, manokip]
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Zaxira nusxa olish
+        run: bash deploy/backup.sh nightly
+
+      - name: Mavjud nusxalar ro'yxati
+        run: |
+          {
+            echo "### Zaxira nusxalar · /opt/manokip/backups"
+            echo ""
+            echo '```'
+            ls -1sh /opt/manokip/backups | tail -20
+            echo '```'
+            echo ""
+            df -h /opt/manokip | tail -1
+          } >> "$GITHUB_STEP_SUMMARY"

@@ -1,3 +1,9 @@
+> ⚠️ **ESKIRGAN — bu hujjat bo'yicha ish qilinmaydi.**
+> Manokip 2026-yil iyundan beri Render/Vercel'da emas, o'z VPS'ida (`176.57.184.199`,
+> manokip.com.uz) Docker + nginx bilan ishlaydi va GitHub Actions orqali deploy qilinadi.
+> Amaldagi qo'llanma: **[DEPLOY-CICD.md](DEPLOY-CICD.md)**.
+> Bu fayl faqat tarix uchun saqlanmoqda.
+
 # Deployment — Backend (Render) + Frontend (Vercel)
 
 This project has two deployables:

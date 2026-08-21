@@ -119,6 +119,26 @@ async function loadCartView(cartId, lang = 'ru') {
   };
 }
 
+/**
+ * The cart this request should check out from: the signed-in user's cart, or
+ * the guest cart bound to the cookie. Never creates one — checkout only reads,
+ * and an empty/absent cart must stay a 400 rather than a fresh empty cart.
+ * @returns {Promise<{id:number, items:Array}|null>} null when there is nothing to order.
+ */
+export async function findRequestCart(req) {
+  const include = { items: { include: { product: true } } };
+  if (req.user) {
+    const owned = await prisma.cart.findFirst({ where: { userId: req.user.id }, include });
+    if (owned?.items.length) return owned;
+  }
+  const token = req.cookies?.[COOKIE];
+  if (!token) return null;
+  const guest = await prisma.cart.findUnique({ where: { token }, include });
+  // A signed-in visitor can still be carrying an unmerged guest cart.
+  if (guest?.items.length && (!guest.userId || guest.userId === req.user?.id)) return guest;
+  return null;
+}
+
 router.get('/', optionalUser, async (req, res, next) => {
   try {
     const cartId = await resolveCart(req, res);

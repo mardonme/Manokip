@@ -1,0 +1,103 @@
+// Ordering without an account.
+//
+// The storefront takes an order from a name and a phone number alone, so those
+// two values are the only thing worth keeping — locally, in this browser, so a
+// returning visitor never retypes them. Nothing here talks to the server; the
+// account (and the server-side order history it unlocks) stays optional.
+
+import { useCallback, useEffect, useState } from 'react';
+import { useAuth } from './AuthContext.jsx';
+
+const CONTACT_KEY = 'mk_contact';
+const ORDERS_KEY = 'mk_recent_orders';
+const MAX_LOCAL_ORDERS = 10;
+
+const EMPTY_CONTACT = { name: '', phone: '', email: '', company: '' };
+
+function readJson(key, fallback) {
+  try {
+    const raw = localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : fallback;
+  } catch {
+    return fallback; // private mode / storage disabled — degrade to "no memory"
+  }
+}
+
+function writeJson(key, value) {
+  try { localStorage.setItem(key, JSON.stringify(value)); } catch { /* ignore */ }
+}
+
+export function readContact() {
+  const saved = readJson(CONTACT_KEY, null);
+  return saved && typeof saved === 'object' ? { ...EMPTY_CONTACT, ...saved } : { ...EMPTY_CONTACT };
+}
+
+export function saveContact(contact) {
+  writeJson(CONTACT_KEY, {
+    name: (contact.name || '').trim(),
+    phone: (contact.phone || '').trim(),
+    email: (contact.email || '').trim(),
+    company: (contact.company || '').trim(),
+  });
+}
+
+/** Digits are what matters — a phone stays valid however it is punctuated. */
+export function digitCount(value) {
+  return (String(value || '').match(/\d/g) || []).length;
+}
+
+export function isPhoneValid(value) {
+  return digitCount(value) >= 7;
+}
+
+export function isNameValid(value) {
+  return String(value || '').trim().length >= 2;
+}
+
+/**
+ * Keep a slim copy of what was just ordered, so a guest can reopen /orders and
+ * still see their request number instead of an empty "sign in" wall.
+ */
+export function rememberOrder(order) {
+  if (!order?.id) return;
+  const entry = {
+    id: order.id,
+    createdAt: order.createdAt || new Date().toISOString(),
+    status: order.status || 'PENDING',
+    notes: order.notes || null,
+    items: (order.items || []).map((it) => ({ productModel: it.productModel, qty: it.qty })),
+  };
+  const list = readJson(ORDERS_KEY, []).filter((o) => o?.id !== entry.id);
+  writeJson(ORDERS_KEY, [entry, ...list].slice(0, MAX_LOCAL_ORDERS));
+}
+
+export function readRecentOrders() {
+  const list = readJson(ORDERS_KEY, []);
+  return Array.isArray(list) ? list.filter((o) => o && o.id) : [];
+}
+
+/**
+ * Contact-form state for every order surface (cart, quick order, contact page).
+ * Seeded from the last order and topped up from the profile once auth resolves,
+ * so a signed-in customer sees their details already filled in.
+ */
+export function useOrderContact() {
+  const { user } = useAuth();
+  const [contact, setContact] = useState(readContact);
+
+  useEffect(() => {
+    if (!user) return;
+    setContact((c) => ({
+      name: c.name || user.name || '',
+      phone: c.phone || user.phone || '',
+      email: c.email || user.email || '',
+      company: c.company || user.company || '',
+    }));
+  }, [user]);
+
+  const set = useCallback((key, value) => {
+    setContact((c) => ({ ...c, [key]: value }));
+  }, []);
+
+  return { contact, set, setContact };
+}

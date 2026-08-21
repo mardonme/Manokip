@@ -5,28 +5,45 @@ import { Reveal, Icon } from '../components/ui/index.js';
 import { api } from '../lib/api.js';
 import { useLang } from '../lib/LangContext.jsx';
 import { useToast } from '../components/Toast.jsx';
+import { isNameValid, isPhoneValid, saveContact, useOrderContact } from '../lib/order.js';
+
+// Manokip sells instruments and the work around them. Picking a service is the
+// fast path: one tap replaces writing out what the request is about.
+const SERVICES = ['supply', 'custom', 'repair', 'calibration', 'consult'];
 
 export default function Contact() {
   const { t } = useLang();
   const toast = useToast();
-  const [form, setForm] = useState({ name: '', company: '', phone: '', email: '', message: '' });
+  const { contact, set } = useOrderContact();
+  const [service, setService] = useState(null);
+  const [message, setMessage] = useState('');
   const [status, setStatus] = useState({ kind: 'idle' });
-
-  function update(k, v) { setForm((f) => ({ ...f, [k]: v })); }
+  const [errors, setErrors] = useState({});
 
   async function submit(e) {
     e.preventDefault();
+    const next = {};
+    if (!isNameValid(contact.name)) next.name = t('order.err.name');
+    if (!isPhoneValid(contact.phone)) next.phone = t('order.err.phone');
+    if (!service && !message.trim()) next.message = t('contact.form.err.message');
+    setErrors(next);
+    if (Object.keys(next).length) return;
+
     setStatus({ kind: 'sending' });
     try {
+      const specs = [service ? t(`contact.service.${service}`) : null, message.trim()]
+        .filter(Boolean).join(' — ');
       const res = await api.post('/api/quotes', {
-        companyName: form.company,
-        contactPerson: form.name,
-        email: form.email,
-        phone: form.phone,
-        specs: form.message,
+        companyName: contact.company.trim(),
+        contactPerson: contact.name.trim(),
+        email: contact.email.trim(),
+        phone: contact.phone.trim(),
+        specs,
       });
+      saveContact(contact);
       setStatus({ kind: 'ok', id: res.id });
-      setForm({ name: '', company: '', phone: '', email: '', message: '' });
+      setMessage('');
+      setService(null);
       toast.success(t('contact.form.ok'), `#${res.id}`);
     } catch (e2) {
       setStatus({ kind: 'err', message: e2.message });
@@ -55,14 +72,33 @@ export default function Contact() {
 
             <Reveal as="form" index={1} onSubmit={submit} className="mk-card" style={{ padding: 32 }}>
               <div className="mk-eyebrow">{t('contact.form.title')}</div>
+              <p className="mk-muted" style={{ fontSize: 13.5, margin: '10px 0 0', lineHeight: 1.5 }}>{t('contact.form.lead')}</p>
+
+              <div style={{ marginTop: 20 }}>
+                <span className="mk-label">{t('contact.service.title')}</span>
+                <div className="mk-row mk-wrap" style={{ gap: 8, marginTop: 10 }}>
+                  {SERVICES.map((key) => (
+                    <button
+                      key={key} type="button"
+                      className={`mk-chip ${service === key ? 'is-active' : ''}`}
+                      aria-pressed={service === key}
+                      onClick={() => setService((s) => (s === key ? null : key))}
+                    >
+                      {t(`contact.service.${key}`)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               <div className="mk-stack" style={{ marginTop: 20, gap: 16 }}>
-                <Field id="c-name" label={t('contact.form.name')} value={form.name} onChange={(v) => update('name', v)} placeholder={t('contact.form.namePh')} autoComplete="name" required />
-                <Field id="c-company" label={t('contact.form.company')} value={form.company} onChange={(v) => update('company', v)} placeholder={t('contact.form.companyPh')} autoComplete="organization" required />
-                <Field id="c-phone" label={t('contact.form.phone')} value={form.phone} onChange={(v) => update('phone', v)} placeholder={t('contact.form.phonePh')} type="tel" autoComplete="tel" required />
-                <Field id="c-email" label={t('contact.form.email')} value={form.email} onChange={(v) => update('email', v)} placeholder={t('contact.form.emailPh')} type="email" autoComplete="email" required />
+                <Field id="c-name" label={t('contact.form.name')} value={contact.name} onChange={(v) => set('name', v)} placeholder={t('contact.form.namePh')} autoComplete="name" required error={errors.name} />
+                <Field id="c-phone" label={t('contact.form.phone')} value={contact.phone} onChange={(v) => set('phone', v)} onFocus={() => { if (!contact.phone) set('phone', '+998 '); }} placeholder={t('contact.form.phonePh')} type="tel" autoComplete="tel" inputMode="tel" required error={errors.phone} />
+                <Field id="c-company" label={`${t('contact.form.company')} · ${t('order.optional')}`} value={contact.company} onChange={(v) => set('company', v)} placeholder={t('contact.form.companyPh')} autoComplete="organization" />
+                <Field id="c-email" label={`${t('contact.form.email')} · ${t('order.optional')}`} value={contact.email} onChange={(v) => set('email', v)} placeholder={t('contact.form.emailPh')} type="email" autoComplete="email" />
                 <label className="mk-field" htmlFor="c-msg">
-                  <span className="mk-label">{t('contact.form.message')} <span style={{ color: 'var(--danger)' }}>*</span></span>
-                  <textarea id="c-msg" className="mk-textarea" value={form.message} onChange={(e) => update('message', e.target.value)} placeholder={t('contact.form.messagePh')} required />
+                  <span className="mk-label">{t('contact.form.message')}{!service && <span style={{ color: 'var(--danger)' }}> *</span>}</span>
+                  <textarea id="c-msg" className="mk-textarea" value={message} onChange={(e) => setMessage(e.target.value)} placeholder={t('contact.form.messagePh')} aria-invalid={errors.message ? 'true' : undefined} />
+                  {errors.message && <span className="mk-error" role="alert">{errors.message}</span>}
                 </label>
 
                 <button type="submit" className="mk-btn mk-btn-primary mk-btn-lg" disabled={status.kind === 'sending'} style={{ alignSelf: 'flex-start' }}>
@@ -73,7 +109,7 @@ export default function Contact() {
                   {status.kind === 'ok' && <div className="mk-row" style={{ fontSize: 13.5, color: 'var(--ok)', gap: 6 }}><Icon name="check-circle" size={15} />{t('contact.form.ok')} (#{status.id})</div>}
                   {status.kind === 'err' && <div className="mk-error" role="alert">{t('contact.form.err')} {status.message}</div>}
                 </div>
-                <div className="mk-help">{t('contact.form.hint')}</div>
+                <div className="mk-help">{t('contact.form.hint')} · {t('order.noAccount')}</div>
               </div>
             </Reveal>
           </div>
@@ -106,11 +142,17 @@ function ContactBlock({ icon, eyebrow, a, b, c }) {
   );
 }
 
-function Field({ id, label, value, onChange, type = 'text', placeholder, required, autoComplete }) {
+function Field({ id, label, value, onChange, onFocus, type = 'text', placeholder, required, autoComplete, inputMode, error }) {
   return (
     <label className="mk-field" htmlFor={id}>
       <span className="mk-label">{label}{required && <span style={{ color: 'var(--danger)' }}> *</span>}</span>
-      <input id={id} className="mk-input" type={type} value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} required={required} autoComplete={autoComplete} />
+      <input
+        id={id} className="mk-input" type={type} value={value}
+        onChange={(e) => onChange(e.target.value)} onFocus={onFocus}
+        placeholder={placeholder} autoComplete={autoComplete} inputMode={inputMode}
+        aria-invalid={error ? 'true' : undefined} aria-describedby={error ? `${id}-err` : undefined}
+      />
+      {error && <span id={`${id}-err`} className="mk-error" role="alert">{error}</span>}
     </label>
   );
 }

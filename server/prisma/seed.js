@@ -33,7 +33,37 @@ function loadCatalog() {
   return JSON.parse(readFileSync(path.join(HERE, 'catalog-data.json'), 'utf8'));
 }
 
+/**
+ * Seeding rebuilds the catalogue from scratch, and the wipe below takes the
+ * order lines and reviews that point at the old products with it. That is
+ * correct on an empty database and catastrophic on a live one, so refuse as
+ * soon as real customer data exists. FORCE_SEED=yes overrides it deliberately.
+ */
+async function assertSafeToSeed() {
+  const [orders, quotes, reviews] = await Promise.all([
+    prisma.order.count(),
+    prisma.quoteRequest.count(),
+    prisma.review.count(),
+  ]);
+  if (orders === 0 && quotes === 0 && reviews === 0) return;
+  if (process.env.FORCE_SEED === 'yes') {
+    console.warn(`[seed] FORCE_SEED=yes — wiping the catalogue although the database holds `
+      + `${orders} order(s), ${quotes} request(s), ${reviews} review(s)`);
+    return;
+  }
+  console.error(
+    '\n[seed] REFUSING TO RUN: this database holds real customer data '
+    + `(${orders} order(s), ${quotes} request(s), ${reviews} review(s)).\n`
+    + '       Seeding would delete order lines and reviews along with the catalogue.\n'
+    + '       Edit products in the admin panel instead. To seed anyway (after a backup):\n'
+    + '         FORCE_SEED=yes npm run seed\n',
+  );
+  process.exit(1);
+}
+
 async function main() {
+  await assertSafeToSeed();
+
   const { categories, specLabels, products } = loadCatalog();
   mkdirSync(UPLOAD_CATALOG_DIR, { recursive: true });
 

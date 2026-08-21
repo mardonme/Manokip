@@ -155,14 +155,24 @@ model CartItem {
   @@unique([cartId, productId])
 }
 
+// An order is a call-back request, not a payment: registration is optional, so
+// `userId` is null for guests and the contact snapshot below is what sales use
+// to reach the customer. For signed-in customers it freezes the profile as it
+// was at order time.
 model Order {
-  id        Int         @id @default(autoincrement())
-  userId    Int
-  user      User        @relation(fields: [userId], references: [id])
-  status    String      @default("PENDING")
-  notes     String?
-  items     OrderItem[]
-  createdAt DateTime    @default(now())
+  id             Int         @id @default(autoincrement())
+  userId         Int?
+  user           User?       @relation(fields: [userId], references: [id])
+  contactName    String?
+  contactPhone   String?
+  contactEmail   String?
+  contactCompany String?
+  status         String      @default("PENDING")
+  notes          String?
+  items          OrderItem[]
+  createdAt      DateTime    @default(now())
+
+  @@index([createdAt])
 }
 
 model OrderItem {
@@ -179,11 +189,13 @@ model OrderItem {
   @@index([orderId])
 }
 
+// Free-form request (service, repair, calibration, custom build). Only the
+// contact person and phone are mandatory — company and email are a bonus.
 model QuoteRequest {
   id            Int      @id @default(autoincrement())
-  companyName   String
+  companyName   String?
   contactPerson String
-  email         String
+  email         String?
   phone         String?
   industry      String?
   specs         String

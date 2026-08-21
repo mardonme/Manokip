@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useLang } from '../lib/LangContext.jsx';
 import { sendChatMessage } from '../lib/api.js';
+import { readContact, saveContact } from '../lib/order.js';
 
 const BLUE = '#1240e5';
 const DARK = '#14161b';
@@ -14,7 +15,11 @@ export default function ChatWidget() {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [showContact, setShowContact] = useState(false);
-  const [contact, setContact] = useState({ name: '', phone: '' });
+  // Seeded from the last order/request so the hand-off costs no typing.
+  const [contact, setContact] = useState(() => {
+    const saved = readContact();
+    return { name: saved.name, phone: saved.phone };
+  });
   const [leadSent, setLeadSent] = useState(false);
   const scrollRef = useRef(null);
   const inputRef = useRef(null);
@@ -70,6 +75,7 @@ export default function ChatWidget() {
         name: contact.name.trim(),
         phone: contact.phone.trim(),
       });
+      saveContact({ ...readContact(), name: contact.name.trim(), phone: contact.phone.trim() });
       setLeadSent(true);
       setShowContact(false);
     } catch {

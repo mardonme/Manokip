@@ -48,11 +48,7 @@ export default function AdminOrders() {
             {items.map((o) => (
               <tr key={o.id}>
                 <td className="mk-mono" style={{ fontSize: 12.5 }}>#{o.id}</td>
-                <td>
-                  <div style={{ fontWeight: 600 }}>{o.user?.name || o.user?.email || '—'}</div>
-                  {o.user?.company && <div className="mk-muted" style={{ fontSize: 12.5 }}>{o.user.company}</div>}
-                  {o.user?.email && <div style={{ color: 'var(--accent-ink)', fontSize: 12.5 }}>{o.user.email}</div>}
-                </td>
+                <td>{renderCustomer(o, t)}</td>
                 <td>
                   {o.items.map((it) => (
                     <div key={it.id} style={{ fontSize: 13, color: 'var(--ink-2)' }}>
@@ -76,5 +72,29 @@ export default function AdminOrders() {
         </table>
       )}
     </div>
+  );
+}
+
+// A guest order carries its own contact snapshot; a signed-in one falls back to
+// the profile. The phone is what sales actually acts on, so it is a dial link.
+function renderCustomer(o, t) {
+  const name = o.contactName || o.user?.name || o.user?.email || '—';
+  const phone = o.contactPhone || o.user?.phone;
+  const email = o.contactEmail || o.user?.email;
+  const company = o.contactCompany || o.user?.company;
+  return (
+    <>
+      <div style={{ fontWeight: 600 }}>{name}</div>
+      {phone && (
+        <div className="mk-mono" style={{ fontSize: 13 }}>
+          <a href={`tel:${String(phone).replace(/[^\d+]/g, '')}`} style={{ color: 'var(--accent-ink)' }}>{phone}</a>
+        </div>
+      )}
+      {company && <div className="mk-muted" style={{ fontSize: 12.5 }}>{company}</div>}
+      {email && <div style={{ color: 'var(--accent-ink)', fontSize: 12.5 }}>{email}</div>}
+      {!o.userId && (
+        <span className="mk-tag" style={{ marginTop: 6, fontSize: 10.5 }}>{t('admin.order.guest')}</span>
+      )}
+    </>
   );
 }

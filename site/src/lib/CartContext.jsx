@@ -7,7 +7,7 @@ const CartContext = createContext(null);
 export function CartProvider({ children }) {
   const [cart, setCart] = useState({ items: [], count: 0 });
   const [loading, setLoading] = useState(true);
-  const { user, openSignIn } = useAuth();
+  const { user } = useAuth();
 
   const refresh = useCallback(async () => {
     try {
@@ -50,19 +50,13 @@ export function CartProvider({ children }) {
     setCart(data);
   }, []);
 
-  const checkout = useCallback(async (notes) => {
-    try {
-      const order = await api.post('/api/orders', { notes });
-      await refresh();
-      return { ok: true, order };
-    } catch (e) {
-      if (e.status === 401) {
-        openSignIn();
-        return { ok: false, needsSignIn: true };
-      }
-      throw e;
-    }
-  }, [refresh, openSignIn]);
+  // Checkout needs no account: the payload carries the contact details sales
+  // will call back on. Throws on failure — the page renders the message.
+  const checkout = useCallback(async (payload) => {
+    const order = await api.post('/api/orders', payload);
+    await refresh();
+    return order;
+  }, [refresh]);
 
   return (
     <CartContext.Provider value={{ cart, loading, add, update, remove, checkout, refresh }}>

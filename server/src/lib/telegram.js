@@ -70,11 +70,12 @@ export async function notifyQuoteRequest(quote) {
   const lines = [
     '🆕 <b>Yangi so\'rovnoma</b> (Quote request)',
     '',
-    `🏢 <b>Kompaniya:</b> ${escapeHtml(quote.companyName)}`,
     `👤 <b>Kontakt:</b> ${escapeHtml(quote.contactPerson)}`,
-    `✉️ <b>Email:</b> ${escapeHtml(quote.email)}`,
   ];
+  // Company and email are optional now — only the person and phone are asked for.
   if (quote.phone) lines.push(`📞 <b>Telefon:</b> ${escapeHtml(quote.phone)}`);
+  if (quote.companyName) lines.push(`🏢 <b>Kompaniya:</b> ${escapeHtml(quote.companyName)}`);
+  if (quote.email) lines.push(`✉️ <b>Email:</b> ${escapeHtml(quote.email)}`);
   if (quote.industry) lines.push(`🏭 <b>Soha:</b> ${escapeHtml(quote.industry)}`);
   lines.push('', '📝 <b>Talablar:</b>', escapeHtml(quote.specs));
   lines.push('', `🆔 #${quote.id}`);
@@ -100,21 +101,30 @@ export async function notifyOperatorLead(lead) {
 
 /**
  * Format and send a new order (zakaz) notification.
+ *
+ * The order carries its own contact snapshot (guests never have a user record),
+ * so `user` is only a legacy fallback for callers that still pass one.
  * @param {object} order  Prisma order with `items` included.
  * @param {object} [user] Optional user (email/name/phone/company) for context.
  */
 export async function notifyOrder(order, user) {
+  const name = order.contactName || user?.name || user?.email;
+  const phone = order.contactPhone || user?.phone;
+  const email = order.contactEmail || user?.email;
+  const company = order.contactCompany || user?.company;
+
   const lines = [
     '🛒 <b>Yangi buyurtma</b> (Order)',
     '',
     `🆔 <b>Buyurtma:</b> #${order.id}`,
   ];
-  if (user) {
-    lines.push(`👤 <b>Mijoz:</b> ${escapeHtml(user.name || user.email)}`);
-    lines.push(`✉️ <b>Email:</b> ${escapeHtml(user.email)}`);
-    if (user.phone) lines.push(`📞 <b>Telefon:</b> ${escapeHtml(user.phone)}`);
-    if (user.company) lines.push(`🏢 <b>Kompaniya:</b> ${escapeHtml(user.company)}`);
-  }
+  if (name) lines.push(`👤 <b>Mijoz:</b> ${escapeHtml(name)}`);
+  if (phone) lines.push(`📞 <b>Telefon:</b> <a href="tel:${escapeHtml(String(phone).replace(/[^\d+]/g, ''))}">${escapeHtml(phone)}</a>`);
+  if (email) lines.push(`✉️ <b>Email:</b> ${escapeHtml(email)}`);
+  if (company) lines.push(`🏢 <b>Kompaniya:</b> ${escapeHtml(company)}`);
+  lines.push(order.userId
+    ? '🔐 <i>Roʻyxatdan oʻtgan mijoz</i>'
+    : '👥 <i>Mehmon (roʻyxatdan oʻtmagan)</i>');
   if (order.notes) lines.push('', `📝 <b>Izoh:</b> ${escapeHtml(order.notes)}`);
 
   const items = order.items || [];

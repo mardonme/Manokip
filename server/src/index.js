@@ -41,6 +41,16 @@ const authLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 50 });
 const writeLimiter = rateLimit({ windowMs: 60 * 1000, max: 60 });
 // Chat is AI-token-bearing, so keep it tighter to curb abuse.
 const chatLimiter = rateLimit({ windowMs: 60 * 1000, max: 15 });
+// Orders and quote requests are open to guests (no account needed), so they are
+// the spammable endpoints. Generous for a real office behind one NAT IP,
+// tight enough that a script cannot flood the admin panel.
+const leadLimiter = rateLimit({ windowMs: 10 * 60 * 1000, max: 20 });
+
+// Only submissions are rate-limited; reading order history is not a lead.
+function leadRateLimit(req, res, next) {
+  if (req.method !== 'POST') return next();
+  return leadLimiter(req, res, next);
+}
 
 // Uploaded product images. CORP cross-origin so the storefront can embed them
 // when it runs on a different origin (VITE_API_URL) than the API.
@@ -64,8 +74,8 @@ app.use('/api/products/:id/reviews', reviewsRoutes);
 app.use('/api/categories', categoriesRoutes);
 app.use('/api/cart', writeLimiter, cartRoutes);
 app.use('/api/saved', writeLimiter, savedRoutes);
-app.use('/api/orders', writeLimiter, ordersRoutes);
-app.use('/api/quotes', writeLimiter, quotesRoutes);
+app.use('/api/orders', writeLimiter, leadRateLimit, ordersRoutes);
+app.use('/api/quotes', leadRateLimit, quotesRoutes);
 app.use('/api/chat', chatLimiter, chatRoutes);
 app.use('/api/admin', adminRoutes);
 

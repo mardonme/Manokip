@@ -4,6 +4,7 @@ import { StoreHeader, StoreFooter } from '../components/Chrome.jsx';
 import Seo, { SITE_URL } from '../components/Seo.jsx';
 import Gauge from '../components/Gauge.jsx';
 import ProductCard from '../components/ProductCard.jsx';
+import OrderModal from '../components/OrderForm.jsx';
 import { Reveal, Icon, Skeleton, SectionHead } from '../components/ui/index.js';
 import { api, mediaUrl } from '../lib/api.js';
 import { useCart } from '../lib/CartContext.jsx';
@@ -25,6 +26,7 @@ export default function Product() {
   const [qty, setQty] = useState(1);
   const [tab, setTab] = useState('specs');
   const [adding, setAdding] = useState(false);
+  const [orderOpen, setOrderOpen] = useState(false);
   const [feedback, setFeedback] = useState(null);
 
   useEffect(() => {
@@ -165,6 +167,12 @@ export default function Product() {
     <div className="mk">
       <StoreHeader />
       <Seo title={p.model} description={seoDesc} type="product" jsonLd={productJsonLd} />
+      <OrderModal
+        open={orderOpen}
+        onClose={() => setOrderOpen(false)}
+        items={[{ productId: p.id, qty }]}
+        summary={`${qty} × ${p.model}${p.variant ? ` · ${p.variant}` : ''}`}
+      />
       <main id="main">
         <div className="mk-container mk-mono" style={{ padding: '18px 40px', borderBottom: '1px solid var(--line)' }}>
           <nav aria-label="Breadcrumb" style={{ fontSize: 11, color: 'var(--ink-3)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
@@ -208,11 +216,18 @@ export default function Product() {
                 </div>
               </div>
 
+              {/* Ordering is one click away and needs no account: the modal
+                  asks for a name and a phone, nothing else. */}
               <div className="mk-row" style={{ gap: 8, marginTop: 26 }}>
-                <button className="mk-btn mk-btn-primary mk-btn-lg" onClick={addToOrder} disabled={adding} style={{ flex: 1 }}>
+                <button className="mk-btn mk-btn-primary mk-btn-lg" onClick={() => setOrderOpen(true)} style={{ flex: 1 }}>
+                  {t('order.quick')} <Icon name="arrow-right" size={16} className="mk-arrow" />
+                </button>
+                <button className="mk-btn mk-btn-light mk-btn-lg" onClick={addToOrder} disabled={adding} style={{ flex: 1 }}>
                   {adding ? <><span className="mk-spinner" /> {t('product.adding')}</> : <>{t('product.addToOrder')} <Icon name="cart" size={16} /></>}
                 </button>
-                <Link to="/contact" style={{ flex: 1 }}><button className="mk-btn mk-btn-light mk-btn-lg" style={{ width: '100%' }}>{t('nav.requestQuote')}</button></Link>
+              </div>
+              <div className="mk-help" style={{ marginTop: 8 }}>
+                {t('order.noAccount')} · <Link to="/contact" className="mk-ulink">{t('nav.requestQuote')}</Link>
               </div>
 
               <div className="mk-row" style={{ gap: 8, marginTop: 10 }}>

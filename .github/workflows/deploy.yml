@@ -1,0 +1,204 @@
+name: Deploy → manokip.com.uz
+
+# BITTA push = to'liq deploy. Ketma-ketlik ma'lumotni yo'qotmaydigan qilib
+# tuzilgan:
+#   1. zaxira nusxa (baza + yuklangan rasmlar)
+#   2. ma'lumot o'chiradigan migratsiya bo'lsa — deploy to'xtaydi
+#   3. backend (API + schema), ishga tushmasa avtomatik orqaga qaytadi
+#   4. frontend (faqat API tayyor bo'lgandan keyin)
+#   5. hech bir jadvaldan qator yo'qolmaganini tekshirish
+#
+# VPS'ning o'zidagi self-hosted runner'da ishlaydi — SSH ham, secret ham kerak
+# emas. Deploy hech qachon /opt/manokip/.env fayliga, Postgres volume'iga yoki
+# uploads volume'iga tegmaydi.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'server/**'
+      - 'site/**'
+      - 'deploy/**'
+      - '.github/workflows/deploy.yml'
+  workflow_dispatch:
+    inputs:
+      target:
+        description: 'Nimani chiqarish'
+        type: choice
+        options: [auto, backend, frontend, both]
+        default: auto
+
+# Ikkita deploy hech qachon ustma-ust tushmasin; boshlangani to'xtatilmaydi.
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: [self-hosted, manokip]
+    timeout-minutes: 25
+    env:
+      HEALTH_URL: http://127.0.0.1:4000/api/health
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # Push'dagi oldingi commit bilan solishtirish uchun to'liq tarix kerak.
+          fetch-depth: 0
+
+      - name: 1/8 · Nimani deploy qilishni aniqlash
+        id: scope
+        run: |
+          set -eo pipefail
+          target="${{ inputs.target }}"
+          # `[ … ] && x=y` bo'lmasin: shart yolg'on bo'lsa set -e step'ni yiqitadi.
+          if [ -z "$target" ]; then target=auto; fi
+          backend=false; frontend=false
+          case "$target" in
+            backend)  backend=true ;;
+            frontend) frontend=true ;;
+            both)     backend=true; frontend=true ;;
+            *)
+              base="${{ github.event.before }}"
+              changed=""
+              if [ -n "$base" ] && [ "$base" != "0000000000000000000000000000000000000000" ] \
+                 && git cat-file -e "$base^{commit}" 2>/dev/null; then
+                changed=$(git diff --name-only "$base" "${{ github.sha }}" || true)
+              fi
+              if [ -z "$changed" ]; then
+                # Tarixni o'qib bo'lmadi (birinchi push / dispatch) — ikkalasini ham chiqaramiz.
+                backend=true; frontend=true
+              else
+                if echo "$changed" | grep -q '^server/'; then backend=true; fi
+                if echo "$changed" | grep -q '^site/';   then frontend=true; fi
+              fi
+              ;;
+          esac
+          echo "backend=$backend" >> "$GITHUB_OUTPUT"
+          echo "frontend=$frontend" >> "$GITHUB_OUTPUT"
+          echo "Backend: $backend · Frontend: $frontend"
+
+      - name: 2/8 · Zaxira/tiklash skriptlarini serverga yangilash
+        # /opt/manokip/bin/ — SSH bilan kirganda restore.sh doim shu yerda turadi.
+        run: |
+          set -eo pipefail
+          mkdir -p /opt/manokip/bin
+          rsync -a deploy/backup.sh deploy/restore.sh deploy/data-guard.sh \
+                   deploy/check-migrations.sh /opt/manokip/bin/
+          chmod +x /opt/manokip/bin/*.sh
+
+      - name: 3/8 · Zaxira nusxa (baza + rasmlar)
+        # Har qanday deploy oldidan, istisnosiz. Bu tiklash nuqtasi.
+        run: |
+          set -eo pipefail
+          file=$(bash deploy/backup.sh deploy | tail -1)
+          echo "BACKUP_FILE=$file" >> "$GITHUB_ENV"
+          echo "Zaxira: $file"
+
+      - name: 4/8 · Deploy oldidan qatorlar sanog'i
+        run: bash deploy/data-guard.sh snapshot "$RUNNER_TEMP/rows-before.txt"
+
+      - name: 5/8 · Migratsiyalarni tekshirish (ma'lumot o'chiradiganini bloklash)
+        if: steps.scope.outputs.backend == 'true'
+        run: bash deploy/check-migrations.sh server/prisma/migrations
+
+      - name: 6/8 · Backend (API + migratsiya)
+        if: steps.scope.outputs.backend == 'true'
+        run: |
+          set -eo pipefail
+
+          rollback() {
+            echo "::warning::Oldingi image'ga qaytarilmoqda"
+            if docker image inspect manokip-api:rollback >/dev/null 2>&1; then
+              docker tag manokip-api:rollback manokip-api:latest
+              (cd /opt/manokip && docker compose up -d --no-build api) || true
+              sleep 5
+              if curl -fsS "$HEALTH_URL" >/dev/null 2>&1; then
+                echo "Eski versiya qaytdi va ishlayapti"
+              else
+                echo "::error::Eski versiya ham ko'tarilmadi — docker logs manokip-api"
+              fi
+            else
+              echo "::error::Qaytish uchun eski image topilmadi"
+            fi
+          }
+
+          # Ishlab turgan image'ga nom qo'yib qo'yamiz — qaytish nuqtasi.
+          docker image inspect manokip-api >/dev/null 2>&1 \
+            && docker tag manokip-api manokip-api:rollback || true
+
+          # Faqat kod ko'chiriladi. .env, uploads, node_modules o'chirilmaydi.
+          rsync -a --delete \
+            --exclude node_modules --exclude .env --exclude uploads \
+            --exclude 'prisma/dev.db*' --exclude '*.log' \
+            server/ /opt/manokip/server/
+
+          if ! (cd /opt/manokip && docker compose up -d --build api); then
+            echo "::error::API build/start bo'lmadi"
+            rollback
+            exit 1
+          fi
+
+          # Konteyner ko'tarilishida `prisma migrate deploy` ishlaydi; /api/health
+          # javob bergani — baza ham, API ham tayyor degani.
+          for i in $(seq 1 45); do
+            if curl -fsS "$HEALTH_URL" >/dev/null 2>&1; then
+              echo "API sog'lom (${i}-urinish)"
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "::error::API 90 soniyada javob bermadi"
+          docker logs --tail 60 manokip-api || true
+          rollback
+          exit 1
+
+      - name: 7/8 · Katalog rasmlarini joylash
+        if: steps.scope.outputs.backend == 'true'
+        # Idempotent: faqat bo'sh imageUrl to'ldiriladi, admin yuklaganiga tegmaydi.
+        run: docker exec -w /app/server manokip-api npm run apply-images
+
+      - name: Frontend · Node
+        if: steps.scope.outputs.frontend == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+
+      - name: Frontend · Build
+        if: steps.scope.outputs.frontend == 'true'
+        working-directory: site
+        env:
+          VITE_API_URL: ''
+          SITEMAP_API_BASE: http://127.0.0.1:4000
+        run: |
+          npm ci
+          npm run build
+
+      - name: Frontend · Nashr qilish
+        if: steps.scope.outputs.frontend == 'true'
+        # Yangi API allaqachon jonli — sayt hech qachon eski backend bilan qolmaydi.
+        run: rsync -a --delete site/dist/ /opt/manokip/site/dist/
+
+      - name: 8/8 · Ma'lumot yo'qolmaganini tekshirish
+        run: |
+          set -eo pipefail
+          bash deploy/data-guard.sh snapshot "$RUNNER_TEMP/rows-after.txt"
+          bash deploy/data-guard.sh verify "$RUNNER_TEMP/rows-before.txt" "$RUNNER_TEMP/rows-after.txt"
+
+      - name: Xulosa
+        if: always()
+        run: |
+          {
+            echo "### Deploy · manokip.com.uz"
+            echo ""
+            echo "| Bosqich | Holat |"
+            echo "|---|---|"
+            echo "| Backend | ${{ steps.scope.outputs.backend }} |"
+            echo "| Frontend | ${{ steps.scope.outputs.frontend }} |"
+            echo "| Zaxira nusxa | \`${BACKUP_FILE:-(olinmadi)}\` |"
+            echo "| Natija | ${{ job.status }} |"
+            echo ""
+            echo "Muammo bo'lsa tiklash: \`ssh root@176.57.184.199\` → \`bash /opt/manokip/bin/restore.sh\`"
+          } >> "$GITHUB_STEP_SUMMARY"

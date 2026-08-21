@@ -1,6 +1,6 @@
 # Mirror of the file live on the VPS at /opt/manokip/docker-compose.yml.
 # Kept here so the production topology is reviewable and rebuildable from
-# git. Deploys do NOT copy this file — deploy-backend.yml only syncs
+# git. Deploys do NOT copy this file — deploy.yml only syncs
 # server/ — so edit the VPS copy and update this one in the same change.
 # Secrets come from /opt/manokip/.env, which is never committed.
 

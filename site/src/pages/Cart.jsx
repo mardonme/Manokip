@@ -1,30 +1,49 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { StoreHeader, StoreFooter } from '../components/Chrome.jsx';
 import Seo from '../components/Seo.jsx';
 import { Icon, ProductCardSkeleton } from '../components/ui/index.js';
+import { ContactFields, OrderPlaced } from '../components/OrderForm.jsx';
 import { useCart } from '../lib/CartContext.jsx';
 import { useAuth } from '../lib/AuthContext.jsx';
 import { useLang } from '../lib/LangContext.jsx';
+import {
+  isNameValid, isPhoneValid, rememberOrder, saveContact, useOrderContact,
+} from '../lib/order.js';
 
 export default function Cart() {
   const { t } = useLang();
   const { cart, loading, update, remove, checkout } = useCart();
   const { user, openSignIn } = useAuth();
-  const navigate = useNavigate();
+  const { contact, set } = useOrderContact();
   const [notes, setNotes] = useState('');
   const [submitting, setSubmitting] = useState(false);
-  const [feedback, setFeedback] = useState(null);
+  const [errors, setErrors] = useState({});
+  const [placed, setPlaced] = useState(null);
 
-  async function placeOrder() {
+  async function placeOrder(e) {
+    e.preventDefault();
+    const next = {};
+    if (!isNameValid(contact.name)) next.name = t('order.err.name');
+    if (!isPhoneValid(contact.phone)) next.phone = t('order.err.phone');
+    setErrors(next);
+    if (Object.keys(next).length) return;
+
     setSubmitting(true);
-    setFeedback(null);
     try {
-      const res = await checkout(notes || undefined);
-      if (res.ok) navigate('/orders');
-      else if (res.needsSignIn) setFeedback({ kind: 'info', text: t('cart.signInRequired') });
-    } catch (e) {
-      setFeedback({ kind: 'err', text: e.message });
+      const order = await checkout({
+        name: contact.name.trim(),
+        phone: contact.phone.trim(),
+        email: contact.email.trim() || undefined,
+        company: contact.company.trim() || undefined,
+        notes: notes.trim() || undefined,
+      });
+      saveContact(contact);
+      rememberOrder(order);
+      setNotes('');
+      setPlaced(order);
+    } catch (e2) {
+      setErrors({ form: e2.message });
     } finally {
       setSubmitting(false);
     }
@@ -37,10 +56,19 @@ export default function Cart() {
       <main id="main" className="mk-container" style={{ paddingTop: 56, paddingBottom: 72 }}>
         <div className="mk-eyebrow">{t('cart.eyebrow')}</div>
         <h1 style={{ fontSize: 'clamp(34px,4.5vw,56px)', fontWeight: 600, letterSpacing: '-0.03em', margin: '12px 0 28px' }}>
-          {cart.count > 0 ? `${cart.count} ${t('cart.itemsIn')}` : t('cart.empty')}
+          {placed ? t('order.ok.title') : cart.count > 0 ? `${cart.count} ${t('cart.itemsIn')}` : t('cart.empty')}
         </h1>
 
-        {loading ? (
+        {placed ? (
+          <div className="mk-card" style={{ padding: '48px 32px', maxWidth: 560, margin: '0 auto' }}>
+            <OrderPlaced order={placed} phone={contact.phone}>
+              {/* Guests get the same link — /orders reads their local history. */}
+              <div style={{ marginTop: 14, fontSize: 13 }}>
+                <Link to="/orders" className="mk-ulink">{t('order.ok.history')}</Link>
+              </div>
+            </OrderPlaced>
+          </div>
+        ) : loading ? (
           <div className="mk-cart-grid"><div className="mk-stack" style={{ gap: 10 }}><ProductCardSkeleton compact /><ProductCardSkeleton compact /></div><div /></div>
         ) : cart.items.length === 0 ? (
           <div className="mk-card mk-center" style={{ padding: '56px 32px' }}>
@@ -76,30 +104,41 @@ export default function Cart() {
               ))}
             </div>
 
-            <aside className="mk-card" style={{ padding: 24, position: 'sticky', top: 100, alignSelf: 'start' }}>
+            {/* The contact details live in the summary itself: an order is one
+                form away, and registration never enters the flow. */}
+            <form onSubmit={placeOrder} className="mk-card" style={{ padding: 24, position: 'sticky', top: 100, alignSelf: 'start' }}>
               <div className="mk-eyebrow">{t('cart.summary')}</div>
               <div className="mk-between" style={{ marginTop: 16, fontSize: 14 }}><span className="mk-muted">{t('cart.items')}</span><span className="mk-num">{cart.count}</span></div>
               <div className="mk-muted" style={{ marginTop: 6, fontSize: 12 }}>{t('cart.pricesNote')}</div>
 
-              <label className="mk-field" htmlFor="cart-notes" style={{ marginTop: 18 }}>
+              <div style={{ marginTop: 18 }}>
+                <ContactFields contact={contact} set={set} errors={errors} idPrefix="cart" />
+              </div>
+
+              <label className="mk-field" htmlFor="cart-notes" style={{ marginTop: 14 }}>
                 <span className="mk-label">{t('cart.notes')}</span>
-                <textarea id="cart-notes" className="mk-textarea" style={{ minHeight: 80 }} value={notes} onChange={(e) => setNotes(e.target.value)} placeholder={t('cart.notesPh')} />
+                <textarea id="cart-notes" className="mk-textarea" style={{ minHeight: 72 }} value={notes} onChange={(e) => setNotes(e.target.value)} placeholder={t('cart.notesPh')} />
               </label>
 
-              {!user && (
-                <div className="mk-muted" style={{ marginTop: 16, padding: 12, background: 'var(--surface-sunken)', border: '1px solid var(--line)', borderRadius: 'var(--r-sm)', fontSize: 13 }}>
-                  {t('cart.signInPrompt.a')} <button onClick={openSignIn} className="mk-ulink" style={{ background: 'none', border: 0, cursor: 'pointer', padding: 0, font: 'inherit' }}>{t('cart.signInPrompt.b')}</button> {t('cart.signInPrompt.c')}
-                </div>
-              )}
-
-              <button onClick={placeOrder} disabled={submitting} className="mk-btn mk-btn-primary mk-btn-lg" style={{ width: '100%', marginTop: 18 }}>
+              <button type="submit" disabled={submitting} className="mk-btn mk-btn-primary mk-btn-lg" style={{ width: '100%', marginTop: 16 }}>
                 {submitting ? <span className="mk-spinner" /> : <>{t('cart.place')} <Icon name="arrow-right" size={16} className="mk-arrow" /></>}
               </button>
 
+              <div className="mk-help mk-center" style={{ marginTop: 10 }}>{t('order.noAccount')}</div>
+
+              {!user && (
+                <div className="mk-muted mk-center" style={{ marginTop: 8, fontSize: 12.5 }}>
+                  {t('order.signInPrompt.a')}{' '}
+                  <button type="button" onClick={openSignIn} className="mk-ulink" style={{ background: 'none', border: 0, cursor: 'pointer', padding: 0, font: 'inherit' }}>
+                    {t('order.signInPrompt.b')}
+                  </button>
+                </div>
+              )}
+
               <div aria-live="polite">
-                {feedback && <div style={{ marginTop: 12, fontSize: 13, color: feedback.kind === 'err' ? 'var(--danger)' : 'var(--ink-2)' }}>{feedback.text}</div>}
+                {errors.form && <div className="mk-error" style={{ marginTop: 12 }} role="alert">{errors.form}</div>}
               </div>
-            </aside>
+            </form>
           </div>
         )}
       </main>

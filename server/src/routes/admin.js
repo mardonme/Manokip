@@ -279,7 +279,7 @@ router.patch('/quotes/:id', validate(quoteStatusSchema), async (req, res, next) 
 router.get('/orders', async (req, res, next) => {
   try {
     const items = await prisma.order.findMany({
-      include: { items: true, user: { select: { id: true, email: true, name: true, company: true } } },
+      include: { items: true, user: { select: { id: true, email: true, name: true, phone: true, company: true } } },
       orderBy: { createdAt: 'desc' },
     });
     res.json({ items });

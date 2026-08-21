@@ -48,13 +48,17 @@ export default function AdminQuotes() {
             {items.map((q) => (
               <tr key={q.id}>
                 <td>
-                  <div style={{ fontWeight: 600 }}>{q.companyName}</div>
+                  <div style={{ fontWeight: 600 }}>{q.companyName || '—'}</div>
                   {q.industry && <div className="mk-muted" style={{ fontSize: 12.5 }}>{q.industry}</div>}
                 </td>
                 <td>
-                  <div>{q.contactPerson}</div>
-                  <div style={{ color: 'var(--accent-ink)', fontSize: 12.5 }}>{q.email}</div>
-                  {q.phone && <div className="mk-mono mk-muted" style={{ fontSize: 12 }}>{q.phone}</div>}
+                  <div style={{ fontWeight: 600 }}>{q.contactPerson}</div>
+                  {q.phone && (
+                    <div className="mk-mono" style={{ fontSize: 13 }}>
+                      <a href={`tel:${String(q.phone).replace(/[^\d+]/g, '')}`} style={{ color: 'var(--accent-ink)' }}>{q.phone}</a>
+                    </div>
+                  )}
+                  {q.email && <div style={{ color: 'var(--accent-ink)', fontSize: 12.5 }}>{q.email}</div>}
                 </td>
                 <td className="mk-muted" style={{ maxWidth: 360, whiteSpace: 'pre-wrap' }}>{q.specs}</td>
                 <td className="mk-mono mk-muted" style={{ fontSize: 12, whiteSpace: 'nowrap' }}>{new Date(q.createdAt).toLocaleDateString()}</td>
