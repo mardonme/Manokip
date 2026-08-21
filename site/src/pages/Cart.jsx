@@ -8,7 +8,8 @@ import { useCart } from '../lib/CartContext.jsx';
 import { useAuth } from '../lib/AuthContext.jsx';
 import { useLang } from '../lib/LangContext.jsx';
 import {
-  isNameValid, isPhoneValid, rememberOrder, saveContact, useOrderContact,
+  focusFirstError, isNameValid, isPhoneValid, orderErrorToFields,
+  rememberOrder, saveContact, useOrderContact,
 } from '../lib/order.js';
 
 export default function Cart() {
@@ -27,7 +28,7 @@ export default function Cart() {
     if (!isNameValid(contact.name)) next.name = t('order.err.name');
     if (!isPhoneValid(contact.phone)) next.phone = t('order.err.phone');
     setErrors(next);
-    if (Object.keys(next).length) return;
+    if (Object.keys(next).length) { focusFirstError('cart', next); return; }
 
     setSubmitting(true);
     try {
@@ -43,7 +44,9 @@ export default function Cart() {
       setNotes('');
       setPlaced(order);
     } catch (e2) {
-      setErrors({ form: e2.message });
+      const failed = orderErrorToFields(e2, t);
+      setErrors(failed);
+      focusFirstError('cart', failed);
     } finally {
       setSubmitting(false);
     }

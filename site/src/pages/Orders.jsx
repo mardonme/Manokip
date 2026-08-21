@@ -75,7 +75,7 @@ export default function Orders() {
                 <p className="mk-muted" style={{ marginBottom: 16 }}>{t('orders.empty')}</p>
                 <Link to="/catalog">
                   <button className="mk-btn mk-btn-primary">
-                    {t('cart.browse').replace(/\s*→\s*$/, '')} <Icon name="arrow-right" size={16} className="mk-arrow" />
+                    {t('cart.browse')} <Icon name="arrow-right" size={16} className="mk-arrow" />
                   </button>
                 </Link>
                 {!user && (

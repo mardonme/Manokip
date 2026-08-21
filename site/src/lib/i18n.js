@@ -55,7 +55,7 @@ const DICT = {
     uz: 'Manokip sanoat uchun manometrlar, MANOBAR bosim datchiklari, MANOPL sath oʻlchagichlari va himoya bloklarini ishlab chiqaradi. Ishlab chiqarish va metrologik tekshiruv — Toshkentda.',
     en: 'Manokip designs and manufactures pressure gauges, MANOBAR pressure transmitters, MANOPL level gauges and protection units for industry. Manufacturing and metrological verification in Tashkent.',
   },
-  'home.cta.browse':          { ru: 'Открыть каталог →', uz: 'Katalogni ochish →', en: 'Browse catalog →' },
+  'home.cta.browse':          { ru: 'Открыть каталог', uz: 'Katalogni ochish', en: 'Browse catalog' },
   'home.cta.quote':           { ru: 'Запросить КП',  uz: 'Soʻrov yuborish', en: 'Request a quote' },
   'home.stat.models':         { ru: 'моделей в каталоге', uz: 'katalogdagi model', en: 'models in the catalog' },
   'home.stat.families':       { ru: 'товарные группы', uz: 'mahsulot guruhi', en: 'product families' },
@@ -63,7 +63,7 @@ const DICT = {
   'home.stat.iso':            { ru: 'сертифицированное производство', uz: 'sertifikatlangan ishlab chiqarish', en: 'certified facility' },
   'home.cat.eyebrow':         { ru: '01 — Каталог', uz: '01 — Katalog', en: '01 — Catalog' },
   'home.cat.title':           { ru: 'Четыре товарные группы.', uz: 'Toʻrtta mahsulot guruhi.', en: 'Four product families.' },
-  'home.cat.seeAll':          { ru: 'Посмотреть все товары →', uz: 'Barcha mahsulotlarni koʻrish →', en: 'See all products →' },
+  'home.cat.seeAll':          { ru: 'Посмотреть все товары', uz: 'Barcha mahsulotlarni koʻrish', en: 'See all products' },
   'home.cat.items':           { ru: 'позиций',     uz: 'pozitsiya',  en: 'items' },
   'home.cat.browse':          { ru: 'Перейти',     uz: 'Oʻtish',     en: 'Browse' },
   'home.feat.eyebrow':        { ru: '03 — Витрина', uz: '03 — Tanlov', en: '03 — Featured' },
@@ -75,7 +75,7 @@ const DICT = {
   'home.certs.eyebrow':       { ru: 'Сертификаты', uz: 'Sertifikatlar', en: 'Certificates' },
   'home.certs.title':         { ru: 'Каждый прибор калиброван и поверен.', uz: 'Har bir asbob kalibrlanadi va tekshiriladi.', en: 'Every instrument is calibrated and verified.' },
   'home.certs.lead':          { ru: 'Производство и метрологическая поверка на одной площадке в Ташкенте. Паспорта и свидетельства о калибровке идут с каждой поставкой.', uz: 'Ishlab chiqarish va metrologik tekshiruv Toshkentdagi bitta maydonda. Har bir yetkazib berish bilan pasport va kalibrlash guvohnomalari beriladi.', en: 'Manufacturing and metrological verification on one site in Tashkent. Passports and calibration certificates ship with every order.' },
-  'home.certs.cta':           { ru: 'Смотреть документы →', uz: 'Hujjatlarni koʻrish →', en: 'View documents →' },
+  'home.certs.cta':           { ru: 'Смотреть документы', uz: 'Hujjatlarni koʻrish', en: 'View documents' },
 
   'home.bulk.eyebrow':        { ru: '04 — Опт и нестандарт', uz: '04 — Optom va maxsus buyurtmalar', en: '04 — Bulk & custom orders' },
   'home.bulk.title':          { ru: 'Опишите. Мы изготовим.', uz: 'Talab qiling. Biz tayyorlaymiz.', en: "Specify it. We'll build it." },
@@ -87,7 +87,7 @@ const DICT = {
   'home.bulk.response':       { ru: 'ответ на КП',  uz: 'narxga javob', en: 'quote response' },
   'home.bulk.discount':       { ru: 'при заказе 100+', uz: '100+ buyurtmada', en: '100+ unit pricing' },
   'home.bulk.countries':      { ru: 'стран поставки', uz: 'yetkazib beriladigan davlat', en: 'countries shipped' },
-  'home.bulk.cta':            { ru: 'Оформить заказ →', uz: 'Buyurtma berish →', en: 'Start an order →' },
+  'home.bulk.cta':            { ru: 'Оформить заказ', uz: 'Buyurtma berish', en: 'Start an order' },
 
   // ──────────────── Catalog ────────────────
   'catalog.crumbHome':        { ru: 'Главная',     uz: 'Bosh sahifa', en: 'Home' },
@@ -225,7 +225,7 @@ const DICT = {
     uz: 'Vazifani tasvirlab bering: qaysi asboblar, diapazon, miqdori…',
     en: 'Describe your request: which instruments, ranges, quantities…',
   },
-  'contact.form.submit':      { ru: 'Отправить →', uz: 'Yuborish →', en: 'Send →' },
+  'contact.form.submit':      { ru: 'Отправить', uz: 'Yuborish', en: 'Send' },
   'contact.form.sending':     { ru: 'Отправляем…', uz: 'Yuborilmoqda…', en: 'Sending…' },
   'contact.form.ok':          {
     ru: 'Спасибо — ваше сообщение получено. Ответим в течение часа.',
@@ -248,13 +248,13 @@ const DICT = {
   'cart.itemsIn':             { ru: 'позиций в заказе', uz: 'buyurtmadagi pozitsiya', en: 'items in your order' },
   'cart.loading':             { ru: 'Загрузка…',   uz: 'Yuklanmoqda…', en: 'Loading…' },
   'cart.emptyHint':           { ru: 'В корзине пока нет приборов.', uz: 'Savatda hali asboblar yoʻq.', en: "You haven't added any instruments yet." },
-  'cart.browse':              { ru: 'Открыть каталог →', uz: 'Katalogni ochish →', en: 'Browse catalog →' },
+  'cart.browse':              { ru: 'Открыть каталог', uz: 'Katalogni ochish', en: 'Browse catalog' },
   'cart.summary':             { ru: 'Сводка заказа', uz: 'Buyurtma xulosasi', en: 'Order summary' },
   'cart.items':               { ru: 'Позиции',     uz: 'Pozitsiyalar', en: 'Items' },
   'cart.pricesNote':          { ru: 'Цены зависят от конфигурации — отдел продаж подтвердит окончательное КП.', uz: 'Narxlar konfiguratsiyaga bogʻliq — savdo boʻlimi yakuniy narxni tasdiqlaydi.', en: 'Prices vary per configuration — sales will confirm the final quote.' },
   'cart.notes':               { ru: 'Примечания (по желанию)', uz: 'Izohlar (ixtiyoriy)', en: 'Notes (optional)' },
   'cart.notesPh':             { ru: 'Условия доставки, сроки, нужные сертификаты…', uz: 'Yetkazib berish shartlari, muddatlar, kerakli sertifikatlar…', en: 'Delivery instructions, deadlines, certifications needed…' },
-  'cart.place':               { ru: 'Оформить заказ →', uz: 'Buyurtma berish →', en: 'Place order →' },
+  'cart.place':               { ru: 'Оформить заказ', uz: 'Buyurtma berish', en: 'Place order' },
   'cart.remove':              { ru: 'Удалить',     uz: 'Oʻchirish',   en: 'Remove' },
 
   // ──────────────── Ordering (no account required) ────────────────
@@ -283,6 +283,24 @@ const DICT = {
   'order.close':              { ru: 'Закрыть',     uz: 'Yopish',     en: 'Close' },
   'order.err.name':           { ru: 'Укажите имя', uz: 'Ismingizni kiriting', en: 'Enter your name' },
   'order.err.phone':          { ru: 'Укажите телефон для связи', uz: 'Bogʻlanish uchun telefon raqamini kiriting', en: 'Enter a phone number we can call' },
+  'order.err.email':          { ru: 'Проверьте адрес email.', uz: 'Email manzilini tekshiring.', en: 'Check the email address.' },
+  'order.err.emptyCart':      { ru: 'Корзина пуста — добавьте прибор из каталога.', uz: 'Savat boʻsh — katalogdan asbob qoʻshing.', en: 'Your cart is empty — add an instrument from the catalog.' },
+  'order.err.product':        { ru: 'Товар не найден — обновите страницу.', uz: 'Mahsulot topilmadi — sahifani yangilang.', en: 'Product not found — refresh the page.' },
+  'order.err.tooMany':        {
+    ru: 'Слишком много заявок подряд. Попробуйте через несколько минут или позвоните нам.',
+    uz: 'Juda koʻp soʻrov yuborildi. Bir necha daqiqadan keyin urinib koʻring yoki qoʻngʻiroq qiling.',
+    en: 'Too many requests in a row. Try again in a few minutes or call us.',
+  },
+  'order.err.network':        {
+    ru: 'Нет связи с сервером. Проверьте интернет и попробуйте снова.',
+    uz: 'Server bilan aloqa yoʻq. Internetni tekshirib, qayta urinib koʻring.',
+    en: 'Cannot reach the server. Check your connection and try again.',
+  },
+  'order.err.generic':        {
+    ru: 'Не удалось отправить заказ. Попробуйте ещё раз или позвоните: +998 90 544 61 07',
+    uz: 'Buyurtma yuborilmadi. Qayta urinib koʻring yoki qoʻngʻiroq qiling: +998 90 544 61 07',
+    en: 'Could not send the order. Try again or call us: +998 90 544 61 07',
+  },
   'order.ok.title':           { ru: 'Заявка принята', uz: 'Soʻrovingiz qabul qilindi', en: 'Request received' },
   'order.ok.body':            {
     ru: 'Менеджер свяжется с вами в течение 1 рабочего часа по номеру',
@@ -374,7 +392,7 @@ const DICT = {
   },
   'product.docs.passport':    { ru: 'Паспорт и руководство (RU / UZ / EN)', uz: 'Pasport va qoʻllanma (RU / UZ / EN)', en: 'Passport & manual (RU / UZ / EN)' },
   'product.docs.calCert':     { ru: 'Сертификат калибровки в комплекте', uz: 'Kalibrlash sertifikati toʻplamda', en: 'Calibration certificate included' },
-  'product.docs.viewCerts':   { ru: 'Открыть сертификаты и лицензии →', uz: 'Sertifikat va litsenziyalarni ochish →', en: 'View certificates & licences →' },
+  'product.docs.viewCerts':   { ru: 'Открыть сертификаты и лицензии', uz: 'Sertifikat va litsenziyalarni ochish', en: 'View certificates & licences' },
   'product.cal.intro':        {
     ru: 'Прибор поверяется по эталону, прослеживаемому до национальных стандартов. Аккредитованная лаборатория «Узстандарт» выполняет первичную и периодическую поверку.',
     uz: 'Asbob milliy standartlarga kuzatib boriladigan etalon boʻyicha tekshiriladi. «Oʻzstandart» akkreditatsiyalangan laboratoriyasi birlamchi va davriy tekshiruvni amalga oshiradi.',
@@ -383,7 +401,7 @@ const DICT = {
   'product.cal.interval':     { ru: 'Межповерочный интервал', uz: 'Tekshiruv oraligʻi', en: 'Verification interval' },
   'product.cal.uncertainty':  { ru: 'Погрешность лаборатории', uz: 'Laboratoriya aniqsizligi', en: 'Laboratory uncertainty' },
   'product.cal.turnaround':   { ru: 'Срок поверки',  uz: 'Tekshiruv muddati', en: 'Turnaround' },
-  'product.cal.book':         { ru: 'Заказать поверку →', uz: 'Tekshiruvga buyurtma →', en: 'Book verification →' },
+  'product.cal.book':         { ru: 'Заказать поверку', uz: 'Tekshiruvga buyurtma', en: 'Book verification' },
 
   // ──────────────── 404 ────────────────
   'notfound.code':            { ru: '404',         uz: '404',        en: '404' },
@@ -425,7 +443,7 @@ const DICT = {
     uz: 'Manokip butun Markaziy Osiyo boʻylab distribyutorlar va integratorlar bilan ishlaydi. Hamkorlarga optom narxlar, texnik qoʻllab-quvvatlash va birgalikdagi marketingni taklif qilamiz. Hamkorlikni muhokama qilish uchun biz bilan bogʻlaning.',
     en: 'Manokip works with distributors and integrators across Central Asia. Partners receive wholesale pricing, technical support and joint marketing. Get in touch to discuss working together.',
   },
-  'info.contactUs':           { ru: 'Связаться с нами →', uz: 'Biz bilan bogʻlanish →', en: 'Contact us →' },
+  'info.contactUs':           { ru: 'Связаться с нами', uz: 'Biz bilan bogʻlanish', en: 'Contact us' },
 
   // ──────────────── Admin panel ────────────────
   'admin.title':              { ru: 'Панель администратора', uz: 'Administrator paneli', en: 'Admin panel' },

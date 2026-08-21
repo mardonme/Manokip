@@ -18,6 +18,11 @@ tartibda bajaradi:
 | 4 | **Frontend** | Sayt build qilinib nashr qilinadi (faqat API tayyor bo'lgandan keyin) |
 | 5 | **Nazorat** | Har bir jadvaldagi qatorlar soni deploy oldi/keyini bilan solishtiriladi. Kamaygan bo'lsa — qizil xato |
 
+Bundan tashqari deploy nginx'ni bir marta sozlab qo'yadi: `index.html` `no-cache`
+bilan beriladi, aks holda foydalanuvchi brauzeri deploydan keyin ham **eski
+saytni** ko'rsatib turadi (hash'langan `/assets/*` fayllar esa keshda qoladi —
+ular baribir yangi nom oladi).
+
 O'zgargan qismi o'zi aniqlanadi: faqat `site/**` tegilgan bo'lsa API qayta
 ishga tushmaydi, faqat `server/**` bo'lsa sayt qayta build qilinmaydi.
 
@@ -106,6 +111,7 @@ bash /opt/manokip/bin/backup.sh mening-belgim
 | [deploy/restore.sh](deploy/restore.sh) | Zaxiradan tiklash (tasdiqlash bilan) |
 | [deploy/check-migrations.sh](deploy/check-migrations.sh) | Ma'lumot o'chiradigan migratsiyani bloklash |
 | [deploy/data-guard.sh](deploy/data-guard.sh) | Deploy oldi/keyin qatorlar sonini solishtirish |
+| [deploy/fix-nginx-cache.sh](deploy/fix-nginx-cache.sh) | `index.html` keshlanmasligini ta'minlaydi (bir martalik, idempotent) |
 | [deploy/docker-compose.prod.yml](deploy/docker-compose.prod.yml) | VPS'dagi `/opt/manokip/docker-compose.yml` nusxasi |
 
 Serverda skriptlar `/opt/manokip/bin/` da turadi va har deployda yangilanadi.

@@ -62,11 +62,19 @@ server {
     }
 
     # ── SPA fallback: noma'lum yo'llar index.html'ga ──
-    # (index.html'ni cache QILMANG — har deploy'da yangilanishi kerak)
+    # DIQQAT: `$uri/` YOZILMAYDI — u haqiqiy papka (masalan /about/) bilan
+    # to'qnashadi va asset'lar o'rniga index.html qaytaradi.
     location / {
-        try_files $uri $uri/ /index.html;
+        try_files $uri /index.html;
     }
+
+    # index.html HECH QACHON keshlanmasin: u hash'langan asset nomlarini
+    # o'z ichiga oladi, keshda qolsa foydalanuvchi deploydan keyin ham eski
+    # ilovani ko'rib turaveradi.
+    # `expires -1` = `Cache-Control: no-cache`. Bu yerda ataylab `add_header`
+    # ishlatilmaydi: nginx'da ichki blokda add_header bo'lsa, serverdan meros
+    # bo'lgan add_header'lar (HSTS) tushib qoladi.
     location = /index.html {
-        add_header Cache-Control "no-cache";
+        expires -1;
     }
 }

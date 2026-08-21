@@ -84,7 +84,7 @@ jobs:
           set -eo pipefail
           mkdir -p /opt/manokip/bin
           rsync -a deploy/backup.sh deploy/restore.sh deploy/data-guard.sh \
-                   deploy/check-migrations.sh /opt/manokip/bin/
+                   deploy/check-migrations.sh deploy/fix-nginx-cache.sh /opt/manokip/bin/
           chmod +x /opt/manokip/bin/*.sh
 
       - name: 3/8 · Zaxira nusxa (baza + rasmlar)
@@ -180,6 +180,13 @@ jobs:
         if: steps.scope.outputs.frontend == 'true'
         # Yangi API allaqachon jonli — sayt hech qachon eski backend bilan qolmaydi.
         run: rsync -a --delete site/dist/ /opt/manokip/site/dist/
+
+      - name: nginx · index.html keshlanmasin
+        # Bir martalik tuzatish, keyingi deploylarda o'zi o'tkazib yuboradi.
+        # Vhost'dan zaxira oladi, `nginx -t` bilan tekshiradi, xato bo'lsa
+        # eski konfigni qaytaradi — shuning uchun deploy'ni yiqitmaydi.
+        continue-on-error: true
+        run: bash deploy/fix-nginx-cache.sh
 
       - name: 8/8 · Ma'lumot yo'qolmaganini tekshirish
         run: |

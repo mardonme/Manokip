@@ -4,7 +4,8 @@ import { api } from '../lib/api.js';
 import { useLang } from '../lib/LangContext.jsx';
 import { useFocusTrap } from '../lib/useFocusTrap.js';
 import {
-  isNameValid, isPhoneValid, rememberOrder, saveContact, useOrderContact,
+  focusFirstError, isNameValid, isPhoneValid, orderErrorToFields,
+  rememberOrder, saveContact, useOrderContact,
 } from '../lib/order.js';
 import Icon from './ui/Icon.jsx';
 
@@ -93,7 +94,7 @@ export default function OrderModal({ open, onClose, items, summary }) {
     if (!isNameValid(contact.name)) next.name = t('order.err.name');
     if (!isPhoneValid(contact.phone)) next.phone = t('order.err.phone');
     setErrors(next);
-    if (Object.keys(next).length) return;
+    if (Object.keys(next).length) { focusFirstError('qo', next); return; }
 
     setBusy(true);
     try {
@@ -110,7 +111,9 @@ export default function OrderModal({ open, onClose, items, summary }) {
       setNotes('');
       setPlaced(order);
     } catch (e2) {
-      setErrors({ form: e2.message });
+      const failed = orderErrorToFields(e2, t);
+      setErrors(failed);
+      focusFirstError('qo', failed);
     } finally {
       setBusy(false);
     }

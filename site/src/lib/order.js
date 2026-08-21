@@ -101,3 +101,46 @@ export function useOrderContact() {
 
   return { contact, set, setContact };
 }
+
+/**
+ * Turn an API failure into per-field form errors.
+ *
+ * The server answers validation problems with `{ error, details:[{path,message}] }`
+ * in English; the storefront is not, so nothing from the server is ever shown
+ * raw — every case maps onto a translated message, and onto the field that
+ * caused it whenever the server says which one.
+ */
+export function orderErrorToFields(err, t) {
+  if (!err) return { form: t('order.err.generic') };
+  // fetch() itself failed (offline, DNS, CORS) — no HTTP status was reached.
+  if (err.status === undefined) return { form: t('order.err.network') };
+  if (err.status === 429) return { form: t('order.err.tooMany') };
+
+  const fields = {};
+  for (const detail of Array.isArray(err.details) ? err.details : []) {
+    const key = String(detail.path || '').split('.')[0];
+    if (key === 'name' || key === 'contactPerson') fields.name = t('order.err.name');
+    else if (key === 'phone') fields.phone = t('order.err.phone');
+    else if (key === 'email') fields.email = t('order.err.email');
+    else if (key === 'specs') fields.message = t('contact.form.err.message');
+  }
+  if (Object.keys(fields).length) return fields;
+
+  const message = String(err.message || '');
+  if (/cart is empty/i.test(message)) return { form: t('order.err.emptyCart') };
+  if (/product not found/i.test(message)) return { form: t('order.err.product') };
+  if (/name/i.test(message)) return { name: t('order.err.name') };
+  if (/phone/i.test(message)) return { phone: t('order.err.phone') };
+  if (/email/i.test(message)) return { email: t('order.err.email') };
+  return { form: t('order.err.generic') };
+}
+
+/** Put the cursor on the first field that failed, so the fix is one keystroke away. */
+export function focusFirstError(idPrefix, errors) {
+  const first = ['name', 'phone', 'email', 'company', 'message'].find((k) => errors?.[k]);
+  if (!first) return;
+  const el = document.getElementById(`${idPrefix}-${first}`);
+  if (!el) return;
+  el.focus({ preventScroll: true });
+  el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+}

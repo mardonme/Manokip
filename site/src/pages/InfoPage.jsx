@@ -26,7 +26,7 @@ export default function InfoPage({ page }) {
               </p>
               <Link to="/contact" style={{ display: 'inline-block', marginTop: 28 }}>
                 <button className="mk-btn mk-btn-primary">
-                  {t('info.contactUs').replace(/\s*→\s*$/, '')} <Icon name="arrow-right" size={16} className="mk-arrow" />
+                  {t('info.contactUs')} <Icon name="arrow-right" size={16} className="mk-arrow" />
                 </button>
               </Link>
             </Reveal>

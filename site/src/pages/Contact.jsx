@@ -5,7 +5,10 @@ import { Reveal, Icon } from '../components/ui/index.js';
 import { api } from '../lib/api.js';
 import { useLang } from '../lib/LangContext.jsx';
 import { useToast } from '../components/Toast.jsx';
-import { isNameValid, isPhoneValid, saveContact, useOrderContact } from '../lib/order.js';
+import {
+  focusFirstError, isNameValid, isPhoneValid, orderErrorToFields,
+  saveContact, useOrderContact,
+} from '../lib/order.js';
 
 // Manokip sells instruments and the work around them. Picking a service is the
 // fast path: one tap replaces writing out what the request is about.
@@ -27,7 +30,7 @@ export default function Contact() {
     if (!isPhoneValid(contact.phone)) next.phone = t('order.err.phone');
     if (!service && !message.trim()) next.message = t('contact.form.err.message');
     setErrors(next);
-    if (Object.keys(next).length) return;
+    if (Object.keys(next).length) { focusFirstError('c', next); return; }
 
     setStatus({ kind: 'sending' });
     try {
@@ -46,8 +49,11 @@ export default function Contact() {
       setService(null);
       toast.success(t('contact.form.ok'), `#${res.id}`);
     } catch (e2) {
-      setStatus({ kind: 'err', message: e2.message });
-      toast.error(t('contact.form.err'), e2.message);
+      const failed = orderErrorToFields(e2, t);
+      setErrors(failed);
+      focusFirstError('c', failed);
+      setStatus({ kind: 'err', message: failed.form || '' });
+      toast.error(t('contact.form.err'), failed.form || failed.phone || failed.name || '');
     }
   }
 
@@ -95,9 +101,9 @@ export default function Contact() {
                 <Field id="c-phone" label={t('contact.form.phone')} value={contact.phone} onChange={(v) => set('phone', v)} onFocus={() => { if (!contact.phone) set('phone', '+998 '); }} placeholder={t('contact.form.phonePh')} type="tel" autoComplete="tel" inputMode="tel" required error={errors.phone} />
                 <Field id="c-company" label={`${t('contact.form.company')} · ${t('order.optional')}`} value={contact.company} onChange={(v) => set('company', v)} placeholder={t('contact.form.companyPh')} autoComplete="organization" />
                 <Field id="c-email" label={`${t('contact.form.email')} · ${t('order.optional')}`} value={contact.email} onChange={(v) => set('email', v)} placeholder={t('contact.form.emailPh')} type="email" autoComplete="email" />
-                <label className="mk-field" htmlFor="c-msg">
+                <label className="mk-field" htmlFor="c-message">
                   <span className="mk-label">{t('contact.form.message')}{!service && <span style={{ color: 'var(--danger)' }}> *</span>}</span>
-                  <textarea id="c-msg" className="mk-textarea" value={message} onChange={(e) => setMessage(e.target.value)} placeholder={t('contact.form.messagePh')} aria-invalid={errors.message ? 'true' : undefined} />
+                  <textarea id="c-message" className="mk-textarea" value={message} onChange={(e) => setMessage(e.target.value)} placeholder={t('contact.form.messagePh')} aria-invalid={errors.message ? 'true' : undefined} />
                   {errors.message && <span className="mk-error" role="alert">{errors.message}</span>}
                 </label>
 
@@ -107,7 +113,7 @@ export default function Contact() {
 
                 <div aria-live="polite">
                   {status.kind === 'ok' && <div className="mk-row" style={{ fontSize: 13.5, color: 'var(--ok)', gap: 6 }}><Icon name="check-circle" size={15} />{t('contact.form.ok')} (#{status.id})</div>}
-                  {status.kind === 'err' && <div className="mk-error" role="alert">{t('contact.form.err')} {status.message}</div>}
+                  {status.kind === 'err' && status.message && <div className="mk-error" role="alert">{status.message}</div>}
                 </div>
                 <div className="mk-help">{t('contact.form.hint')} · {t('order.noAccount')}</div>
               </div>
